@@ -1,0 +1,92 @@
+.map-wrapper
+{
+  --square-size: 16px;
+  width: 100%;
+  min-width: 90px;
+  max-height: calc( var(--square-size) * 6 );
+  overflow: hidden;
+}
+
+.row-wrapper
+{
+  width: max-content;
+  height: var(--square-size);
+}
+
+.app-map-square
+{
+  display: inline-block;
+  height: var(--square-size) !important;
+  width : var(--square-size) !important;
+  display: inline-block;
+  position: relative;
+}
+
+.walkspace
+{
+  position: absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  outline:  1px solid black;
+}
+
+.walkspace::after
+{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 80%;
+  width: 80%;
+  transform:  translate(-50%, -50%);
+  border:  1px solid black;
+}
+
+.walkspace.current::before
+{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color:black;
+  opacity: 0.2;
+}
+
+.move-keyboard
+{
+  margin-top: auto;
+  display: flex;
+  height: 70px;
+}
+
+.wasd
+{
+  display: grid !important;
+  grid-template-columns: auto auto auto;
+  margin: 5px auto;
+  width: 90px !important;
+  height: 60px !important;
+}
+
+.move-keyboard div
+{
+  height : 30px;
+  width  : 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+[data-key]
+{
+  position:relative;
+  border:  1px solid black;
+}
+
+[data-key]::before
+{
+  content: attr(data-key);
+  pointer-events:none;
+}
+
