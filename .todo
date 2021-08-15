@@ -1,0 +1,3 @@
+-map-handler.service.ts
+--Implement a way to disable move to other room
+--TODO make the move to other room a single method
