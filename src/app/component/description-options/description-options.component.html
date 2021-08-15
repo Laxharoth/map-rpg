@@ -1,0 +1,12 @@
+<div class="app-gui-option-wrapper">
+  <div class="app-gui-option-grid">
+    <div class="app-gui-option" *ngFor="let option of currentOptions; let nthOption = index;">
+      <button *ngIf="option?.action" (click)="option.action()"
+      [disabled]="option.disabled ||
+      (isSubsetOfOptions && nthOption===8 && isFirst) ||
+      (isSubsetOfOptions && nthOption===9 && isLast)">
+        {{ option.text }}
+      </button>
+    </div>
+  </div>
+</div>
