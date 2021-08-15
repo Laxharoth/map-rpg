@@ -1,0 +1,20 @@
+<div tabindex="0" class="app-gui" (keydown)="mapmove($event)" onblur="setTimeout(_=>{this.focus();},100)" autofocus="">
+  <div class="app-gui-left">
+    <div class="app-gui-upper">
+      <div class="app-gui-upper-left">
+        <app-map [maphandler]="maphandler" [currentMap]="maphandler.currentMap" [lockmap]="lockmap" (moveEvent)="move($event)"></app-map>
+      </div>
+      <div class="app-gui-upper-right">
+        <app-description [descriptionhandler]="descriptionhandler"></app-description>
+      </div>
+    </div>
+    <div class="app-gui-lower">
+      <app-description-options [currentOptions]="currentOptions"
+        [isSubsetOfOptions]="isSubsetOfOptions()"
+        [isFirst]="isFirst()"
+        [isLast]="isLast()"
+      ></app-description-options>
+    </div>
+  </div>
+  <div class="app-gui-right"></div>
+</div>
