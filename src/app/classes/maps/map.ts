@@ -20,12 +20,10 @@ export class Map{
   descriptionhandler:DescriptionHandlerService;
   maphandler:MapHandlerService;
 
-  constructor(loadRoomSubject:Subject<string>
-              ,flagshandler:FlagHandlerService
+  constructor(flagshandler:FlagHandlerService
               ,descriptionhandler:DescriptionHandlerService
               ,maphandler:MapHandlerService)
   {
-    this.loadRoomSubject = loadRoomSubject;
     this.flagshandler = flagshandler;
     this.descriptionhandler = descriptionhandler;
     this.maphandler = maphandler;
@@ -43,7 +41,6 @@ export class Map{
         if(this.roomsNames[i][j])
         {
           this.rooms[i][j] = this.roomcolection[this.roomsNames[i][j]].room;
-          this.loadRoomSubject.next(this.roomsNames[i][j]);
         }
       }
     }
