@@ -1,32 +1,32 @@
-export class DoubleLinkedList
+export class DoubleLinkedList<T>
 {
-    head:DoubleLinkedListNode|null;
+    head:DoubleLinkedListNode<T>|null;
     length:number;
-    constructor(...values:Array<any>)
+    constructor(...values:Array<T>)
     {
         this.head = null;
         this.length =  0;
         this.insertHead(...values);
     }
-    get next()
+    get next():DoubleLinkedListNode<T>
     {
         if(this.length===0 || this.head===null) return null;
         return this.head.next;
     }
-    insertHead(...values:Array<any>)
+    insertHead(...values:Array<T>):T
     {
         if(values.length===0) return null;
         const valuesReversed = values.reverse();
         for(const value of valuesReversed)
         {
-            this.head = new DoubleLinkedListNode(value,null,this.head);
+            this.head = new DoubleLinkedListNode<T>(value,null,this.head);
             if(this.next!==null)
                 this.next.prev = this.head;
             this.length++;
         }
         return valuesReversed[0];
     }
-    insertBefore(index:number,...values:Array<any>)
+    insertBefore(index:number,...values:Array<T>):T
     {
         if(values.length===0) return null;
         if(index < 0 || index > this.length) return null;
@@ -51,11 +51,11 @@ export class DoubleLinkedList
 
         return valuesReversed[0];
     }
-    insertTail(...values:Array<any>)
+    insertTail(...values:Array<T>):T
     {
-      this.insertBefore(this.length,...values);
+      return this.insertBefore(this.length,...values);
     }
-    removeAt(index:number)
+    removeAt(index:number):T|null
     {
         if(this.length===0 || !this.head) return null;
         if(index < 0 || index >= this.length )return null;
@@ -75,17 +75,14 @@ export class DoubleLinkedList
         for(let i = 0; i < index-1 && prev.next; i++){
             prev = prev.next;
         }
+        const returnValue = prev.next.value;
+        prev.next = prev.next.next;
         if(prev.next)
-        {
-          const returnValue = prev.next.value;
-          prev.next = prev.next.next;
-          if(prev.next)
-            prev.next.prev = prev;
-          this.length--;
-          return returnValue;
-        }
+          prev.next.prev = prev;
+        this.length--;
+        return returnValue;
     }
-    lookAt(index:number)
+    lookAt(index:number):T
     {
         if(index===undefined) return null;
         if(index < 0|| index >= this.length) return null;
@@ -93,9 +90,9 @@ export class DoubleLinkedList
         let current = this.head;
         for(let i = 0; i < index && current ; i++) current = current.next;
 
-        if(current) return current.value;
+        return current.value;
     }
-    getNode(index:number)
+    getNode(index:number):DoubleLinkedListNode<T>
     {
         if(index < 0 || index >= this.length || index === null) return null;
         if(!this.head) return null;
@@ -132,12 +129,12 @@ export class DoubleLinkedList
     }
 }
 
-class DoubleLinkedListNode
+export class DoubleLinkedListNode<T>
 {
-    value:any;
-    prev:DoubleLinkedListNode|null;
-    next:DoubleLinkedListNode|null;
-    constructor(value:any,prev:DoubleLinkedListNode|null,next:DoubleLinkedListNode|null)
+    value:T;
+    prev:DoubleLinkedListNode<T>|null;
+    next:DoubleLinkedListNode<T>|null;
+    constructor(value:T,prev:DoubleLinkedListNode<T>|null,next:DoubleLinkedListNode<T>|null)
     {
         this.value = value;
         this.prev = prev;
