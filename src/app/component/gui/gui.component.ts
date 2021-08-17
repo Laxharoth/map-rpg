@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MapHandlerService } from 'src/app/service/map-handler.service';
 import { DescriptionHandlerService } from 'src/app/service/description-handler.service';
 import { FlagHandlerService } from 'src/app/service/flag-handler.service';
-import { Description, DescriptionOptions } from 'src/app/classes/Description';
+import { DescriptionOptions } from 'src/app/classes/Description';
 import { LockMapService } from 'src/app/service/lock-map.service';
-
+import { Subscription } from 'rxjs';
 
 @Component({
   selector   : 'app-gui',
@@ -17,43 +17,52 @@ export class GuiComponent implements OnInit {
   maphandler:MapHandlerService;
   lockmap:LockMapService;
 
-  currentDescription:Description;
+
   currentOptions:Array<DescriptionOptions|null>;
 
   private descriptionOptions:Array<DescriptionOptions|null>;
   private offset = 0;
   private size   = 8;
+
+  private descriptionSubscription : Subscription;
+
   constructor() {
     this.lockmap =new LockMapService()
     this.flagshandler = new FlagHandlerService('save1');
     this.descriptionhandler = new DescriptionHandlerService(this.lockmap);
     this.maphandler = new MapHandlerService(this.flagshandler,this.descriptionhandler,this.lockmap);
-    this.maphandler.loadRoom(this.flagshandler.getFlag("currentroom"));
 
-    this.descriptionhandler.onSetDescription().subscribe((description)=>{
+    this.descriptionSubscription=this.descriptionhandler.onSetDescription().subscribe((description)=>{
       this.offset = 0;
-      this.currentDescription = description;
       this.descriptionOptions = description.options;
       this.setCurrentOptions();
     })
+
+    this.maphandler.loadRoom(this.flagshandler.getFlag("currentroom"));
+    this.flagshandler.addTime(0);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    this.descriptionSubscription.unsubscribe();
   }
 
   move(direction:any)
   {
     this.maphandler.moveInsideMap(direction);
   }
+  @HostListener('body:keydown',["$event"])
   mapmove(event: any): void
   {
+    if(event.target.tagName.toLowerCase()==='input')return;
     const isnumber = (string: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(string)?string:'';
     switch(event.key){
       case 'w':case 'ArrowUp' :this.move("UP");break;
       case 'a':case 'ArrowLeft' :this.move("LEFT");break;
       case 's':case 'ArrowDown' :this.move("DOWN");break;
       case 'd':case 'ArrowRight':this.move("RIGHT");break;
-      case ' ':case 'Enter':this.currentDescription?.options?.[0].action();break;
+      case ' ':case 'Enter':this.currentOptions?.[0].action();break;
       default:
         if(isnumber(event.key)){
           let number = event.key==='0'? 10: parseInt(event.key)
@@ -64,7 +73,6 @@ export class GuiComponent implements OnInit {
         ;
     }
   }
-
   isSubsetOfOptions():boolean{
     return this.descriptionOptions.length>10;
   }
