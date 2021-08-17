@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { flags } from '../flags/flags';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { Time } from '../classes/Time';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +9,18 @@ import { Subject } from 'rxjs';
 export class FlagHandlerService {
 
   private gameFlags:{[key: string]:any} = flags;
+  private time:Time;
   private flagsSubject = new Subject<string>();
+  private timeSubject = new Subject<Time>();
 
   constructor(@Inject(String)savename:string) {
     this.load(savename);
+    this.time = new Time(this.getFlag("time"));
   }
 
   setFlag(key: string, value: any)
   {
-    if(!this.gameFlags?.[key])
+    if(!this.gameFlags[key]===undefined)
     {
       console.log(`Invalid Flag ${key}`);
       return;
@@ -62,5 +66,23 @@ export class FlagHandlerService {
           this.gameFlags[key] = flags[key];
       }
     }
+  }
+
+  //Time Operations
+  addTime( time: number|string)
+  {
+    this.time.addTime(time);
+    this.gameFlags.time = this.time.getMinutes();
+    this.timeSubject.next(this.time);
+  }
+
+  onTimeChanged():Observable<Time>
+  {
+    return this.timeSubject.asObservable();
+  }
+
+  getTimeValues()
+  {
+    return this.time.getTimeValues();
   }
 }
