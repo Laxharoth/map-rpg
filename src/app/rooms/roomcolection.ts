@@ -1,7 +1,3 @@
-import { Room } from "../classes/maps/room"
-import { FlagHandlerService } from "../service/flag-handler.service"
-import { DescriptionHandlerService } from "../service/description-handler.service"
-import { MapHandlerService } from "../service/map-handler.service"
 import {room as room1} from "./room1"
 import {room as room2} from "./room1"
 import {room as room3} from "./room1"
@@ -26,9 +22,10 @@ import {room as room21} from "./room1"
 import {room as room22} from "./room1"
 import {room as room23} from "./room1"
 import {room as room24} from "./room1"
+import { roomFunction } from "../customTypes/customTypes"
 
 
-export const roomcolection:{[key: string]: {map:string,room:(flagshandler: FlagHandlerService, descriptionhandler: DescriptionHandlerService, maphandler: MapHandlerService) => Room}} = {
+export const roomcolection:{[key: string]: {map:string,room:roomFunction}} = {
   //map1
   room1:{map:"map1",room:room1('room1')},
   room2:{map:"map1",room:room1('room2')},
