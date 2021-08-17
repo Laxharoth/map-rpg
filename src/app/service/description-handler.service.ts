@@ -13,6 +13,7 @@ export class DescriptionHandlerService {
   private descriptionTextHistory = new DoubleLinkedList<string>();
   private pivot:DoubleLinkedListNode<string>;
   private descriptionSubject = new Subject<Description>();
+  private descriptionTextSubject = new Subject<string>();
   private lockmap:LockMapService;
 
   constructor(lockmap:LockMapService){
@@ -20,12 +21,17 @@ export class DescriptionHandlerService {
     this.lockmap = lockmap
   }
 
-  setDescription():void{
+  setDescription(addToHistory:boolean=true):void{
     if(this.descriptionList.length>1)this.lockmap.lockMap("description-lock");
     else this.lockmap.unlockMap("description-lock");
+
+    if(addToHistory)
+    {
+      this.descriptionTextHistory.insertHead(this.descriptionList.head.value.text());
+      this.pivot = this.descriptionTextHistory.head;
+    }
     this.descriptionSubject.next(this.descriptionList.head.value);
-    this.descriptionTextHistory.insertHead(this.descriptionList.head.value.text());
-    this.pivot = this.descriptionTextHistory.head;
+    this.descriptionTextSubject.next(this.descriptionList.head.value.text());
   }
 
   headDescription(...description:Description[]):void{
@@ -36,11 +42,11 @@ export class DescriptionHandlerService {
     this.descriptionList.insertTail(...description);
   }
 
-  nextDescription():void{
+  nextDescription(addToHistory:boolean=true):void{
     if(this.descriptionList.length > 1)
       this.descriptionList.removeAt(0);
     if(this.descriptionList.length > 0){
-      this.setDescription();
+      this.setDescription(addToHistory);
     }
   }
 
@@ -49,15 +55,25 @@ export class DescriptionHandlerService {
     return this.descriptionSubject.asObservable();
   }
 
-  getPreviousDescription():string
+  onSetTextDescription():Observable<string>
   {
-    if(this.pivot.next  ) this.pivot = this.pivot.next;
-    return this.pivot.value;
+    return this.descriptionTextSubject.asObservable();
   }
 
-  getFollowingDescription():string
+  getPreviousDescription():void
+  {
+    if(this.pivot.next  ) this.pivot = this.pivot.next;
+    this.descriptionTextSubject.next(this.pivot.value);
+  }
+
+  getFollowingDescription():void
   {
     if(this.pivot.prev  ) this.pivot = this.pivot.prev;
-    return this.pivot.value;
+    this.descriptionTextSubject.next(this.pivot.value);
+  }
+
+  get currentDescription():Description
+  {
+    return this.descriptionList.head.value;
   }
 }
