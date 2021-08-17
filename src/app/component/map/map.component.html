@@ -4,19 +4,25 @@
       <div class="app-map-square" *ngFor="let columns of rows; let column=index;">
         <div *ngIf="columns"
           [ngClass]=" {'walkspace':true, 'current':currentCoordinates[0]==row && currentCoordinates[1]==column }">
-
         </div>
       </div>
     </div>
   </div>
-  <div class="move-keyboard">
-    <div class="wasd" [ngClass] = " {'disabled':lockedMap} ">
-      <div></div>
-      <div (click)="move('UP')"  data-key="W" [ngClass] = " {'disabled':LockedWASD['UP']}"></div>
-      <div></div>
-      <div (click)="move('LEFT')"  data-key="A" [ngClass] = " {'disabled':LockedWASD['LEFT']}"></div>
-      <div (click)="move('DOWN')"  data-key="S" [ngClass] = " {'disabled':LockedWASD['DOWN']}"></div>
-      <div (click)="move('RIGHT')"  data-key="D" [ngClass] = " {'disabled':LockedWASD['RIGHT']}"></div>
+  <div class="app-map-time-wrapper">
+    <div class="app-map-time-high">
+      Year:{{ timeValues.Years }}
+    </div>
+    <div class="app-map-time-low">
+      {{ timeValues.Hours.toString().padStart(2, '0') }}:{{ timeValues.Minutes.toString().padStart(2, '0') }}
     </div>
   </div>
+  <div class="wasd" [ngClass] = " {'disabled':lockedMap} ">
+    <div></div>
+    <div (click)="move('UP')"  data-key="W" [ngClass] = " {'disabled':LockedWASD['UP']}"></div>
+    <div></div>
+    <div (click)="move('LEFT')"  data-key="A" [ngClass] = " {'disabled':LockedWASD['LEFT']}"></div>
+    <div (click)="move('DOWN')"  data-key="S" [ngClass] = " {'disabled':LockedWASD['DOWN']}"></div>
+    <div (click)="move('RIGHT')"  data-key="D" [ngClass] = " {'disabled':LockedWASD['RIGHT']}"></div>
+  </div>
+
 </div>
