@@ -1,7 +1,10 @@
 import { ElementRef, Input, ViewChild } from '@angular/core';
 import { Output, EventEmitter } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Map } from 'src/app/classes/maps/map';
+import { Time } from 'src/app/classes/Time';
+import { FlagHandlerService } from 'src/app/service/flag-handler.service';
 import { LockMapService } from 'src/app/service/lock-map.service';
 import { MapHandlerService } from 'src/app/service/map-handler.service';
 
@@ -12,14 +15,21 @@ import { MapHandlerService } from 'src/app/service/map-handler.service';
 })
 export class MapComponent implements OnInit {
 
-  @Input() currentMap:Map;
   @Input() maphandler:MapHandlerService;
+  @Input() flagshandler:FlagHandlerService;
   @Input() lockmap:LockMapService;
   @Output() moveEvent = new EventEmitter<string>();
 
   lockedMap:boolean;
   LockedWASD = {UP:false,DOWN:false,LEFT:false,RIGHT:false}
   currentCoordinates=[0,0];
+  currentMap:Map;
+  timeValues:{ Years: number; Months: number; Days: number; Hours: number; Minutes: number; };
+
+  private mapSubscription:Subscription;
+  private lockmapSubscription:Subscription;
+  private coordinatesSubscription: Subscription;
+  private timeSubscription: Subscription;
 
   @ViewChild('mapwrapper') mapWrapper: ElementRef;
 
@@ -29,20 +39,31 @@ export class MapComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentCoordinates = this.maphandler.coordinates;
-    this.setLockedWASD()
-    this.maphandler.onCoordinatesChanged().subscribe(changedCoordinates => {
+    this.lockedMap = this.lockmap.isMapLocked();
+    this.currentMap = this.maphandler.currentMap;
+    this.timeValues = this.flagshandler.getTimeValues();
+
+    this.coordinatesSubscription = this.maphandler.onCoordinatesChanged().subscribe(changedCoordinates => {
       this.currentCoordinates = changedCoordinates;
       this.setLockedWASD()
       this.setMapOverflow();
     })
-    this.maphandler.onLoadMap().subscribe(loadedMap =>{ this.currentMap = loadedMap; })
-    this.lockmap.onMapLockChanged().subscribe(_=>{
-      this.lockedMap = this.lockmap.isMapLocked();
-    })
+    this.mapSubscription = this.maphandler.onLoadMap().subscribe(loadedMap =>{ this.currentMap = loadedMap; })
+    this.lockmapSubscription = this.lockmap.onMapLockChanged().subscribe(isMapLocked=>{ this.lockedMap = isMapLocked; })
+    this.timeSubscription= this.flagshandler.onTimeChanged().subscribe(time => {this.timeValues = time.getTimeValues();})
+
+    this.setLockedWASD()
   }
 
   ngAfterViewInit(): void {
     this.setMapOverflow();
+  }
+
+  ngOnDestroy(): void {
+    this.mapSubscription?.unsubscribe();
+    this.lockmapSubscription?.unsubscribe();
+    this.coordinatesSubscription?.unsubscribe();
+    this.timeSubscription?.unsubscribe();
   }
 
   move(direction)
