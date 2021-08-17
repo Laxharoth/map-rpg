@@ -1,3 +1,20 @@
 <div class="app-gui-description">
-  {{ currentDescription.text() }}
+  <span *ngIf="hasInput && inputGoesFirst">
+    {{ beforeInput }}
+    <input id="unique-input" value="{{ input.default }}" placeholder=" {{ input.placeholder }} ">
+    {{ afterInput }}
+  </span>
+  <span *ngIf="hasSelect && inputGoesFirst">
+    {{ beforeSelect }}
+    <select *ngIf="hasSelect" id="unique-select">
+      <option *ngFor="let option of inputOptions" [value]='option'>{{ option }}</option>
+    </select>
+    {{ afterSelect }}
+  </span>
+  <span *ngIf="hasInput && !inputGoesFirst">
+    {{ beforeInput }}
+    <input id="unique-input" value="{{ input.default }}" placeholder=" {{ input.placeholder }} ">
+    {{ afterInput }}
+  </span>
+  <span *ngIf='!hasInput && !hasSelect'>{{ afterInput }}</span>
 </div>
