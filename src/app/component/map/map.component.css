@@ -1,9 +1,17 @@
+.app-map
+{
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
 .map-wrapper
 {
   --square-size: 16px;
   width: 100%;
   min-width: 90px;
   max-height: calc( var(--square-size) * 6 );
+  margin-top: var(--square-size);
   overflow: hidden;
 }
 
@@ -53,26 +61,26 @@
   opacity: 0.2;
 }
 
-.move-keyboard
+.app-map-time-wrapper
 {
-  margin-top: auto;
-  display: flex;
-  height: 70px;
+  margin: auto;
 }
 
 .wasd
 {
+  --move-keyboard-size :40px;
+  margin: auto;
+  margin-bottom: 20px;
   display: grid !important;
   grid-template-columns: auto auto auto;
-  margin: 5px auto;
-  width: 90px !important;
-  height: 60px !important;
+  width: calc(var(--move-keyboard-size) * 3) !important;
+  height: calc(var(--move-keyboard-size) * 2) !important;
 }
 
-.move-keyboard div
+.wasd div
 {
-  height : 30px;
-  width  : 30px;
+  height : var(--move-keyboard-size);
+  width  : var(--move-keyboard-size);
   display: flex;
   justify-content: center;
   align-items: center;
