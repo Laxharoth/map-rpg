@@ -5,6 +5,7 @@ import { Map } from '../classes/maps/map';
 import { DescriptionHandlerService } from './description-handler.service';
 import { FlagHandlerService } from './flag-handler.service';
 import { LockMapService } from './lock-map.service';
+import { roomFunction } from '../customTypes/customTypes';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class MapHandlerService {
       this.descriptionhandler = descriptionhandler;
       this.lockmap = lockmap;
 
-    this.currentMap = new Map(this.flagshandler,this.descriptionhandler,this)
+    this.currentMap = new Map()
   }
 
   loadMap(mapName: string):void {
@@ -103,13 +104,15 @@ export class MapHandlerService {
     if(this.lockmap.isMapLocked())return false;
     let shouldChangeRoom = false;
     let foundRoom:Room;
+    let room:roomFunction;
     let coordinates:number[];
     let roomName:string;
     if(typeof(roomnameORcoordinates)==="string")
     {
       roomName = roomnameORcoordinates;
       this.flagshandler.setFlag('currentroom',roomName);
-      ({room:foundRoom,coordinates} = this.currentMap.findRoomByName(roomName))
+      ({room,coordinates} = this.currentMap.findRoomByName(roomName))
+      foundRoom = room?.(this.flagshandler,this.descriptionhandler,this);
       if(foundRoom && this.currentRoom !== foundRoom && this.currentRoom.beforeMoveTo(roomName))
         shouldChangeRoom = true;
     }
@@ -117,7 +120,8 @@ export class MapHandlerService {
     {
       coordinates = roomnameORcoordinates;
       const [y,x] = coordinates;
-      ({room:foundRoom,roomName} = this.currentMap.findRoomByCoordinates(y,x))
+      ({room,roomName} = this.currentMap.findRoomByCoordinates(y,x))
+      foundRoom = room?.(this.flagshandler,this.descriptionhandler,this)
       if(roomName && this.currentRoom.beforeMoveTo(roomName))
       {
         this.currentRoomName = roomName;
