@@ -4,8 +4,9 @@ import { DescriptionHandlerService } from "../service/description-handler.servic
 import { FlagHandlerService } from "../service/flag-handler.service";
 import { MapHandlerService } from "../service/map-handler.service";
 
-export function room(roomName: string,flagshandler:FlagHandlerService,descriptionhandler:DescriptionHandlerService, maphandler:MapHandlerService):Room
+export function room(flagshandler:FlagHandlerService,descriptionhandler:DescriptionHandlerService, maphandler:MapHandlerService):Room
 {
+  const roomName = 'room7'
   const $flag = (name:string) => flagshandler.getFlag(name);
   const nextOption      = new DescriptionOptions("next",function(){descriptionhandler.nextDescription()});
   const roomOptions =[
