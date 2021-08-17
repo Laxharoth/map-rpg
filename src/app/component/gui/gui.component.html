@@ -1,8 +1,8 @@
-<div tabindex="0" class="app-gui" (keydown)="mapmove($event)" onblur="setTimeout(_=>{this.focus();},100)" autofocus="">
+<div tabindex="0" class="app-gui">
   <div class="app-gui-left">
     <div class="app-gui-upper">
       <div class="app-gui-upper-left">
-        <app-map [maphandler]="maphandler" [currentMap]="maphandler.currentMap" [lockmap]="lockmap" (moveEvent)="move($event)"></app-map>
+        <app-map [flagshandler]="flagshandler" [maphandler]="maphandler" [lockmap]="lockmap" (moveEvent)="move($event)"></app-map>
       </div>
       <div class="app-gui-upper-right">
         <app-description [descriptionhandler]="descriptionhandler"></app-description>
