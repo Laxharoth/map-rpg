@@ -5,3 +5,4 @@ import { MapHandlerService } from "../service/map-handler.service";
 
 export type roomFunction = (flagshandler: FlagHandlerService, descriptionhandler: DescriptionHandlerService, maphandler: MapHandlerService) => Room;
 export type inputObject  = {default: string , placeholder: string}
+export type characterStats = { hitpoints     : number; energypoints  : number; attack  : number; defence : number; speed   : number; }
