@@ -1,0 +1,7 @@
+Round.
+  each character.
+    Backups the original stats.
+    Remove Statuses.
+    Apply equipment modifications.
+    Apply status modifications.
+

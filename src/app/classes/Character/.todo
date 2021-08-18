@@ -1,0 +1,191 @@
+{
+  "todotree": {
+    "tree": [
+      {
+        "key": 1629246224387,
+        "children": [
+          {
+            "key": 1629246274987,
+            "children": [
+              {
+                "key": 1629245836898,
+                "children": [],
+                "todo": {
+                  "content": "Create List of counters",
+                  "id": 1629245836898,
+                  "level": "default",
+                  "done": false
+                }
+              }
+            ],
+            "todo": {
+              "content": "Add react action.",
+              "id": 1629246274987,
+              "level": "default",
+              "done": false
+            }
+          },
+          {
+            "key": 1629246558900,
+            "children": [
+              {
+                "key": 1629246565772,
+                "children": [],
+                "todo": {
+                  "content": "Take tags from perks wiapons and status lists",
+                  "id": 1629246565772,
+                  "level": "default",
+                  "done": false
+                }
+              }
+            ],
+            "todo": {
+              "content": "Add tags list",
+              "id": 1629246558900,
+              "level": "default",
+              "done": false
+            }
+          },
+          {
+            "key": 1629246896965,
+            "children": [],
+            "todo": {
+              "content": "Create character classes",
+              "id": 1629246896965,
+              "level": "default",
+              "done": false
+            }
+          }
+        ],
+        "todo": {
+          "content": "Character",
+          "id": 1629246224387,
+          "level": "default",
+          "done": false
+        }
+      },
+      {
+        "key": 1629246232738,
+        "children": [
+          {
+            "key": 1629246064169,
+            "children": [],
+            "todo": {
+              "content": "Make the weapon do the attack.",
+              "id": 1629246064169,
+              "level": "default",
+              "done": false
+            }
+          },
+          {
+            "key": 1629246044383,
+            "children": [],
+            "todo": {
+              "content": "Add system to equipment to check if can equip",
+              "id": 1629246044383,
+              "level": "default",
+              "done": false
+            }
+          },
+          {
+            "key": 1629246292389,
+            "children": [],
+            "todo": {
+              "content": "Make clases for each piece of equipment. melee, shield, etc",
+              "id": 1629246292389,
+              "level": "default",
+              "done": false
+            }
+          }
+        ],
+        "todo": {
+          "content": "Weapon",
+          "id": 1629246232738,
+          "level": "default",
+          "done": false
+        }
+      },
+      {
+        "key": 1629246237859,
+        "children": [
+          {
+            "key": 1629246012175,
+            "children": [],
+            "todo": {
+              "content": "Create List of Statuses",
+              "id": 1629246012175,
+              "level": "default",
+              "done": false
+            }
+          },
+          {
+            "key": 1629246536692,
+            "children": [],
+            "todo": {
+              "content": "edit todo.",
+              "id": 1629246536692,
+              "level": "default",
+              "done": false
+            }
+          }
+        ],
+        "todo": {
+          "content": "Status",
+          "id": 1629246237859,
+          "level": "default",
+          "done": false
+        }
+      },
+      {
+        "key": 1629246544983,
+        "children": [
+          {
+            "key": 1629247146713,
+            "children": [],
+            "todo": {
+              "content": "Add possible tags",
+              "id": 1629247146713,
+              "level": "default",
+              "done": false
+            }
+          }
+        ],
+        "todo": {
+          "content": "Add tag system, Tags are basically strings",
+          "id": 1629246544983,
+          "level": "default",
+          "done": false
+        }
+      },
+      {
+        "key": 1629246573852,
+        "children": [
+          {
+            "key": 1629246863461,
+            "children": [],
+            "todo": {
+              "content": "Create List",
+              "id": 1629246863461,
+              "level": "default",
+              "done": false
+            }
+          }
+        ],
+        "todo": {
+          "content": "Perks",
+          "id": 1629246573852,
+          "level": "default",
+          "done": false
+        }
+      }
+    ],
+    "expandKeys": [
+      1629246237859,
+      1629246573852,
+      1629246558900,
+      1629246274987,
+      1629246232738,
+      1629246544983
+    ]
+  }
+}
