@@ -1,28 +1,30 @@
-import { Description, DescriptionOptions } from "../classes/Description";
+import { testformation } from "../classes/Character/NPC/EnemyFormations/testformation";
+import { enemyTest } from "../classes/Character/NPC/enemyTest";
+import { Description, DescriptionOptions } from "../classes/Descriptions/Description";
+import { descriptionFight } from "../classes/Descriptions/DescriptionFight";
 import { Room } from "../classes/maps/room";
-import { getInputs } from "../htmlHelper/htmlHelper.functions";
-import { DescriptionHandlerService } from "../service/description-handler.service";
-import { FlagHandlerService } from "../service/flag-handler.service";
-import { MapHandlerService } from "../service/map-handler.service";
+import { MasterService } from "../classes/masterService";
+import { roomFunction } from "../customTypes/customTypes";
+import { getInputs, randomBetween, randomCheck } from "../htmlHelper/htmlHelper.functions";
 
-export function room(roomName: string)
+export function room(roomName: string):roomFunction
 {
-  return function(flagshandler:FlagHandlerService,descriptionhandler:DescriptionHandlerService, maphandler:MapHandlerService):Room
+  return function(masterService:MasterService):Room
   {
     const $flag = (name:string,value:any=null) =>{
-      if(value!==null) flagshandler.setFlag(name,value);
-      return flagshandler.getFlag(name)
+      if(value!==null) masterService.flagsHandler.setFlag(name,value);
+      return masterService.flagsHandler.getFlag(name)
     };
 
-  const nextOption      = new DescriptionOptions("next",function(){descriptionhandler.nextDescription(false)});
+  const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription(false)});
   const yesOption      = (action:()=>void)=>new DescriptionOptions("Yes",function(){action()});
-  const noOption      = new DescriptionOptions("No",function(){descriptionhandler.nextDescription()});
+  const noOption      = new DescriptionOptions("No",function(){masterService.descriptionHandler.nextDescription()});
   const nextOptionInputs = new DescriptionOptions("next",function(){
     const {input,select} = getInputs();
     $flag('petshout',input);
     if(input===''){$flag('petshout',null);}
     if(select){$flag('pet',select);}
-    descriptionhandler.nextDescription(false)
+    masterService.descriptionHandler.nextDescription(false)
   });
   //with input and select
   const furtherDescription = new Description(function(){return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing`+
@@ -34,11 +36,11 @@ export function room(roomName: string)
   `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`},[nextOptionInputs])
   const roomOptions =[
     new DescriptionOptions("option1",function(){
-      descriptionhandler.headDescription(furtherDescription);
-      descriptionhandler.setDescription(false);
+      masterService.descriptionHandler.headDescription(furtherDescription);
+      masterService.descriptionHandler.setDescription(false);
     }),
     new DescriptionOptions("save",function(){
-      flagshandler.save("save1");
+      masterService.flagsHandler.save("save1");
     }),
     new DescriptionOptions("option3",function(){},true),
     new DescriptionOptions("unlock 3",function(){
@@ -58,14 +60,14 @@ export function room(roomName: string)
           this.text = "unlock 3";
         }
       }),
-      new DescriptionOptions("add 1 hour",function(){ flagshandler.addTime("1h") }),
+      new DescriptionOptions("add 1 hour",function(){ masterService.flagsHandler.addTime("1h") }),
       null,
-    new DescriptionOptions("add 1 month",function(){ flagshandler.addTime("1M") }),
+    new DescriptionOptions("add 1 month",function(){ masterService.flagsHandler.addTime("1M") }),
   ]
   if($flag("caninroom1")){
     roomOptions.splice(2,0,new DescriptionOptions("kick can",function(){
-        descriptionhandler.headDescription(kickCanDescription);
-        descriptionhandler.setDescription();
+        masterService.descriptionHandler.headDescription(kickCanDescription);
+        masterService.descriptionHandler.setDescription();
         $flag("caninroom1",false);
         roomOptions.splice(2,1);
       }))
@@ -76,14 +78,14 @@ export function room(roomName: string)
     const flyDescription3 =  new Description(function(){return `That was something`},[nextOption])
     const cannonDescription = new Description(function(){return `Dafuk there is a cannon here.\n enter the cannon?`;}
     ,[yesOption(()=>{
-      descriptionhandler.nextDescription();
-      descriptionhandler.tailDescription(flyDescription1, flyDescription2,flyDescription3);
-      flagshandler.addTime('30m');
-      maphandler.loadRoom('room1');
+      masterService.descriptionHandler.nextDescription();
+      masterService.descriptionHandler.tailDescription(flyDescription1, flyDescription2,flyDescription3);
+      masterService.flagsHandler.addTime('30m');
+      masterService.mapHandler.loadRoom('room1');
     }),noOption])
     roomOptions.splice(2,0, new DescriptionOptions("Cannon",function(){
-      descriptionhandler.headDescription(cannonDescription);
-      descriptionhandler.setDescription();
+      masterService.descriptionHandler.headDescription(cannonDescription);
+      masterService.descriptionHandler.setDescription();
       })
       )
     }
@@ -100,22 +102,26 @@ export function room(roomName: string)
   const room = new Room({
     onEnter  : () => {
       if($flag("map1room1firstenter")){
-        descriptionhandler.tailDescription(fistEnter);
+        masterService.descriptionHandler.tailDescription(fistEnter);
       }
-      descriptionhandler.tailDescription(roomDescription)
-      descriptionhandler.nextDescription();
+      masterService.descriptionHandler.tailDescription(roomDescription)
+      masterService.descriptionHandler.nextDescription();
+      if(randomCheck(10))
+      {
+        descriptionFight(masterService,new testformation(masterService))
+      }
     },
     onExit   : () => {
       if($flag("map1room1firstexit"))
       {
         $flag("map1room1firstenter",false)
         $flag("map1room1firstexit",false);
-        descriptionhandler.tailDescription(firstExit);
+        masterService.descriptionHandler.tailDescription(firstExit);
       }
     },
     beforeMoveTo(roomName){
       if(roomName!=='room1')
-      {flagshandler.addTime('5m')}
+      {masterService.flagsHandler.addTime('5m')}
       return true;
     },
     icon:""
