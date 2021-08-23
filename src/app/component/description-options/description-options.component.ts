@@ -1,7 +1,7 @@
 import { DescriptionHandlerService } from 'src/app/service/description-handler.service';
 import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { DescriptionOptions } from 'src/app/classes/Description';
+import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 
 @Component({
   selector: 'app-description-options',
