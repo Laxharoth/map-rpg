@@ -1,17 +1,19 @@
-import { Description, DescriptionOptions } from "../classes/Description";
+import { charTest } from "../classes/Character/NPC/characterTest";
+import { testformation } from "../classes/Character/NPC/EnemyFormations/testformation";
+import { enemyTest } from "../classes/Character/NPC/enemyTest";
+import { Description, DescriptionOptions } from "../classes/Descriptions/Description";
+import { descriptionFight } from "../classes/Descriptions/DescriptionFight";
 import { Room } from "../classes/maps/room";
-import { DescriptionHandlerService } from "../service/description-handler.service";
-import { FlagHandlerService } from "../service/flag-handler.service";
-import { MapHandlerService } from "../service/map-handler.service";
+import { MasterService } from "../classes/masterService";
 
-export function room(flagshandler:FlagHandlerService,descriptionhandler:DescriptionHandlerService, maphandler:MapHandlerService):Room
+export function room(masterService:MasterService):Room
 {
   const roomName = 'room7'
-  const $flag = (name:string) => flagshandler.getFlag(name);
-  const nextOption      = new DescriptionOptions("next",function(){descriptionhandler.nextDescription()});
+  const $flag = (name:string) => masterService.flagsHandler.getFlag(name);
+  const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription()});
   const roomOptions =[
-    new DescriptionOptions("option1",function(){flagshandler.setFlag("",0)}),
-    new DescriptionOptions("option2",function(){}),
+    new DescriptionOptions("option1",function(){masterService.flagsHandler.setFlag("",0)}),
+    new DescriptionOptions("test battle",function(){ descriptionFight(masterService,new testformation(masterService) ) }),
     new DescriptionOptions("option2",function(){}),
     new DescriptionOptions("option2",function(){}),
     new DescriptionOptions("option2",function(){}),
@@ -29,30 +31,30 @@ export function room(flagshandler:FlagHandlerService,descriptionhandler:Descript
   const goBackThere2     = new Description(function(){return `little choices i have`},[nextOption]);
   const room = new Room({
     onEnter  : () => {
-      descriptionhandler.tailDescription(roomDescription)
-      descriptionhandler.nextDescription();
+      masterService.descriptionHandler.tailDescription(roomDescription)
+      masterService.descriptionHandler.nextDescription();
     },
     onExit   : () => {},
     beforeMoveTo(roomName){
       //if(["room6","room8"].includes(roomName))
       if(["room6"].includes(roomName))
       {
-        descriptionhandler.headDescription(cantGoThere);
-        descriptionhandler.setDescription();
+        masterService.descriptionHandler.headDescription(cantGoThere);
+        masterService.descriptionHandler.setDescription();
         return false;
       }
       if(["room8"].includes(roomName) && $flag("firstreturn2room1"))
       {
-        descriptionhandler.headDescription(cantGoThereYet);
-        descriptionhandler.setDescription();
+        masterService.descriptionHandler.headDescription(cantGoThereYet);
+        masterService.descriptionHandler.setDescription();
         return false;
       }
       if(roomName === "room1")
       {
         if($flag("firstreturn2room1"))
         {
-          flagshandler.setFlag("firstreturn2room1",false);
-          descriptionhandler.tailDescription(goBackThere,goBackThere2);
+          masterService.flagsHandler.setFlag("firstreturn2room1",false);
+          masterService.descriptionHandler.tailDescription(goBackThere,goBackThere2);
         }
       }
       return true;
