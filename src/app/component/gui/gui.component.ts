@@ -1,10 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { MapHandlerService } from 'src/app/service/map-handler.service';
-import { DescriptionHandlerService } from 'src/app/service/description-handler.service';
-import { FlagHandlerService } from 'src/app/service/flag-handler.service';
-import { DescriptionOptions } from 'src/app/classes/Description';
-import { LockMapService } from 'src/app/service/lock-map.service';
+import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 import { Subscription } from 'rxjs';
+import { MasterService } from 'src/app/classes/masterService';
+import { charTest } from 'src/app/classes/Character/NPC/characterTest';
 
 @Component({
   selector   : 'app-gui',
@@ -12,12 +10,7 @@ import { Subscription } from 'rxjs';
   styleUrls  :['./gui.component.css']
 })
 export class GuiComponent implements OnInit {
-  flagshandler:FlagHandlerService;
-  descriptionhandler:DescriptionHandlerService;
-  maphandler:MapHandlerService;
-  lockmap:LockMapService;
-
-
+  masterService:MasterService;
   currentOptions:Array<DescriptionOptions|null>;
 
   private descriptionOptions:Array<DescriptionOptions|null>;
@@ -26,20 +19,22 @@ export class GuiComponent implements OnInit {
 
   private descriptionSubscription : Subscription;
 
-  constructor() {
-    this.lockmap =new LockMapService()
-    this.flagshandler = new FlagHandlerService('save1');
-    this.descriptionhandler = new DescriptionHandlerService(this.lockmap);
-    this.maphandler = new MapHandlerService(this.flagshandler,this.descriptionhandler,this.lockmap);
+  user:charTest;
 
-    this.descriptionSubscription=this.descriptionhandler.onSetDescription().subscribe((description)=>{
+  constructor() {
+    this.masterService = new MasterService('save1')
+    this.user = new charTest(this.masterService,'player');
+    this.masterService.user = this.user;
+    this.masterService.setPartyMember(new charTest(this.masterService,'ally 1'),0)
+
+    this.descriptionSubscription=this.masterService.descriptionHandler.onSetDescription().subscribe((description)=>{
       this.offset = 0;
       this.descriptionOptions = description.options;
       this.setCurrentOptions();
     })
 
-    this.maphandler.loadRoom(this.flagshandler.getFlag("currentroom"));
-    this.flagshandler.addTime(0);
+    this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
+    this.masterService.flagsHandler.addTime(0);
   }
 
   ngOnInit(): void { }
@@ -50,7 +45,7 @@ export class GuiComponent implements OnInit {
 
   move(direction:any)
   {
-    this.maphandler.moveInsideMap(direction);
+    this.masterService.mapHandler.moveInsideMap(direction);
   }
   @HostListener('body:keydown',["$event"])
   mapmove(event: any): void
