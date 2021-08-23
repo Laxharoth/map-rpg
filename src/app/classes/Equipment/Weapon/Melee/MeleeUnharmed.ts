@@ -2,7 +2,7 @@ import { Character } from "src/app/classes/Character/Character";
 import { damageTypes } from "src/app/customTypes/customTypes";
 import { MeleeWeapon } from "./MeleeWeapon";
 import { tag } from 'src/app/customTypes/tags';
-import { OnePunch } from "src/app/classes/Items/SpecialAttack/onePunch";
+import { OnePunch } from "src/app/classes/Items/SpecialAttack/OnePunch";
 
 export class MeleeUnharmed extends MeleeWeapon
 {
