@@ -1,4 +1,4 @@
-import { Description } from './../classes/Description';
+import { Description } from '../classes/Descriptions/Description';
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DoubleLinkedList, DoubleLinkedListNode } from './../classes/DoubleLinkedList';
@@ -21,7 +21,7 @@ export class DescriptionHandlerService {
     this.lockmap = lockmap
   }
 
-  setDescription(addToHistory:boolean=true):void{
+  setDescription(addToHistory:boolean=true):DescriptionHandlerService{
     if(this.descriptionList.length>1)this.lockmap.lockMap("description-lock");
     else this.lockmap.unlockMap("description-lock");
 
@@ -32,22 +32,39 @@ export class DescriptionHandlerService {
     }
     this.descriptionSubject.next(this.descriptionList.head.value);
     this.descriptionTextSubject.next(this.descriptionList.head.value.text());
+    return this
   }
 
-  headDescription(...description:Description[]):void{
+  headDescription(...description:Description[]):DescriptionHandlerService{
     this.descriptionList.insertHead(...description);
+    return this
   }
 
-  tailDescription(...description:Description[]):void{
+  afterHeadDescription(...description:Description[]):DescriptionHandlerService{
+    this.descriptionList.insertBefore(1,...description);
+    return this
+  }
+
+  tailDescription(...description:Description[]):DescriptionHandlerService{
     this.descriptionList.insertTail(...description);
+    return this
   }
 
-  nextDescription(addToHistory:boolean=true):void{
+  nextDescription(addToHistory:boolean=true):DescriptionHandlerService{
     if(this.descriptionList.length > 1)
       this.descriptionList.removeAt(0);
     if(this.descriptionList.length > 0){
       this.setDescription(addToHistory);
     }
+    return this
+  }
+
+  flush(descriptionNumber: number):DescriptionHandlerService
+  {
+    while(this.descriptionList.length>descriptionNumber+1)
+    { this.descriptionList.removeAt(0); }
+    this.setDescription(false);
+    return this;
   }
 
   onSetDescription():Observable<Description>
@@ -76,4 +93,5 @@ export class DescriptionHandlerService {
   {
     return this.descriptionList.head.value;
   }
+
 }
