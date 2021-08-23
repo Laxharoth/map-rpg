@@ -2,10 +2,10 @@
   <div class="app-gui-left">
     <div class="app-gui-upper">
       <div class="app-gui-upper-left">
-        <app-map [flagshandler]="flagshandler" [maphandler]="maphandler" [lockmap]="lockmap" (moveEvent)="move($event)"></app-map>
+        <app-map [masterService]="masterService" (moveEvent)="move($event)"></app-map>
       </div>
       <div class="app-gui-upper-right">
-        <app-description [descriptionhandler]="descriptionhandler"></app-description>
+        <app-description [descriptionhandler]="masterService.descriptionHandler"></app-description>
       </div>
     </div>
     <div class="app-gui-lower">

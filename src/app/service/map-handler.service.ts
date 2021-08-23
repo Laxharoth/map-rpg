@@ -6,6 +6,7 @@ import { DescriptionHandlerService } from './description-handler.service';
 import { FlagHandlerService } from './flag-handler.service';
 import { LockMapService } from './lock-map.service';
 import { roomFunction } from '../customTypes/customTypes';
+import { MasterService } from '../classes/masterService';
 
 @Injectable({
   providedIn: 'root'
@@ -23,21 +24,14 @@ export class MapHandlerService {
   currentRoomName:string="";
   coordinates:Array<number> = [];
 
-  private flagshandler: FlagHandlerService;
-  private descriptionhandler:DescriptionHandlerService;
-  private lockmap: LockMapService;
+  private readonly masterService: MasterService;
 
   private currentRoom:Room = new Room({onEnter:_=>{},onExit:_=>{},icon:''});
   currentMap:Map;
 
-  constructor(flagshandler: FlagHandlerService,
-    descriptionhandler:DescriptionHandlerService,
-    lockmap:LockMapService
-    )
+  constructor(masterService:MasterService)
   {
-      this.flagshandler = flagshandler;
-      this.descriptionhandler = descriptionhandler;
-      this.lockmap = lockmap;
+      this.masterService = masterService;
 
     this.currentMap = new Map()
   }
@@ -101,7 +95,7 @@ export class MapHandlerService {
 
   private loadRoomHelper(roomnameORcoordinates: string|number[]):boolean
   {
-    if(this.lockmap.isMapLocked())return false;
+    if(this.masterService.lockmap.isMapLocked())return false;
     let shouldChangeRoom = false;
     let foundRoom:Room;
     let room:roomFunction;
@@ -110,9 +104,9 @@ export class MapHandlerService {
     if(typeof(roomnameORcoordinates)==="string")
     {
       roomName = roomnameORcoordinates;
-      this.flagshandler.setFlag('currentroom',roomName);
+      this.masterService.flagsHandler.setFlag('currentroom',roomName);
       ({room,coordinates} = this.currentMap.findRoomByName(roomName))
-      foundRoom = room?.(this.flagshandler,this.descriptionhandler,this);
+      foundRoom = room?.(this.masterService);
       if(foundRoom && this.currentRoom !== foundRoom && this.currentRoom.beforeMoveTo(roomName))
         shouldChangeRoom = true;
     }
@@ -121,7 +115,7 @@ export class MapHandlerService {
       coordinates = roomnameORcoordinates;
       const [y,x] = coordinates;
       ({room,roomName} = this.currentMap.findRoomByCoordinates(y,x))
-      foundRoom = room?.(this.flagshandler,this.descriptionhandler,this)
+      foundRoom = room?.(this.masterService)
       if(roomName && this.currentRoom.beforeMoveTo(roomName))
       {
         this.currentRoomName = roomName;
@@ -131,7 +125,7 @@ export class MapHandlerService {
     }
     if(shouldChangeRoom)
     {
-      this.flagshandler.setFlag("currentroom",roomName);
+      this.masterService.flagsHandler.setFlag("currentroom",roomName);
       this.currentRoom.onExit();
       this.currentRoom=foundRoom;
       this.currentRoom.onEnter();
