@@ -1,6 +1,7 @@
-import { battleActionOutput, characterStats } from "src/app/customTypes/customTypes";
+import { ActionOutput, characterStats } from "src/app/customTypes/customTypes";
+import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
-import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
+import { loadCharacterStats, pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Description } from "../Descriptions/Description";
 import { Armor } from "../Equipment/Armor/Armor";
 import { ArmorNoArmor } from "../Equipment/Armor/ArmorNoArmor";
@@ -18,8 +19,12 @@ import { Perk } from "../Perk/Perk";
 import { Reaction } from "./Reaction/Reaction";
 import { Status } from "./Status/Status";
 import { StatusFight } from "./Status/StatusFight";
+import { StatusCharm } from "./Status/StatusTemporal/Ailments/StatusCharm";
+import { StatusFright } from "./Status/StatusTemporal/Ailments/StatusFright";
 import { StatusDefend } from "./Status/StatusTemporal/StatusDefend";
 import { TimedStatus } from "./Status/TimedStatus";
+import { StatusGrappling } from "./Status/StatusTemporal/Ailments/StatusGrappling";
+import { StatusGrappled } from "./Status/StatusTemporal/Ailments/StatusGrappled";
 
 export abstract class Character
 {
@@ -31,9 +36,7 @@ export abstract class Character
     private timedStatus:TimedStatus[] = [];
     private fightStatus:StatusFight[] = [];
     inventary:Item[] = [];
-    specialAttacks:SpecialAttack[] = [];
-    protected abstract reactions:Reaction[];
-
+    
     private _meleeWeapon:MeleeWeapon = null;
     get meleeWeapon():MeleeWeapon { return this._meleeWeapon || new MeleeUnharmed(this.masterService) }
     private _rangedWeapon:RangedWeapon = null;
@@ -45,30 +48,13 @@ export abstract class Character
 
     private readonly masterService:MasterService;
 
-    constructor( hitpoints : number, energypoints : number, attack : number, defence : number, speed : number,
-      aim:number, evasion:number, 
-      heatresistance:number, energyresistance:number,frostresistance:number, slashresistance:number, bluntresistance:number, pierceresistance:number, poisonresistance:number,
+    constructor( originalstats:characterStats,
       statuses : Status[] = [] ,timedStatus: TimedStatus[],
       masterService:MasterService
       )
       {
       this.masterService = masterService;
-      this.originalstats= {
-        hitpoints : hitpoints,
-        energypoints : energypoints,
-        attack  : attack,
-        defence :defence,
-        speed   : speed,
-        aim:aim, 
-        evasion:evasion, 
-        heatresistance:heatresistance, 
-        energyresistance:energyresistance,
-        frostresistance:frostresistance,
-        slashresistance:slashresistance,
-        bluntresistance:bluntresistance,
-        pierceresistance:pierceresistance,
-        poisonresistance:poisonresistance
-      }
+      this.originalstats = loadCharacterStats(originalstats)
       this.stats = {...this.originalstats};
       this.statuses = statuses;
       this.timedStatus = timedStatus;
@@ -77,127 +63,221 @@ export abstract class Character
     
     abstract get name(): string;
 
-    Attack(targets:Character[]):battleActionOutput
+    Attack(targets:Character[]):ActionOutput
     {
-      const [attackDescription, attackString]:battleActionOutput = [[],[]];
+      const attackDescription:ActionOutput = [[],[]];
       const weapon = this.meleeWeapon;
+      if(this.hasTag('double attack'))
+        for(const target of targets)
+        { pushBattleActionOutput(this.tryAttack(target,(target: Character)=>weapon.attack(this,target)),attackDescription) }
       for(const target of targets)
-      { pushBattleActionOutput(weapon.attack(this,target),[attackDescription, attackString]) }
-      return [attackDescription, attackString];
+      { pushBattleActionOutput(this.tryAttack(target,(target: Character)=>weapon.attack(this,target)),attackDescription) }
+      return attackDescription;
     }
-    Shoot(targets:Character[]):battleActionOutput
+    Shoot(targets:Character[]):ActionOutput
     {
-      const [attackDescription, attackString]:battleActionOutput = [[],[]];
+      const attackDescription:ActionOutput = [[],[]];
       const weapon = this.rangedWeapon;
+      if(this.hasTag('double shoot'))
+        for(const target of targets)
+        { pushBattleActionOutput(this.tryAttack(target,(target: Character)=>weapon.attack(this,target)),attackDescription) }
       for(const target of targets)
-      { pushBattleActionOutput(weapon.attack(this,target),[attackDescription, attackString]) }
-      return [attackDescription, attackString];
+      { pushBattleActionOutput(this.tryAttack(target,(target: Character)=>weapon.attack(this,target)),attackDescription) }
+      return attackDescription;
     }
-    Defend(target:Character[]):battleActionOutput
+    Defend(target:Character[]):ActionOutput
     {
       const status = new StatusDefend(this.masterService)
       this.addStatus(status);
-      this.react(this.shield.tags,this);
-      return status.applyEffect(this);
+      const reactionOutput = this.react(this.shield.tags,this);
+      const statusOutput  = status.applyEffect(this);
+      return pushBattleActionOutput(statusOutput,reactionOutput);
     }
-    startRound():battleActionOutput
+    startRound():ActionOutput
     {
-      const roundString:string[]=[];
-      const roundDescription:Description[]=[];
-      roundString.push(this.currentStatusString);
+      const roundDescription:ActionOutput = [[],[]]
+      roundDescription[1].push(this.currentStatusString);
       ({...this.roundStats} = this.stats)
-      const removeAilments = this.fightStatus.filter(ailment => ailment.effectHasEnded);
-      this.fightStatus = this.fightStatus.filter(ailment => !ailment.effectHasEnded);
-      for(const ended of removeAilments)
-      { pushBattleActionOutput(ended.onEffectEnded(this),[roundDescription, roundString]) }
-      for(const status of this.fightStatus)
-      { pushBattleActionOutput(status.applyEffect(this),[roundDescription, roundString]) }
-      for(const special of this.specialAttacks)
-      { special.cooldown = Math.max(0,special.cooldown-1) }
-      return [roundDescription,roundString];
+      pushBattleActionOutput(this.startRoundRemoveStatusFight(),roundDescription)
+      pushBattleActionOutput(this.startRoundApplyStatus(),roundDescription)
+      this.cooldownSpecials();
+      return roundDescription;
     }
+    onDefeated():ActionOutput
+    {
+      let description:ActionOutput =[[],[]]
+      for(const status of this. fightStatus)
+      { pushBattleActionOutput(status.onStatusRemoved(this),description) }
+      this.fightStatus = [];
+      return description;
+    }
+
+    protected startRoundRemoveStatusFight():ActionOutput
+    {
+      const removeStatusDescription:ActionOutput = [[],[]]
+      const removeFightStatus = this.fightStatus.filter(ailment => ailment.effectHasEnded);
+      this.fightStatus = this.fightStatus.filter(ailment => !ailment.effectHasEnded);
+      for(const ended of removeFightStatus)
+      { pushBattleActionOutput(ended.onStatusRemoved(this),removeStatusDescription) }
+      return removeStatusDescription
+    }
+    p
+    protected startRoundApplyStatus():ActionOutput
+    {
+      const statusDescription:ActionOutput = [[],[]]
+      for(const status of this.fightStatus)
+      { pushBattleActionOutput(status.applyEffect(this),statusDescription) }
+      return statusDescription;
+    }
+    protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cooldown = Math.max(0,special.cooldown-1) }
 
     /**
      * Gets the number of instances of a specific status in the character
      * @param status The name of the status to check
      * @returns The number of instance of the status applied
      */
-    hasStatus(status:Status|string):number
+    hasStatus(status:Status|statusname):number
     {
       let timesFound = 0;
-      for(const charStatus of this.iterStatus()) 
-        if(charStatus.toString()===status.toString()) 
+      for(const characterStatus of this.iterStatus()) 
+        if(characterStatus.toString()===status.toString()) 
           timesFound++;
       return timesFound;
     }
 
-    get tags():tag[]
+    protected get reactions(): Reaction[]
+    { 
+      const reactions: Reaction[] = []
+      for(const equipment of this.iterEquipment()) { this.pushReactions(reactions,equipment.reactions) }
+      for(const perk of this.perks){this.pushReactions(reactions,perk.reactions)}
+      for(const status of this.iterStatus()){this.pushReactions(reactions,status.reactions)}
+      return reactions;
+    };
+    private pushReactions(reactions:Reaction[],reactions2push:Reaction[])
+    {
+      for(const reaction of reactions2push)
+      {
+        if(reactions.some(pushed => pushed.constructor === reaction.constructor))continue;
+        reactions.push(reaction);
+      }
+    }
+    get specialAttacks(): SpecialAttack[]
+    { 
+      const specials: SpecialAttack[] = []
+      for(const equipment of this.iterEquipment()) { this.pushSpecial(specials,equipment.specials) }
+      for(const perk of this.perks){this.pushSpecial(specials,perk.specials)}
+      for(const status of this.iterStatus()){this.pushSpecial(specials,status.specials)}
+      return specials
+    };
+    private pushSpecial(specials:SpecialAttack[],specials2push:SpecialAttack[])
+    {
+      for(const special of specials2push)
+      {
+        if(specials.some(pushed => pushed.constructor === special.constructor))continue;
+        specials.push(special);
+      }
+    }
+
+    protected get tags():tag[]
     {
       const tags:tag[] = [];
       for(const equipment of this.iterEquipment()) tags.push(...equipment.tags)
       for(const status of this.iterStatus())tags.push(...status.tags)
       for(const perk of this.perks)tags.push(...perk.tags)
-      return tags
+      return tags;
     }
 
-    hasTag(tag:tag):boolean
-    {
-      return this.tags.includes(tag);
+    hasTag(tag:tag):boolean { return this.tags.includes(tag); }
+    
+    addStatus(status: Status): ActionOutput{
+      if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
+      const statusDescription:ActionOutput = [[],[]]
+      if(status instanceof StatusFight){pushBattleActionOutput(this.addFightStatus(status),statusDescription)}
+      else if(status instanceof TimedStatus){pushBattleActionOutput(this.addTimedStatus(status),statusDescription)}
+      else{
+        this.statuses.push(status);
+        pushBattleActionOutput(status.onStatusGainded(this),statusDescription)
+      }
+      return statusDescription;
     }
-    addStatus(status: Status): battleActionOutput{
-      if(status instanceof StatusFight)return this.addFightStatus(status)
-      if(status instanceof TimedStatus)return this.addTimedStatus(status)
-      const [statusDescription=[], statusString=[]] = []
-      this.statuses.push(status);
-      pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString])
-      return [statusDescription, statusString];
-    }
-    private addFightStatus(status: StatusFight): battleActionOutput {
-      const statusDescription:Description[] = []
-      const statusString:string[] = []
+    private addFightStatus(status: StatusFight): ActionOutput {
+      const statusDescription:ActionOutput = [[],[]]
       this.fightStatus.push(status);
-      pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString])
-      return [statusDescription,statusString];
+      pushBattleActionOutput(status.onStatusGainded(this),statusDescription)
+      return statusDescription;
     }
-    private addTimedStatus(status: TimedStatus): battleActionOutput {
-      const [statusDescription, statusString]:battleActionOutput = [[],[]];
+    private addTimedStatus(status: TimedStatus): ActionOutput {
+      const [statusDescription, statusString]:ActionOutput = [[],[]];
       this.timedStatus.push(status);
       pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString]);
       return [statusDescription, statusString];
     }
-    removeStatus(status:Status|string):battleActionOutput
+    addPerk(perk:Perk):void
     {
-      let [descriptions,strings]:battleActionOutput = [[],[]];
+      if(this.perks.some(characterperk => characterperk.constructor ===  perk.constructor))return;
+      this.perks.push(perk);
+    }
+    removeStatus(status:Status|statusname):ActionOutput
+    {
+      let removeStatusDescription:ActionOutput = [[],[]];
       let statusIndex = this.statuses.findIndex(characterStatus=>characterStatus.toString()===status.toString());
       while(statusIndex>=0)
       {
         const [status] = this.statuses.splice(statusIndex,1);
-        [descriptions,strings] = status.onEffectEnded(this);
+        removeStatusDescription = status.onStatusRemoved(this);
         statusIndex = this.statuses.findIndex(characterStatus=>characterStatus.toString()===status.toString())
       }
+      statusIndex = this.timedStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString());
+      while(statusIndex>=0)
+      {
+        const [status] = this.timedStatus.splice(statusIndex,1);
+        removeStatusDescription = status.onStatusRemoved(this);
+        statusIndex = this.timedStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString())
+      }
+      statusIndex = this.fightStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString());
+      while(statusIndex>=0)
+      {
+        const [status] = this.fightStatus.splice(statusIndex,1);
+        removeStatusDescription = status.onStatusRemoved(this);
+        statusIndex = this.fightStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString())
+      }
       this.applyStatus();
-      return [descriptions,strings];
+      return removeStatusDescription;
     }
-    removeTimedStatus():battleActionOutput
+    getStatus(status: statusname):Status|null{
+      for(const characterStatus of this.iterStatus())if(characterStatus.toString()===status.toString())return characterStatus;
+      return null;
+    }
+    tryAttack(target:Character , action:(target:Character)=>ActionOutput):ActionOutput
+    {
+      for(const tag of this.tags)
+      {
+        if(tag==='paralized') return [[],[`${this.name} is paralized and can't move`]]
+      }
+      for(const status of this.iterStatus())
+      {
+        if(status instanceof StatusCharm      && !(status as StatusCharm)?.canAttack?.(target)   ) return [[],[`${this.name} is charmed and can't attack ${target.name}`]]
+        if(status instanceof StatusFright     && !(status as StatusFright)?.canAttack?.(target)  ) return [[],[`${this.name} fears ${target.name} and can't act.`]]
+        if(status instanceof StatusGrappled   && !(status as StatusGrappled)?.canAttack?.(target)) return [[],[`${this.name} can attack only the grapping one.`]]
+        if(status instanceof StatusGrappling  && !(status as StatusGrappling)?.canAttack?.(target))return [[],[`${this.name} can attack only the grapped one.`]]
+      }
+      return  action(target);
+    }
+    removeTimedStatus():ActionOutput
     {
       const statusDescription:Description[]=[]
       const statusString:string[]=[]
       const removeStatus = this.timedStatus.filter(status => status.effectHasEnded);
       this.timedStatus   = this.timedStatus.filter(status => !status.effectHasEnded);
       for(const ended of removeStatus)
-      { pushBattleActionOutput(ended.onEffectEnded(),[statusDescription,statusString]) }
+      { pushBattleActionOutput(ended.onStatusRemoved(this),[statusDescription,statusString]) }
       return [statusDescription, statusString];
     }
-    addItem(item:Item):battleActionOutput
+    addItem(item:Item):ActionOutput
     {
       throw Error('addItem')
     }
-    addSpecialAttack(specialAttack:SpecialAttack):void
-    {
-      if(this.specialAttacks.some(attack=>attack.toString()===specialAttack.toString()))return;
-      this.specialAttacks.push(specialAttack);
-    }
-    useItem(itemIndex: number,targets: Character[]):battleActionOutput
+    useItem(itemIndex: number,targets: Character[]):ActionOutput
     {
       const item = this.inventary[itemIndex];
       if(item instanceof Equipment)
@@ -205,18 +285,19 @@ export abstract class Character
         const removedItem = this.Equip(item)
         return this.addItem(removedItem);
       }
-      const descriptions:Description[] = []
-      const strings:string[] = []
+      const useItemDescription:ActionOutput =[[],[]]
       for(const target of targets)
-      { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
-      return [descriptions,strings];
+      { pushBattleActionOutput(item.itemEffect(this,target),useItemDescription) }
+      return useItemDescription;
     }
-    useSpecialAttack(itemIndex: number,targets: Character[]):battleActionOutput
+    useSpecialAttack(itemIndex: number,targets: Character[]):ActionOutput
     {
       const item = this.specialAttacks[itemIndex];
       const descriptions:Description[] = []
       const strings:string[] = []
-      for(const target of targets)
+      if(targets.length === 1)
+      { pushBattleActionOutput(this.tryAttack(targets[0],(target: Character)=>item.itemEffect(this,target)),[descriptions,strings]) }
+      else for(const target of targets)
       { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
       return [descriptions,strings];
     }
@@ -254,15 +335,15 @@ export abstract class Character
                               for(const status of this.timedStatus) yield status;
                               for(const status of this.fightStatus) yield status;
                             }
-    abstract IA_Action(ally: Character[], enemy: Character[]):battleActionOutput;
+    abstract IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
 
-    react(whatTriggers:tag[],source: Character):battleActionOutput
+    react(whatTriggers:tag[],source: Character):ActionOutput
     {
-      const reactionDescriptions:Description[] = []
-      const reactionStrings:string[] = []
+      const reactDescription:ActionOutput = [[],[]]
+      if(this.hasTag('paralized') || this.stats.hitpoints<=0) return reactDescription;
       for(const reaction of this.reactions)
-      { pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),[reactionDescriptions,reactionStrings]) }
-      return [reactionDescriptions,reactionStrings]
+      { pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription); console.log(reactDescription) }
+      return reactDescription
     }
 
     get currentStatusString():string { return `${this.name} looks like they are ${this.stats.hitpoints} in a scale of 0 to ${this.originalstats.hitpoints}`}
