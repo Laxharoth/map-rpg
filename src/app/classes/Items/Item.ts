@@ -1,4 +1,4 @@
-import { battleActionOutput } from "src/app/customTypes/customTypes";
+import { ActionOutput } from "src/app/customTypes/customTypes";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../Character/Character";
 import { MasterService } from "../masterService";
@@ -15,8 +15,8 @@ export abstract class Item
   abstract get isPartyUsable(): boolean;
   abstract get isEnemyUsable(): boolean;
   abstract get isSelfUsableOnly(): boolean;
-  get disabled(): boolean { return false;}
+  disabled(user: Character): boolean { return false;}
   abstract get isSingleTarget():boolean;
-  abstract itemEffect(user:Character,target: Character):battleActionOutput;
+  itemEffect(user:Character,target: Character):ActionOutput{return target.react(this.tags,user)};
   get tags(): tag[] {return []};
 }
