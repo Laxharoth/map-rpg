@@ -1,22 +1,36 @@
-import { battleActionOutput } from "src/app/customTypes/customTypes";
+import { ActionOutput } from "src/app/customTypes/customTypes";
+import { statusname } from "src/app/customTypes/statusnames";
+import { tag } from "src/app/customTypes/tags";
+import { pushBattleActionOutput, randomCheck } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
 import { StatusFight } from "../StatusFight";
 
 export class StatusPoison extends StatusFight
 {
-  protected DURATION: number;
-  get name(): string { return 'Poison'; }
+  protected DURATION: number = 6;
+  get name(): statusname { return 'Poison'; }
   get description(): string { return `Causes the target to lose hp gradually\n${this.DURATION} turns left.`; }
-  protected effect(target: Character): battleActionOutput
+  protected effect(target: Character): ActionOutput
   {
-    const damage = Math.floor(target.stats.hitpoints*7/8);
+    const damage = this.calculatePoisonDamage(target);
     target.stats.hitpoints-=damage;
     return [[],[`Poison causes ${damage} points of damage to ${target.name}`]];
   }
   canApply(target:Character): boolean
-  { return super.canApply(target) && target.roundStats.poisonresistance<Math.random()*100; }
-  onStatusGainded(target: Character): battleActionOutput
-  { return [[],[`${target.name} has been poisoned.`]]; }
-  onEffectEnded(target: Character): battleActionOutput
-  { return [[],[`${target.name} is no loger poisoned.`]]; }
+  { return super.canApply(target) && randomCheck(target.roundStats.poisonresistance); }
+  onStatusGainded(target: Character): ActionOutput
+  { return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} has been poisoned.`]]); }
+  onStatusRemoved(target: Character): ActionOutput
+  { return pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger poisoned.`]]); }
+
+  private calculatePoisonDamage(target: Character):number
+  {
+    const basedamage = target.stats.hitpoints*1/8;
+    const turnModifier = (5-this.DURATION)**2 / 100;
+    const resistanceModifier = Math.max(0,100-target.stats.poisonresistance)/100;
+    const turndamage = basedamage*(1+turnModifier)*resistanceModifier;
+    return Math.floor(turndamage)
+  }
+
+  get tags(): tag[] { return super.tags.concat(['poison'])}
 }

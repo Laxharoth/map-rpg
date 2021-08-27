@@ -1,19 +1,20 @@
 import { Description, nextOption } from "src/app/classes/Descriptions/Description";
-import { battleActionOutput } from "src/app/customTypes/customTypes";
+import { ActionOutput } from "src/app/customTypes/customTypes";
+import { statusname } from "src/app/customTypes/statusnames";
+import { tag } from "src/app/customTypes/tags";
+import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
 import { StatusFight } from "../StatusFight";
 
 export class StatusParalisis extends StatusFight {
   protected DURATION: number = 0;
-  get name(): string {
-    return 'Paralisis';
-  }
+  get name(): statusname { return 'Paralisis'; }
   get description(): string {
     return "The target can't move due to an energy shock.";
   }
-  protected effect(target: Character): battleActionOutput
+  protected effect(target: Character): ActionOutput
   { return [[],[`${target.name} can't move`]] }
-  onStatusGainded(target: Character): battleActionOutput
+  onStatusGainded(target: Character): ActionOutput
   {
     switch(Math.floor(Math.random() * 7))
     {
@@ -22,12 +23,13 @@ export class StatusParalisis extends StatusFight {
       case 7: this.DURATION=3; break;
     }
     if(this.DURATION)
-      return [[new Description(()=>`${target.name} has been paralized.`,[nextOption(this.masterService)])],[]];
+      return pushBattleActionOutput(super.onStatusGainded(target),[[new Description(()=>`${target.name} has been paralized.`,[nextOption(this.masterService)])],[]]);
     else
-      return [[],[`${target.name} resisted the paralisis.`]];
+      return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} resisted the paralisis.`]]);
   }
-  onEffectEnded(target: Character): battleActionOutput
-  { return [[],[`${target.name} is no loger paralized.`]]; }
+  onStatusRemoved(target: Character): ActionOutput
+  { return pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger paralized.`]]); }
   canApply(target:Character): boolean
   { return super.canApply(target) && target.roundStats.energyresistance<Math.random()*100; }
+  get tags(): tag[] { return super.tags.concat(['paralized'])}
 }
