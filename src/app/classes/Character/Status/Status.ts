@@ -1,24 +1,31 @@
-import { DescriptionHandlerService } from './../../../service/description-handler.service';
-import { Description } from "../../Descriptions/Description";
 import { Character } from "../Character";
 import { MasterService } from '../../masterService';
-import { battleActionOutput } from 'src/app/customTypes/customTypes';
+import { ActionOutput } from 'src/app/customTypes/customTypes';
 import { tag } from 'src/app/customTypes/tags';
+import { statusname } from '../../../customTypes/statusnames';
+import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
+import { Reaction } from "../Reaction/Reaction";
+import { SpecialAttack } from "../../Items/SpecialAttack/SpecialAttack";
 
 export abstract class Status
 {
   protected masterService:MasterService;
   constructor(masterService:MasterService){this.masterService=masterService;}
   //constant
-  abstract get name(): string;
+  abstract get name(): statusname;
   abstract get description(): string;
-  abstract applyEffect(target: Character):battleActionOutput
   abstract get effectHasEnded():boolean;
-  protected abstract effect(target: Character):battleActionOutput
-
+  protected abstract effect(target: Character):ActionOutput
+  
+  applyEffect(target: Character):ActionOutput{
+    const effect = this.effect(target);
+    return pushBattleActionOutput(target.react(this.tags,target), effect);
+  }
   canApply(target: Character):boolean{return target.hasStatus(this.name)===0;}
-  onStatusGainded(target: Character):battleActionOutput{return [[],[]];};
-  onEffectEnded(target: Character)  :battleActionOutput{return [[],[]];};
+  onStatusGainded(target: Character):ActionOutput{ return target.react(this.tags.concat(['status gained']),target) };
+  onStatusRemoved(target: Character)  :ActionOutput{ return target.react(this.tags.concat(['status ended']),target) };
   toString():string{return this.name;};
   get tags(): tag[]{ return []}
+  get reactions(): Reaction[]{ return [];}
+  get specials():SpecialAttack[]{ return [];}
 }
