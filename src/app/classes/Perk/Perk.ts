@@ -1,11 +1,16 @@
 import { tag } from "src/app/customTypes/tags";
+import { Reaction } from "../Character/Reaction/Reaction";
+import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 import { MasterService } from "../masterService";
 
 export abstract class Perk
 {
-    masterService:MasterService;
+    abstract get name():string;
+    protected readonly masterService:MasterService;
     constructor(masterService:MasterService)
     { this.masterService = masterService; }
 
-    abstract get tags(): tag[];
+    get tags(): tag[] { return []; }
+    get reactions(): Reaction[]{ return []}
+    get specials():SpecialAttack[] { return []}
 }
