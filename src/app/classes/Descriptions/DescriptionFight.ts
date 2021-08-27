@@ -1,4 +1,4 @@
-import { battleActionOutput } from "src/app/customTypes/customTypes";
+import { ActionOutput } from "src/app/customTypes/customTypes";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../Character/Character";
 import { EnemyFormation } from "../Character/NPC/EnemyFormations/EnemyFormation";
@@ -48,18 +48,30 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
       .headDescription(...startRoundDescription)
       .setDescription(false);
   }
-  function round(playerAction:(target:Character[])=>battleActionOutput,playerTarget:Character[]):void
+  function round(playerAction:(target:Character[])=>ActionOutput,playerTarget:Character[]):void
   {
     for(const character of attackOrder()){
-      if(character.hasTag('paralized') || character.stats.hitpoints <= 0)
-      { fightRoundString.push(`${character.name} can't move`); continue; }
+      if(character.stats.hitpoints <= 0)
+      { 
+        fightRoundString.push(`${character.name} can't move`); 
+        pushBattleActionOutput(character.onDefeated(),[fightRoundDescription,fightRoundString])
+        continue; 
+      }
       if(character === user)
       { pushBattleActionOutput(playerAction(playerTarget),[fightRoundDescription,fightRoundString]); continue; }
       
       { pushBattleActionOutput(character.IA_Action([user].concat(party),enemy.enemies),[fightRoundDescription,fightRoundString]) }
 
-      if(enemyIsDefended()){fightRoundString.push('ememy is defeated');break; }
-      if(partyIsDefended()){fightRoundString.push('party is defeated');break;}
+      if(enemyIsDefended()){
+        for(const enem of enemy.enemies)
+        { pushBattleActionOutput(enem.onDefeated(),[fightRoundDescription,fightRoundString]); }
+        break; 
+      }
+      if(partyIsDefended()){
+        for(const ally of [user].concat(party))
+        { pushBattleActionOutput(ally.onDefeated(),[fightRoundDescription,fightRoundString]); };
+        break;
+      }
     }
     if(enemyIsDefended()){ fightRoundDescription.push(endBattle(true,fightRoundString))}
     else if(partyIsDefended()){ fightRoundDescription.push(endBattle(false,fightRoundString))}
@@ -128,7 +140,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   ///////////////////////////////////////////////////////
   //SELECT TARGET
   ///////////////////////////////////////////////////////
-  function selectTarget(targets:Character[],playerAction:(target:Character[])=>battleActionOutput):Description
+  function selectTarget(targets:Character[],playerAction:(target:Character[])=>ActionOutput):Description
   {
     const targetsOptions:DescriptionOptions[] = [];
     for(const target of targets)
@@ -159,7 +171,6 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
     {
       const playerAction = (target: Character[])=>user.useSpecialAttack(i,target);
       options.push(new DescriptionOptions(items[i].name,()=>{
-        console.log(items[i])
         if(items[i].isSelfUsableOnly)
         {
           round(playerAction,[user])
@@ -176,7 +187,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
           return;
         }
         round(playerAction,targets);
-      },!items[i].isBattleUsable || items[i].disabled))
+      },!items[i].isBattleUsable || items[i].disabled(user)))
     }
     if(options.length <= 10)
     {
