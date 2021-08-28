@@ -13,7 +13,7 @@ export class StatusPoison extends StatusFight
   protected effect(target: Character): ActionOutput
   {
     const damage = this.calculatePoisonDamage(target);
-    target.stats.hitpoints-=damage;
+    target.takeDamage(damage);
     return [[],[`Poison causes ${damage} points of damage to ${target.name}`]];
   }
   canApply(target:Character): boolean

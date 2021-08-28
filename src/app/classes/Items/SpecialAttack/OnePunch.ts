@@ -13,12 +13,12 @@ export class OnePunch extends SpecialAttack
     get isSingleTarget(): boolean { return true; }
     itemEffect(user:Character ,target: Character): ActionOutput {
         this.cooldown = 10000;
-        target.stats.hitpoints = 0;
+        target.takeDamage(Infinity);
         const specialDescription:ActionOutput = [[this.specialDescription(user,target)],[]]
         pushBattleActionOutput(super.itemEffect(user,target),specialDescription)
         return specialDescription;
     }
-    
+
     ////////////////////
     /// SPECIAL DESCRIPTION
     ////////////////////

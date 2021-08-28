@@ -24,7 +24,7 @@ export abstract class Weapon extends Equipment
     {return [[],[`${user.name} attack ${target.name} but missed`]];}
     const [descriptions,strings]:ActionOutput = [[],[]];
     const damage = this.calculateDamage(user, target);
-    target.stats.hitpoints-=damage;
+    target.takeDamage(damage);
     strings.push(`${target.name} takes ${damage} damage from ${user.name}'s ${this.name}`)
     pushBattleActionOutput(target.react(this.tags,user),[descriptions,strings]);
     return [descriptions,strings];
