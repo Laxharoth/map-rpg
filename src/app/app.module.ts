@@ -7,6 +7,8 @@ import { MapComponent } from './component/map/map.component';
 import { GuiComponent } from './component/gui/gui.component';
 import { DescriptionComponent } from './component/description/description.component';
 import { DescriptionOptionsComponent } from './component/description-options/description-options.component';
+import { PartyComponent } from './component/party/party.component';
+import { PartyMemberComponent } from './component/party-member/party-member.component';
 
 
 @NgModule({
@@ -16,6 +18,8 @@ import { DescriptionOptionsComponent } from './component/description-options/des
     GuiComponent,
     DescriptionComponent,
     DescriptionOptionsComponent,
+    PartyComponent,
+    PartyMemberComponent,
   ],
   imports: [
     BrowserModule,
