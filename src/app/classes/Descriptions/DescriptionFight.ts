@@ -8,8 +8,9 @@ import { Description, DescriptionOptions } from "./Description";
 
 export const descriptionFight = (masterService:MasterService,enemy:EnemyFormation)=>{
 
-  const user = masterService.user;
-  const party = masterService.party;
+  const user = masterService.partyHandler.user;
+  const party = masterService.partyHandler.party;
+  masterService.enemyHandler.enemyFormation  = enemy;
   [user].concat(party).forEach(character=>{character.specialAttacks.forEach(attacker=>{attacker.cooldown = 0})})
 
   let fightRoundString:string[] = [];
@@ -17,7 +18,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   let fightRoundDescription:Description[] = [];
   let startRoundDescription:Description[] = [];
 
-  function enemyIsDefended():boolean 
+  function enemyIsDefended():boolean
   { return enemy.enemies.every(character=>character.stats.hitpoints<=0); }
   function partyIsDefended():boolean
   { return user.stats.hitpoints<=0; }
@@ -35,7 +36,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
     fightRoundString = [];
     startRoundDescription = [];
     fightRoundDescription = [];
-    
+
     for(const character of  [user].concat(party).concat(enemy.enemies).filter(character => character.stats.hitpoints>0))
     {
       const [description,string] = character.startRound();
@@ -52,20 +53,20 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   {
     for(const character of attackOrder()){
       if(character.stats.hitpoints <= 0)
-      { 
-        fightRoundString.push(`${character.name} can't move`); 
+      {
+        fightRoundString.push(`${character.name} can't move`);
         pushBattleActionOutput(character.onDefeated(),[fightRoundDescription,fightRoundString])
-        continue; 
+        continue;
       }
       if(character === user)
       { pushBattleActionOutput(playerAction(playerTarget),[fightRoundDescription,fightRoundString]); continue; }
-      
+
       { pushBattleActionOutput(character.IA_Action([user].concat(party),enemy.enemies),[fightRoundDescription,fightRoundString]) }
 
       if(enemyIsDefended()){
         for(const enem of enemy.enemies)
         { pushBattleActionOutput(enem.onDefeated(),[fightRoundDescription,fightRoundString]); }
-        break; 
+        break;
       }
       if(partyIsDefended()){
         for(const ally of [user].concat(party))
@@ -159,7 +160,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
     }
     return new Description(()=>`${targets.map(target=>`${target.name}:${target.stats.hitpoints}`).join('\n')}`,targetsOptions)
   }
-  
+
   ///////////////////////////////////////////////////////
   //SELECT ITEM
   ///////////////////////////////////////////////////////
@@ -225,8 +226,8 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   function endBattle(playerWon: boolean,roundStrings:string[]):Description
   {
     const nextOption = new DescriptionOptions('next',()=>{
-      if(!playerWon)user.stats.hitpoints=user.originalstats.hitpoints;
-      else user.stats.hitpoints+=10;
+      if(!playerWon)user.healHitPoints(user.originalstats.hitpoints);
+      else user.healHitPoints(10);
       masterService.descriptionHandler.flush(0)
       masterService.descriptionHandler.headDescription(playerWon?
         enemy.onPartyVictory([user].concat(party)):
