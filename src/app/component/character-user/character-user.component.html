@@ -1,0 +1,27 @@
+<div class="user">
+  <div class="name hp"></div>
+  <div class="stats"></div>
+    <span>attack</span>
+    <div [ngStyle]="{'--size-percent': character.stats.attack.toString()+'%'}" >
+            {{ character.stats.attack }}
+    </div>
+    <span>aim</span>
+    <div [ngStyle]="{'--size-percent': character.stats.aim.toString()+'%'}" >
+            {{ character.stats.aim }}
+    </div>
+    <span>defence</span>
+    <div [ngStyle]="{'--size-percent': character.stats.defence.toString()+'%'}" >
+            {{ character.stats.defence }}
+    </div>
+    <span>speed</span>
+    <div [ngStyle]="{'--size-percent': character.stats.speed.toString()+'%'}" >
+            {{ character.stats.speed }}
+    </div>
+    <span>evasion</span>
+    <div [ngStyle]="{'--size-percent': character.stats.evasion.toString()+'%'}" >
+            {{ character.stats.evasion }}
+    </div>
+  <div class="status">|
+    <app-status-icon *ngFor="let status of character.iterStatus()" [status]="status"></app-status-icon>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.stats
+{
+  display: grid;
+  grid-template-columns: 10% 90%;
+}
+
+.stats div
+{
+  position: relative;
+}
+
+.stats div::after
+{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: --var(--size-percent);
+  background-color: rgba(255, 0, 0, 0.5);
+}
