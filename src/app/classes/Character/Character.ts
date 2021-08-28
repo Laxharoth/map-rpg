@@ -36,7 +36,7 @@ export abstract class Character
     private timedStatus:TimedStatus[] = [];
     private fightStatus:StatusFight[] = [];
     inventary:Item[] = [];
-    
+
     private _meleeWeapon:MeleeWeapon = null;
     get meleeWeapon():MeleeWeapon { return this._meleeWeapon || new MeleeUnharmed(this.masterService) }
     private _rangedWeapon:RangedWeapon = null;
@@ -60,7 +60,7 @@ export abstract class Character
       this.timedStatus = timedStatus;
       this.applyStatus();
     }
-    
+
     abstract get name(): string;
 
     Attack(targets:Character[]):ActionOutput
@@ -139,14 +139,14 @@ export abstract class Character
     hasStatus(status:Status|statusname):number
     {
       let timesFound = 0;
-      for(const characterStatus of this.iterStatus()) 
-        if(characterStatus.toString()===status.toString()) 
+      for(const characterStatus of this.iterStatus())
+        if(characterStatus.toString()===status.toString())
           timesFound++;
       return timesFound;
     }
 
     protected get reactions(): Reaction[]
-    { 
+    {
       const reactions: Reaction[] = []
       for(const equipment of this.iterEquipment()) { this.pushReactions(reactions,equipment.reactions) }
       for(const perk of this.perks){this.pushReactions(reactions,perk.reactions)}
@@ -162,7 +162,7 @@ export abstract class Character
       }
     }
     get specialAttacks(): SpecialAttack[]
-    { 
+    {
       const specials: SpecialAttack[] = []
       for(const equipment of this.iterEquipment()) { this.pushSpecial(specials,equipment.specials) }
       for(const perk of this.perks){this.pushSpecial(specials,perk.specials)}
@@ -188,7 +188,7 @@ export abstract class Character
     }
 
     hasTag(tag:tag):boolean { return this.tags.includes(tag); }
-    
+
     addStatus(status: Status): ActionOutput{
       if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
       const statusDescription:ActionOutput = [[],[]]
@@ -322,19 +322,19 @@ export abstract class Character
       { status.applyEffect(this); }
     }
 
-    private iterEquipment = function*():Generator<Equipment, void, unknown>
-                            {
-                              yield this.meleeWeapon;
-                              yield this.rangedWeapon;
-                              yield this.armor;
-                              yield this.shield;
-                            }
-    private iterStatus    = function*():Generator<Status, void,unknown>
-                            {
-                              for(const status of this.statuses) yield status;
-                              for(const status of this.timedStatus) yield status;
-                              for(const status of this.fightStatus) yield status;
-                            }
+    iterEquipment = function*():Generator<Equipment, void, unknown>
+                    {
+                      yield this.meleeWeapon;
+                      yield this.rangedWeapon;
+                      yield this.armor;
+                      yield this.shield;
+                    }
+    iterStatus =  function*():Generator<Status, void,unknown>
+                  {
+                    for(const status of this.statuses) yield status;
+                    for(const status of this.timedStatus) yield status;
+                    for(const status of this.fightStatus) yield status;
+                  }
     abstract IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
 
     react(whatTriggers:tag[],source: Character):ActionOutput
@@ -344,6 +344,18 @@ export abstract class Character
       for(const reaction of this.reactions)
       { pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription); console.log(reactDescription) }
       return reactDescription
+    }
+
+    takeDamage(damage:number)
+    {
+      this.stats.hitpoints=Math.max(0,this.stats.hitpoints-damage);
+      this.masterService.updateCharacter(this);
+    }
+
+    healHitPoints(hitpointsgain:number)
+    {
+      this.stats.hitpoints=Math.min(this.originalstats.hitpoints,this.stats.hitpoints+hitpointsgain);
+      this.masterService.updateCharacter(this);
     }
 
     get currentStatusString():string { return `${this.name} looks like they are ${this.stats.hitpoints} in a scale of 0 to ${this.originalstats.hitpoints}`}
