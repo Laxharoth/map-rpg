@@ -1,4 +1,4 @@
 <div class="party">
-    <app-party-member></app-party-member>
-    <app-party-member></app-party-member>
+    <app-party-member [partyMember]="user"></app-party-member>
+    <app-party-member *ngFor="let partymember of party" [partyMember]="partymember"></app-party-member>
 </div>

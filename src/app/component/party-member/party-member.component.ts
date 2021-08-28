@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Character } from 'src/app/classes/Character/Character';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-party-member',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PartyMemberComponent implements OnInit {
 
+  @Input() partyMember:Character;
+
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }
