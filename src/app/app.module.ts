@@ -9,6 +9,8 @@ import { DescriptionComponent } from './component/description/description.compon
 import { DescriptionOptionsComponent } from './component/description-options/description-options.component';
 import { PartyComponent } from './component/party/party.component';
 import { PartyMemberComponent } from './component/party-member/party-member.component';
+import { CharacterUserComponent } from './component/character-user/character-user.component';
+import { StatusIconComponent } from './component/status-icon/status-icon.component';
 
 
 @NgModule({
@@ -20,6 +22,8 @@ import { PartyMemberComponent } from './component/party-member/party-member.comp
     DescriptionOptionsComponent,
     PartyComponent,
     PartyMemberComponent,
+    CharacterUserComponent,
+    StatusIconComponent,
   ],
   imports: [
     BrowserModule,
