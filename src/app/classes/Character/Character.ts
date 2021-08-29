@@ -48,6 +48,8 @@ export abstract class Character
 
     private readonly masterService:MasterService;
 
+    private __endbattle__ = false;
+
     constructor( originalstats:characterStats,
       statuses : Status[] = [] ,timedStatus: TimedStatus[],
       masterService:MasterService
@@ -340,7 +342,9 @@ export abstract class Character
     react(whatTriggers:tag[],source: Character):ActionOutput
     {
       const reactDescription:ActionOutput = [[],[]]
-      if(this.hasTag('paralized') || this.stats.hitpoints<=0) return reactDescription;
+      if( this.hasTag('paralized') ||
+          this.stats.hitpoints<=0  ||
+          this.__endbattle__         ) return reactDescription;
       for(const reaction of this.reactions)
       { pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription); console.log(reactDescription) }
       return reactDescription
@@ -359,4 +363,13 @@ export abstract class Character
     }
 
     get currentStatusString():string { return `${this.name} looks like they are ${this.stats.hitpoints} in a scale of 0 to ${this.originalstats.hitpoints}`}
+
+    onEndBattle():void
+    {
+      const removeStatus = this.fightStatus
+      this.fightStatus = [];
+      this.__endbattle__ = true;
+      for(const status of removeStatus)status.onStatusRemoved(this);
+      this.__endbattle__ = false;
+    }
 }
