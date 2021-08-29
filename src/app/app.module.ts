@@ -11,6 +11,8 @@ import { PartyComponent } from './component/party/party.component';
 import { PartyMemberComponent } from './component/party-member/party-member.component';
 import { CharacterUserComponent } from './component/character-user/character-user.component';
 import { StatusIconComponent } from './component/status-icon/status-icon.component';
+import { OverrideCssVarDirective } from './directive/override-css-var.directive';
+import { CharacterStatComponent } from './component/character-stat/character-stat.component';
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import { StatusIconComponent } from './component/status-icon/status-icon.compone
     PartyMemberComponent,
     CharacterUserComponent,
     StatusIconComponent,
+    OverrideCssVarDirective,
+    CharacterStatComponent,
   ],
   imports: [
     BrowserModule,
