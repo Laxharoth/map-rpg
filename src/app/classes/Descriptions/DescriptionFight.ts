@@ -127,8 +127,8 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
     null,
     new DescriptionOptions("Escape",()=>{
       masterService.descriptionHandler
-        .flush(0)
-        .headDescription(escapeMessage())
+        .flush(1)
+        .headDescription(enemy.attemptEscape([user].concat(party)))
         .setDescription(false);
     }),
   ]
