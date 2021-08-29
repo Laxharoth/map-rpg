@@ -1,0 +1,28 @@
+.status
+{
+  --status-size:1.3rem;
+  --status-padding:2px;
+  display: flex;
+  height: var(--status-size);
+  width: var(--status-size);
+  padding:var(--status-padding);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.status::before
+{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid black;
+}
+
+span
+{
+  display: block;
+  overflow: hidden;
+  max-width: 1ch;
+  font-family: monospace;
+}
