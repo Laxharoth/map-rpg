@@ -1,20 +1,53 @@
-.stats
+.user
 {
-  display: grid;
-  grid-template-columns: 10% 90%;
+  display: flex;
+  flex-direction:column;
+  height: calc(100% - 30px);
+  padding: 15px;
 }
 
-.stats div
+.character-name
 {
+  font-size: 1.2em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.stats
+{
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+.double-border
+{
+  padding: 10px;
   position: relative;
 }
 
-.stats div::after
+.double-border::before
 {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: --var(--size-percent);
-  background-color: rgba(255, 0, 0, 0.5);
+  inset: 0;
+  border: 1px solid black;
+}
+.double-border::after
+{
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid black;
+}
+
+.status
+{
+  display: flex;
+  padding: 10px;
+  margin-top: 5px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  column-gap: 10px;
 }
