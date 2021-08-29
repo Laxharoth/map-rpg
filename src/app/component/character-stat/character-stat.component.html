@@ -1,0 +1,7 @@
+<div class=single-stat>
+  <span>{{ statName }}</span>
+  <div [appOverrideCssVar]="[{ name:'--size-percent', value:(statValue/maxValue*100)+'%'},
+                              {name:'--bar-color' , value:barColor}]" >
+    {{ statValue }}
+  </div>
+</div>
