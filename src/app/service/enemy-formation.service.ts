@@ -17,7 +17,7 @@ export class EnemyFormationService {
   get enemyFormation():EnemyFormation { return this._enemyFormation}
   set enemyFormation(value:EnemyFormation)
   {
-    this._enemyFormation
+    this._enemyFormation = value;
     this.enemyFormationSubject.next(this._enemyFormation);
   }
 
