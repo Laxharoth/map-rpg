@@ -34,9 +34,9 @@ export class MasterService
   updateCharacter(character:Character):void
   {
     if(character===this.partyHandler.user) return this.partyHandler.updateUser()
-    for(let partyIndeX = 0; partyIndeX < this.partyHandler.party.length; partyIndeX++)
+    for(let partyIndeX = 0; partyIndeX < this.partyHandler.party?.length; partyIndeX++)
     if(this.partyHandler.party[partyIndeX]===character)return this.partyHandler.updatePartyMember(partyIndeX)
-    for(let enemyIndeX = 0; enemyIndeX < this.enemyHandler.enemyFormation.enemies.length; enemyIndeX++)
+    for(let enemyIndeX = 0; enemyIndeX < this.enemyHandler.enemyFormation?.enemies.length; enemyIndeX++)
     if(this.enemyHandler.enemyFormation.enemies[enemyIndeX]===character)return this.enemyHandler.updateEnemy(enemyIndeX)
   }
 }
