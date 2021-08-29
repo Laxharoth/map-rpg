@@ -24,8 +24,8 @@ export class GuiComponent implements OnInit {
   constructor() {
     this.masterService = new MasterService('save1')
     this.user = new charTest(this.masterService,'player');
-    this.masterService.user = this.user;
-    this.masterService.setPartyMember(new charTest(this.masterService,'ally 1'),0)
+    this.masterService.partyHandler.user = this.user;
+    this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
 
     this.descriptionSubscription=this.masterService.descriptionHandler.onSetDescription().subscribe((description)=>{
       this.offset = 0;
