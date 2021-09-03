@@ -1,6 +1,8 @@
+import { game_state } from "../customTypes/states";
 import { DescriptionHandlerService } from "../service/description-handler.service";
 import { EnemyFormationService } from "../service/enemy-formation.service";
 import { FlagHandlerService } from "../service/flag-handler.service";
+import { GameStateService } from "../service/game-state.service";
 import { LockMapService } from "../service/lock-map.service";
 import { MapHandlerService } from "../service/map-handler.service";
 import { PartyService } from "../service/party.service";
@@ -14,6 +16,7 @@ export class MasterService
   private _mapHandler:MapHandlerService
   private _partyHandler:PartyService
   private _enemyHandler:EnemyFormationService
+  private _gameStateHandler:GameStateService
 
   constructor(savename:string)
   {
@@ -23,6 +26,7 @@ export class MasterService
     this._mapHandler = new MapHandlerService(this);
     this._partyHandler = new PartyService();
     this._enemyHandler = new EnemyFormationService();
+    this._gameStateHandler = new GameStateService();
   }
   get lockmap(){return this._lockmap;}
   get descriptionHandler(){return this._descriptionHandler;}
@@ -30,12 +34,15 @@ export class MasterService
   get mapHandler(){return this._mapHandler;}
   get partyHandler(){return this._partyHandler;}
   get enemyHandler(){return this._enemyHandler;}
+  get gameStateHandler(){return this._gameStateHandler;}
 
   updateCharacter(character:Character):void
   {
     if(character===this.partyHandler.user) return this.partyHandler.updateUser()
+
     for(let partyIndeX = 0; partyIndeX < this.partyHandler.party?.length; partyIndeX++)
     if(this.partyHandler.party[partyIndeX]===character)return this.partyHandler.updatePartyMember(partyIndeX)
+
     for(let enemyIndeX = 0; enemyIndeX < this.enemyHandler.enemyFormation?.enemies.length; enemyIndeX++)
     if(this.enemyHandler.enemyFormation.enemies[enemyIndeX]===character)return this.enemyHandler.updateEnemy(enemyIndeX)
   }

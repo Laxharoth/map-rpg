@@ -18,6 +18,8 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   let fightRoundDescription:Description[] = [];
   let startRoundDescription:Description[] = [];
 
+  masterService.gameStateHandler.gameState = 'battle'
+
   function enemyIsDefended():boolean
   { return enemy.enemies.every(character=>character.stats.hitpoints<=0); }
   function partyIsDefended():boolean
