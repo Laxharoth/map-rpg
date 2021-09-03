@@ -14,3 +14,23 @@ body{
 {
   opacity: 0.3;
 }
+
+.double-border
+{
+  padding: 10px;
+  position: relative;
+}
+.double-border::before
+{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid black;
+}
+.double-border::after
+{
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid black;
+}
