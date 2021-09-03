@@ -13,9 +13,9 @@ export class StatusSleep extends StatusFight {
     return "The target can't move.";
   }
   protected effect(target: Character): ActionOutput
-  { 
+  {
       target.roundStats.evasion*=0.8;
-      return [[],[`${target.name} is sleeping.`]] 
+      return [[],[`${target.name} is sleeping.`]]
   }
   onStatusRemoved(target: Character): ActionOutput
   { return pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger paralized.`]]); }

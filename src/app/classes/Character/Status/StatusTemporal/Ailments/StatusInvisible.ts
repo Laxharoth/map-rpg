@@ -15,5 +15,5 @@ export class StatusInvisible extends StatusFight
         return [[],[]];
     }
     get name(): statusname { return 'Invisible'; }
-    get tags(): tag[] { return super.tags.concat(['aim']);}
+    get tags(): tag[] { return super.tags.concat(['aim','invisible']);}
 }

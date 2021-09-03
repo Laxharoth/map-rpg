@@ -18,9 +18,7 @@ export class StatusPetrified extends StatusFight
         if(poison)poison.extraDuration = 1;
         return [[],[]];
     }
-    get name(): statusname {
-        return 'Petrified';
-    }
+    get name(): statusname { return 'Petrified'; }
     onStatusGainded(target: Character): ActionOutput
     {
         this.previousPoison = target.stats.poisonresistance;
@@ -33,10 +31,9 @@ export class StatusPetrified extends StatusFight
         target.stats.poisonresistance = this.previousPoison;
         return super.onStatusRemoved(target);
     }
-    get tags(): tag[] { return super.tags.concat(['paralized'])}
-    
     private getPoison(target: Character):StatusPoison
     {
-        return target.getStatus('Poison') as StatusPoison;
+      return target.getStatus('Poison') as StatusPoison;
     }
+    get tags(): tag[] { return super.tags.concat(['paralized','petrified'])}
 }

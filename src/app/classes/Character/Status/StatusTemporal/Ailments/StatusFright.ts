@@ -1,6 +1,7 @@
 import { MasterService } from "src/app/classes/masterService";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
+import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput, randomCheck } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../../Character";
 import { StatusFight } from "../../StatusFight";
@@ -30,4 +31,5 @@ export class StatusFright extends StatusFight
     protected effect(target: Character): ActionOutput { return [[],[`${this.frighted.name} fears ${this.frighter.name}`]]}
 
     canAttack(target: Character): boolean {if(this.frighter === target) return randomCheck(30); return true;}
+    get tags(): tag[] { return super.tags.concat(['fright'])}
 }

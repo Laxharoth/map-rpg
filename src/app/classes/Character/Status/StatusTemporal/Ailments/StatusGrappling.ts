@@ -1,6 +1,7 @@
 import { MasterService } from "src/app/classes/masterService";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
+import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../../Character";
 import { StatusFight } from "../../StatusFight";
@@ -32,10 +33,11 @@ export class StatusGrappling extends StatusFight
         return pushBattleActionOutput(super.onStatusGainded(target),description);
     }
     onStatusRemoved(target: Character): ActionOutput
-    { 
-        const effectEndedDescription = this._target.removeStatus('Grappled'); 
+    {
+        const effectEndedDescription = this._target.removeStatus('Grappled');
         return pushBattleActionOutput(super.onStatusRemoved(target), effectEndedDescription);
     }
     canAttack(target: Character): boolean {return this._target === target;}
     get target(): Character { return this._target}
+    get tags(): tag[] { return super.tags.concat(['grappling'])}
 }

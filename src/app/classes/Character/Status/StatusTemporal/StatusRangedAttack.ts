@@ -1,5 +1,6 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
+import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
 import { StatusFight } from "../StatusFight";
@@ -20,4 +21,5 @@ export class StatusRangedAttack extends StatusFight
   }
   onStatusGainded(target: Character)
   { return pushBattleActionOutput(super.onStatusGainded(target),this.applyEffect(target) )}
+  get tags(): tag[] { return super.tags.concat(['aim'])}
 }
