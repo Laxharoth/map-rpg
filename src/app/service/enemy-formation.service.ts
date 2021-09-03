@@ -22,7 +22,7 @@ export class EnemyFormationService {
   }
 
   updateEnemy(index:number){ this.enemySubject.next(this.enemyFormation.enemies[index]); }
-  onUpdateEnemy(index:number):Observable<Character>{ return this.enemySubject.asObservable()}
+  onUpdateEnemy():Observable<Character>{ return this.enemySubject.asObservable()}
 
   onSetEnemyFormation():Observable<EnemyFormation>{ return this.enemyFormationSubject.asObservable();}
 }
