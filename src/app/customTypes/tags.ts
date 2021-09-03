@@ -2,15 +2,21 @@ export type tag = 'melee unharmed'|
                   'ranged unharmed'|
                   'no shield'|
                   'no armor' |
-                  'paralized'|
-                  'status gained'|
-                  'status ended'|
-                  'poison'|
-                  'charm'|
                   'double attack'|
                   'double shoot'|
-                  'blind'|
+                  'status gained'|
+                  'status ended'|
+                  'defend'|
+                  'paralized'|
+                  'poison'|
                   'aim'|
+                  'blind'|
+                  'charm'|
+                  'fright'|
+                  'grappled'|
+                  'grappling'|
+                  'invisible'|
+                  'petrified'|
                   'prone'|
                   'restrained'|
                   'sleep';
