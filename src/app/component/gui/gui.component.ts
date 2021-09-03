@@ -1,8 +1,10 @@
+import { GameStateService } from './../../service/game-state.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 import { Subscription } from 'rxjs';
 import { MasterService } from 'src/app/classes/masterService';
 import { charTest } from 'src/app/classes/Character/NPC/characterTest';
+import { game_state } from 'src/app/customTypes/states';
 
 @Component({
   selector   : 'app-gui',
@@ -12,12 +14,14 @@ import { charTest } from 'src/app/classes/Character/NPC/characterTest';
 export class GuiComponent implements OnInit {
   masterService:MasterService;
   currentOptions:Array<DescriptionOptions|null>;
+  currentGameState:game_state;
 
   private descriptionOptions:Array<DescriptionOptions|null>;
   private offset = 0;
   private size   = 8;
 
   private descriptionSubscription : Subscription;
+  private gameStateSubscription : Subscription;
 
   user:charTest;
 
@@ -26,11 +30,15 @@ export class GuiComponent implements OnInit {
     this.user = new charTest(this.masterService,'player');
     this.masterService.partyHandler.user = this.user;
     this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
+    this.currentGameState = this.masterService.gameStateHandler.gameState;
 
     this.descriptionSubscription=this.masterService.descriptionHandler.onSetDescription().subscribe((description)=>{
       this.offset = 0;
       this.descriptionOptions = description.options;
       this.setCurrentOptions();
+    })
+    this.gameStateSubscription=this.masterService.gameStateHandler.onSetGameState().subscribe(gameState => {
+      this.currentGameState = gameState;
     })
 
     this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
@@ -41,6 +49,7 @@ export class GuiComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.descriptionSubscription.unsubscribe();
+    this.gameStateSubscription.unsubscribe();
   }
 
   move(direction:any)
@@ -68,6 +77,9 @@ export class GuiComponent implements OnInit {
         ;
     }
   }
+
+
+
   isSubsetOfOptions():boolean{
     return this.descriptionOptions.length>10;
   }
