@@ -13,9 +13,9 @@ export class SpecialCharm extends SpecialAttack
     get isSelfUsableOnly(): boolean { return false; }
     get isSingleTarget(): boolean { return true; }
     itemEffect(user:Character,target: Character): ActionOutput {
-        const itemDescription:ActionOutput = [[],[]]
-        target.addStatus(new StatusCharm(this.masterService,user,target))
-        this.cooldown = 6;
-        return pushBattleActionOutput(super.itemEffect(user,target),itemDescription)
+      this.cooldown = 6;
+      const itemDescription:ActionOutput = [[],[]]
+      target.addStatus(new StatusCharm(this.masterService,user,target))
+      return pushBattleActionOutput(super.itemEffect(user,target),itemDescription)
     }
 }
