@@ -4,8 +4,9 @@ import { PoisonRush } from "../Character/Reaction/ReactionPoisonRush";
 import { Perk } from "./Perk";
 
 export class PerkPoisonRush extends Perk {
-    get name(){ return 'Posion Rush';}
-    get tags(): tag[] { return [] }
-    
-    get reactions(): Reaction[] {return [new PoisonRush(this.masterService)]}
+  readonly poisonRush = new PoisonRush(this.masterService);
+  get name(){ return 'Posion Rush';}
+  get tags(): tag[] { return [] }
+
+  get reactions(): Reaction[] {return [this.poisonRush]}
 }

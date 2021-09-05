@@ -8,6 +8,7 @@ import { MasterService } from "src/app/classes/masterService";
 
 export class MeleeUnharmed extends MeleeWeapon
 {
+  readonly onePunch = new OnePunch(this.masterService);
   protected statsModifier: characterStats = {evasion:30};
   maxStack = 0;
   protected accuracy: number = 100;
@@ -16,5 +17,6 @@ export class MeleeUnharmed extends MeleeWeapon
   canEquip(character: Character): boolean { return true; }
   get tags(): tag[] { return ['melee unharmed']; }
   get isSingleTarget(): boolean { return true;}
-  get specials():SpecialAttack[]{return [new OnePunch(this.masterService)]}
+  get specials():SpecialAttack[]{return [this.onePunch]}
+
 }

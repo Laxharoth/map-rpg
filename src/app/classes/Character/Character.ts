@@ -10,7 +10,6 @@ import { Shield } from "../Equipment/Shield/Shield";
 import { ShieldNoShield } from "../Equipment/Shield/ShieldNoShield";
 import { MeleeUnharmed } from "../Equipment/Weapon/Melee/MeleeUnharmed";
 import { MeleeWeapon } from "../Equipment/Weapon/Melee/MeleeWeapon";
-import { RangedUnharmed } from "../Equipment/Weapon/Ranged/RangedUnharmed";
 import { RangedWeapon } from "../Equipment/Weapon/Ranged/RangedWeapon";
 import { Item } from "../Items/Item";
 import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
@@ -25,6 +24,7 @@ import { StatusDefend } from "./Status/StatusTemporal/StatusDefend";
 import { TimedStatus } from "./Status/TimedStatus";
 import { StatusGrappling } from "./Status/StatusTemporal/Ailments/StatusGrappling";
 import { StatusGrappled } from "./Status/StatusTemporal/Ailments/StatusGrappled";
+import { RangedUnharmed } from "../Equipment/Weapon/Ranged/RangedUnharmed";
 
 export abstract class Character
 {
@@ -37,14 +37,20 @@ export abstract class Character
     private fightStatus:StatusFight[] = [];
     inventary:Item[] = [];
 
+    private meleeUnharmed:MeleeUnharmed;
+    private rangedUnharmed:RangedUnharmed;
+    private noArmor:ArmorNoArmor;
+    private noShield:ShieldNoShield;
+
+
     private _meleeWeapon:MeleeWeapon = null;
-    get meleeWeapon():MeleeWeapon { return this._meleeWeapon || new MeleeUnharmed(this.masterService) }
+    get meleeWeapon():MeleeWeapon { return this._meleeWeapon || this.meleeUnharmed }
     private _rangedWeapon:RangedWeapon = null;
-    get rangedWeapon():RangedWeapon { return this._rangedWeapon || new RangedUnharmed(this.masterService) }
+    get rangedWeapon():RangedWeapon { return this._rangedWeapon || this.rangedUnharmed }
     private _armor:Armor = null;
-    get armor():Armor { return this._armor || new ArmorNoArmor(this.masterService)}
+    get armor():Armor { return this._armor || this.noArmor}
     private _shield:Shield = null;
-    get shield():Shield { return this._shield || new ShieldNoShield(this.masterService)}
+    get shield():Shield { return this._shield || this.noShield}
 
     private readonly masterService:MasterService;
 
@@ -60,6 +66,10 @@ export abstract class Character
       this.stats = {...this.originalstats};
       this.statuses = statuses;
       this.timedStatus = timedStatus;
+      this.meleeUnharmed  = new MeleeUnharmed(this.masterService);
+      this.rangedUnharmed = new RangedUnharmed(this.masterService);
+      this.noArmor        = new ArmorNoArmor(this.masterService);
+      this.noShield       = new ShieldNoShield(this.masterService);
       this.applyStatus();
     }
 
@@ -346,7 +356,7 @@ export abstract class Character
           this.stats.hitpoints<=0  ||
           this.__endbattle__         ) return reactDescription;
       for(const reaction of this.reactions)
-      { pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription); console.log(reactDescription) }
+      { pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription);}
       return reactDescription
     }
 

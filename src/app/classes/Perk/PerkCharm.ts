@@ -3,6 +3,7 @@ import { SpecialCharm } from "../Items/SpecialAttack/SpecialCharm";
 import { Perk } from "./Perk";
 
 export class PerkCharm extends Perk {
-    get name() { return 'Charmer';}
-    get specials(): SpecialAttack[] {return [new SpecialCharm(this.masterService)] }
+  readonly charmSpecial = new SpecialCharm(this.masterService)
+  get name() { return 'Charmer';}
+  get specials(): SpecialAttack[] {return [this.charmSpecial] }
 }
