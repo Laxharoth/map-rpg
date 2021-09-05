@@ -14,16 +14,20 @@ export abstract class EnemyFormation
     abstract onPartyVictory(party: Character[]):Description;
     attemptEscape(party: Character[]):Description
     {
-      if(this.escapeCheck(party))
-      {
-        for(const character of party){character.onEndBattle();}
-        return this.escapeSuccess();
-      }
-      return this.escapeFail();
+      if(!this.escapeCheck(party))return this.escapeFail();
+      for(const character of party){character.onEndBattle();}
+      this.masterService.gameStateHandler.gameState = 'map'
+      return this.escapeSuccess();
     }
 
     protected abstract escapeSuccess():Description;
     protected abstract escapeFail():Description;
     protected abstract escapeCheck(party: Character[]):boolean;
-    protected exitOption(exitString:string):DescriptionOptions {return new DescriptionOptions(exitString,()=>{ this.masterService.descriptionHandler.flush(0).setDescription(false)})}
+    protected exitOption(exitString:string):DescriptionOptions
+    {
+      return new DescriptionOptions(exitString,()=>{
+        this.masterService.gameStateHandler.gameState = 'map';
+        this.masterService.descriptionHandler.flush(0).setDescription(false)
+      })
+    }
 }
