@@ -10,26 +10,43 @@ import { MasterService } from 'src/app/classes/masterService';
 })
 export class PartyComponent implements OnInit {
 
-  @Input() readonly masterService:MasterService;
-  user:Character;
-  party:Character[];
+  @Input() masterService:MasterService;
 
-
+  @Input() partyType!:'PARTY'|'ENEMY';
+  private _user:Character;
+  private _party:Character[];
   private userSubscription:Subscription;
-  private partySubject: Subscription;
-
-  constructor() { }
+  private partySubscription:Subscription;
+  constructor() {}
 
   ngOnInit(): void {
-    this.user = this.masterService.partyHandler.user;
-    this.party= this.masterService.partyHandler.party;
-    this.userSubscription = this.masterService.partyHandler.onUpdateUser().subscribe(data=>{ this.user = data; });
-    this.partySubject = this.masterService.partyHandler.onUpdateParty().subscribe(data=>{ this.party = data; });
+    if(this.partyType==='PARTY')
+    {
+      this._user = this.masterService.partyHandler.user;
+      this._party= this.masterService.partyHandler.party;
+      this.userSubscription = this.masterService.partyHandler.onUpdateUser().subscribe(user => this._user = user);
+      this.partySubscription= this.masterService.partyHandler.onUpdatePartyMember().subscribe(([index,character])=>{
+        this._party[index] = character;
+      })
+    }
+    if(this.partyType==='ENEMY')
+    {
+      this._party= this.masterService.enemyHandler.enemyFormation.enemies;
+      this.partySubscription= this.masterService.enemyHandler.onUpdateEnemy().subscribe(([index, character])=>{
+        this._party[index] = character
+      })
+    }
   }
 
   ngOnDestroy(): void
   {
-    this.userSubscription.unsubscribe();
-    this.partySubject.unsubscribe();
+    if(this.userSubscription) this.userSubscription.unsubscribe();
+    if(this.partySubscription)this.partySubscription.unsubscribe();
+  }
+
+  get party():Character[]
+  {
+    const party:Character[] = [this._user].concat(this._party).filter(character=>character);
+    return party;
   }
 }
