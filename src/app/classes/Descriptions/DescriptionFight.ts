@@ -3,6 +3,7 @@ import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions"
 import { Character } from "../Character/Character";
 import { EnemyFormation } from "../Character/NPC/EnemyFormations/EnemyFormation";
 import { Item } from "../Items/Item";
+import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 import { MasterService } from "../masterService";
 import { Description, DescriptionOptions } from "./Description";
 
@@ -39,7 +40,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
     startRoundDescription = [];
     fightRoundDescription = [];
 
-    for(const character of  [user].concat(party).concat(enemy.enemies).filter(character => character.stats.hitpoints>0))
+    for(  const character of  getPossibleTarget( [user].concat(party).concat(enemy.enemies) )  )
     {
       const [description,string] = character.startRound();
       startRoundDescription.push(...description)
@@ -123,7 +124,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
       round(playerAction,[user]);
     }),
     new DescriptionOptions("Auto",()=>{
-      round((target: Character[])=>user.IA_Action([user].concat(party),enemy.enemies),[])
+      round((target: Character[])=>user.IA_Action([user].concat(party),getPossibleTarget(enemy.enemies)),[])
     }),
     null,
     null,
@@ -170,27 +171,34 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   {
     const options:DescriptionOptions[]=[]
 
+    console.log(user.specialAttacks)
     for(let i = 0; i < items.length; i++)
     {
       const playerAction = (target: Character[])=>user.useSpecialAttack(i,target);
       options.push(new DescriptionOptions(items[i].name,()=>{
-        if(items[i].isSelfUsableOnly)
-        {
-          round(playerAction,[user])
-          return;
-        }
-        const targets = []
-          .concat(items[i].isPartyUsable? [user].concat(party):[])
-          .concat(items[i].isEnemyUsable? enemy.enemies:[])
-        if(items[i].isSingleTarget)
-        {
-          masterService.descriptionHandler
-          .headDescription(selectTarget(targets,playerAction))
-          .setDescription(false)
-          return;
-        }
-        round(playerAction,targets);
-      },!items[i].isBattleUsable || items[i].disabled(user)))
+          if(items[i].isSelfUsableOnly)
+          {
+            round(playerAction,[user])
+            return;
+          }
+          const targets = []
+            .concat(items[i].isPartyUsable? [user].concat(party):[])
+            .concat(items[i].isEnemyUsable? getPossibleTarget(enemy.enemies):[])
+          if(items[i].isSingleTarget)
+          {
+            if(targets.length===1)
+            {
+              round(playerAction,targets);
+              return;
+            }
+            masterService.descriptionHandler
+            .headDescription(selectTarget(targets,playerAction))
+            .setDescription(false)
+            return;
+          }
+          round(playerAction,targets);
+        },!items[i].isBattleUsable || items[i].disabled(user))
+      )
     }
     if(options.length <= 10)
     {
