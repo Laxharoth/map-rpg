@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Status } from 'src/app/classes/Character/Status/Status';
 
 @Component({
@@ -9,9 +9,19 @@ import { Status } from 'src/app/classes/Character/Status/Status';
 export class StatusIconComponent implements OnInit {
 
   @Input() status: Status;
+  elRef: ElementRef;
+  xOffset:number;
+  constructor(elRef:ElementRef) { this.elRef=elRef;}
 
-  constructor() { }
+  ngOnInit(): void {
+    const x = this.elRef.nativeElement.offsetLeft;
+    const parentNode =this.elRef.nativeElement.parentNode
+    const parentX = parentNode.offsetLeft;
+    this.xOffset = parentX -x
+    console.log(parentNode,x,parentX)
+  }
 
-  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+  }
 
 }
