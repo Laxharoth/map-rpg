@@ -10,7 +10,7 @@ export class EnemyFormationService {
 
   private _enemyFormation:EnemyFormation;
   private enemyFormationSubject = new Subject<EnemyFormation>();
-  private enemySubject = new Subject<Character>();
+  private enemySubject = new Subject<[number,Character]>();
 
   constructor() { }
 
@@ -21,8 +21,8 @@ export class EnemyFormationService {
     this.enemyFormationSubject.next(this._enemyFormation);
   }
 
-  updateEnemy(index:number){ this.enemySubject.next(this.enemyFormation.enemies[index]); }
-  onUpdateEnemy():Observable<Character>{ return this.enemySubject.asObservable()}
+  updateEnemy(index:number){ this.enemySubject.next([index,this.enemyFormation.enemies[index]]); }
+  onUpdateEnemy():Observable<[number,Character]>{ return this.enemySubject.asObservable()}
 
   onSetEnemyFormation():Observable<EnemyFormation>{ return this.enemyFormationSubject.asObservable();}
 }
