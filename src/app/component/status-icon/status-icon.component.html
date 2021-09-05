@@ -1,1 +1,4 @@
-<div class="status"><span>{{ status.name }}</span></div>
+<div class="status">
+  <span>{{ status.name }}</span>
+  <div class="status-tooltip" [appOverrideCssVar]="{name:'--x-offset',value:xOffset+'px'}">{{ status.description }}</div>
+</div>
