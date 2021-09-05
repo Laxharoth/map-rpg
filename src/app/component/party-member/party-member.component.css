@@ -1,0 +1,12 @@
+.status-wrapper
+{
+  display: flex;
+  margin-top: 5px;
+  flex-direction: row;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  column-gap: 5px;
+}
+
+app-status-icon:nth-child(n+5) { display: none; }
