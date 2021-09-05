@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { MasterService } from 'src/app/classes/masterService';
 import { charTest } from 'src/app/classes/Character/NPC/characterTest';
 import { game_state } from 'src/app/customTypes/states';
+import { Character } from 'src/app/classes/Character/Character';
 
 @Component({
   selector   : 'app-gui',
@@ -78,15 +79,17 @@ export class GuiComponent implements OnInit {
     }
   }
 
-
-
-  isSubsetOfOptions():boolean{
-    return this.descriptionOptions.length>10;
+  get enemyFormation():Character[]
+  { return this.masterService.enemyHandler.enemyFormation.enemies }
+  get party():Character[]
+  {
+    const party = [this.masterService.partyHandler.user].concat(this.masterService.partyHandler.party)
+    return party;
   }
 
-  isFirst():boolean{
-    return this.currentOptions[0] === this.descriptionOptions[0];
-  }
+  isSubsetOfOptions():boolean{ return this.descriptionOptions.length>10; }
+
+  isFirst():boolean{ return this.currentOptions[0] === this.descriptionOptions[0]; }
 
   isLast():boolean{
     let compareOptioinIndex = 0;
