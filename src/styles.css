@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+:root
+{
+  --scroll-width:0.7em;
+}
 
 body{
   position: absolute;
@@ -34,3 +38,22 @@ body{
   inset: 3px;
   border: 1px solid black;
 }
+
+::-webkit-scrollbar {
+  width: var(--scroll-width);
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-left: calc(var(--scroll-width) / 4) solid transparent;
+  border-right: calc(var(--scroll-width) / 4) solid transparent;
+  border-radius: 10px;
+  background-clip: content-box;
+}
+
+::before,::after { pointer-events: none; }
