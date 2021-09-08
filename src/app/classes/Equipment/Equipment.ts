@@ -12,16 +12,15 @@ export abstract class Equipment extends Item
   abstract canEquip(character:Character ):boolean;
   abstract get tags():tag[];
   protected readonly abstract statsModifier:characterStats;
-  
+
   get reactions(): Reaction[]{return []};
   get specials():SpecialAttack[]{return []};
-  
+
   get isBattleUsable(): boolean{return true;};
   get isPartyUsable(): boolean {return true;};
   get isEnemyUsable(): boolean {return false;};
   get isSelfUsableOnly(): boolean {return true;};
-  
-  itemEffect(user:Character,target: Character): ActionOutput { return [[],[]] }
+
   applyModifiers(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
