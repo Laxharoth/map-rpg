@@ -85,4 +85,6 @@ export class FlagHandlerService {
   {
     return this.time.getTimeValues();
   }
+
+  get minutes(){return this.time.getMinutes();}
 }
