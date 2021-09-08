@@ -35,6 +35,7 @@ export abstract class Character
     private statuses:Status[] = [];
     private timedStatus:TimedStatus[] = [];
     private fightStatus:StatusFight[] = [];
+    inventarysize = 9;
     inventary:Item[] = [];
 
     private meleeUnharmed:MeleeUnharmed;
@@ -45,12 +46,16 @@ export abstract class Character
 
     private _meleeWeapon:MeleeWeapon = null;
     get meleeWeapon():MeleeWeapon { return this._meleeWeapon || this.meleeUnharmed }
+    set meleeWeapon(equipment:MeleeWeapon){this._meleeWeapon=equipment}
     private _rangedWeapon:RangedWeapon = null;
     get rangedWeapon():RangedWeapon { return this._rangedWeapon || this.rangedUnharmed }
+    set rangedWeapon(equipment:RangedWeapon){this._rangedWeapon=equipment}
     private _armor:Armor = null;
     get armor():Armor { return this._armor || this.noArmor}
+    set armor(equipment:Armor){this._armor=equipment}
     private _shield:Shield = null;
     get shield():Shield { return this._shield || this.noShield}
+    set shield(equipment:Shield){this._shield=equipment}
 
     private readonly masterService:MasterService;
 
@@ -232,30 +237,45 @@ export abstract class Character
     removeStatus(status:Status|statusname):ActionOutput
     {
       let removeStatusDescription:ActionOutput = [[],[]];
-      let statusIndex = this.statuses.findIndex(characterStatus=>characterStatus.toString()===status.toString());
-      while(statusIndex>=0)
-      {
-        const [status] = this.statuses.splice(statusIndex,1);
-        removeStatusDescription = status.onStatusRemoved(this);
-        statusIndex = this.statuses.findIndex(characterStatus=>characterStatus.toString()===status.toString())
-      }
-      statusIndex = this.timedStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString());
-      while(statusIndex>=0)
-      {
-        const [status] = this.timedStatus.splice(statusIndex,1);
-        removeStatusDescription = status.onStatusRemoved(this);
-        statusIndex = this.timedStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString())
-      }
-      statusIndex = this.fightStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString());
-      while(statusIndex>=0)
-      {
-        const [status] = this.fightStatus.splice(statusIndex,1);
-        removeStatusDescription = status.onStatusRemoved(this);
-        statusIndex = this.fightStatus.findIndex(characterStatus=>characterStatus.toString()===status.toString())
-      }
+      pushBattleActionOutput(this.removeRegularStatus(status),removeStatusDescription);
+      pushBattleActionOutput(this.removeTimedStatus(  status),removeStatusDescription);
+      pushBattleActionOutput(this.removeBattleStatus( status),removeStatusDescription);
       this.applyStatus();
       return removeStatusDescription;
     }
+  private removeBattleStatus(status: string | Status) {
+    let removeStatusDescription: ActionOutput = [[],[]];
+    let statusIndex = this.fightStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    while (statusIndex >= 0) {
+      const [status] = this.fightStatus.splice(statusIndex, 1);
+      removeStatusDescription = status.onStatusRemoved(this);
+      statusIndex = this.fightStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    }
+    return removeStatusDescription ;
+  }
+
+  private removeTimedStatus(status: string | Status) {
+    let removeStatusDescription: ActionOutput = [[],[]]
+    let statusIndex = this.timedStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    while (statusIndex >= 0) {
+      const [status] = this.timedStatus.splice(statusIndex, 1);
+      removeStatusDescription = status.onStatusRemoved(this);
+      statusIndex = this.timedStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    }
+    return removeStatusDescription ;
+  }
+
+  private removeRegularStatus(status: string | Status) {
+    let removeStatusDescription: ActionOutput = [[],[]]
+    let statusIndex = this.statuses.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    while (statusIndex >= 0) {
+      const [status] = this.statuses.splice(statusIndex, 1);
+      removeStatusDescription = status.onStatusRemoved(this);
+      statusIndex = this.statuses.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    }
+    return removeStatusDescription ;
+  }
+
     getStatus(status: statusname):Status|null{
       for(const characterStatus of this.iterStatus())if(characterStatus.toString()===status.toString())return characterStatus;
       return null;
@@ -275,16 +295,6 @@ export abstract class Character
       }
       return  action(target);
     }
-    removeTimedStatus():ActionOutput
-    {
-      const statusDescription:Description[]=[]
-      const statusString:string[]=[]
-      const removeStatus = this.timedStatus.filter(status => status.effectHasEnded);
-      this.timedStatus   = this.timedStatus.filter(status => !status.effectHasEnded);
-      for(const ended of removeStatus)
-      { pushBattleActionOutput(ended.onStatusRemoved(this),[statusDescription,statusString]) }
-      return [statusDescription, statusString];
-    }
     addItem(item:Item):ActionOutput
     {
       throw Error('addItem')
@@ -292,11 +302,6 @@ export abstract class Character
     useItem(itemIndex: number,targets: Character[]):ActionOutput
     {
       const item = this.inventary[itemIndex];
-      if(item instanceof Equipment)
-      {
-        const removedItem = this.Equip(item)
-        return this.addItem(removedItem);
-      }
       const useItemDescription:ActionOutput =[[],[]]
       for(const target of targets)
       { pushBattleActionOutput(item.itemEffect(this,target),useItemDescription) }
@@ -312,15 +317,6 @@ export abstract class Character
       else for(const target of targets)
       { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
       return [descriptions,strings];
-    }
-    private Equip(equipment:Equipment):Item
-    {
-      let removedEquipment:Equipment;
-      if(equipment instanceof MeleeWeapon){}
-      if(equipment instanceof RangedWeapon){}
-      if(equipment instanceof Armor){}
-      if(equipment instanceof Shield){}
-      return removedEquipment;
     }
     private applyStatus():void
     {
