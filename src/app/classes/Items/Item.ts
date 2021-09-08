@@ -17,6 +17,15 @@ export abstract class Item
   abstract get isSelfUsableOnly(): boolean;
   disabled(user: Character): boolean { return false;}
   abstract get isSingleTarget():boolean;
-  itemEffect(user:Character,target: Character):ActionOutput{return target.react(this.tags,user)};
+  itemEffect(user:Character,target: Character):ActionOutput
+  {
+    this.amount--;
+    if (this.amount<=0)
+    {
+      const index = user.inventary.indexOf(this);
+      user.inventary.splice(index,1);
+    }
+    return target.react(this.tags,user)
+  };
   get tags(): tag[] {return []};
 }
