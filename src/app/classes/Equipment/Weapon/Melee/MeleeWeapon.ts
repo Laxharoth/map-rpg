@@ -1,5 +1,6 @@
+import { ActionOutput } from 'src/app/customTypes/customTypes';
 import { Character } from "src/app/classes/Character/Character";
-import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
+import { pushBattleActionOutput, randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { Weapon } from "../Weapon";
 
 export abstract class MeleeWeapon extends Weapon
@@ -12,5 +13,13 @@ export abstract class MeleeWeapon extends Weapon
     let accuracyFix = 0;
     if(target.hasTag('prone')) accuracyFix+=20;
     return super.accuracyTest(user,target)+randomBetween(0,accuracyFix);
+  }
+
+  itemEffect(user:Character,target: Character): ActionOutput
+  {
+    const output = super.itemEffect(user, user);
+    const removedEquipment = user.meleeWeapon
+    user.meleeWeapon = this;
+    return pushBattleActionOutput(user.addItem(removedEquipment),output);
   }
 }
