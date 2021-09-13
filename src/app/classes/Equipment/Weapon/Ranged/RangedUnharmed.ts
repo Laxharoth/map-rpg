@@ -9,10 +9,8 @@ export class RangedUnharmed extends RangedWeapon
 {
   protected statsModifier = {};
   maxStack = 0;
-  protected damageTypes: damageTypes;
+  protected damageTypes: damageTypes = {};
   protected accuracy = 50;
-  constructor(masterService:MasterService)
-  { super(masterService,{}) }
   get name(): rangedname { return 'a rock'; }
   canEquip(character: Character): boolean { return true; }
   get tags(): tag[] { return ['ranged unharmed']; }
