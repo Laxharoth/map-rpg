@@ -39,7 +39,7 @@ export class MapHandlerService {
   loadMap(mapName: string):void {
     if(!this.currentMap.mapcolection[mapName])
     {
-      console.log("map does not exist");
+      console.error("map does not exist");
       return;
     }
 
@@ -52,7 +52,7 @@ export class MapHandlerService {
     const {map:mapname=null,room=null} = this.currentMap.roomcolection[roomName];
     if(!room)
     {
-      console.log("room does not exist");
+      console.error("room does not exist");
       return;
     }
 

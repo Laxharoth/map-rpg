@@ -81,7 +81,7 @@ export class Time
     {
       if(!Time.timeconvertion?.[unit])
       {
-        console.log(`Unit ${unit} not supported`);
+        console.warn(`Unit ${unit} not supported`);
         return accumulator;
       }
       return Time.timeconvertion?.[unit]*Number.parseInt(quantity) + accumulator
