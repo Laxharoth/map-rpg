@@ -27,7 +27,7 @@ export function randomCheck(percent:number):boolean
 
 export const loadCharacterStats = (function ()
 {
-  const _defaultStats:characterStats = { hitpoints : 1, energypoints : 0, 
+  const _defaultStats:characterStats = { hitpoints : 1, energypoints : 0,
     attack : 0, aim: 0, defence : 0, speed : 0, evasion : 0,
     heatresistance: 0, energyresistance:0, frostresistance:0, slashresistance: 0, bluntresistance:0, pierceresistance: 0, poisonresistance : 0,}
   return function (characterStats:characterStats):characterStats
@@ -39,7 +39,7 @@ export const loadCharacterStats = (function ()
   }
 })()
 
-export const loadWeaponDamage = (function() {
+export const fillMissingWeaponDamage = (function() {
   const _defaultStats:damageTypes = {
      heatdamage  :0,
      energydamage:0,
