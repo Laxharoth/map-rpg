@@ -11,9 +11,9 @@ export class MeleeUnharmed extends MeleeWeapon
 {
   readonly onePunch = new OnePunch(this.masterService);
   protected statsModifier: characterStats = {evasion:30};
+  protected damageTypes:damageTypes = {bluntdamage:10};
   maxStack = 0;
   protected accuracy: number = 100;
-  constructor(masterService:MasterService) { super(masterService,{bluntdamage:10}) }
   constructor(masterService:MasterService) { super(masterService) }
   get name(): meleename { return 'hand'; }
   canEquip(character: Character): boolean { return true; }
