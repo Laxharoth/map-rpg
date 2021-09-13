@@ -1,9 +1,9 @@
-import { ActionOutput } from "src/app/customTypes/customTypes";
+import { ActionOutput, storeable } from "src/app/customTypes/customTypes";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../Character/Character";
 import { MasterService } from "../masterService";
 
-export abstract class Item
+export abstract class Item implements storeable
 {
   readonly maxStack: number = 9;
   protected readonly masterService: MasterService;
@@ -17,15 +17,15 @@ export abstract class Item
   abstract get isSelfUsableOnly(): boolean;
   disabled(user: Character): boolean { return false;}
   abstract get isSingleTarget():boolean;
-  itemEffect(user:Character,target: Character):ActionOutput
-  {
-    this.amount--;
-    if (this.amount<=0)
-    {
-      const index = user.inventary.indexOf(this);
-      user.inventary.splice(index,1);
-    }
-    return target.react(this.tags,user)
-  };
+  itemEffect(user:Character,target: Character):ActionOutput { return target.react(this.tags,user) };
   get tags(): tag[] {return []};
+  toJson():{[key: string]:any}
+  {
+    return {amount:this.amount}
+  }
+  fromJson(options: {[key: string]: any}): void
+  {
+    const {amount} = options;
+    this.amount = amount;
+  }
 }
