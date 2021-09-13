@@ -27,18 +27,26 @@ export abstract class TimedStatus extends Status{
     return super.onStatusGainded(target)
   }
 
-  private checkRemoveStatus(time: Time, target: Character) {
+  private checkRemoveStatus(time: Time, target: Character)
+  {
     this.currentTime = time.getMinutes();
     if (this.effectHasEnded) {
       const [message] = target.removeStatus(this);
       this.masterService.descriptionHandler.tailDescription(...message);
     }
   }
-
   onStatusRemoved(target: Character)
   {
     this.timerSubscription.unsubscribe()
     return super.onStatusRemoved(target)
   }
-
+  toJson():{[key: string]:any}
+  {
+    return {initialTime:this.initialTime}
+  }
+  fromJson(options:{[key: string]: any}):void
+  {
+    const {initialTime} = options;
+    this.initialTime = initialTime;
+  }
 }
