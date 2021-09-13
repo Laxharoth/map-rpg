@@ -1,13 +1,15 @@
+import { characterStats } from 'src/app/customTypes/customTypes';
 import { ActionOutput, damageTypes } from './../../../customTypes/customTypes';
 import { Character } from "../../Character/Character";
 import { Equipment } from "../Equipment";
-import { loadWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/app/htmlHelper/htmlHelper.functions';
+import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/app/htmlHelper/htmlHelper.functions';
 import { MasterService } from '../../masterService';
 import { weaponname } from 'src/app/customTypes/equipmentnames';
 
 export abstract class Weapon extends Equipment
 {
-  protected damageTypes:damageTypes;
+  protected damageTypes:damageTypes = {};
+  protected statsModifier:characterStats = {};
   protected abstract accuracy:number;
   abstract get name():weaponname;
   /**
@@ -15,10 +17,10 @@ export abstract class Weapon extends Equipment
    * @param masterService should be added to the child contructor parameters
    * @param damageTypes The damage stats of the weapon SHOULD NOT BE ADDED TO CHILD CONSTRUCTOR PARAMETERS
    */
-  constructor(masterService:MasterService, damageTypes:damageTypes)
+  constructor(masterService:MasterService)
   {
     super(masterService)
-    this.damageTypes = loadWeaponDamage(damageTypes)
+    this.damageTypes = fillMissingWeaponDamage(this.damageTypes)
   }
   attack(user:Character,target:Character):ActionOutput
   {
