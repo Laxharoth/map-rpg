@@ -7,16 +7,16 @@ import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 import { MasterService } from "../masterService";
 import { Description, DescriptionOptions } from "./Description";
 
-export const descriptionFight = (masterService:MasterService,enemy:EnemyFormation)=>{
+export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormation)=>{
 
   const user = masterService.partyHandler.user;
   const party = masterService.partyHandler.party;
   masterService.enemyHandler.enemyFormation  = enemy;
   [user].concat(party).forEach(character=>{character.specialAttacks.forEach(attacker=>{attacker.cooldown = 0})})
 
-  let fightRoundString:string[] = [];
+  let battleRoundString:string[] = [];
   let startRoundString:string[] = [];
-  let fightRoundDescription:Description[] = [];
+  let battleRoundDescription:Description[] = [];
   let startRoundDescription:Description[] = [];
 
   masterService.gameStateHandler.gameState = 'battle'
@@ -36,9 +36,14 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   function startRound():void
   {
     startRoundString = [];
-    fightRoundString = [];
+    battleRoundString = [];
     startRoundDescription = [];
-    fightRoundDescription = [];
+    battleRoundDescription = [];
+    updateDisables:{
+      const specials = user.specialAttacks;
+      descriptionOptionSpecial.disabled = specials.length <= 0 || specials.every(item => item.disabled(user));
+      descriptionOptionItem.disabled = user.inventary.length <= 0 || user.inventary.every(item => item.disabled(user));
+    }
 
     for(  const character of  getPossibleTarget( [user].concat(party).concat(enemy.enemies) )  )
     {
@@ -57,83 +62,92 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
     for(const character of attackOrder()){
       if(character.stats.hitpoints <= 0)
       {
-        fightRoundString.push(`${character.name} can't move`);
-        pushBattleActionOutput(character.onDefeated(),[fightRoundDescription,fightRoundString])
+        battleRoundString.push(`${character.name} can't move`);
+        pushBattleActionOutput(character.onDefeated(),[battleRoundDescription,battleRoundString])
         continue;
       }
       if(character === user)
-      { pushBattleActionOutput(playerAction(playerTarget),[fightRoundDescription,fightRoundString]); continue; }
+      { pushBattleActionOutput(playerAction(playerTarget),[battleRoundDescription,battleRoundString]); continue; }
 
-      { pushBattleActionOutput(character.IA_Action([user].concat(party),enemy.enemies),[fightRoundDescription,fightRoundString]) }
+      { pushBattleActionOutput(character.IA_Action([user].concat(party),enemy.enemies),[battleRoundDescription,battleRoundString]) }
 
       if(enemyIsDefended()){
         for(const enem of enemy.enemies)
-        { pushBattleActionOutput(enem.onDefeated(),[fightRoundDescription,fightRoundString]); }
+        { pushBattleActionOutput(enem.onDefeated(),[battleRoundDescription,battleRoundString]); }
         break;
       }
       if(partyIsDefended()){
         for(const ally of [user].concat(party))
-        { pushBattleActionOutput(ally.onDefeated(),[fightRoundDescription,fightRoundString]); };
+        { pushBattleActionOutput(ally.onDefeated(),[battleRoundDescription,battleRoundString]); };
         break;
       }
     }
-    if(enemyIsDefended()){ fightRoundDescription.push(endBattle(true,fightRoundString))}
-    else if(partyIsDefended()){ fightRoundDescription.push(endBattle(false,fightRoundString))}
-    else { fightRoundDescription.push(roundMessage(fightRoundString))}
+    if(enemyIsDefended()){ battleRoundDescription.push(endBattle(true,battleRoundString))}
+    else if(partyIsDefended()){ battleRoundDescription.push(endBattle(false,battleRoundString))}
+    else { battleRoundDescription.push(roundMessage(battleRoundString))}
 
     masterService.descriptionHandler
       .flush(1)
-      .headDescription(...fightRoundDescription)
+      .headDescription(...battleRoundDescription)
       .setDescription(false);
   }
 
-  const options = [
-    new DescriptionOptions("Attack" ,()=>{
-      const targets = getPossibleTarget(enemy.enemies);
-      const playerAction = (target)=>user.Attack(target)
-      if(targets.length === 1)
-        round(playerAction,targets)
-      else
-        masterService.descriptionHandler
-        .headDescription(selectTarget(targets,playerAction))
-        .setDescription(false)
-    }),
-    new DescriptionOptions("Shoot " ,()=>{
-      const targets = getPossibleTarget(enemy.enemies);
-      const playerAction = (target: Character[])=>user.Shoot(target)
-      if(targets.length === 1)
-        round(playerAction,targets)
-      else
+  const descriptionOptionAttack = new DescriptionOptions("Attack", () => {
+    const targets = getPossibleTarget(enemy.enemies);
+    const playerAction = (target) => user.Attack(target);
+    if (targets.length === 1)
+      round(playerAction, targets);
+
+    else
       masterService.descriptionHandler
-      .headDescription(selectTarget(targets,playerAction))
-      .setDescription(false)
-    }),
-    new DescriptionOptions("Special",()=>{
-      masterService.descriptionHandler
-        .headDescription(selectItem(user.specialAttacks))
-        .setDescription(false)
-    },user.specialAttacks.length<=0),
-    new DescriptionOptions("Item"   ,()=>{
-      masterService.descriptionHandler
-        .headDescription(selectItem(user.inventary))
-        .setDescription(false)
-    },user.inventary.length<=0),
-    null,
-    new DescriptionOptions("Defend",()=>{
-      const playerAction = (target: Character[])=>user.Defend(target)
-      round(playerAction,[user]);
-    }),
-    new DescriptionOptions("Auto",()=>{
-      round((target: Character[])=>user.IA_Action([user].concat(party),getPossibleTarget(enemy.enemies)),[])
-    }),
-    null,
-    null,
-    new DescriptionOptions("Escape",()=>{
-      masterService.descriptionHandler
-        .flush(1)
-        .headDescription(enemy.attemptEscape([user].concat(party)))
+        .headDescription(selectTarget(targets, playerAction))
         .setDescription(false);
-    }),
+  });
+  const descriptionOptionShoot = new DescriptionOptions("Shoot ", () => {
+    const targets = getPossibleTarget(enemy.enemies);
+    const playerAction = (target: Character[]) => user.Shoot(target);
+    if (targets.length === 1)
+      round(playerAction, targets);
+
+    else
+      masterService.descriptionHandler
+        .headDescription(selectTarget(targets, playerAction))
+        .setDescription(false);
+  });
+  const descriptionOptionSpecial = new DescriptionOptions("Special", () => {
+    masterService.descriptionHandler
+      .headDescription(selectItem(user.specialAttacks))
+      .setDescription(false);
+  });
+  const descriptionOptionItem = new DescriptionOptions("Item", () => {
+    masterService.descriptionHandler
+      .headDescription(selectItem(user.inventary))
+      .setDescription(false);
+  });
+  const descriptionOptionDefend = new DescriptionOptions("Defend", () => {
+    const playerAction = (target: Character[]) => user.Defend(target);
+    round(playerAction, [user]);
+  });
+  const descriptionOptionAuto = new DescriptionOptions("Auto", () => {
+    round((target: Character[]) => user.IA_Action([user].concat(party), getPossibleTarget(enemy.enemies)), []);
+  });
+  const descriptionOptionEscape = new DescriptionOptions("Escape", () => {
+    masterService.descriptionHandler
+      .flush(1)
+      .headDescription(enemy.attemptEscape([user].concat(party)))
+      .setDescription(false);
+  });
+  const options = [
+    descriptionOptionAttack,
+    descriptionOptionShoot,
+    descriptionOptionSpecial,
+    descriptionOptionItem,
+    null,
+    descriptionOptionDefend,
+    descriptionOptionAuto,
+    null,
+    null,
+    descriptionOptionEscape,
   ]
 
   const playerParalizedOption = [
@@ -170,21 +184,19 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
   function selectItem(items:Item[]):Description
   {
     const options:DescriptionOptions[]=[]
-
-    console.log(user.specialAttacks)
-    for(let i = 0; i < items.length; i++)
+    for(const item of items)
     {
-      const playerAction = (target: Character[])=>user.useSpecialAttack(i,target);
-      options.push(new DescriptionOptions(items[i].name,()=>{
-          if(items[i].isSelfUsableOnly)
+      const playerAction = (target: Character[])=>user.useItem(item,target);
+      options.push(new DescriptionOptions(item.name,()=>{
+          if(item.isSelfUsableOnly)
           {
             round(playerAction,[user])
             return;
           }
           const targets = []
-            .concat(items[i].isPartyUsable? [user].concat(party):[])
-            .concat(items[i].isEnemyUsable? getPossibleTarget(enemy.enemies):[])
-          if(items[i].isSingleTarget)
+            .concat(item.isPartyUsable? [user].concat(party):[])
+            .concat(item.isEnemyUsable? getPossibleTarget(enemy.enemies):[])
+          if(item.isSingleTarget)
           {
             if(targets.length===1)
             {
@@ -197,7 +209,7 @@ export const descriptionFight = (masterService:MasterService,enemy:EnemyFormatio
             return;
           }
           round(playerAction,targets);
-        },!items[i].isBattleUsable || items[i].disabled(user))
+        },!item.isBattleUsable || item.disabled(user))
       )
     }
     if(options.length <= 10)
