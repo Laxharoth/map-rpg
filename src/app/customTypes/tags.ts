@@ -1,4 +1,8 @@
-export type tag = 'melee unharmed'|
+export type tag = 'melee weapon'|
+                  'ranged weapon'|
+                  'shield'|
+                  'armor'|
+                  'melee unharmed'|
                   'ranged unharmed'|
                   'no shield'|
                   'no armor' |
