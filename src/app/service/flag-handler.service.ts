@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { flags } from '../flags/flags';
 import { Observable, Subject } from 'rxjs';
 import { Time } from '../classes/Time';
+import { MasterService } from '../classes/masterService';
+import { CharacterFactory } from '../classes/Character/Factory/CharacterFactory';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +15,7 @@ export class FlagHandlerService {
   private flagsSubject = new Subject<string>();
   private timeSubject = new Subject<Time>();
 
-  constructor(@Inject(String)savename:string) {
-    this.load(savename);
+  constructor() {
     this.time = new Time(this.getFlag("time"));
   }
 
@@ -22,7 +23,7 @@ export class FlagHandlerService {
   {
     if(!this.gameFlags[key]===undefined)
     {
-      console.log(`Invalid Flag ${key}`);
+      console.warn(`Invalid Flag ${key}`);
       return;
     }
     this.gameFlags[key] = value;
@@ -45,15 +46,27 @@ export class FlagHandlerService {
     this.flagsSubject.next("NEW SET OF FLAGS LOADED");
   }
 
-  save(savename: string)
+  save(savename: string, masterService: MasterService)
   {
-    localStorage.setItem(savename,JSON.stringify(this.gameFlags));
+    const savefile = {};
+    const character = masterService.partyHandler.user;
+    savefile['flags']=this.gameFlags;
+    savefile['character'] = character.toJson();
+    console.log(savefile);
+    localStorage.setItem(savename,JSON.stringify(savefile));
   }
 
-  load(savename: string)
+  load(savename: string, masterService: MasterService)
   {
-    this.gameFlags = JSON.parse(localStorage.getItem(savename));
-    if(!this.gameFlags)
+    const savefile = JSON.parse(localStorage.getItem(savename));
+    if(savefile)
+    {
+      console.log(savefile);
+      masterService.partyHandler.user = CharacterFactory(masterService,savefile['character']['type'],savefile['character']);
+      this.gameFlags = savefile['flags'];
+      this.time = new Time(this.getFlag("time"));
+    }
+    else
     {
       this.gameFlags = flags;
     }
