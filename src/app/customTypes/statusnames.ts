@@ -11,4 +11,13 @@ export type statusname = 'Defend' |
  'Petrified'|
  'Prone'|
  'Restrained'|
- 'Sleep';
+ 'Sleep'|
+
+
+
+
+
+
+
+ 'TimedStatusTest'
+ ;
