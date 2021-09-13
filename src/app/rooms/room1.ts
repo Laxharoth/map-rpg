@@ -1,7 +1,7 @@
 import { testformation } from "../classes/Character/NPC/EnemyFormations/testformation";
 import { enemyTest } from "../classes/Character/NPC/enemyTest";
 import { Description, DescriptionOptions } from "../classes/Descriptions/Description";
-import { descriptionFight } from "../classes/Descriptions/DescriptionFight";
+import { descriptionBattle } from "../classes/Descriptions/BattleDescription";
 import { Room } from "../classes/maps/room";
 import { MasterService } from "../classes/masterService";
 import { roomFunction } from "../customTypes/customTypes";
@@ -40,7 +40,7 @@ export function room(roomName: string):roomFunction
       masterService.descriptionHandler.setDescription(false);
     }),
     new DescriptionOptions("save",function(){
-      masterService.flagsHandler.save("save1");
+      masterService.flagsHandler.save("save1",masterService);
     }),
     new DescriptionOptions("option3",function(){},true),
     new DescriptionOptions("unlock 3",function(){
@@ -108,7 +108,7 @@ export function room(roomName: string):roomFunction
       masterService.descriptionHandler.nextDescription();
       if(randomCheck(10))
       {
-        descriptionFight(masterService,new testformation(masterService))
+        descriptionBattle(masterService,new testformation(masterService))
       }
     },
     onExit   : () => {
