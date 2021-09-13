@@ -18,11 +18,11 @@ export class MasterService
   private _enemyHandler:EnemyFormationService
   private _gameStateHandler:GameStateService
 
-  constructor(savename:string)
+  constructor()
   {
     this._lockmap = new LockMapService();
     this._descriptionHandler = new DescriptionHandlerService(this._lockmap);
-    this._flagsHandler = new FlagHandlerService(savename);
+    this._flagsHandler = new FlagHandlerService();
     this._mapHandler = new MapHandlerService(this);
     this._partyHandler = new PartyService();
     this._enemyHandler = new EnemyFormationService();
