@@ -1,4 +1,5 @@
-import { ActionOutput, characterStats } from "src/app/customTypes/customTypes";
+import { ActionOutput, characterStats, storeable } from "src/app/customTypes/customTypes";
+import { itemname } from "src/app/customTypes/equipmentnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../Character/Character";
 import { Reaction } from "../Character/Reaction/Reaction";
@@ -8,7 +9,7 @@ import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 export abstract class Equipment extends Item
 {
   //Check if can equip
-  abstract get name():string;
+  abstract get name():itemname;
   abstract canEquip(character:Character ):boolean;
   abstract get tags():tag[];
   protected readonly abstract statsModifier:characterStats;
@@ -20,7 +21,7 @@ export abstract class Equipment extends Item
   get isPartyUsable(): boolean {return true;};
   get isEnemyUsable(): boolean {return false;};
   get isSelfUsableOnly(): boolean {return true;};
-
+  get isSingleTarget(): boolean {return true;};
   applyModifiers(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))

@@ -3,11 +3,13 @@ import { Character } from "../../Character/Character";
 import { Equipment } from "../Equipment";
 import { loadWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/app/htmlHelper/htmlHelper.functions';
 import { MasterService } from '../../masterService';
+import { weaponname } from 'src/app/customTypes/equipmentnames';
 
 export abstract class Weapon extends Equipment
 {
   protected damageTypes:damageTypes;
   protected abstract accuracy:number;
+  abstract get name():weaponname;
   /**
    * Should be overriden
    * @param masterService should be added to the child contructor parameters

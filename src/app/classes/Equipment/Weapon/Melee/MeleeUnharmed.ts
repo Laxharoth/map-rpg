@@ -5,6 +5,7 @@ import { tag } from 'src/app/customTypes/tags';
 import { OnePunch } from "src/app/classes/Items/SpecialAttack/OnePunch";
 import { SpecialAttack } from "src/app/classes/Items/SpecialAttack/SpecialAttack";
 import { MasterService } from "src/app/classes/masterService";
+import { meleename } from "src/app/customTypes/equipmentnames";
 
 export class MeleeUnharmed extends MeleeWeapon
 {
@@ -13,7 +14,8 @@ export class MeleeUnharmed extends MeleeWeapon
   maxStack = 0;
   protected accuracy: number = 100;
   constructor(masterService:MasterService) { super(masterService,{bluntdamage:10}) }
-  get name(): string { return 'hand'; }
+  constructor(masterService:MasterService) { super(masterService) }
+  get name(): meleename { return 'hand'; }
   canEquip(character: Character): boolean { return true; }
   get tags(): tag[] { return ['melee unharmed']; }
   get isSingleTarget(): boolean { return true;}
