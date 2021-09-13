@@ -10,8 +10,8 @@ export class testformation extends EnemyFormation
     constructor(masterService:MasterService)
     {
         super(masterService)
-        //this._enemies = Array.from(Array(randomBetween(1,3))).map(_=>new enemyTest(this.masterService))
-        this._enemies = [new enemyTest(this.masterService)]
+        this._enemies = Array.from(Array(randomBetween(1,3))).map(_=>new enemyTest(this.masterService))
+        //this._enemies = [new enemyTest(this.masterService)]
     }
 
     get descriptionMessage():string {return `${this.masterService.partyHandler.user.name} escapes`}
@@ -43,20 +43,16 @@ export class testformation extends EnemyFormation
     // Enemy Victory
     //////////////////////////
     private enemyVictory(party: Character[]): Description {
-        const options = [new DescriptionOptions('next',()=>{
-            party.forEach(char=>{char.healHitPoints(Infinity)})
-            this.masterService.descriptionHandler.nextDescription(false)
-        })]
+      party.forEach(char=>{char.healHitPoints(Infinity)})
+        const options = [this.exitOption('next')]
         return new Description(()=>`Enemy won`, options)
     }
     //////////////////////////
     // Party Victory
     //////////////////////////
     private partyVictory(party: Character[]): Description {
-        const options = [new DescriptionOptions('next',()=>{
-            party.forEach(char=>{char.healHitPoints(10)})
-            this.masterService.descriptionHandler.nextDescription(false)
-        })]
+      party.forEach(char=>{char.healHitPoints(10)})
+        const options = [this.exitOption('next')]
         return new Description(()=>`Party won`, options)
     }
 }

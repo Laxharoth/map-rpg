@@ -1,19 +1,33 @@
-import { battleActionOutput } from "src/app/customTypes/customTypes";
+import { characterType } from "src/app/customTypes/characterTypes";
+import { ActionOutput } from "src/app/customTypes/customTypes";
 import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { MasterService } from "../../masterService";
+import { PerkCharm } from "../../Perk/PerkCharm";
+import { PerkFright } from "../../Perk/PerkFright";
+import { PerkGrappler } from "../../Perk/PerkGrappler";
 import { Character } from "../Character";
-import { Reaction } from "../Reaction/Reaction";
+import { TimedStatusTest } from "../Status/TimedStatusTest";
 
 export class charTest extends Character
 {
-    protected reactions: Reaction[] = [];
     private _name!:string;
-    constructor(masterService:MasterService ,name)
-    { super(200,100,20,20,20,0,0,0,0,0,0,0,0,0,[],[],masterService); this._name = name}
-    
+    characterType:characterType = "test character";
+    constructor(masterService:MasterService ,name:string='')
+    { super({
+        hitpoints:200, energypoints:100,
+        attack : 20, aim: 20, defence : 20, speed : 20, evasion : 20,
+        },masterService);
+        this._name = name
+        this.addPerk(new PerkCharm(masterService))
+        this.addPerk(new PerkGrappler(masterService))
+        this.addPerk(new PerkFright(masterService))
+        this.addStatus(new TimedStatusTest(masterService));
+    }
+
     get name(): string { return this._name; }
-    IA_Action(ally: Character[], enemy: Character[]): battleActionOutput {
-        const target = randomBetween(0,enemy.length);
+    set name(name: string) { this._name = name;}
+    IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+        const target = randomBetween(0,enemy.length-1);
         switch (randomBetween(0,2))
         {
             //ATTACK
@@ -24,5 +38,17 @@ export class charTest extends Character
             case 2: return this.Defend([this]);
             default: return [[],[]];
         }
+    }
+    toJson():{[key: string]:any}
+    {
+      const userjson = super.toJson();
+      userjson.name = this._name;
+      return userjson;
+    }
+
+    fromJson(options: {[key: string]: any}): void
+    {
+      super.fromJson(options);
+      this._name = options.name;
     }
 }
