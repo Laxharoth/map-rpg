@@ -4,9 +4,9 @@ import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
-import { StatusFight } from "../StatusFight";
+import { StatusBattle } from "../StatusBattle";
 
-export class StatusParalisis extends StatusFight {
+export class StatusParalisis extends StatusBattle {
   protected DURATION: number = 0;
   get name(): statusname { return 'Paralisis'; }
   get description(): string {

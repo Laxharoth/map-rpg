@@ -2,7 +2,7 @@ import { ActionOutput } from "src/app/customTypes/customTypes";
 import { Character } from "../Character";
 import { Status } from "./Status";
 
-export abstract class StatusFight extends Status
+export abstract class StatusBattle extends Status
 {
   //constant
   protected abstract DURATION: number;

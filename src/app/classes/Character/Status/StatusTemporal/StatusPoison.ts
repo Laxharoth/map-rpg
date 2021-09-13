@@ -3,9 +3,9 @@ import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput, randomCheck } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
-import { StatusFight } from "../StatusFight";
+import { StatusBattle } from "../StatusBattle";
 
-export class StatusPoison extends StatusFight
+export class StatusPoison extends StatusBattle
 {
   protected DURATION: number = 6;
   get name(): statusname { return 'Poison'; }

@@ -4,9 +4,9 @@ import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput, randomCheck } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../../Character";
-import { StatusFight } from "../../StatusFight";
+import { StatusBattle } from "../../StatusBattle";
 
-export class StatusFright extends StatusFight
+export class StatusFright extends StatusBattle
 {
     protected DURATION: number = 3;
     private frighted:Character;

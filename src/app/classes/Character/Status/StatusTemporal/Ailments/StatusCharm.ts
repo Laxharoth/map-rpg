@@ -3,9 +3,9 @@ import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../../../Character";
-import { StatusFight } from "../../StatusFight";
+import { StatusBattle } from "../../StatusBattle";
 
-export class StatusCharm extends StatusFight
+export class StatusCharm extends StatusBattle
 {
     protected DURATION: number = 3;
     private _charmer:Character;

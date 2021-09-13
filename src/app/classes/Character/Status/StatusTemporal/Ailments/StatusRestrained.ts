@@ -4,12 +4,12 @@ import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../../Character";
-import { StatusFight } from "../../StatusFight";
+import { StatusBattle } from "../../StatusBattle";
 
-export class StatusRestrained extends StatusFight
+export class StatusRestrained extends StatusBattle
 {
     protected DURATION: number = 4;
-    
+
     constructor(masterService:MasterService)
     {
         super(masterService)

@@ -2,10 +2,10 @@ import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../../../Character";
-import { StatusFight } from "../../StatusFight";
+import { StatusBattle } from "../../StatusBattle";
 import { StatusPoison } from "../StatusPoison";
 
-export class StatusPetrified extends StatusFight
+export class StatusPetrified extends StatusBattle
 {
     protected DURATION: number = 4;
     private previousPoison:number;
