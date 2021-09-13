@@ -6,6 +6,10 @@ import { MasterService } from 'src/app/classes/masterService';
 import { charTest } from 'src/app/classes/Character/NPC/characterTest';
 import { game_state } from 'src/app/customTypes/states';
 import { Character } from 'src/app/classes/Character/Character';
+import { MeleeTest } from 'src/app/classes/Equipment/Weapon/Melee/MeleeTest';
+import { RangedTest } from 'src/app/classes/Equipment/Weapon/Ranged/RangedTest';
+import { ShieldTest } from 'src/app/classes/Equipment/Shield/ShieldTest';
+import { ArmorTest } from 'src/app/classes/Equipment/Armor/ArmorTest';
 
 @Component({
   selector   : 'app-gui',
@@ -24,12 +28,20 @@ export class GuiComponent implements OnInit {
   private descriptionSubscription : Subscription;
   private gameStateSubscription : Subscription;
 
-  user:charTest;
-
   constructor() {
-    this.masterService = new MasterService('save1')
-    this.user = new charTest(this.masterService,'player');
-    this.masterService.partyHandler.user = this.user;
+    this.masterService = new MasterService()
+    this.masterService.flagsHandler.load("save1",this.masterService);
+    console.log(this.masterService.partyHandler.user)
+    if(!this.masterService.partyHandler.user)
+    {
+      const user = new charTest(this.masterService,'player');
+      const meleeTest1 = new MeleeTest(this.masterService)
+      const rangedTest1 = new RangedTest(this.masterService);
+      const shieldTest1 = new ShieldTest(this.masterService);
+      const armorTest1  = new ArmorTest(this.masterService);
+      user.addItem(meleeTest1);user.addItem(rangedTest1);user.addItem(shieldTest1);user.addItem(armorTest1);
+      this.masterService.partyHandler.user = user;
+    }
     this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
     this.currentGameState = this.masterService.gameStateHandler.gameState;
 
