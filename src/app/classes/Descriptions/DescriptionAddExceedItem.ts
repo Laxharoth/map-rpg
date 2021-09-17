@@ -15,7 +15,7 @@ export function AddExceedItem(masterService:MasterService,item:Item,character:Ch
   if(character.inventary.length+1<10)
   {
     for(const characteritem of character.inventary)
-      ExceedItemOptions.push(new DescriptionOptions(characteritem.name,removeItemFromInventary(characteritem, item, masterService, character)))
+      ExceedItemOptions.push(new DescriptionOptions(characteritem.name,removeItemFromInventary(masterService, characteritem, item, character)))
     while(character.inventary.length+1<10) ExceedItemOptions.push(null);
     ExceedItemOptions.push(dropItemOption)
   }
@@ -24,7 +24,7 @@ export function AddExceedItem(masterService:MasterService,item:Item,character:Ch
     for(let index = 0; index < character.inventary.length; index++)
     {
       const characteritem = character.inventary[index];
-      ExceedItemOptions.push(new DescriptionOptions(characteritem.name ,removeItemFromInventary(characteritem,item,masterService, character)))
+      ExceedItemOptions.push(new DescriptionOptions(characteritem.name ,removeItemFromInventary(masterService, characteritem,item,character)))
       if(ExceedItemOptions.length%8===7) ExceedItemOptions.push(dropItemOption);
     }
     while((ExceedItemOptions.length+1)%8!==0) ExceedItemOptions.push(null);
@@ -32,16 +32,13 @@ export function AddExceedItem(masterService:MasterService,item:Item,character:Ch
   }
   return ExceedItemDescription;
 }
-function removeItemFromInventary(characteritem: Item, item: Item, masterService: MasterService, character: Character): () => void {
+function removeItemFromInventary(masterService: MasterService, characteritem: Item, item: Item, character: Character): () => void {
   return () => {
-    if (characteritem.constructor === item.constructor) {
-      masterService.descriptionHandler.nextDescription(false);
-      return;
+    if (characteritem.constructor !== item.constructor) {
+      const index = character.inventary.indexOf(characteritem);
+      character.inventary.splice(index, 1);
+      character.addItem(item);
     }
-    const index = character.inventary.indexOf(characteritem);
-    character.inventary.splice(index, 1);
-    const [description] = character.addItem(item);
-    masterService.descriptionHandler.afterHeadDescription(...description);
     masterService.descriptionHandler.nextDescription(false);
   };
 }
