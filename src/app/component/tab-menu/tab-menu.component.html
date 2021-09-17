@@ -1,0 +1,14 @@
+<div class="app-tab-menu">
+  <div class="tabs-wrapper">
+    <ul class="tabs">
+      <li class="tab-element" [ngClass]="{'active':currentTab==='perk'}" (click)="setTab('perk',$event)">perk</li>
+      <li class="tab-element" [ngClass]="{'active':currentTab==='equipment'}" (click)="setTab('equipment',$event)">equipment</li>
+      <li class="tab-element" [ngClass]="{'active':currentTab==='party'}" (click)="setTab('party',$event)">party</li>
+      <li class="tab-element" [ngClass]="{'active':currentTab==='user'}" (click)="setTab('user',$event)">user</li>
+    </ul>
+  </div>
+  <div class="content">
+    <app-character-user *ngIf="currentTab==='user'" [masterService]="masterService"></app-character-user>
+    <app-party *ngIf="currentTab==='party'" [masterService]="masterService" [partyType]="'PARTY'"></app-party>
+  </div>
+</div>

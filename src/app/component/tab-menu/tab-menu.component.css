@@ -1,0 +1,34 @@
+.app-tab-menu
+{
+  display: flex;
+  flex-direction: column;
+  height:100%;
+}
+.tabs{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 0;
+}
+.content{overflow-y: auto;}
+.tab-element
+{
+  padding:0 0.6rem;
+  margin-left: -0.6rem;
+  border: 1px solid black;
+  background:white;
+  border-top-left-radius: 0.7em;
+}
+.tab-element:last-child { margin-left: 0; }
+.tab-element.active{
+  z-index: 1;
+}
+.content
+{
+  flex-grow: 1;
+}

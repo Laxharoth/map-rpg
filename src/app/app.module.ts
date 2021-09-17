@@ -13,6 +13,7 @@ import { CharacterUserComponent } from './component/character-user/character-use
 import { StatusIconComponent } from './component/status-icon/status-icon.component';
 import { OverrideCssVarDirective } from './directive/override-css-var.directive';
 import { CharacterStatComponent } from './component/character-stat/character-stat.component';
+import { TabMenuComponent } from './component/tab-menu/tab-menu.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { CharacterStatComponent } from './component/character-stat/character-sta
     StatusIconComponent,
     OverrideCssVarDirective,
     CharacterStatComponent,
+    TabMenuComponent,
   ],
   imports: [
     BrowserModule,
