@@ -20,6 +20,6 @@ export class StatusRangedAttack extends StatusBattle
     return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} takes some space to shoot.`]]);
   }
   onStatusGainded(target: Character)
-  { return pushBattleActionOutput(super.onStatusGainded(target),this.applyEffect(target) )}
+  { return pushBattleActionOutput(super.onStatusGainded(target),this.effect(target) )}
   get tags(): tag[] { return super.tags.concat(['aim'])}
 }
