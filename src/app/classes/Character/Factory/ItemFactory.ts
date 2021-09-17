@@ -1,4 +1,5 @@
-import { itemname } from "src/app/customTypes/equipmentnames";
+import { armornameEnum, meleenameEnum, rangednameEnum, shieldnameEnum, specialsnameEnum } from './../../../customTypes/itemnames';
+import { itemname, itemsEnum } from "src/app/customTypes/itemnames";
 import { ArmorNoArmor } from "../../Equipment/Armor/ArmorNoArmor";
 import { ArmorTest } from "../../Equipment/Armor/ArmorTest";
 import { Equipment as Item } from "../../Equipment/Equipment";
@@ -9,6 +10,7 @@ import { MeleeUnharmed } from "../../Equipment/Weapon/Melee/MeleeUnharmed";
 import { RangedTest } from "../../Equipment/Weapon/Ranged/RangedTest";
 import { RangedUnharmed } from "../../Equipment/Weapon/Ranged/RangedUnharmed";
 import { MasterService } from "../../masterService";
+import { ItemTest } from '../../Items/ItemTest';
 
 export function ItemFactory(masterService:MasterService,equipmentName:itemname,options:{[key: string]: any}):Item
 {
@@ -17,7 +19,7 @@ export function ItemFactory(masterService:MasterService,equipmentName:itemname,o
   return equipment;
 }
 
-const ItemSwitcher = {
+const ItemSwitcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armornameEnum| itemsEnum]:any} = {
   'hand':MeleeUnharmed,
   'Melee test':MeleeTest,
   'a rock':RangedUnharmed,
@@ -26,4 +28,5 @@ const ItemSwitcher = {
   'Shield test':ShieldTest,
   'No Armor':ArmorNoArmor,
   'Armor Test':ArmorTest,
+  'item-test':ItemTest
 }
