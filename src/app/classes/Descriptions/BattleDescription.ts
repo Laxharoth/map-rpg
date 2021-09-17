@@ -229,7 +229,7 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   ///////////////////////////////////////////////////////
   function roundMessage(roundStrings:string[]):Description
   {
-    const nextOption = new DescriptionOptions("next",function(){ startRound() })
+    const nextOption = new DescriptionOptions("next",startRound)
     return new Description(()=>`${roundStrings.join("\n\n")}`,[nextOption])
   }
 
@@ -248,13 +248,24 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   function endBattle(playerWon: boolean,roundStrings:string[]):Description
   {
     const nextOption = new DescriptionOptions('next',()=>{
-      if(!playerWon)user.healHitPoints(user.originalstats.hitpoints);
-      else user.healHitPoints(10);
-      masterService.descriptionHandler.flush(0)
-      masterService.descriptionHandler.headDescription(playerWon?
-        enemy.onPartyVictory([user].concat(party)):
-        enemy.onEnemyVictory([user].concat(party))
-        ).setDescription(false);
+      masterService.gameStateHandler.gameState = 'map'
+      if(playerWon)
+      {
+        user.healHitPoints(10);
+        masterService.descriptionHandler
+          .flush(0)
+          .headDescription( enemy.onPartyVictory([user].concat(party)) )
+          .nextDescription(false);
+        for(const item of enemy.loot()){user.addItem(item);}
+      }
+      else
+      {
+        user.healHitPoints(user.originalstats.hitpoints);
+        masterService.descriptionHandler
+          .flush(0)
+          .headDescription( enemy.onEnemyVictory([user].concat(party)) )
+          .nextDescription(false);
+      }
     })
     return new Description(()=>`${roundStrings.join("\n\n")}`,[nextOption]);
   }
