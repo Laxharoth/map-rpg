@@ -17,13 +17,8 @@ import { MasterService } from "../masterService";
 import { Perk } from "../Perk/Perk";
 import { Reaction } from "./Reaction/Reaction";
 import { Status } from "./Status/Status";
-import { StatusBattle } from "./Status/StatusBattle";
-import { StatusCharm } from "./Status/StatusTemporal/Ailments/StatusCharm";
-import { StatusFright } from "./Status/StatusTemporal/Ailments/StatusFright";
-import { StatusDefend } from "./Status/StatusTemporal/StatusDefend";
+import { isStatusPreventAttack, StatusBattle, StatusPreventAttack } from "./Status/StatusBattle";
 import { TimedStatus } from "./Status/TimedStatus";
-import { StatusGrappling } from "./Status/StatusTemporal/Ailments/StatusGrappling";
-import { StatusGrappled } from "./Status/StatusTemporal/Ailments/StatusGrappled";
 import { RangedUnharmed } from "../Equipment/Weapon/Ranged/RangedUnharmed";
 import { AddExceedItem } from "../Descriptions/DescriptionAddExceedItem";
 import { Weapon } from "../Equipment/Weapon/Weapon";
@@ -31,6 +26,7 @@ import { StatusFactory } from "./Factory/StatusFactory";
 import { ItemFactory } from "./Factory/ItemFactory";
 import { PerkFactory } from "./Factory/PerkFactory";
 import { characterType } from "src/app/customTypes/characterTypes";
+import { perkname } from "src/app/customTypes/perkname";
 
 export abstract class Character implements storeable
 {
@@ -96,18 +92,13 @@ export abstract class Character implements storeable
   }
   Defend(target:Character[]):ActionOutput
   {
-    const status = new StatusDefend(this.masterService)
-    this.addStatus(status);
-    const reactionOutput = this.react(this.shield.tags,this);
-    const statusOutput  = status.applyEffect(this);
-    return pushBattleActionOutput(statusOutput,reactionOutput);
+    return this.shield.defend(this);
   }
   startRound():ActionOutput
   {
-    const roundDescription:ActionOutput = [[],[]]
+    const roundDescription:ActionOutput = [[],[]];
     roundDescription[1].push(this.currentStatusString);
     this.roundStats = {...this.stats}
-    pushBattleActionOutput(this.startRoundRemoveStatusBattle(),roundDescription)
     pushBattleActionOutput(this.startRoundApplyStatus(),roundDescription)
     this.cooldownSpecials();
     return roundDescription;
@@ -151,12 +142,19 @@ export abstract class Character implements storeable
     if(status instanceof StatusBattle)return this.addBattleStatus(status)
     else if(status instanceof TimedStatus)return this.addTimedStatus(status);
     this.statuses.push(status);
+    this.masterService.updateCharacter(this);
     return status.onStatusGainded(this)
   }
   addPerk(perk:Perk):void
   {
     if(this.perks.some(characterperk => characterperk.constructor ===  perk.constructor))return;
     this.perks.push(perk);
+  }
+  getPerk(perkOrName:Perk|perkname):Perk
+  {
+    if(perkOrName instanceof Perk)return this.perks[this.perks.indexOf(perkOrName)];
+    for(const perk of this.perks)if(perk.name === perkOrName)return perk;
+    return null;
   }
   removeStatus(status:Status|statusname):ActionOutput
   {
@@ -176,24 +174,23 @@ export abstract class Character implements storeable
     if(this.hasTag('paralized')) return [[],[`${this.name} is paralized and can't move`]];
     for(const status of this.iterStatus())
     {
-      if(status instanceof StatusCharm      && !(status as StatusCharm)?.canAttack?.(target)   ) return [[],[`${this.name} is charmed and can't attack ${target.name}`]];
-      if(status instanceof StatusFright     && !(status as StatusFright)?.canAttack?.(target)  ) return [[],[`${this.name} fears ${target.name} and can't act.`]];
-      if(status instanceof StatusGrappled   && !(status as StatusGrappled)?.canAttack?.(target)) return [[],[`${this.name} can attack only the grapping one.`]];
-      if(status instanceof StatusGrappling  && !(status as StatusGrappling)?.canAttack?.(target))return [[],[`${this.name} can attack only the grapped one.`]];
+      const preventAttackStatus = status as unknown as StatusPreventAttack;
+      if(isStatusPreventAttack(preventAttackStatus)      && !preventAttackStatus?.canAttack(target)) return preventAttackStatus.preventAttackDescription(target)
     }
     return  action(target);
   }
-  addItem(item:Item):ActionOutput
+  addItem(item:Item):void
   {
-    if(!item){console.warn("Item not found, Is null or undefined."); return [[],[]];}
-    if(item.amount === 0) return [[],[]];
+    if(!item){console.warn("Item not found, Is null or undefined."); return;}
+    if(item.amount === 0) return;
     this.fitItemIntoInventary(item);
     if(item.amount > 0 && this.inventary.length < this.inventarysize)
     {
       this.inventary.push(item);
-      return [[],[]];
+      return;
     }
-    return [[AddExceedItem(this.masterService,item,this)],[]];
+    this.masterService.descriptionHandler.headDescription(AddExceedItem(this.masterService,item,this)).setDescription(false);
+    return;
   }
   useItem(itemIndexOrItem: number|Item|SpecialAttack,targets: Character[],sourceItem:'inventary'|'special'=null):ActionOutput
   {
@@ -204,33 +201,33 @@ export abstract class Character implements storeable
     console.warn('item instance not provided or source not provided')
     return [[],[]]
   }
-  unequipMelee():ActionOutput
+  unequipMelee()
   {
     const melee = this._meleeWeapon;
     if(melee)melee.amount++
     this._meleeWeapon = null;
-    return this.addItem(melee);
+    this.addItem(melee);
   }
-  unequipRanged():ActionOutput
+  unequipRanged()
   {
     const ranged = this._rangedWeapon;
     if(ranged)ranged.amount++;
     this._rangedWeapon = null;
-    return this.addItem(ranged);
+    this.addItem(ranged);
   }
-  unequipArmor():ActionOutput
+  unequipArmor()
   {
     const armor = this._armor;
     if(armor)armor.amount++;
     this._armor = null;
-    return this.addItem(armor);
+    this.addItem(armor);
   }
-  unequipShield():ActionOutput
+  unequipShield()
   {
     const shield = this._shield;
     if(shield)shield.amount++;
     this._shield = null;
-    return this.addItem(shield);
+    this.addItem(shield);
   }
 
   iterEquipment = function*():Generator<Equipment, void, unknown>
@@ -277,19 +274,6 @@ export abstract class Character implements storeable
     this.__endbattle__ = true;
     for(const status of removeStatus)status.onStatusRemoved(this);
     this.__endbattle__ = false;
-  }
-
-  protected startRoundRemoveStatusBattle():ActionOutput
-  {
-    const removeStatusDescription:ActionOutput = [[],[]]
-    const keepStatus:StatusBattle[] = [];
-    for(const status of this.battleStatus)
-    {
-      if(status.effectHasEnded)pushBattleActionOutput(status.onStatusRemoved(this),removeStatusDescription)
-      else keepStatus.push(status);
-    }
-    this.battleStatus = keepStatus;
-    return removeStatusDescription
   }
   protected get reactions(): Reaction[]
   {
@@ -458,8 +442,8 @@ export abstract class Character implements storeable
     const storeables = {};
     storeables['type'] = this.characterType;
     storeables['originalStats'] = {...this.originalstats};
-    storeables['status']  = this.statuses.map(status => { return {name:status.name,options:status.toJson() } })
-                    .concat(this.battleStatus.map(status => { return {name:status.name,options:status.toJson() } }));
+    storeables['status'] = []
+    for(const status of this.iterStatus())storeables['status'].push({name:status.name,options:status.toJson()})
     if(this._meleeWeapon)
       storeables['melee']  = {name:this._meleeWeapon.name,options:this._meleeWeapon.toJson()};
     if(this._rangedWeapon)
@@ -476,18 +460,15 @@ export abstract class Character implements storeable
   }
   fromJson(options: {[key: string]: any}): void
   {
-    this.originalstats = {...options['originalstats']};
-    for(const status of options['status']){ this.addStatus(StatusFactory(this.masterService,status.name,status.options))}
-    if(options['melee'])
-      this._meleeWeapon = ItemFactory(this.masterService,options['melee'].name,options['melee'].options) as MeleeWeapon
-    if(options['ranged'])
-      this._rangedWeapon= ItemFactory(this.masterService,options['ranged'].name,options['ranged'].options) as RangedWeapon
-    if(options['armor'])
-      this._armor       = ItemFactory(this.masterService,options['armor'].name,options['armor'].options) as Armor
-    if(options['shield'])
-      this._shield      = ItemFactory(this.masterService,options['shield'].name,options['shield'].options) as Shield
-    for(const item of options['inventary']){ this.addItem(ItemFactory(this.masterService,item.name,item.options)) }
-    for(const perk of options['perk']){ this.addPerk(PerkFactory(this.masterService,perk.name,perk.options)) }
+    if(options['originalStats'])
+    this.originalstats = loadCharacterStats(options['originalStats']);
+    if(options['status'])for(const status of options['status']){ this.addStatus(StatusFactory(this.masterService,status.name,status.options))}
+    (options['melee']) && (this._meleeWeapon=ItemFactory(this.masterService,options['melee'].name,options['melee'].options) as MeleeWeapon);
+    (options['ranged'])&& (this._rangedWeapon=ItemFactory(this.masterService,options['ranged'].name,options['ranged'].options) as RangedWeapon);
+    (options['armor']) && (this._armor=ItemFactory(this.masterService,options['armor'].name,options['armor'].options) as Armor);
+    (options['shield'])&& (this._shield=ItemFactory(this.masterService,options['shield'].name,options['shield'].options) as Shield);
+    if(options['inventary']) for(const item of options['inventary']){ this.addItem(ItemFactory(this.masterService,item.name,item.options)) };
+    if(options['perk'])for(const perk of options['perk']){ this.addPerk(PerkFactory(this.masterService,perk.name,perk.options))};
     this.applyStatus();
   }
 }
