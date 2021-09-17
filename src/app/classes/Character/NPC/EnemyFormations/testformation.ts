@@ -1,4 +1,6 @@
+import { ItemTest } from './../../../Items/ItemTest';
 import { Description, DescriptionOptions } from "src/app/classes/Descriptions/Description";
+import { Item } from "src/app/classes/Items/Item";
 import { MasterService } from "src/app/classes/masterService";
 import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
@@ -38,7 +40,12 @@ export class testformation extends EnemyFormation
     onPartyVictory(party: Character[]): Description {
         return this.partyVictory(party)
     }
-
+    loot():Item[]
+    {
+      const Item = new ItemTest(this.masterService);
+      Item.amount = randomBetween(1,4);
+      return [Item];
+    }
     //////////////////////////
     // Enemy Victory
     //////////////////////////
