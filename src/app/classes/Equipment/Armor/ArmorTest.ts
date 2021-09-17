@@ -1,5 +1,5 @@
 import { characterStats } from "src/app/customTypes/customTypes";
-import { armorname } from "src/app/customTypes/equipmentnames";
+import { armorname } from "src/app/customTypes/itemnames";
 import { Character } from "../../Character/Character";
 import { Armor } from "./Armor";
 

@@ -1,5 +1,5 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
-import { armorname } from "src/app/customTypes/equipmentnames";
+import { armorname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../../Character/Character";
 import { Armor } from "./Armor";

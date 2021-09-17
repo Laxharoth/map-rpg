@@ -1,5 +1,5 @@
 import { characterStats } from "src/app/customTypes/customTypes";
-import { shieldname } from "src/app/customTypes/equipmentnames";
+import { shieldname } from "src/app/customTypes/itemnames";
 import { Character } from "../../Character/Character";
 import { Shield } from "./Shield";
 

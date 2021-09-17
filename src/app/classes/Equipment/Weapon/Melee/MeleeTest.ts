@@ -1,4 +1,4 @@
-import { meleename } from 'src/app/customTypes/equipmentnames';
+import { meleename } from 'src/app/customTypes/itemnames';
 import { characterStats, damageTypes } from '../../../../customTypes/customTypes';
 import { Character } from '../../../Character/Character';
 import { MeleeWeapon } from './MeleeWeapon'

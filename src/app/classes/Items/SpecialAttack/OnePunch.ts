@@ -1,4 +1,5 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
+import { specialsname } from "src/app/customTypes/itemnames";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character/Character";
 import { Description, DescriptionOptions } from "../../Descriptions/Description";
@@ -6,7 +7,7 @@ import { SpecialAttack } from "./SpecialAttack";
 
 export class OnePunch extends SpecialAttack
 {
-    get name(): string { return "One Punch"; }
+    get name(): specialsname { return "One Punch"; }
     get isPartyUsable(): boolean { return false; }
     get isEnemyUsable(): boolean { return true; }
     get isSelfUsableOnly(): boolean { return false; }

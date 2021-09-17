@@ -1,4 +1,5 @@
 import { ActionOutput, storeable } from "src/app/customTypes/customTypes";
+import { itemname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../Character/Character";
 import { MasterService } from "../masterService";
@@ -9,7 +10,7 @@ export abstract class Item implements storeable
   protected readonly masterService: MasterService;
   amount: number = 1;
   constructor(masterService:MasterService){this.masterService=masterService;}
-  abstract get name(): string;
+  abstract get name(): itemname;
   abstract get isBattleUsable(): boolean;
   get isBattleUsableOnly(): boolean {return false;}
   abstract get isPartyUsable(): boolean;

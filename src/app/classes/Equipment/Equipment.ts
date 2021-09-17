@@ -1,5 +1,5 @@
 import { ActionOutput, characterStats, storeable } from "src/app/customTypes/customTypes";
-import { itemname } from "src/app/customTypes/equipmentnames";
+import { equipmentname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../Character/Character";
 import { Reaction } from "../Character/Reaction/Reaction";
@@ -9,7 +9,7 @@ import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 export abstract class Equipment extends Item
 {
   //Check if can equip
-  abstract get name():itemname;
+  abstract get name():equipmentname;
   abstract canEquip(character:Character ):boolean;
   abstract get tags():tag[];
   protected readonly abstract statsModifier:characterStats;

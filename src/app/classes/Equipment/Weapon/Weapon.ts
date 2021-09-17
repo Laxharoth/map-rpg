@@ -4,7 +4,7 @@ import { Character } from "../../Character/Character";
 import { Equipment } from "../Equipment";
 import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/app/htmlHelper/htmlHelper.functions';
 import { MasterService } from '../../masterService';
-import { weaponname } from 'src/app/customTypes/equipmentnames';
+import { weaponname } from 'src/app/customTypes/itemnames';
 
 export abstract class Weapon extends Equipment
 {

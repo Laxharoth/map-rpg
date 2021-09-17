@@ -1,4 +1,5 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
+import { specialsname } from "src/app/customTypes/itemnames";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character/Character";
 import { StatusGrappled } from "../../Character/Status/StatusTemporal/Ailments/StatusGrappled";
@@ -7,7 +8,7 @@ import { SpecialAttack } from "./SpecialAttack";
 
 export class SpecialGrab extends SpecialAttack
 {
-    get name(): string { return 'Grab' }
+    get name(): specialsname { return 'Grab' }
     get isPartyUsable(): boolean { return false }
     get isEnemyUsable(): boolean { return true }
     get isSelfUsableOnly(): boolean { return false }

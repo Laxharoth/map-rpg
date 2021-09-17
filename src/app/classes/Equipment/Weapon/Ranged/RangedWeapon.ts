@@ -1,7 +1,7 @@
 import { Character } from "src/app/classes/Character/Character";
 import { StatusRangedAttack } from "src/app/classes/Character/Status/StatusTemporal/StatusRangedAttack";
 import { ActionOutput } from "src/app/customTypes/customTypes";
-import { rangedname } from "src/app/customTypes/equipmentnames";
+import { rangedname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput, randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { Weapon } from "../Weapon";
@@ -31,8 +31,8 @@ export abstract class RangedWeapon extends Weapon
   itemEffect(user:Character,target: Character): ActionOutput
   {
     const output = super.itemEffect(user, user);
-    const removedEquipment = user.unequipRanged();
+    user.unequipRanged();
     user.rangedWeapon = this;
-    return pushBattleActionOutput(removedEquipment,output);
+    return output;
   }
 }

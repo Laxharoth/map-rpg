@@ -1,5 +1,5 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
-import { armorname } from "src/app/customTypes/equipmentnames";
+import { armorname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character/Character";
@@ -11,9 +11,9 @@ export abstract class Armor extends Equipment
   itemEffect(user:Character,target: Character): ActionOutput
   {
     const output = super.itemEffect(user, user);
-    const removedEquipment = user.unequipArmor();
+    user.unequipArmor();
     user.armor = this;
-    return pushBattleActionOutput(removedEquipment,output);
+    return output;
   }
   get tags(): tag[] { return ['armor']; }
 }

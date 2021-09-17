@@ -1,4 +1,5 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
+import { specialsname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character/Character";
@@ -7,7 +8,7 @@ import { SpecialAttack } from "./SpecialAttack";
 
 export class SpecialCharm extends SpecialAttack
 {
-    get name(): string { return 'Charm'; }
+    get name(): specialsname { return 'Charm'; }
     get isPartyUsable(): boolean { return false; }
     get isEnemyUsable(): boolean { return true; }
     get isSelfUsableOnly(): boolean { return false; }

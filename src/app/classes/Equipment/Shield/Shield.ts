@@ -1,5 +1,5 @@
 import { ActionOutput } from 'src/app/customTypes/customTypes';
-import { shieldname } from 'src/app/customTypes/equipmentnames';
+import { shieldname } from 'src/app/customTypes/itemnames';
 import { tag } from 'src/app/customTypes/tags';
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character/Character";

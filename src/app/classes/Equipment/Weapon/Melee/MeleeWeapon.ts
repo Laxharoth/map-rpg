@@ -3,7 +3,7 @@ import { Character } from "src/app/classes/Character/Character";
 import { pushBattleActionOutput, randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { Weapon } from "../Weapon";
 import { tag } from 'src/app/customTypes/tags';
-import { meleename } from 'src/app/customTypes/equipmentnames';
+import { meleename } from 'src/app/customTypes/itemnames';
 
 export abstract class MeleeWeapon extends Weapon
 {
@@ -20,9 +20,9 @@ export abstract class MeleeWeapon extends Weapon
   itemEffect(user:Character,target: Character): ActionOutput
   {
     const output = super.itemEffect(user, user);
-    const removedEquipment = user.unequipMelee();
+    user.unequipMelee();
     user.meleeWeapon = this;
-    return pushBattleActionOutput(removedEquipment,output);
+    return output;
   }
   get tags(): tag[] { return ['melee weapon']; }
 }
