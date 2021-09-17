@@ -28,9 +28,7 @@ export class MapComponent implements OnInit {
 
   @ViewChild('mapwrapper') mapWrapper: ElementRef;
 
-  constructor() {
-
-  }
+  constructor() { }
 
   ngOnInit(): void {
     this.currentCoordinates = this.masterService.mapHandler.coordinates;
