@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { Time } from '../classes/Time';
 import { MasterService } from '../classes/masterService';
 import { CharacterFactory } from '../classes/Character/Factory/CharacterFactory';
+import { loadPersistentNames, savePersistentNames } from '../classes/Character/Factory/LoadPersistentCharacters';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,7 @@ export class FlagHandlerService {
     const character = masterService.partyHandler.user;
     savefile['flags']=this.gameFlags;
     savefile['character'] = character.toJson();
+    savefile['persisten'] = savePersistentNames(masterService.partyHandler.persistents)
     console.log(savefile);
     localStorage.setItem(savename,JSON.stringify(savefile));
   }
@@ -63,6 +65,7 @@ export class FlagHandlerService {
     {
       console.log(savefile);
       masterService.partyHandler.user = CharacterFactory(masterService,savefile['character']['type'],savefile['character']);
+      masterService.partyHandler.persistents = loadPersistentNames(masterService,savefile['persistent']);
       this.gameFlags = savefile['flags'];
       this.time = new Time(this.getFlag("time"));
     }
