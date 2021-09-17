@@ -10,6 +10,7 @@ import { MeleeTest } from 'src/app/classes/Equipment/Weapon/Melee/MeleeTest';
 import { RangedTest } from 'src/app/classes/Equipment/Weapon/Ranged/RangedTest';
 import { ShieldTest } from 'src/app/classes/Equipment/Shield/ShieldTest';
 import { ArmorTest } from 'src/app/classes/Equipment/Armor/ArmorTest';
+import { PerkUpgradeable } from 'src/app/classes/Perk/PerkUpgradeable';
 
 @Component({
   selector   : 'app-gui',
@@ -31,7 +32,6 @@ export class GuiComponent implements OnInit {
   constructor() {
     this.masterService = new MasterService()
     this.masterService.flagsHandler.load("save1",this.masterService);
-    console.log(this.masterService.partyHandler.user)
     if(!this.masterService.partyHandler.user)
     {
       const user = new charTest(this.masterService,'player');
@@ -39,6 +39,7 @@ export class GuiComponent implements OnInit {
       const rangedTest1 = new RangedTest(this.masterService);
       const shieldTest1 = new ShieldTest(this.masterService);
       const armorTest1  = new ArmorTest(this.masterService);
+      user.addPerk(new PerkUpgradeable(this.masterService));
       user.addItem(meleeTest1);user.addItem(rangedTest1);user.addItem(shieldTest1);user.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
     }
