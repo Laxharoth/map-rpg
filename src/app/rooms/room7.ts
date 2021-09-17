@@ -7,6 +7,8 @@ import { MeleeUnharmed } from "../classes/Equipment/Weapon/Melee/MeleeUnharmed";
 import { RangedUnharmed } from "../classes/Equipment/Weapon/Ranged/RangedUnharmed";
 import { Room } from "../classes/maps/room";
 import { MasterService } from "../classes/masterService";
+import { ItemTest } from '../classes/Items/ItemTest';
+import { PerkUpgradeable } from '../classes/Perk/PerkUpgradeable';
 
 export function room(masterService:MasterService):Room
 {
@@ -77,8 +79,17 @@ export function room(masterService:MasterService):Room
     equipRanged,
     equipShield,
     equipArmor,
-    new DescriptionOptions("option2",function(){}),
-    new DescriptionOptions("option2",function(){}),
+    new DescriptionOptions("Add Test Item",function(){
+      const item = new ItemTest(masterService);
+      item.amount = 9;
+      user.addItem(item);
+      console.log(user.inventary)
+    }),
+    new DescriptionOptions("level up perk",function(){
+      const perk = (user.getPerk('Perk Upgrade') as PerkUpgradeable);
+      if(!perk) user.addPerk(new PerkUpgradeable(this.masterService));
+      else perk.level++;
+    }),
     new DescriptionOptions("option2",function(){}),
     new DescriptionOptions("option2",function(){}),
     new DescriptionOptions("option3",function(){})
