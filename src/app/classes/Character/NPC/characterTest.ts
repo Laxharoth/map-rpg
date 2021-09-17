@@ -7,10 +7,11 @@ import { PerkFright } from "../../Perk/PerkFright";
 import { PerkGrappler } from "../../Perk/PerkGrappler";
 import { Character } from "../Character";
 import { TimedStatusTest } from "../Status/TimedStatusTest";
+import { PersistentCharacter } from "./PersistentCharacter";
 
-export class charTest extends Character
+export class charTest extends PersistentCharacter
 {
-    private _name!:string;
+    protected _name!: string;
     characterType:characterType = "test character";
     constructor(masterService:MasterService ,name:string='')
     { super({
@@ -38,17 +39,5 @@ export class charTest extends Character
             case 2: return this.Defend([this]);
             default: return [[],[]];
         }
-    }
-    toJson():{[key: string]:any}
-    {
-      const userjson = super.toJson();
-      userjson.name = this._name;
-      return userjson;
-    }
-
-    fromJson(options: {[key: string]: any}): void
-    {
-      super.fromJson(options);
-      this._name = options.name;
     }
 }
