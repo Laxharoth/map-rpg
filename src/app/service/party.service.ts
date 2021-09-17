@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Character } from '../classes/Character/Character';
+import { characterType } from '../customTypes/characterTypes';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { Character } from '../classes/Character/Character';
 export class PartyService {
   private _user:Character;
   private _party: [(Character|null),(Character|null)] = [null,null];
+  persistents:{[key: string]:Character} = {};
 
   private partySubject = new Subject<Character>();
   private partyMemberSubject = new Subject<[number,Character]>();
@@ -19,8 +21,9 @@ export class PartyService {
 
   get user(){return this._user;}
   get party():Character[]{return this._party.filter(character=> character!==null);}
-
+  getPersistent(characterType:characterType){return this.persistents[characterType];}
   set user(user:Character){this._user = user; this.updateUser()}
+
   setPartyMember(value:Character,index:number)
   {
     if([0,1].includes(index))
