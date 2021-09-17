@@ -3,6 +3,7 @@ import { shieldname } from 'src/app/customTypes/itemnames';
 import { tag } from 'src/app/customTypes/tags';
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character/Character";
+import { StatusDefend } from '../../Character/Status/StatusTemporal/StatusDefend';
 import { Equipment } from "../Equipment";
 
 export abstract class Shield extends Equipment{
@@ -10,9 +11,15 @@ export abstract class Shield extends Equipment{
   itemEffect(user:Character,target: Character): ActionOutput
   {
     const output = super.itemEffect(user, user);
-    const removedEquipment = user.unequipShield();
+    user.unequipShield();
     user.shield = this;
-    return pushBattleActionOutput(removedEquipment,output);
+    return output;
+  }
+  defend(target : Character):ActionOutput
+  {
+    const statusOutput = target.addStatus(new StatusDefend(this.masterService));
+    const reactionOutput = target.react(this.tags,target);
+    return pushBattleActionOutput(statusOutput,reactionOutput);
   }
   get tags(): tag[] { return ['shield']}
 }
