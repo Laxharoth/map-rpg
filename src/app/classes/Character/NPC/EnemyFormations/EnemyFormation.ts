@@ -1,4 +1,5 @@
 import { Description, DescriptionOptions } from "src/app/classes/Descriptions/Description";
+import { Item } from "src/app/classes/Items/Item";
 import { MasterService } from "src/app/classes/masterService";
 import { Character } from "../../Character";
 
@@ -12,11 +13,13 @@ export abstract class EnemyFormation
 
     abstract onEnemyVictory(party: Character[]):Description;
     abstract onPartyVictory(party: Character[]):Description;
+    abstract loot():Item[];
     attemptEscape(party: Character[]):Description
     {
       if(!this.escapeCheck(party))return this.escapeFail();
       for(const character of party){character.onEndBattle();}
       this.masterService.gameStateHandler.gameState = 'map'
+      this.masterService.descriptionHandler.flush(0);
       return this.escapeSuccess();
     }
 
@@ -27,7 +30,7 @@ export abstract class EnemyFormation
     {
       return new DescriptionOptions(exitString,()=>{
         this.masterService.gameStateHandler.gameState = 'map';
-        this.masterService.descriptionHandler.flush(0).setDescription(false)
+        this.masterService.descriptionHandler.nextDescription(false);
       })
     }
 }
