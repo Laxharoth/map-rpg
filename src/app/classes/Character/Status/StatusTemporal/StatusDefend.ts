@@ -16,6 +16,6 @@ export class StatusDefend extends StatusBattle
     return [[],[`${target.name} raises it's defence.`]];
   }
   onStatusGainded(target: Character):ActionOutput
-  { return pushBattleActionOutput(super.onStatusRemoved(target),this.applyEffect(target)); }
+  { return pushBattleActionOutput(super.onStatusGainded(target),this.effect(target)); }
   get tags(): tag[] { return super.tags.concat(['defend']) }
 }
