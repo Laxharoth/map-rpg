@@ -9,8 +9,18 @@ export abstract class StatusBattle extends Status
   applyEffect(target: Character):ActionOutput
   {
     this.DURATION--;
+    if(this.DURATION<=0)return target.removeStatus(this);
     return super.applyEffect(target);
   }
   get effectHasEnded():boolean { return this.DURATION<=0; }
   set extraDuration(extra:number){this.DURATION+=extra;}
 }
+
+export interface StatusPreventAttack
+{
+  discriminator:'StatusPreventAttack';
+  canAttack(target:Character):boolean;
+  preventAttackDescription(target:Character):ActionOutput;
+}
+
+export function isStatusPreventAttack(object:any) { return object.discriminator === 'StatusPreventAttack'; }
