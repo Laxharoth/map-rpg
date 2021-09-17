@@ -21,8 +21,8 @@
     </div>
   </div>
   <div class="app-gui-right">
-    <app-character-user *ngIf="currentGameState === 'map' || party.length===1"
-     [masterService]="masterService"></app-character-user>
+    <app-tab-menu *ngIf="currentGameState === 'map'" [masterService]="masterService"></app-tab-menu>
+
     <app-party *ngIf="currentGameState === 'battle' && party.length>1"
          [masterService]="masterService"
          [partyType]="'PARTY'"></app-party>
