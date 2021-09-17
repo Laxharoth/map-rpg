@@ -1,3 +1,30 @@
--map-handler.service.ts
---Implement a way to disable move to other room
---TODO make the move to other room a single method
+{
+  "todotree": {
+    "tree": [
+      {
+        "key": 1631918221236,
+        "children": [
+          {
+            "key": 1631918819717,
+            "children": [],
+            "todo": {
+              "content": "Idea: Use the game states and create more descriptions lists.",
+              "id": 1631918819717,
+              "level": "default",
+              "done": false
+            }
+          }
+        ],
+        "todo": {
+          "content": "Find a better way to use description handlers",
+          "id": 1631918221236,
+          "level": "default",
+          "done": false
+        }
+      }
+    ],
+    "expandKeys": [
+      1631918221236
+    ]
+  }
+}

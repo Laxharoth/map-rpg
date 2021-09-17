@@ -8,6 +8,16 @@
             "key": 1629246274987,
             "children": [
               {
+                "key": 1630698248063,
+                "children": [],
+                "todo": {
+                  "content": "Create Reaction Class",
+                  "id": 1630698248063,
+                  "level": "default",
+                  "done": true
+                }
+              },
+              {
                 "key": 1629245836898,
                 "children": [],
                 "todo": {
@@ -35,7 +45,7 @@
                   "content": "Take tags from perks wiapons and status lists",
                   "id": 1629246565772,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               }
             ],
@@ -114,7 +124,7 @@
               "content": "Make clases for each piece of equipment. melee, shield, etc",
               "id": 1629246292389,
               "level": "default",
-              "done": false
+              "done": true
             }
           }
         ],
@@ -151,7 +161,7 @@
                       "content": "test",
                       "id": 1629818868043,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -159,7 +169,7 @@
                   "content": "Blinded->reduces accuracy and evasion",
                   "id": 1629765167279,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -182,7 +192,7 @@
                       "content": "test",
                       "id": 1629818920398,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -190,7 +200,7 @@
                   "content": "Charmed->tring attack charmer will fail; when constructed add the charmer as readonly.",
                   "id": 1629765196743,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -213,7 +223,7 @@
                       "content": "test.",
                       "id": 1629818957215,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -221,7 +231,7 @@
                   "content": "Frightened->tring attack charmer can fail, reduce speed; when constructed add the source as readonly.",
                   "id": 1629765249595,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -244,15 +254,15 @@
                       "content": "test",
                       "id": 1629818983076,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
                 "todo": {
-                  "content": "Grappled->reduce speed when constructed add the source as readonly, .effect() checks if source still has grapping if not remove",
+                  "content": "Grappled->reduce speed when constructed add the source as readonly.",
                   "id": 1629765414354,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -275,7 +285,7 @@
                       "content": "test",
                       "id": 1629818995467,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -283,7 +293,7 @@
                   "content": "Grapping->reduce speed.when constructed add the target as readonly.",
                   "id": 1629765453280,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -306,7 +316,7 @@
                       "content": "test",
                       "id": 1629819016833,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -314,7 +324,7 @@
                   "content": "Invisible->increases evasion and accuracy",
                   "id": 1629765501623,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -337,7 +347,7 @@
                       "content": "test",
                       "id": 1629819031541,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -345,7 +355,7 @@
                   "content": "Paralized->can't act or react",
                   "id": 1629765838085,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -368,7 +378,7 @@
                       "content": "test",
                       "id": 1629819042832,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -376,7 +386,7 @@
                   "content": "Petrified->adds paralized tag, increases defence, maxes poison resistance. increases poison duration by 1 each turn.",
                   "id": 1629765881722,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -399,7 +409,7 @@
                       "content": "test",
                       "id": 1629819053676,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -407,7 +417,7 @@
                   "content": "Prone-> reduce speed, increase accuracy melee if target has prone, reduce accuracy melee if user has prone.",
                   "id": 1629765882701,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -430,7 +440,7 @@
                       "content": "Test",
                       "id": 1629819068131,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -438,7 +448,7 @@
                   "content": "Restrained->Grappled without source + prone, reduce ranged accuracy.",
                   "id": 1629766802108,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -461,7 +471,7 @@
                       "content": "code",
                       "id": 1629819120031,
                       "level": "default",
-                      "done": false
+                      "done": true
                     }
                   }
                 ],
@@ -469,23 +479,13 @@
                   "content": "Sleep->Reduce evasion + paralized",
                   "id": 1629766906187,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               }
             ],
             "todo": {
               "content": "Create List of Statuses",
               "id": 1629246012175,
-              "level": "default",
-              "done": false
-            }
-          },
-          {
-            "key": 1629246536692,
-            "children": [],
-            "todo": {
-              "content": "edit todo.",
-              "id": 1629246536692,
               "level": "default",
               "done": false
             }
@@ -508,7 +508,7 @@
               "content": "Add possible tags",
               "id": 1629247146713,
               "level": "default",
-              "done": false
+              "done": true
             }
           }
         ],
@@ -516,7 +516,7 @@
           "content": "Add tag system, Tags are basically strings",
           "id": 1629246544983,
           "level": "default",
-          "done": false
+          "done": true
         }
       },
       {
@@ -529,7 +529,7 @@
               "content": "Create Perk class",
               "id": 1629651239198,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -560,7 +560,7 @@
               "content": "Make reaction system that happen after an attack.",
               "id": 1629646753450,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -570,7 +570,7 @@
               "content": "Reactions react to tags",
               "id": 1629646789850,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -580,7 +580,7 @@
               "content": "Implement when should look if trigger",
               "id": 1629757196829,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -593,7 +593,7 @@
                   "content": "Defeated removes grapping",
                   "id": 1629765537856,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               }
             ],
@@ -614,7 +614,6 @@
       }
     ],
     "expandKeys": [
-      1629246237859,
       1629246573852,
       1629246558900,
       1629246274987,
@@ -623,20 +622,12 @@
       1629646753450,
       1629246012175,
       1629765520008,
-      1629765167279,
-      1629765196743,
-      1629765249595,
-      1629765414354,
-      1629765453280,
-      1629765501623,
-      1629765838085,
-      1629765882701,
-      1629766802108,
-      1629766906187,
       1629818981844,
-      1629765881722,
       1629819042832,
-      1629819053676
+      1629819053676,
+      1629246224387,
+      1629246232738,
+      1629246237859
     ]
   }
 }
