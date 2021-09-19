@@ -3,7 +3,6 @@ import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions"
 import { Character } from "../Character/Character";
 import { EnemyFormation } from "../Character/NPC/EnemyFormations/EnemyFormation";
 import { Item } from "../Items/Item";
-import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 import { MasterService } from "../masterService";
 import { Description, DescriptionOptions } from "./Description";
 
@@ -33,6 +32,7 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
           .concat(enemy.enemies.filter((character) => character.stats.hitpoints>0))
           .sort((character,other)=> character.stats.speed > other.stats.speed ? -1:1)
   }
+  let fistRound = true;
   function startRound():void
   {
     startRoundString = [];
@@ -53,9 +53,14 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
     }
     startRoundDescription.push(new Description(()=>`${startRoundString.join("\n\n")}`, user.hasTag('paralized')?playerParalizedOption:options));
     masterService.descriptionHandler
-      .flush(0)
-      .headDescription(...startRoundDescription)
+      .tailDescription(startRoundDescription,'battle')
+    if(fistRound)
+      masterService.descriptionHandler
       .setDescription(false);
+    else
+      masterService.descriptionHandler
+      .nextDescription(false);
+    fistRound = false;
   }
   function round(playerAction:(target:Character[])=>ActionOutput,playerTarget:Character[]):void
   {
@@ -87,9 +92,8 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
     else { battleRoundDescription.push(roundMessage(battleRoundString))}
 
     masterService.descriptionHandler
-      .flush(1)
-      .headDescription(...battleRoundDescription)
-      .setDescription(false);
+      .tailDescription(battleRoundDescription,'battle')
+      .nextDescription(false);
   }
 
   const descriptionOptionAttack = new DescriptionOptions("Attack", () => {
@@ -100,8 +104,8 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
 
     else
       masterService.descriptionHandler
-        .headDescription(selectTarget(targets, playerAction))
-        .setDescription(false);
+        .tailDescription(selectTarget(targets, playerAction),'battle')
+        .nextDescription(false);
   });
   const descriptionOptionShoot = new DescriptionOptions("Shoot ", () => {
     const targets = getPossibleTarget(enemy.enemies);
@@ -111,18 +115,18 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
 
     else
       masterService.descriptionHandler
-        .headDescription(selectTarget(targets, playerAction))
-        .setDescription(false);
+        .tailDescription(selectTarget(targets, playerAction),'battle')
+        .nextDescription(false);
   });
   const descriptionOptionSpecial = new DescriptionOptions("Special", () => {
     masterService.descriptionHandler
-      .headDescription(selectItem(user.specialAttacks))
-      .setDescription(false);
+      .tailDescription(selectItem(user.specialAttacks),'battle')
+      .nextDescription(false);
   });
   const descriptionOptionItem = new DescriptionOptions("Item", () => {
     masterService.descriptionHandler
-      .headDescription(selectItem(user.inventary))
-      .setDescription(false);
+      .tailDescription(selectItem(user.inventary),'battle')
+      .nextDescription(false);
   });
   const descriptionOptionDefend = new DescriptionOptions("Defend", () => {
     const playerAction = (target: Character[]) => user.Defend(target);
@@ -133,9 +137,8 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   });
   const descriptionOptionEscape = new DescriptionOptions("Escape", () => {
     masterService.descriptionHandler
-      .flush(1)
-      .headDescription(enemy.attemptEscape([user].concat(party)))
-      .setDescription(false);
+      .tailDescription(enemy.attemptEscape([user].concat(party)),'battle')
+      .nextDescription(false);
   });
   const options = [
     descriptionOptionAttack,
@@ -204,8 +207,8 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
               return;
             }
             masterService.descriptionHandler
-            .headDescription(selectTarget(targets,playerAction))
-            .setDescription(false)
+            .tailDescription(selectTarget(targets,playerAction),'battle')
+            .nextDescription(false)
             return;
           }
           round(playerAction,targets);
@@ -253,8 +256,7 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
       {
         user.healHitPoints(10);
         masterService.descriptionHandler
-          .flush(0)
-          .headDescription( enemy.onPartyVictory([user].concat(party)) )
+          .tailDescription( enemy.onPartyVictory([user].concat(party)) ,'battle')
           .nextDescription(false);
         for(const item of enemy.loot()){user.addItem(item);}
       }
@@ -262,8 +264,7 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
       {
         user.healHitPoints(user.originalstats.hitpoints);
         masterService.descriptionHandler
-          .flush(0)
-          .headDescription( enemy.onEnemyVictory([user].concat(party)) )
+          .tailDescription( enemy.onEnemyVictory([user].concat(party)) ,'battle')
           .nextDescription(false);
       }
     })
