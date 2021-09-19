@@ -21,12 +21,12 @@ export class MasterService
   constructor()
   {
     this._lockmap = new LockMapService();
-    this._descriptionHandler = new DescriptionHandlerService(this._lockmap);
     this._flagsHandler = new FlagHandlerService();
     this._mapHandler = new MapHandlerService(this);
     this._partyHandler = new PartyService();
     this._enemyHandler = new EnemyFormationService();
     this._gameStateHandler = new GameStateService();
+    this._descriptionHandler = new DescriptionHandlerService(this._lockmap,this._gameStateHandler);
   }
   get lockmap(){return this._lockmap;}
   get descriptionHandler(){return this._descriptionHandler;}
