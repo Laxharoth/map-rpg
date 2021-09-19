@@ -32,7 +32,7 @@ export abstract class TimedStatus extends Status{
     this.currentTime = time.getMinutes();
     if (this.effectHasEnded) {
       const [message] = target.removeStatus(this);
-      this.masterService.descriptionHandler.tailDescription(...message);
+      this.masterService.descriptionHandler.tailDescription(message,'map');
     }
   }
   onStatusRemoved(target: Character)
