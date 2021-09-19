@@ -83,7 +83,6 @@ export function room(masterService:MasterService):Room
       const item = new ItemTest(masterService);
       item.amount = 9;
       user.addItem(item);
-      console.log(user.inventary)
     }),
     new DescriptionOptions("level up perk",function(){
       const perk = (user.getPerk('Perk Upgrade') as PerkUpgradeable);
@@ -101,7 +100,7 @@ export function room(masterService:MasterService):Room
   const goBackThere2     = new Description(function(){return `little choices i have`},[nextOption]);
   const room = new Room({
     onEnter  : () => {
-      masterService.descriptionHandler.tailDescription(roomDescription)
+      masterService.descriptionHandler.tailDescription(roomDescription,'map')
       masterService.descriptionHandler.nextDescription();
     },
     onExit   : () => {},
@@ -109,13 +108,13 @@ export function room(masterService:MasterService):Room
       //if(["room6","room8"].includes(roomName))
       if(["room6"].includes(roomName))
       {
-        masterService.descriptionHandler.headDescription(cantGoThere);
+        masterService.descriptionHandler.headDescription(cantGoThere,'map');
         masterService.descriptionHandler.setDescription();
         return false;
       }
       if(["room8"].includes(roomName) && $flag("firstreturn2room1"))
       {
-        masterService.descriptionHandler.headDescription(cantGoThereYet);
+        masterService.descriptionHandler.headDescription(cantGoThereYet,'map');
         masterService.descriptionHandler.setDescription();
         return false;
       }
@@ -124,7 +123,7 @@ export function room(masterService:MasterService):Room
         if($flag("firstreturn2room1"))
         {
           masterService.flagsHandler.setFlag("firstreturn2room1",false);
-          masterService.descriptionHandler.tailDescription(goBackThere,goBackThere2);
+          masterService.descriptionHandler.tailDescription([goBackThere,goBackThere2],'map');
         }
       }
       return true;

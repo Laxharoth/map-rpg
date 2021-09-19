@@ -36,7 +36,7 @@ export function room(roomName: string):roomFunction
   `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`},[nextOptionInputs])
   const roomOptions =[
     new DescriptionOptions("option1",function(){
-      masterService.descriptionHandler.headDescription(furtherDescription);
+      masterService.descriptionHandler.headDescription(furtherDescription,'map');
       masterService.descriptionHandler.setDescription(false);
     }),
     new DescriptionOptions("save",function(){
@@ -66,7 +66,7 @@ export function room(roomName: string):roomFunction
   ]
   if($flag("caninroom1")){
     roomOptions.splice(2,0,new DescriptionOptions("kick can",function(){
-        masterService.descriptionHandler.headDescription(kickCanDescription);
+        masterService.descriptionHandler.headDescription(kickCanDescription,'map');
         masterService.descriptionHandler.setDescription();
         $flag("caninroom1",false);
         roomOptions.splice(2,1);
@@ -79,12 +79,12 @@ export function room(roomName: string):roomFunction
     const cannonDescription = new Description(function(){return `Dafuk there is a cannon here.\n enter the cannon?`;}
     ,[yesOption(()=>{
       masterService.descriptionHandler.nextDescription();
-      masterService.descriptionHandler.tailDescription(flyDescription1, flyDescription2,flyDescription3);
+      masterService.descriptionHandler.tailDescription([flyDescription1, flyDescription2,flyDescription3],'map');
       masterService.flagsHandler.addTime('30m');
       masterService.mapHandler.loadRoom('room1');
     }),noOption])
     roomOptions.splice(2,0, new DescriptionOptions("Cannon",function(){
-      masterService.descriptionHandler.headDescription(cannonDescription);
+      masterService.descriptionHandler.headDescription(cannonDescription,'map');
       masterService.descriptionHandler.setDescription();
       })
       )
@@ -102,9 +102,9 @@ export function room(roomName: string):roomFunction
   const room = new Room({
     onEnter  : () => {
       if($flag("map1room1firstenter")){
-        masterService.descriptionHandler.tailDescription(fistEnter);
+        masterService.descriptionHandler.tailDescription(fistEnter,'map');
       }
-      masterService.descriptionHandler.tailDescription(roomDescription)
+      masterService.descriptionHandler.tailDescription(roomDescription,'map')
       masterService.descriptionHandler.nextDescription();
       if(randomCheck(10))
       {
@@ -116,7 +116,7 @@ export function room(roomName: string):roomFunction
       {
         $flag("map1room1firstenter",false)
         $flag("map1room1firstexit",false);
-        masterService.descriptionHandler.tailDescription(firstExit);
+        masterService.descriptionHandler.tailDescription(firstExit,'map');
       }
     },
     beforeMoveTo(roomName){
