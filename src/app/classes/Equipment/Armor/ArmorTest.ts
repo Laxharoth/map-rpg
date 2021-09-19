@@ -8,5 +8,4 @@ export class ArmorTest extends Armor
   protected statsModifier: characterStats = {defence:20,pierceresistance:10,speed:-5};
   get name(): armorname { return "Armor Test"; }
   canEquip(character: Character): boolean { return true; }
-
 }

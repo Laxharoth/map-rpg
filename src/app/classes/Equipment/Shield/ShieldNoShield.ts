@@ -6,9 +6,9 @@ import { Shield } from "./Shield";
 
 export class ShieldNoShield extends Shield
 {
-    protected statsModifier = {}
-    get name(): shieldname { return 'No shield'; }
-    canEquip(character: Character): boolean { return false; }
-    get tags(): tag[] { return ['no shield']; }
-    get isSingleTarget(): boolean { return true; }
+  protected statsModifier = {}
+  get name(): shieldname { return 'No shield'; }
+  canEquip(character: Character): boolean { return false; }
+  get tags(): tag[] { return ['no shield']; }
+  get isSingleTarget(): boolean { return true; }
 }

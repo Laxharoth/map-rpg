@@ -7,15 +7,15 @@ import { MasterService } from "../masterService";
 
 export abstract class Perk implements storeable
 {
-    abstract get name():perkname;
-    protected readonly masterService:MasterService;
-    constructor(masterService:MasterService)
-    { this.masterService = masterService; }
+  abstract get name():perkname;
+  protected readonly masterService:MasterService;
+  constructor(masterService:MasterService)
+  { this.masterService = masterService; }
 
-    get tags(): tag[] { return []; }
-    get reactions(): Reaction[]{ return []}
-    get specials():SpecialAttack[] { return []}
+  get tags(): tag[] { return []; }
+  get reactions(): Reaction[]{ return []}
+  get specials():SpecialAttack[] { return []}
 
-    toJson():{[key: string]:any} { return {}; }
-    fromJson(options:{[key: string]: any}):void { }
+  toJson():{[key: string]:any} { return {}; }
+  fromJson(options:{[key: string]: any}):void { }
 }

@@ -12,11 +12,6 @@ export abstract class Weapon extends Equipment
   protected statsModifier:characterStats = {};
   protected abstract accuracy:number;
   abstract get name():weaponname;
-  /**
-   * Should be overriden
-   * @param masterService should be added to the child contructor parameters
-   * @param damageTypes The damage stats of the weapon SHOULD NOT BE ADDED TO CHILD CONSTRUCTOR PARAMETERS
-   */
   constructor(masterService:MasterService)
   {
     super(masterService)

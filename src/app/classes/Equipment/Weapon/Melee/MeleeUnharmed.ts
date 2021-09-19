@@ -20,5 +20,4 @@ export class MeleeUnharmed extends MeleeWeapon
   get tags(): tag[] { return ['melee unharmed']; }
   get isSingleTarget(): boolean { return true;}
   get specials():SpecialAttack[]{return [this.onePunch]}
-
 }

@@ -6,9 +6,9 @@ import { Armor } from "./Armor";
 
 export class ArmorNoArmor extends Armor
 {
-    protected statsModifier = {}
-    get name(): armorname { return 'No Armor'; }
-    canEquip(character: Character): boolean { return false; }
-    get tags(): tag[] { return ['no armor']; }
-    get isSingleTarget(): boolean { return true; }
+  protected statsModifier = {}
+  get name(): armorname { return 'No Armor'; }
+  canEquip(character: Character): boolean { return false; }
+  get tags(): tag[] { return ['no armor']; }
+  get isSingleTarget(): boolean { return true; }
 }

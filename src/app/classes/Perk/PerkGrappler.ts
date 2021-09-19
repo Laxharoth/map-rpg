@@ -4,8 +4,8 @@ import { SpecialGrab } from "../Items/SpecialAttack/SpecialGrab";
 import { Perk } from "./Perk";
 
 export class PerkGrappler extends Perk {
-    readonly specialGrab = new SpecialGrab(this.masterService)
-    get name():perkname { return 'Grappler'; }
+  readonly specialGrab = new SpecialGrab(this.masterService)
+  get name():perkname { return 'Grappler'; }
 
-    get specials() :SpecialAttack[]{return [this.specialGrab]}
+  get specials() :SpecialAttack[]{return [this.specialGrab]}
 }

@@ -6,14 +6,14 @@ import { StatusBattle } from "../../StatusBattle"
 
 export class StatusBlind extends StatusBattle
 {
-    protected DURATION: number = 4;
-    get name(): statusname { return 'Blind' }
-    get description(): string {
-        return 'Reduces accuracy and evasion';
-    }
-    protected effect(target: Character): ActionOutput {
-        target.roundStats.evasion=Math.round(0.8*target.roundStats.evasion);
-        return [[],[]];
-    }
-    get tags(): tag[] { return super.tags.concat(['blind'])}
+  protected DURATION: number = 4;
+  get name(): statusname { return 'Blind' }
+  get description(): string {
+      return 'Reduces accuracy and evasion';
+  }
+  protected effect(target: Character): ActionOutput {
+      target.roundStats.evasion=Math.round(0.8*target.roundStats.evasion);
+      return [[],[]];
+  }
+  get tags(): tag[] { return super.tags.concat(['blind'])}
 }
