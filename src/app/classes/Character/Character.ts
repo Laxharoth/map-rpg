@@ -182,14 +182,16 @@ export abstract class Character implements storeable
   addItem(item:Item):void
   {
     if(!item){console.warn("Item not found, Is null or undefined."); return;}
-    if(item.amount === 0) return;
     this.fitItemIntoInventary(item);
-    if(item.amount > 0 && this.inventary.length < this.inventarysize)
+    if(item.amount <= 0) return;
+    if(this.inventary.length < this.inventarysize)
     {
       this.inventary.push(item);
       return;
     }
-    this.masterService.descriptionHandler.headDescription(AddExceedItem(this.masterService,item,this)).setDescription(false);
+    this.masterService.descriptionHandler
+      .headDescription(AddExceedItem(this.masterService,item,this),'item')
+      .setDescription(false);
     return;
   }
   useItem(itemIndexOrItem: number|Item|SpecialAttack,targets: Character[],sourceItem:'inventary'|'special'=null):ActionOutput
@@ -311,12 +313,13 @@ export abstract class Character implements storeable
   }
   private fitItemIntoInventary(item: Item)
   {
+    if(item.amount<=0)return;
     for (const characteritem of this.inventary)
     {
       if (characteritem.constructor === item.constructor)
       {
         const characteriteramount = characteritem.amount;
-        const itemamount = characteritem.amount;
+        const itemamount = item.amount;
         const newcharacteritemamount = Math.min(characteriteramount + itemamount, item.maxStack);
         const newitemamount = itemamount - (newcharacteritemamount - characteriteramount);
         characteritem.amount = newcharacteritemamount;
