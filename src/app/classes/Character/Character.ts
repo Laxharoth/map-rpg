@@ -121,7 +121,7 @@ export abstract class Character implements storeable
   {
     let timesFound = 0;
     for(const characterStatus of this.iterStatus())
-      if(characterStatus.toString()===status.toString())
+      if(this.compareStatusName(status, characterStatus))
         timesFound++;
     return timesFound;
   }
@@ -166,7 +166,7 @@ export abstract class Character implements storeable
     return removeStatusDescription;
   }
   getStatus(status: statusname):Status|null{
-    for(const characterStatus of this.iterStatus())if(characterStatus.toString()===status.toString())return characterStatus;
+    for(const characterStatus of this.iterStatus())if(this.compareStatusName(status, characterStatus))return characterStatus;
     return null;
   }
   tryAttack(target:Character , action:(target:Character)=>ActionOutput):ActionOutput
@@ -306,10 +306,10 @@ export abstract class Character implements storeable
   {
     const {hitpoints:currentlife=this.originalstats.hitpoints,energypoints:currentenergy=this.originalstats.energypoints} = this.stats;
     this.stats = {...this.originalstats}
-    this.stats.hitpoints = currentlife;
-    this.stats.energypoints = currentenergy;
     for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this); }
     for(const status of this.statuses.concat(this.timedStatus)){ status.applyEffect(this); }
+    this.stats.hitpoints = currentlife;
+    this.stats.energypoints = currentenergy;
   }
   private fitItemIntoInventary(item: Item)
   {
@@ -330,36 +330,36 @@ export abstract class Character implements storeable
   private removeBattleStatus(status: string | Status)
   {
     let removeStatusDescription: ActionOutput = [[],[]];
-    let statusIndex = this.battleStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    let statusIndex = this.battleStatus.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
     while (statusIndex >= 0)
     {
       const [status] = this.battleStatus.splice(statusIndex, 1);
       removeStatusDescription = status.onStatusRemoved(this);
-      statusIndex = this.battleStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+      statusIndex = this.battleStatus.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
     }
     return removeStatusDescription ;
   }
   private removeTimedStatus(status: string | Status)
   {
     let removeStatusDescription: ActionOutput = [[],[]]
-    let statusIndex = this.timedStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    let statusIndex = this.timedStatus.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
     while (statusIndex >= 0)
     {
       const [status] = this.timedStatus.splice(statusIndex, 1);
       removeStatusDescription = status.onStatusRemoved(this);
-      statusIndex = this.timedStatus.findIndex(characterStatus => characterStatus.toString() === status.toString());
+      statusIndex = this.timedStatus.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
     }
     return removeStatusDescription ;
   }
   private removeRegularStatus(status: string | Status)
   {
     let removeStatusDescription: ActionOutput = [[],[]]
-    let statusIndex = this.statuses.findIndex(characterStatus => characterStatus.toString() === status.toString());
+    let statusIndex = this.statuses.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
     while (statusIndex >= 0)
     {
       const [status] = this.statuses.splice(statusIndex, 1);
       removeStatusDescription = status.onStatusRemoved(this);
-      statusIndex = this.statuses.findIndex(characterStatus => characterStatus.toString() === status.toString());
+      statusIndex = this.statuses.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
     }
     return removeStatusDescription ;
   }
@@ -438,6 +438,9 @@ export abstract class Character implements storeable
   }
   private attackWithWeapon(targets: Character[], weapon: Weapon, attackDescription: ActionOutput) {
     for (const target of targets) pushBattleActionOutput(this.tryAttack(target, (target: Character) => weapon.attack(this, target)), attackDescription);
+  }
+  private compareStatusName(status: string | Status, characterStatus: Status) {
+    return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status;
   }
   abstract IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
   toJson(): {[key: string]:any}
