@@ -18,9 +18,9 @@ export abstract class Equipment extends Item
   get specials():SpecialAttack[]{return []};
 
   get isBattleUsable(): boolean{return true;};
-  get isPartyUsable(): boolean {return true;};
+  get isPartyUsable(): boolean {return false;};
   get isEnemyUsable(): boolean {return false;};
-  get isSelfUsableOnly(): boolean {return true;};
+  get isSelfUsable() : boolean {return true;};
   get isSingleTarget(): boolean {return true;};
   applyModifiers(character:Character):void
   {

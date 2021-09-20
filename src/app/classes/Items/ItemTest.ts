@@ -7,6 +7,6 @@ export class ItemTest extends Item
   get isBattleUsable(): boolean { return false; }
   get isPartyUsable(): boolean { return false; }
   get isEnemyUsable(): boolean { return false; }
-  get isSelfUsableOnly(): boolean { return false; }
+  get isSelfUsable(): boolean { return false; }
   get isSingleTarget(): boolean { return true; }
 }

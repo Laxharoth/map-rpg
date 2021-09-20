@@ -10,7 +10,7 @@ export class SpecialFright extends SpecialAttack
   get name(): specialsname { return 'Fright' }
   get isPartyUsable(): boolean { return false }
   get isEnemyUsable(): boolean { return true }
-  get isSelfUsableOnly(): boolean { return false }
+  get isSelfUsable(): boolean { return false }
   get isSingleTarget(): boolean { return true }
 
   itemEffect(user:Character,target: Character): ActionOutput

@@ -15,7 +15,7 @@ export abstract class Item implements storeable
   get isBattleUsableOnly(): boolean {return false;}
   abstract get isPartyUsable(): boolean;
   abstract get isEnemyUsable(): boolean;
-  abstract get isSelfUsableOnly(): boolean;
+  abstract get isSelfUsable(): boolean;
   disabled(user: Character): boolean { return false;}
   abstract get isSingleTarget():boolean;
   itemEffect(user:Character,target: Character):ActionOutput { return target.react(this.tags,user) };
