@@ -92,6 +92,7 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
     else { battleRoundDescription.push(roundMessage(battleRoundString))}
 
     masterService.descriptionHandler
+      .flush(0)
       .tailDescription(battleRoundDescription,'battle')
       .nextDescription(false);
   }
@@ -115,18 +116,18 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
 
     else
       masterService.descriptionHandler
-        .tailDescription(selectTarget(targets, playerAction),'battle')
-        .nextDescription(false);
+        .headDescription(selectTarget(targets, playerAction),'battle')
+        .setDescription(false);
   });
   const descriptionOptionSpecial = new DescriptionOptions("Special", () => {
     masterService.descriptionHandler
-      .tailDescription(selectItem(user.specialAttacks),'battle')
-      .nextDescription(false);
+      .headDescription(selectItem(user.specialAttacks),'battle')
+      .setDescription(false);
   });
   const descriptionOptionItem = new DescriptionOptions("Item", () => {
     masterService.descriptionHandler
-      .tailDescription(selectItem(user.inventary),'battle')
-      .nextDescription(false);
+      .headDescription(selectItem(user.inventary),'battle')
+      .setDescription(false);
   });
   const descriptionOptionDefend = new DescriptionOptions("Defend", () => {
     const playerAction = (target: Character[]) => user.Defend(target);
@@ -207,8 +208,8 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
               return;
             }
             masterService.descriptionHandler
-            .tailDescription(selectTarget(targets,playerAction),'battle')
-            .nextDescription(false)
+            .headDescription(selectTarget(targets,playerAction),'battle')
+            .setDescription(false)
             return;
           }
           round(playerAction,targets);
