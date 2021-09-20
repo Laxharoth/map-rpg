@@ -15,8 +15,6 @@ export abstract class TimedStatus extends Status{
     this.initialTime = this.masterService.flagsHandler.minutes;
     this.currentTime = this.initialTime;
   }
-  get effectHasEnded():boolean
-  { return this.remainingTime <= 0; }
   get remainingTime(): number
   { return this.duration - (this.currentTime - this.initialTime); }
   onStatusGainded(target: Character)
@@ -30,7 +28,7 @@ export abstract class TimedStatus extends Status{
   private checkRemoveStatus(time: Time, target: Character)
   {
     this.currentTime = time.getMinutes();
-    if (this.effectHasEnded) {
+    if (this.remainingTime <= 0) {
       const [message] = target.removeStatus(this);
       this.masterService.descriptionHandler.tailDescription(message,'map');
     }
