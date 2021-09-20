@@ -1,9 +1,8 @@
-import { characterType } from "src/app/customTypes/characterTypes";
+import { characterType, persistentNames } from "src/app/customTypes/characterTypes";
 import { MasterService } from "../../masterService";
 import { Character } from "../Character";
 import { CharacterFactory } from "./CharacterFactory";
 
-const persistentNames:characterType[] = [ 'john' ];
 export function savePersistentNames(characters:{[key: string]: Character})
 {
   const saveCharacter = {};
