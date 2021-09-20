@@ -7,7 +7,6 @@ export class Map{
   roomsNames:string[][];
   private rooms:roomFunction[][];
 
-  loadRoomSubject:Subject<string>;
 
   mapcolection  = mapcolection;
   roomcolection = roomcolection;
