@@ -3,5 +3,6 @@ export enum CharacterTypeValues{
   'test enemy'='test enemy',
   'john'='john',
 }
+export const persistentNames:characterType[] = [ 'john' ];
 
 export type characterType = `${CharacterTypeValues}`;
