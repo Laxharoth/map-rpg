@@ -103,4 +103,11 @@ export class DescriptionHandlerService {
     return this.descriptionList.head.value;
   }
 
+  flush(descriptionNumber: number):DescriptionHandlerService
+  {
+    while(this.descriptionList.length>descriptionNumber+1)
+    { this.descriptionList.removeAt(0); }
+    this.setDescription(false);
+    return this;
+  }
 }
