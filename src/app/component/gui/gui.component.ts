@@ -31,29 +31,13 @@ export class GuiComponent implements OnInit {
 
   constructor() {
     this.masterService = new MasterService()
+    //debug to get savedata
     this.masterService.flagsHandler.load("save1",this.masterService);
-    if(!this.masterService.partyHandler.user)
-    {
-      const user = new charTest(this.masterService,'player');
-      const meleeTest1 = new MeleeTest(this.masterService)
-      const rangedTest1 = new RangedTest(this.masterService);
-      const shieldTest1 = new ShieldTest(this.masterService);
-      const armorTest1  = new ArmorTest(this.masterService);
-      user.addPerk(new PerkUpgradeable(this.masterService));
-      user.addItem(meleeTest1);user.addItem(rangedTest1);user.addItem(shieldTest1);user.addItem(armorTest1);
-      this.masterService.partyHandler.user = user;
-    }
+    this.FirstTimeUserInitialize();
+    //debug to test having a team member
     this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
     this.currentGameState = this.masterService.gameStateHandler.gameState;
-
-    this.descriptionSubscription=this.masterService.descriptionHandler.onSetDescription().subscribe((description)=>{
-      this.offset = 0;
-      this.descriptionOptions = description.options;
-      this.setCurrentOptions();
-    })
-    this.gameStateSubscription=this.masterService.gameStateHandler.onSetGameState().subscribe(gameState => {
-      this.currentGameState = gameState;
-    })
+    this.InitializeSubscriptions();
 
     this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
     this.masterService.flagsHandler.addTime(0);
@@ -102,21 +86,18 @@ export class GuiComponent implements OnInit {
 
   isSubsetOfOptions():boolean{ return this.descriptionOptions.length>10; }
 
-  isFirst():boolean{ return this.currentOptions[0] === this.descriptionOptions[0]; }
+  isFirst():boolean{ return this.currentOptions?.[0] === this.descriptionOptions?.[0]; }
 
   isLast():boolean{
     let compareOptioinIndex = 0;
-    while(this.currentOptions[compareOptioinIndex+1] !== null && compareOptioinIndex !=7)compareOptioinIndex++;
-    return this.currentOptions[compareOptioinIndex]===this.descriptionOptions.slice(-1)[0];
+    while(this.currentOptions?.[compareOptioinIndex+1] !== null && compareOptioinIndex !=7)compareOptioinIndex++;
+    return this.currentOptions?.[compareOptioinIndex]===this.descriptionOptions?.slice(-1)?.[0];
   }
 
   private setCurrentOptions()
   {
-    if(this.descriptionOptions.length <= 10)
-    {
-      this.currentOptions = this.descriptionOptions;
-      return;
-    }
+    this.currentOptions = this.descriptionOptions;
+    if(this.descriptionOptions.length <= 10) return;
     let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+this.size)
     while(aux_currentOptions.length< this.size) {aux_currentOptions.push(null);}
     aux_currentOptions.push(this.prevOptions);
@@ -137,4 +118,27 @@ export class GuiComponent implements OnInit {
     this.setCurrentOptions();
   })
 
+  private InitializeSubscriptions() {
+    this.descriptionSubscription = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
+      this.offset = 0;
+      this.descriptionOptions = description.options;
+      this.setCurrentOptions();
+    });
+    this.gameStateSubscription = this.masterService.gameStateHandler.onSetGameState().subscribe(gameState => {
+      this.currentGameState = gameState;
+    });
+  }
+
+  private FirstTimeUserInitialize() {
+    if (!this.masterService.partyHandler.user) {
+      const user = new charTest(this.masterService, 'player');
+      const meleeTest1 = new MeleeTest(this.masterService);
+      const rangedTest1 = new RangedTest(this.masterService);
+      const shieldTest1 = new ShieldTest(this.masterService);
+      const armorTest1 = new ArmorTest(this.masterService);
+      user.addPerk(new PerkUpgradeable(this.masterService));
+      user.addItem(meleeTest1); user.addItem(rangedTest1); user.addItem(shieldTest1); user.addItem(armorTest1);
+      this.masterService.partyHandler.user = user;
+    }
+  }
 }
