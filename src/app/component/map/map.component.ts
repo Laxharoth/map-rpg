@@ -31,20 +31,7 @@ export class MapComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.currentCoordinates = this.masterService.mapHandler.coordinates;
-    this.lockedMap = this.masterService.lockmap.isMapLocked();
-    this.currentMap = this.masterService.mapHandler.currentMap;
-    this.timeValues = this.masterService.flagsHandler.getTimeValues();
-
-    this.coordinatesSubscription = this.masterService.mapHandler.onCoordinatesChanged().subscribe(changedCoordinates => {
-      this.currentCoordinates = changedCoordinates;
-      this.setLockedWASD()
-      this.setMapOverflow();
-    })
-    this.mapSubscription = this.masterService.mapHandler.onLoadMap().subscribe(loadedMap =>{ this.currentMap = loadedMap; })
-    this.lockmapSubscription = this.masterService.lockmap.onMapLockChanged().subscribe(isMapLocked=>{ this.lockedMap = isMapLocked; })
-    this.timeSubscription= this.masterService.flagsHandler.onTimeChanged().subscribe(time => {this.timeValues = time.getTimeValues();})
-
+    this.InitializeSubscriptions();
     this.setLockedWASD()
   }
 
@@ -87,5 +74,19 @@ export class MapComponent implements OnInit {
       LEFT:this.currentMap.roomsNames[y][x-1]?false:true,
       RIGHT:this.currentMap.roomsNames[y][x+1]?false:true,
     };
+  }
+  private InitializeSubscriptions() {
+    this.currentCoordinates = this.masterService.mapHandler.coordinates;
+    this.lockedMap = this.masterService.lockmap.isMapLocked();
+    this.currentMap = this.masterService.mapHandler.currentMap;
+    this.timeValues = this.masterService.flagsHandler.getTimeValues();
+    this.coordinatesSubscription = this.masterService.mapHandler.onCoordinatesChanged().subscribe(changedCoordinates => {
+      this.currentCoordinates = changedCoordinates;
+      this.setLockedWASD();
+      this.setMapOverflow();
+    });
+    this.mapSubscription = this.masterService.mapHandler.onLoadMap().subscribe(loadedMap => { this.currentMap = loadedMap; });
+    this.lockmapSubscription = this.masterService.lockmap.onMapLockChanged().subscribe(isMapLocked => { this.lockedMap = isMapLocked; });
+    this.timeSubscription = this.masterService.flagsHandler.onTimeChanged().subscribe(time => { this.timeValues = time.getTimeValues(); });
   }
 }
