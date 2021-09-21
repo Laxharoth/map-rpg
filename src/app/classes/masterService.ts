@@ -8,6 +8,12 @@ import { MapHandlerService } from "../service/map-handler.service";
 import { PartyService } from "../service/party.service";
 import { Character } from "./Character/Character";
 
+/**
+ * A object to pack all services
+ *
+ * @export
+ * @class MasterService
+ */
 export class MasterService
 {
   private _lockmap:LockMapService
@@ -22,11 +28,11 @@ export class MasterService
   {
     this._lockmap = new LockMapService();
     this._flagsHandler = new FlagHandlerService();
-    this._mapHandler = new MapHandlerService(this);
     this._partyHandler = new PartyService();
     this._enemyHandler = new EnemyFormationService();
     this._gameStateHandler = new GameStateService();
     this._descriptionHandler = new DescriptionHandlerService(this._lockmap,this._gameStateHandler);
+    this._mapHandler = new MapHandlerService(this);
   }
   get lockmap(){return this._lockmap;}
   get descriptionHandler(){return this._descriptionHandler;}
