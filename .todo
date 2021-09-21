@@ -11,13 +11,33 @@
               "content": "Idea: Use the game states and create more descriptions lists.",
               "id": 1631918819717,
               "level": "default",
-              "done": false
+              "done": true
             }
           }
         ],
         "todo": {
           "content": "Find a better way to use description handlers",
           "id": 1631918221236,
+          "level": "default",
+          "done": false
+        }
+      },
+      {
+        "key": 1632078599747,
+        "children": [],
+        "todo": {
+          "content": "The add excess item description should have a way to stack items with the same type, but also separate stack with the max stack",
+          "id": 1632078599747,
+          "level": "default",
+          "done": false
+        }
+      },
+      {
+        "key": 1632094053542,
+        "children": [],
+        "todo": {
+          "content": "Check if select item and then return still works",
+          "id": 1632094053542,
           "level": "default",
           "done": false
         }
