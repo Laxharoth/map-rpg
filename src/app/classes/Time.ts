@@ -1,3 +1,9 @@
+/**
+ * A object to represent Time.
+ *
+ * @export
+ * @class Time
+ */
 export class Time
 {
   private static timeconvertion = {
@@ -34,11 +40,22 @@ export class Time
     return this.minutes;
   }
 
+  /**
+   * Adds to the current time the specified value.
+   *
+   * @param {(number|string)} value The time to add.
+   * @memberof Time
+   */
   addTime(value:number|string)
   {
     this.minutes+=this.convert2Time(value);
   }
-
+  /**
+   * Divides the minutes in the max posible integer value it can represent for each time unit.
+   *
+   * @return {*}  {{Years:number,Months:number,Days:number,Hours:number,Minutes:number}}
+   * @memberof Time
+   */
   getTimeValues():{Years:number,Months:number,Days:number,Hours:number,Minutes:number}
   {
     let backupMinutes = this.minutes;
@@ -60,23 +77,21 @@ export class Time
 
     return values;
   }
-
+  /**
+   * Converts a string into it's representation in minutes.
+   *
+   * @private
+   * @param {(number|string)} value The time representation
+   * @return {*}  {number} if number is provided return the number, otherwise the time representation of the string.
+   * @memberof Time
+   */
   private convert2Time(value: number|string):number
   {
     if(typeof value === 'number') return value;
-    const pendingConvertions = [];
+
     let unitIndex  = 0;
     let unitOffset = 0;
-    while(unitOffset < value.length)
-    {
-      unitIndex = unitOffset;
-      while((!isNaN(Number.parseInt(value[unitIndex])) || ['+','-'].includes(value[unitIndex])) && unitIndex < value.length){unitIndex++}
-      const quantity = value.substring(unitOffset,unitIndex);
-      unitOffset = unitIndex;
-      while((isNaN(Number.parseInt(value[unitOffset])) && !['+','-'].includes(value[unitOffset]) ) && unitOffset < value.length){unitOffset++}
-      const unit = value.substring(unitIndex,unitOffset);
-      pendingConvertions.push([quantity,unit]);
-    }
+    const pendingConvertions = separateTime(unitOffset, value, unitIndex);
     const minutes = pendingConvertions.reduce((accumulator,[quantity,unit]) =>
     {
       if(!Time.timeconvertion?.[unit])
@@ -87,5 +102,36 @@ export class Time
       return Time.timeconvertion?.[unit]*Number.parseInt(quantity) + accumulator
     } ,0)
     return minutes;
+    function separateTime(unitOffset: number, value: string, unitIndex: number) {
+      const pendingConvertions = []
+      while (unitOffset < value.length) {
+        let quantity:string;
+        ({ quantity, unitIndex } = getNextQuantity(unitIndex, unitOffset, value));
+        let unit:string;
+        ({ unit, unitOffset } = getNextTimeUnit(unitOffset, unitIndex, value));
+        pendingConvertions.push([quantity, unit]);
+      }
+      return pendingConvertions;
+    }
+    function getNextTimeUnit(unitOffset: number, unitIndex: number, value: string) {
+      unitOffset = unitIndex;
+      while ((isPartOfTimeUnit(value)) && unitOffset < value.length) { unitOffset++; }
+      const unit = value.substring(unitIndex, unitOffset);
+      return { unit, unitOffset };
+    }
+
+    function getNextQuantity(unitIndex: number, unitOffset: number, value: string) {
+      unitIndex = unitOffset;
+      while ((isPartOfNumber(value)) && unitIndex < value.length) { unitIndex++; }
+      const quantity = value.substring(unitOffset, unitIndex);
+      return { quantity, unitIndex };
+    }
+
+    function isPartOfTimeUnit(value:string) {
+      return isNaN(Number.parseInt(value[unitOffset])) && !['+', '-'].includes(value[unitOffset]);
+    }
+    function isPartOfNumber(value:string) {
+      return !isNaN(Number.parseInt(value[unitIndex])) || ['+', '-'].includes(value[unitIndex]);
+    }
   }
 }
