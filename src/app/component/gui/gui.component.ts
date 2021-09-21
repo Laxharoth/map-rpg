@@ -110,13 +110,13 @@ export class GuiComponent implements OnInit {
     if(this.isFirst())return;
     this.offset-=this.size;
     this.setCurrentOptions();
-  })
+  }, ()=>this.isFirst())
 
   private nextOptions = new DescriptionOptions(">>>",()=>{
     if(this.isLast())return;
     this.offset+=this.size;
     this.setCurrentOptions();
-  })
+  },()=>this.isLast())
 
   private InitializeSubscriptions() {
     this.descriptionSubscription = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
