@@ -1,5 +1,11 @@
 import { ActionOutput, characterStats, damageTypes } from "../customTypes/customTypes";
 
+/**
+ * In descriptions that use input elements get the value of the input and select.
+ *
+ * @export
+ * @return {*}  {{input:string,select:string}}
+ */
 export function getInputs():{input:string,select:string}
 {
   const input:any = document.getElementById('unique-input');
@@ -9,6 +15,14 @@ export function getInputs():{input:string,select:string}
   return {input:inputValue, select:selectValue};
 }
 
+/**
+ * Pushes the descriptions in the fisrt array to the descriptions of the second
+ * Pushes the strings in the first array to the strings of the second array
+ * @export
+ * @param {ActionOutput} source The descriptions and strings to be pushed.
+ * @param {ActionOutput} target The original array of descriptions and strings.
+ * @return {*}  {ActionOutput}
+ */
 export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):ActionOutput
 {
   target[0].push(...source[0])
@@ -16,15 +30,36 @@ export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):
   return target;
 }
 
+/**
+ * Returns a integer between the values provided
+ *
+ * @export
+ * @param {number} min The minimum value that can be returned
+ * @param {number} max The maximum value that can be returned
+ * @return {*}  {number}
+ */
 export function randomBetween(min:number, max:number):number{
   return Math.floor(Math.random()*(max-min+1)+min);
 }
 
+/**
+ * Generates a random number between 0 and 100, and checks if the number provided is bigger.
+ *
+ * @export
+ * @param {number} percent The probability the function should return true.
+ * @return {*}  {boolean}
+ */
 export function randomCheck(percent:number):boolean
 {
   return percent >= Math.random()*100;
 }
 
+/**
+ *  Fills missing CharacterStats
+ *
+ * @param {*} {characterStats} characterStats The original character stats (can have attributes missing)
+ * @return {*} {characterStats} The stats with all the possible attributes.
+ */
 export const loadCharacterStats = (function ()
 {
   const _defaultStats:characterStats = { hitpoints : 1, energypoints : 0,
@@ -39,6 +74,12 @@ export const loadCharacterStats = (function ()
   }
 })()
 
+/**
+ *  Fills missing weapon damageTypes
+ *
+ * @param {*} {damageTypes} weaponDamages The original weapon damage stats (can have attributes missing)
+ * @return {*} {damageTypes} The stats with all the possible attributes.
+ */
 export const fillMissingWeaponDamage = (function() {
   const _defaultStats:damageTypes = {
      heatdamage  :0,

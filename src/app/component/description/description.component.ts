@@ -14,9 +14,36 @@ export class DescriptionComponent implements OnInit {
   @Input() descriptionhandler:DescriptionHandlerService;
 
   //strings for befor and after Input and select
+  /**
+   * Text to be displayed before the input element
+   *
+   * @type {string}
+   * @memberof DescriptionComponent
+   */
   beforeInput:string;
+  //strings for befor and after Input and select
+  /**
+   * Text to be displayed after the input element
+   *
+   * @type {string}
+   * @memberof DescriptionComponent
+   */
   afterInput:string;
+  //strings for befor and after Input and select
+  /**
+   * Text to be displayed before the select element
+   *
+   * @type {string}
+   * @memberof DescriptionComponent
+   */
   beforeSelect:string;
+  //strings for befor and after Input and select
+  /**
+   * Text to be displayed after the select element
+   *
+   * @type {string}
+   * @memberof DescriptionComponent
+   */
   afterSelect:string;
 
   //if input goes first and if has input and select
@@ -62,36 +89,41 @@ export class DescriptionComponent implements OnInit {
     //if there is no input then inputGoesFirst is true since the inputIndex is negative
     let beforeInput='',afterInput=description,beforeSelect='',afterSelect='';
 
-    checkinput:{
-      if(inputIndex >= 0 && inputIndex < endInputIndex)
-      {
-        const inputString = description.slice(inputIndex, endInputIndex);
-        [beforeInput,afterInput] = [description.slice(0,inputIndex),description.slice(endInputIndex)]
-        this.input = JSON.parse(inputString.slice(6,-1)||'{}') as inputObject;
-        this.hasInput = true;
-      }
-    }
-    checkselect:{
-      const selectSubString = (this.inputGoesFirst)?afterInput:beforeInput;
+    ({ beforeInput, afterInput } = this.InitializeInputStrings(inputIndex, endInputIndex, description, beforeInput, afterInput));
+    ({ afterInput, beforeInput, selectIndex, endselectIndex } = this.InitializeSelectStrings(afterInput, beforeInput, beforeSelect, afterSelect));
 
-      //have to check again since now it's using a substring
-      selectIndex = selectSubString.indexOf('\\select');
-      endselectIndex = selectSubString.indexOf('\\',selectIndex+1)+1;
-
-      if(selectIndex >= 0 && selectIndex < endselectIndex)
-      {
-        const selectString = selectSubString.slice(selectIndex, endselectIndex);
-        [beforeSelect,afterSelect] = [selectSubString.slice(0,selectIndex),selectSubString.slice(endselectIndex)]
-        if(this.inputGoesFirst) afterInput = '';
-        else beforeInput = '';
-
-        this.inputOptions = JSON.parse(selectString.slice(7,-1)||'[]') as string[];
-        this.hasSelect = true;
-      }
-    }
     this.beforeInput  = beforeInput;
     this.afterInput   = afterInput;
     this.beforeSelect = beforeSelect;
     this.afterSelect  = afterSelect;
+  }
+
+  private InitializeSelectStrings(afterInput: string, beforeInput: string, beforeSelect: string, afterSelect: string) {
+    const selectSubString = (this.inputGoesFirst) ? afterInput : beforeInput;
+
+    const selectIndex = selectSubString.indexOf('\\select');
+    const endselectIndex = selectSubString.indexOf('\\', selectIndex + 1) + 1;
+
+    if (selectIndex >= 0 && selectIndex < endselectIndex) {
+      const selectString = selectSubString.slice(selectIndex, endselectIndex);
+      [beforeSelect, afterSelect] = [selectSubString.slice(0, selectIndex), selectSubString.slice(endselectIndex)];
+      if (this.inputGoesFirst) afterInput = '';
+      else beforeInput = '';
+
+      this.inputOptions = JSON.parse(selectString.slice(7, -1) || '[]') as string[];
+      this.hasSelect = true;
+    }
+    return { afterInput, beforeInput, selectIndex, endselectIndex };
+  }
+
+  private InitializeInputStrings(inputIndex: number, endInputIndex: number, description: string, beforeInput: string, afterInput: string) {
+    if (inputIndex >= 0 && inputIndex < endInputIndex) {
+      const inputString = description.slice(inputIndex, endInputIndex);
+      beforeInput = description.slice(0, inputIndex);
+      afterInput = description.slice(endInputIndex);
+      this.input = JSON.parse(inputString.slice(6, -1) || '{}') as inputObject;
+      this.hasInput = true;
+    }
+    return { beforeInput, afterInput };
   }
 }

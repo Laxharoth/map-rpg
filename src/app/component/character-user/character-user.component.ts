@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, Sanitizer, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { Character } from 'src/app/classes/Character/Character';
 import { Status } from 'src/app/classes/Character/Status/Status';

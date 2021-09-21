@@ -12,13 +12,23 @@ import { RangedUnharmed } from "../../Equipment/Weapon/Ranged/RangedUnharmed";
 import { MasterService } from "../../masterService";
 import { ItemTest } from '../../Items/ItemTest';
 
-export function ItemFactory(masterService:MasterService,equipmentName:itemname,options:{[key: string]: any}):Item
+/**
+ * Creates an Item with the given itemname
+ *
+ * @export
+ * @param {MasterService} masterService The master service
+ * @param {itemname} itemName The itemname
+ * @param {{[key: string]: any}} options The options from the item created with the  storeable.toJson
+ * @return {Item} An Item with the loaded options
+ */
+export function ItemFactory(masterService:MasterService,itemName:itemname,options:{[key: string]: any}):Item
 {
-  const equipment = new ItemSwitcher[equipmentName](masterService);
+  const equipment = new ItemSwitcher[itemName](masterService);
   equipment.fromJson(options)
   return equipment;
 }
 
+/** @type {[key: string]:Item.constructor} */
 const ItemSwitcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armornameEnum| itemsEnum]:any} = {
   'hand':MeleeUnharmed,
   'Melee test':MeleeTest,

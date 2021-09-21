@@ -6,8 +6,32 @@ import { Character } from "../../Character/Character";
 import { StatusDefend } from '../../Character/Status/StatusTemporal/StatusDefend';
 import { Equipment } from "../Equipment";
 
+/**
+ * Type of equipment, adds defend method.
+ *
+ * @export
+ * @abstract
+ * @class Shield
+ * @extends {Equipment}
+ */
 export abstract class Shield extends Equipment{
+  /**
+   * Can only use shieldname
+   *
+   * @readonly
+   * @abstract
+   * @type {shieldname}
+   * @memberof Shield
+   */
   abstract get name(): shieldname;
+  /**
+   * Equips into user shield
+   *
+   * @param {Character} user The character that uses the shield.
+   * @param {Character} target
+   * @return {*}  {ActionOutput}
+   * @memberof Shield
+   */
   itemEffect(user:Character,target: Character): ActionOutput
   {
     const output = super.itemEffect(user, user);
@@ -15,6 +39,13 @@ export abstract class Shield extends Equipment{
     user.shield = this;
     return output;
   }
+  /**
+   * Adds the StatusDefend to the character with the shield.
+   *
+   * @param {Character} target
+   * @return {*}  {ActionOutput}
+   * @memberof Shield
+   */
   defend(target : Character):ActionOutput
   {
     const statusOutput = target.addStatus(new StatusDefend(this.masterService));

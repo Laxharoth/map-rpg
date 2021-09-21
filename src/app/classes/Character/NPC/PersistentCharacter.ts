@@ -1,5 +1,13 @@
 import { Character } from "../Character";
 
+/**
+ * A character with a name, adds/loads the name to/from the storeable json.
+ *
+ * @export
+ * @abstract
+ * @class PersistentCharacter
+ * @extends {Character}
+ */
 export abstract class PersistentCharacter extends Character
 {
   protected abstract _name:string;

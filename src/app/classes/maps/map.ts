@@ -3,16 +3,40 @@ import { mapcolection } from "src/app/maps/mapcolection";
 import { roomcolection } from './../../rooms/roomcolection';
 import { roomFunction } from "src/app/customTypes/customTypes";
 
+/**
+ * A model that represents a map
+ *
+ * @export
+ * @class Map
+ */
 export class Map{
+  /**
+   * The matrix of the map that contains the names
+   *
+   * @type {string[][]}
+   * @memberof Map
+   */
   roomsNames:string[][];
+  /**
+   * The matrix of the map that contains the functions to create the rooms.
+   *
+   * @private
+   * @type {roomFunction[][]}
+   * @memberof Map
+   */
   private rooms:roomFunction[][];
-
 
   mapcolection  = mapcolection;
   roomcolection = roomcolection;
 
   constructor() { }
 
+  /**
+   * Loads in the roomNames the matrix of the current map.
+   *
+   * @param {string} mapname The name of the map to load.
+   * @memberof Map
+   */
   loadMap(mapname:string):void{
     this.roomsNames = this.mapcolection[mapname];
     Object.freeze(this.roomsNames);

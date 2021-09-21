@@ -3,6 +3,15 @@ import { Item } from "../Items/Item";
 import { MasterService } from "../masterService";
 import { Description, DescriptionOptions } from "./Description";
 
+/**
+ * Returns a description to drop items if adding a item to inventary exceeds max inventary.
+ *
+ * @export
+ * @param {MasterService} masterService The master service.
+ * @param {Item} item The item tring to add.
+ * @param {Character} character The character to add the inventary.
+ * @return {*}  {Description}
+ */
 export function AddExceedItem(masterService:MasterService,item:Item,character:Character):Description
 {
   const dropItemOption = new DescriptionOptions('Drop Item', () => { masterService.descriptionHandler.nextDescription(false); });

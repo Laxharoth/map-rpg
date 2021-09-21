@@ -6,8 +6,15 @@ import { Item } from "../Items/Item";
 import { MasterService } from "../masterService";
 import { Description, DescriptionOptions } from "./Description";
 
-export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormation)=>{
-
+/**
+ * Starts a battle
+ *
+ * @export
+ * @param {MasterService} masterService The master service.
+ * @param {EnemyFormation} enemy The enemy formation.
+ */
+export function descriptionBattle(masterService:MasterService,enemy:EnemyFormation):void
+{
   const user = masterService.partyHandler.user;
   const party = masterService.partyHandler.party;
   masterService.enemyHandler.enemyFormation  = enemy;
@@ -33,6 +40,10 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
           .sort((character,other)=> character.stats.speed > other.stats.speed ? -1:1)
   }
   let fistRound = true;
+  /**
+   * Reset the round strings and description lists.
+   *
+   */
   function startRound():void
   {
     startRoundString = [];
@@ -62,6 +73,12 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
       .nextDescription(false);
     fistRound = false;
   }
+  /**
+   * Iterates the character actions appling their actions.
+   *
+   * @param {(target:Character[])=>ActionOutput} playerAction
+   * @param {Character[]} playerTarget
+   */
   function round(playerAction:(target:Character[])=>ActionOutput,playerTarget:Character[]):void
   {
     for(const character of attackOrder()){
@@ -162,6 +179,13 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   ///////////////////////////////////////////////////////
   //SELECT TARGET
   ///////////////////////////////////////////////////////
+  /**
+   * Returns options to select target.
+   *
+   * @param {Character[]} targets
+   * @param {(target:Character[])=>ActionOutput} playerAction
+   * @return {*}  {Description}
+   */
   function selectTarget(targets:Character[],playerAction:(target:Character[])=>ActionOutput):Description
   {
     const targetsOptions:DescriptionOptions[] = [];
@@ -185,6 +209,12 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   ///////////////////////////////////////////////////////
   //SELECT ITEM
   ///////////////////////////////////////////////////////
+  /**
+   * Returns options to select an item
+   *
+   * @param {Item[]} items
+   * @return {*}  {Description}
+   */
   function selectItem(items:Item[]):Description
   {
     const options:DescriptionOptions[]=[]
@@ -192,12 +222,8 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
     {
       const playerAction = (target: Character[])=>user.useItem(item,target);
       options.push(new DescriptionOptions(item.name,()=>{
-          if(item.isSelfUsableOnly)
-          {
-            round(playerAction,[user])
-            return;
-          }
           const targets = []
+            .concat(item.isSelfUsable? [user]:[])
             .concat(item.isPartyUsable? [user].concat(party):[])
             .concat(item.isEnemyUsable? getPossibleTarget(enemy.enemies):[])
           if(item.isSingleTarget)
@@ -231,6 +257,7 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   ///////////////////////////////////////////////////////
   //ROUND MESSAGE
   ///////////////////////////////////////////////////////
+  /**Returns the round message */
   function roundMessage(roundStrings:string[]):Description
   {
     const nextOption = new DescriptionOptions("next",startRound)
@@ -238,17 +265,15 @@ export const descriptionBattle = (masterService:MasterService,enemy:EnemyFormati
   }
 
   ///////////////////////////////////////////////////////
-  //ESCAPE MESSAGE
-  ///////////////////////////////////////////////////////
-  function escapeMessage():Description
-  {
-    const nextOption = new DescriptionOptions("next",function(){ masterService.descriptionHandler.nextDescription(false) })
-    return new Description(()=>`${user.name} escapes`,[nextOption])
-  }
-
-  ///////////////////////////////////////////////////////
   //END BATTLE
   ///////////////////////////////////////////////////////
+  /**
+   * Returns a description of the endBattle
+   *
+   * @param {boolean} playerWon
+   * @param {string[]} roundStrings
+   * @return {*}  {Description}
+   */
   function endBattle(playerWon: boolean,roundStrings:string[]):Description
   {
     const nextOption = new DescriptionOptions('next',()=>{

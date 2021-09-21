@@ -28,10 +28,37 @@ import { PerkFactory } from "./Factory/PerkFactory";
 import { characterType } from "src/app/customTypes/characterTypes";
 import { perkname } from "src/app/customTypes/perkname";
 
+/**
+ * A model of a character.
+ *
+ * @export
+ * @abstract
+ * @class Character
+ * @implements {storeable}
+ * @constructor Initializes the masterService Should be overridden to set originalStats
+ */
 export abstract class Character implements storeable
 {
+  /**
+   * The original stats of the character.
+   *
+   * @type {characterStats}
+   * @memberof Character
+   */
   originalstats:characterStats;
+  /**
+   * The current stats of the character after appling equipment, status, etc modifiers.
+   *
+   * @type {characterStats}
+   * @memberof Character
+   */
   stats:characterStats;
+  /**
+   * The current status of the character after appling equipment during a battle round.
+   *
+   * @type {characterStats}
+   * @memberof Character
+   */
   roundStats:characterStats;
   private perks:Perk[] = [];
   private statuses:Status[] = [];
@@ -46,15 +73,43 @@ export abstract class Character implements storeable
   private static __noArmor__:ArmorNoArmor;
   private static __noShield__:ShieldNoShield;
 
+  /**
+   * The currently equiped melee weapon.
+   *
+   * @private
+   * @type {MeleeWeapon}
+   * @memberof Character
+   */
   private _meleeWeapon:MeleeWeapon = null;
   get meleeWeapon():MeleeWeapon { return this._meleeWeapon || Character.__meleeUnharmed__ }
   set meleeWeapon(equipment:MeleeWeapon){this._meleeWeapon=equipment}
+  /**
+   * The currently equiped rangedWeapon.
+   *
+   * @private
+   * @type {RangedWeapon}
+   * @memberof Character
+   */
   private _rangedWeapon:RangedWeapon = null;
   get rangedWeapon():RangedWeapon { return this._rangedWeapon || Character.__rangedUnharmed__ }
   set rangedWeapon(equipment:RangedWeapon){this._rangedWeapon=equipment}
+  /**
+   * The currently equiped armor.
+   *
+   * @private
+   * @type {Armor}
+   * @memberof Character
+   */
   private _armor:Armor = null;
   get armor():Armor { return this._armor || Character.__noArmor__}
   set armor(equipment:Armor){this._armor=equipment}
+  /**
+   * The currently equiped shield.
+   *
+   * @private
+   * @type {Shield}
+   * @memberof Character
+   */
   private _shield:Shield = null;
   get shield():Shield { return this._shield || Character.__noShield__}
   set shield(equipment:Shield){this._shield=equipment}
@@ -63,6 +118,12 @@ export abstract class Character implements storeable
   private readonly masterService:MasterService
   private __endbattle__ = false;
 
+  /**
+   * Creates an instance of Character.
+   * @param {characterStats} originalstats The original stats of the character
+   * @param {MasterService} masterService The master service.
+   * @memberof Character
+   */
   constructor( originalstats:characterStats,
     masterService:MasterService)
   {
@@ -72,6 +133,13 @@ export abstract class Character implements storeable
     this.initializeUnharmed();
     this.applyStatus();
   }
+  /**
+   * Uses the meleeWeapon to attack the target.
+   *
+   * @param {Character[]} targets The characters to attack.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   Attack(targets:Character[]):ActionOutput
   {
     const attackDescription:ActionOutput = [[],[]];
@@ -81,6 +149,13 @@ export abstract class Character implements storeable
     this.attackWithWeapon(targets, weapon, attackDescription);
     return attackDescription;
   }
+  /**
+   * Uses rangedWeapon to attack the target.
+   *
+   * @param {Character[]} targets The targets to attack.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   Shoot(targets:Character[]):ActionOutput
   {
     const attackDescription:ActionOutput = [[],[]];
@@ -90,10 +165,23 @@ export abstract class Character implements storeable
     this.attackWithWeapon(targets, weapon, attackDescription);
     return attackDescription;
   }
+  /**
+   * Uses shield .defend
+   *
+   * @param {Character[]} target Defends with the equiped shield.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   Defend(target:Character[]):ActionOutput
   {
     return this.shield.defend(this);
   }
+  /**
+   * Reset roundStats apply the battle status effects and cooldown the specials.
+   *
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   startRound():ActionOutput
   {
     const roundDescription:ActionOutput = [[],[]];
@@ -103,6 +191,12 @@ export abstract class Character implements storeable
     this.cooldownSpecials();
     return roundDescription;
   }
+  /**
+   * Removes the battle status.
+   *
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   onDefeated():ActionOutput
   {
     let description:ActionOutput =[[],[]]
@@ -126,6 +220,13 @@ export abstract class Character implements storeable
     return timesFound;
   }
 
+  /**
+   * Gets all the specials from equipments, perks and status.
+   *
+   * @readonly
+   * @type {SpecialAttack[]}
+   * @memberof Character
+   */
   get specialAttacks(): SpecialAttack[]
   {
     const specials: SpecialAttack[] = []
@@ -135,8 +236,21 @@ export abstract class Character implements storeable
     return specials
   };
 
+  /**
+   * Checks if the character has a tag.
+   *
+   * @param {tag} tag The tag to check.
+   * @return {*}  {boolean}
+   * @memberof Character
+   */
   hasTag(tag:tag):boolean { return this.tags.includes(tag); }
-
+  /**
+   * Adds status to the character. to the correct Array if able.
+   *
+   * @param {Status} status The status to add to the character.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   addStatus(status: Status): ActionOutput{
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
     if(status instanceof StatusBattle)return this.addBattleStatus(status)
@@ -145,17 +259,38 @@ export abstract class Character implements storeable
     this.masterService.updateCharacter(this);
     return status.onStatusGainded(this)
   }
+  /**
+   * Adds perk if does not already has it.
+   *
+   * @param {Perk} perk The perk to add.
+   * @return {*}  {void}
+   * @memberof Character
+   */
   addPerk(perk:Perk):void
   {
     if(this.perks.some(characterperk => characterperk.constructor ===  perk.constructor))return;
     this.perks.push(perk);
   }
+  /**
+   * Returns a perk if the character has it.
+   *
+   * @param {(Perk|perkname)} perkOrName The perk or perkname.
+   * @return {*}  {Perk}
+   * @memberof Character
+   */
   getPerk(perkOrName:Perk|perkname):Perk
   {
     if(perkOrName instanceof Perk)return this.perks[this.perks.indexOf(perkOrName)];
     for(const perk of this.perks)if(perk.name === perkOrName)return perk;
     return null;
   }
+  /**
+   * Removes all instances of the given statusname or Status.
+   *
+   * @param {(Status|statusname)} status
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   removeStatus(status:Status|statusname):ActionOutput
   {
     let removeStatusDescription:ActionOutput = [[],[]];
@@ -165,10 +300,25 @@ export abstract class Character implements storeable
     this.applyStatus();
     return removeStatusDescription;
   }
+  /**
+   * Gets the first instance of Status that matches the statusname or type of Status
+   *
+   * @param {statusname} status
+   * @return {*}  {(Status|null)}
+   * @memberof Character
+   */
   getStatus(status: statusname):Status|null{
     for(const characterStatus of this.iterStatus())if(this.compareStatusName(status, characterStatus))return characterStatus;
     return null;
   }
+  /**
+   * Check if the attack action can be performed on the target character.
+   *
+   * @param {Character} target The target of the attack action.
+   * @param {(target:Character)=>ActionOutput} action The action to be performed.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   tryAttack(target:Character , action:(target:Character)=>ActionOutput):ActionOutput
   {
     if(this.hasTag('paralized')) return [[],[`${this.name} is paralized and can't move`]];
@@ -179,6 +329,13 @@ export abstract class Character implements storeable
     }
     return  action(target);
   }
+  /**
+   * Adds Item to the inventary.
+   *
+   * @param {Item} item The item to add.
+   * @return {*}  {void}
+   * @memberof Character
+   */
   addItem(item:Item):void
   {
     if(!item){console.warn("Item not found, Is null or undefined."); return;}
@@ -194,6 +351,15 @@ export abstract class Character implements storeable
       .setDescription(false);
     return;
   }
+  /**
+   * Uses an item from Inventary or SpecialAttack.
+   *
+   * @param {(number|Item|SpecialAttack)} itemIndexOrItem If number, the index of the array, If object, the actuall Item.
+   * @param {Character[]} targets The targets the item will affect.
+   * @param {('inventary'|'special')} [sourceItem=null] If index is provided the array is required.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   useItem(itemIndexOrItem: number|Item|SpecialAttack,targets: Character[],sourceItem:'inventary'|'special'=null):ActionOutput
   {
     if(itemIndexOrItem instanceof SpecialAttack)return this._useSpecialAttack(itemIndexOrItem,targets);
@@ -203,6 +369,11 @@ export abstract class Character implements storeable
     console.warn('item instance not provided or source not provided')
     return [[],[]]
   }
+  /**
+   * Unequip melee weapon and adds it to the inventary.
+   *
+   * @memberof Character
+   */
   unequipMelee()
   {
     const melee = this._meleeWeapon;
@@ -210,6 +381,11 @@ export abstract class Character implements storeable
     this._meleeWeapon = null;
     this.addItem(melee);
   }
+  /**
+   * Unequip ranged weapon and adds it to the inventary.
+   *
+   * @memberof Character
+   */
   unequipRanged()
   {
     const ranged = this._rangedWeapon;
@@ -217,6 +393,11 @@ export abstract class Character implements storeable
     this._rangedWeapon = null;
     this.addItem(ranged);
   }
+  /**
+   * Unequip armor and adds it to the inventary.
+   *
+   * @memberof Character
+   */
   unequipArmor()
   {
     const armor = this._armor;
@@ -224,6 +405,11 @@ export abstract class Character implements storeable
     this._armor = null;
     this.addItem(armor);
   }
+  /**
+   * Unequip shield and adds it to the inventary.
+   *
+   * @memberof Character
+   */
   unequipShield()
   {
     const shield = this._shield;
@@ -232,6 +418,11 @@ export abstract class Character implements storeable
     this.addItem(shield);
   }
 
+  /**
+   * Iterator of character equipment.
+   *
+   * @memberof Character
+   */
   iterEquipment = function*():Generator<Equipment, void, unknown>
                   {
                     yield this.meleeWeapon;
@@ -239,6 +430,11 @@ export abstract class Character implements storeable
                     yield this.armor;
                     yield this.shield;
                   }
+  /**
+   * Iterator of character status.
+   *
+   * @memberof Character
+   */
   iterStatus    = function*():Generator<Status, void,unknown>
                   {
                     for(const status of this.statuses) yield status;
@@ -246,6 +442,15 @@ export abstract class Character implements storeable
                     for(const status of this.battleStatus) yield status;
                   }
 
+  /**
+   * Checks all the reactions of the character.
+   * Won't react if character is paralized, zero hitpoints or the battle ended.
+   *
+   * @param {tag[]} whatTriggers The tags to match the reaction.
+   * @param {Character} source The character whose action triggered the reactions.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   react(whatTriggers:tag[],source: Character):ActionOutput
   {
     const reactDescription:ActionOutput = [[],[]]
@@ -256,19 +461,42 @@ export abstract class Character implements storeable
     for(const reaction of this.reactions){ pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription);}
     return reactDescription
   }
+  /**
+   * Reduces the character hitpoints up to zero.
+   *
+   * @param {number} damage The damage taken by the character.
+   * @memberof Character
+   */
   takeDamage(damage:number)
   {
     this.stats.hitpoints=Math.max(0,this.stats.hitpoints-damage);
     this.masterService.updateCharacter(this);
   }
+  /**
+   * Heals hitpoints from the character up to original hitpoints.
+   *
+   * @param {number} hitpointsgain The number of hitpoints to gain.
+   * @memberof Character
+   */
   healHitPoints(hitpointsgain:number)
   {
     this.stats.hitpoints=Math.min(this.originalstats.hitpoints,this.stats.hitpoints+hitpointsgain);
     this.masterService.updateCharacter(this);
   }
-
+  /**
+   * Gets the current status of the character.
+   *
+   * @readonly
+   * @type {string}
+   * @memberof Character
+   */
   get currentStatusString():string { return `${this.name} looks like they are ${this.stats.hitpoints} in a scale of 0 to ${this.originalstats.hitpoints}`}
 
+  /**
+   * Removes all the Battle Status without trigger reactions.
+   *
+   * @memberof Character
+   */
   onEndBattle():void
   {
     const removeStatus = this.battleStatus
@@ -277,6 +505,14 @@ export abstract class Character implements storeable
     for(const status of removeStatus)status.onStatusRemoved(this);
     this.__endbattle__ = false;
   }
+  /**
+   * Gets all the reactions from equipment, perks and status.
+   *
+   * @readonly
+   * @protected
+   * @type {Reaction[]}
+   * @memberof Character
+   */
   protected get reactions(): Reaction[]
   {
     const reactions: Reaction[] = []
@@ -285,6 +521,14 @@ export abstract class Character implements storeable
     for(const status of this.iterStatus()){this.pushReactions(reactions,status.reactions)}
     return reactions;
   };
+  /**
+   * Gets all the tags from equipment, perks and status.
+   *
+   * @readonly
+   * @protected
+   * @type {tag[]}
+   * @memberof Character
+   */
   protected get tags():tag[]
   {
     const tags:tag[] = [];
@@ -293,6 +537,13 @@ export abstract class Character implements storeable
     for(const perk of this.perks)tags.push(...perk.tags)
     return tags;
   }
+  /**
+   * Apply the Battle Status effects.
+   *
+   * @protected
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   protected startRoundApplyStatus():ActionOutput
   {
     const statusDescription:ActionOutput = [[],[]]
@@ -300,8 +551,21 @@ export abstract class Character implements storeable
     { pushBattleActionOutput(status.applyEffect(this),statusDescription) }
     return statusDescription;
   }
+  /**
+   * Cooldown the SpecialAttacks
+   *
+   * @protected
+   * @memberof Character
+   */
   protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cooldown = Math.max(0,special.cooldown-1) }
 
+  /**
+   * Resets the stats of the character except hitpoints  and energypoints.
+   * Apply modifiers of equipment and non Battle Status.
+   *
+   * @private
+   * @memberof Character
+   */
   private applyStatus():void
   {
     const {hitpoints:currentlife=this.originalstats.hitpoints,energypoints:currentenergy=this.originalstats.energypoints} = this.stats;
@@ -311,7 +575,14 @@ export abstract class Character implements storeable
     this.stats.hitpoints = currentlife;
     this.stats.energypoints = currentenergy;
   }
-  private fitItemIntoInventary(item: Item)
+  /**
+   * Check if the Item can be Inserted into the Inventary.
+   *
+   * @private
+   * @param {Item} item
+   * @memberof Character
+   */
+  private fitItemIntoInventary(item: Item):void
   {
     if(item.amount<=0)return;
     for (const characteritem of this.inventary)
@@ -327,7 +598,15 @@ export abstract class Character implements storeable
       }
     }
   }
-  private removeBattleStatus(status: string | Status)
+  /**
+   * Removes all instances of battleStatus
+   *
+   * @private
+   * @param {(string | Status)} status The status to remove.
+   * @return {*} {ActionOutput}
+   * @memberof Character
+   */
+  private removeBattleStatus(status: string | Status):ActionOutput
   {
     let removeStatusDescription: ActionOutput = [[],[]];
     let statusIndex = this.battleStatus.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
@@ -339,7 +618,15 @@ export abstract class Character implements storeable
     }
     return removeStatusDescription ;
   }
-  private removeTimedStatus(status: string | Status)
+  /**
+   * Removes all instances TimedStatus
+   *
+   * @private
+   * @param {(string | Status)} status The status to remove.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
+  private removeTimedStatus(status: string | Status): ActionOutput
   {
     let removeStatusDescription: ActionOutput = [[],[]]
     let statusIndex = this.timedStatus.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
@@ -351,7 +638,15 @@ export abstract class Character implements storeable
     }
     return removeStatusDescription ;
   }
-  private removeRegularStatus(status: string | Status)
+  /**
+   * Removes all instances of status.
+   *
+   * @private
+   * @param {(string | Status)} status The status to remove.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
+  private removeRegularStatus(status: string | Status): ActionOutput
   {
     let removeStatusDescription: ActionOutput = [[],[]]
     let statusIndex = this.statuses.findIndex(characterStatus => this.compareStatusName(status,characterStatus));
@@ -363,6 +658,14 @@ export abstract class Character implements storeable
     }
     return removeStatusDescription ;
   }
+  /**
+   * Adds  a status to Battle Status Array and calls onStatusGainded
+   *
+   * @private
+   * @param {StatusBattle} status The status to add.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   private addBattleStatus(status: StatusBattle): ActionOutput
   {
     const statusDescription:ActionOutput = [[],[]]
@@ -370,6 +673,14 @@ export abstract class Character implements storeable
     pushBattleActionOutput(status.onStatusGainded(this),statusDescription)
     return statusDescription;
   }
+  /**
+   * Adds a Status the TimedStatus Array.
+   *
+   * @private
+   * @param {TimedStatus} status The status to add
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   private addTimedStatus(status: TimedStatus): ActionOutput
   {
     const [statusDescription, statusString]:ActionOutput = [[],[]];
@@ -377,6 +688,14 @@ export abstract class Character implements storeable
     pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString]);
     return [statusDescription, statusString];
   }
+  /**
+   * Pushes an array of Special Attack to another if not already present.
+   *
+   * @private
+   * @param {SpecialAttack[]} specials The original array
+   * @param {SpecialAttack[]} specials2push The array of specials that will be pushed.
+   * @memberof Character
+   */
   private pushSpecial(specials:SpecialAttack[],specials2push:SpecialAttack[])
   {
     for(const special of specials2push)
@@ -385,6 +704,14 @@ export abstract class Character implements storeable
       specials.push(special);
     }
   }
+  /**
+   * Pushes an array of reactions to another if not already present.
+   *
+   * @private
+   * @param {Reaction[]} reactions The original array
+   * @param {Reaction[]} reactions2push The array of reactions that will be pushed.
+   * @memberof Character
+   */
   private pushReactions(reactions:Reaction[],reactions2push:Reaction[])
   {
     for(const reaction of reactions2push)
@@ -393,6 +720,15 @@ export abstract class Character implements storeable
       reactions.push(reaction);
     }
   }
+  /**
+   * Use an actial item from Inventary
+   *
+   * @private
+   * @param {(number|Item)} itemIndexOrItem The Index of the item or the item.
+   * @param {Character[]} targets The targets the item will target.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   private _useItem(itemIndexOrItem: number|Item,targets: Character[]):ActionOutput
   {
     let itemIndex:number;
@@ -411,6 +747,15 @@ export abstract class Character implements storeable
     { pushBattleActionOutput(item.itemEffect(this,target),useItemDescription) }
     return useItemDescription;
   }
+  /**
+   * Use a special attack from the equpments, perks or status.
+   *
+   * @private
+   * @param {(number|SpecialAttack)} itemIndexOrItem The index of the SpecialAttack or the special attack.
+   * @param {Character[]} targets The targets of the SpecialAttack.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   private _useSpecialAttack(itemIndexOrItem: number|SpecialAttack,targets: Character[]):ActionOutput
   {
     let itemIndex:number;
@@ -427,6 +772,12 @@ export abstract class Character implements storeable
     { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
     return [descriptions,strings];
   }
+  /**
+   * Initializes the unharmed equpments.
+   *
+   * @private
+   * @memberof Character
+   */
   private initializeUnharmed() {
     if(!Character.__meleeUnharmed__)
     {
@@ -436,13 +787,46 @@ export abstract class Character implements storeable
       Character.__noShield__        = new ShieldNoShield(this.masterService);
     }
   }
+  /**
+   * Attacks with a weapon.
+   *
+   * @private
+   * @param {Character[]} targets The targets to attack.
+   * @param {Weapon} weapon The weapon used to attack the targets.
+   * @param {ActionOutput} attackDescription
+   * @memberof Character
+   */
   private attackWithWeapon(targets: Character[], weapon: Weapon, attackDescription: ActionOutput) {
     for (const target of targets) pushBattleActionOutput(this.tryAttack(target, (target: Character) => weapon.attack(this, target)), attackDescription);
   }
+  /**
+   * Check if the statusname is the same as the second argument.
+   *
+   * @private
+   * @param {(string | Status)} status The status name to check.
+   * @param {Status} characterStatus The status to check.
+   * @return {*}
+   * @memberof Character
+   */
   private compareStatusName(status: string | Status, characterStatus: Status) {
     return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status;
   }
+  /**
+   * The automatic action to perform.
+   *
+   * @abstract
+   * @param {Character[]} ally The player party.
+   * @param {Character[]} enemy The enemy party.
+   * @return {*}  {ActionOutput}
+   * @memberof Character
+   */
   abstract IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
+  /**
+   * Stores character type, originalstats, status, equipment,items and perks
+   *
+   * @return {*}  {{[key: string]:any}}
+   * @memberof Character
+   */
   toJson(): {[key: string]:any}
   {
     const storeables = {};
@@ -464,6 +848,12 @@ export abstract class Character implements storeable
     for(const perk of this.perks)storeables['perk'].push({name:perk.name,options:perk.toJson()});
     return storeables
   }
+  /**
+   * loads originalstats, status, equipment,items and perks
+   *
+   * @param {{[key: string]: any}} options
+   * @memberof Character
+   */
   fromJson(options: {[key: string]: any}): void
   {
     if(options['originalStats'])

@@ -5,6 +5,14 @@ import { Weapon } from "../Weapon";
 import { tag } from 'src/app/customTypes/tags';
 import { meleename } from 'src/app/customTypes/itemnames';
 
+/**
+ * A type of weapon that normally uses attack stat to determine damage.
+ *
+ * @export
+ * @abstract
+ * @class MeleeWeapon
+ * @extends {Weapon}
+ */
 export abstract class MeleeWeapon extends Weapon
 {
   protected damagestat(user   : Character):number{return user.stats.attack;}
@@ -16,7 +24,14 @@ export abstract class MeleeWeapon extends Weapon
     if(target.hasTag('prone')) accuracyFix+=20;
     return super.accuracyTest(user,target)+randomBetween(0,accuracyFix);
   }
-
+  /**
+   * Equips into the character melee weapon
+   *
+   * @param {Character} user
+   * @param {Character} target
+   * @return {*}  {ActionOutput}
+   * @memberof MeleeWeapon
+   */
   itemEffect(user:Character,target: Character): ActionOutput
   {
     const output = super.itemEffect(user, user);

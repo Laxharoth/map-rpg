@@ -6,15 +6,68 @@ import { Reaction } from "../Character/Reaction/Reaction";
 import { Item } from "../Items/Item";
 import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
 
+/**
+ * A item that can be equiped to a character.
+ *
+ * @export
+ * @abstract
+ * @class Equipment
+ * @extends {Item}
+ */
 export abstract class Equipment extends Item
 {
-  //Check if can equip
+  /**
+   * The name of the equipment
+   *
+   * @readonly
+   * @abstract
+   * @type {equipmentname}
+   * @memberof Equipment
+   */
   abstract get name():equipmentname;
+  /**
+   * Check if can be equiped to the character.
+   *
+   * @abstract
+   * @param {Character} character The character to be equiped to.
+   * @return {*}  {boolean}
+   * @memberof Equipment
+   */
   abstract canEquip(character:Character ):boolean;
+  /**
+   * The tags associated with the equipment.
+   *
+   * @readonly
+   * @abstract
+   * @type {tag[]}
+   * @memberof Equipment
+   */
   abstract get tags():tag[];
+  /**
+   * The stats that are going to be applied to the character-
+   *
+   * @protected
+   * @abstract
+   * @type {characterStats}
+   * @memberof Equipment
+   */
   protected readonly abstract statsModifier:characterStats;
 
+  /**
+   * The reactions the equipment privides.
+   *
+   * @readonly
+   * @type {Reaction[]}
+   * @memberof Equipment
+   */
   get reactions(): Reaction[]{return []};
+  /**
+   * The special attacks the equipment privides
+   *
+   * @readonly
+   * @type {SpecialAttack[]}
+   * @memberof Equipment
+   */
   get specials():SpecialAttack[]{return []};
 
   get isBattleUsable(): boolean{return true;};
@@ -22,6 +75,12 @@ export abstract class Equipment extends Item
   get isEnemyUsable(): boolean {return false;};
   get isSelfUsable() : boolean {return true;};
   get isSingleTarget(): boolean {return true;};
+  /**
+   * Applies stat modifiers to the equiped character.
+   *
+   * @param {Character} character
+   * @memberof Equipment
+   */
   applyModifiers(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
