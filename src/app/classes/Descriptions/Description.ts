@@ -72,8 +72,3 @@ export class DescriptionOptions
     return this._disabled();
   }
 }
-
-export function nextOption(masterService:MasterService):DescriptionOptions
-{
-  return new DescriptionOptions("Next",()=>{masterService.descriptionHandler.nextDescription()})
-}
