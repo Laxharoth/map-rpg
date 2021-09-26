@@ -6,6 +6,7 @@ import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
 import { enemyTest } from "../enemyTest";
 import { EnemyFormation } from "./EnemyFormation";
+import { MeleeTest } from 'src/app/classes/Equipment/Weapon/Melee/MeleeTest';
 
 export class testformation extends EnemyFormation
 {
@@ -44,7 +45,8 @@ export class testformation extends EnemyFormation
   {
     const Item = new ItemTest(this.masterService);
     Item.amount = randomBetween(1,4);
-    return [Item];
+    const weapon = new MeleeTest(this.masterService);
+    return [Item,weapon];
   }
   //////////////////////////
   // Enemy Victory
