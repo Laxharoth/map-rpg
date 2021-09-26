@@ -227,16 +227,11 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
             .concat(item.isSelfUsable? [user]:[])
             .concat(item.isPartyUsable? [user].concat(party):[])
             .concat(item.isEnemyUsable? getPossibleTarget(enemy.enemies):[])
-          if(item.isSingleTarget)
+          if(item.isSingleTarget && targets.length > 1)
           {
-            if(targets.length===1)
-            {
-              round(playerAction,targets);
-              return;
-            }
             masterService.descriptionHandler
-            .headDescription(selectTarget(targets,playerAction),'battle')
-            .setDescription(false)
+              .headDescription(selectTarget(targets,playerAction),'battle')
+              .setDescription(false)
             return;
           }
           round(playerAction,targets);
