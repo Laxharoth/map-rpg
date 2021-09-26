@@ -1,4 +1,3 @@
-import { Description, nextOption } from "src/app/classes/Descriptions/Description";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
