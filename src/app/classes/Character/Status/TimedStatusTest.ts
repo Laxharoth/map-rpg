@@ -1,5 +1,4 @@
-import { Description, DescriptionOptions, nextOption } from 'src/app/classes/Descriptions/Description';
-import { Subscription } from 'rxjs';
+import { Description, DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
 import { Character } from "../Character";
