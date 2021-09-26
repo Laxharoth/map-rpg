@@ -347,7 +347,8 @@ export abstract class Character implements storeable
       return;
     }
     this.masterService.descriptionHandler
-      .headDescription(AddExceedItem(this.masterService,item,this),'item')
+      .tailDescription(AddExceedItem(this.masterService,item,this),'item')
+      .flush(0)
       .setDescription(false);
     return;
   }
@@ -465,23 +466,29 @@ export abstract class Character implements storeable
    * Reduces the character hitpoints up to zero.
    *
    * @param {number} damage The damage taken by the character.
+   * @return {number} The number of hitpoints of damage taken.
    * @memberof Character
    */
-  takeDamage(damage:number)
+  takeDamage(damage:number):number
   {
+    const hitpointsBeforeDamage = this.stats.hitpoints;
     this.stats.hitpoints=Math.max(0,this.stats.hitpoints-damage);
     this.masterService.updateCharacter(this);
+    return this.stats.hitpoints-hitpointsBeforeDamage;
   }
   /**
    * Heals hitpoints from the character up to original hitpoints.
    *
    * @param {number} hitpointsgain The number of hitpoints to gain.
+   * @return {number} The hitpoints that were healed.
    * @memberof Character
    */
-  healHitPoints(hitpointsgain:number)
+  healHitPoints(hitpointsgain:number):number
   {
+    const hitpointsBeforeHeal = this.stats.hitpoints;
     this.stats.hitpoints=Math.min(this.originalstats.hitpoints,this.stats.hitpoints+hitpointsgain);
     this.masterService.updateCharacter(this);
+    return this.stats.hitpoints-hitpointsBeforeHeal;
   }
   /**
    * Gets the current status of the character.
