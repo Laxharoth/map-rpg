@@ -1,4 +1,3 @@
-import { GameStateService } from './../../service/game-state.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 import { Subscription } from 'rxjs';
@@ -11,6 +10,7 @@ import { RangedTest } from 'src/app/classes/Equipment/Weapon/Ranged/RangedTest';
 import { ShieldTest } from 'src/app/classes/Equipment/Shield/ShieldTest';
 import { ArmorTest } from 'src/app/classes/Equipment/Armor/ArmorTest';
 import { PerkUpgradeable } from 'src/app/classes/Perk/PerkUpgradeable';
+import { MAXOPTIONSNUMBERPERPAGE } from 'src/app/customTypes/constants';
 
 @Component({
   selector   : 'app-gui',
@@ -24,7 +24,7 @@ export class GuiComponent implements OnInit {
 
   private descriptionOptions:Array<DescriptionOptions|null>;
   private offset = 0;
-  private size   = 8;
+  private size   = MAXOPTIONSNUMBERPERPAGE-2;
 
   private descriptionSubscription : Subscription;
   private gameStateSubscription : Subscription;
@@ -84,7 +84,7 @@ export class GuiComponent implements OnInit {
     return party;
   }
 
-  isSubsetOfOptions():boolean{ return this.descriptionOptions.length>10; }
+  isSubsetOfOptions():boolean{ return this.descriptionOptions.length>MAXOPTIONSNUMBERPERPAGE; }
 
   isFirst():boolean{ return this.currentOptions?.[0] === this.descriptionOptions?.[0]; }
 
@@ -97,7 +97,7 @@ export class GuiComponent implements OnInit {
   private setCurrentOptions()
   {
     this.currentOptions = this.descriptionOptions;
-    if(this.descriptionOptions.length <= 10) return;
+    if(this.descriptionOptions.length <= MAXOPTIONSNUMBERPERPAGE) return;
     let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+this.size)
     while(aux_currentOptions.length< this.size) {aux_currentOptions.push(null);}
     aux_currentOptions.push(this.prevOptions);

@@ -1,3 +1,4 @@
+import { MAXOPTIONSNUMBERPERPAGE } from "src/app/customTypes/constants";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../Character/Character";
@@ -193,14 +194,14 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
     {
       targetsOptions.push(new DescriptionOptions(target.name,()=>{ round(playerAction,[target]) }))
     }
-    if(targetsOptions.length <= 10)
+    if(targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE)
     {
-      while(targetsOptions.length < 9) targetsOptions.push(null);
+      while(targetsOptions.length < MAXOPTIONSNUMBERPERPAGE-1) targetsOptions.push(null);
       targetsOptions.push(new DescriptionOptions('return',()=>{ masterService.descriptionHandler.nextDescription(false) }))
     }
     else
     {
-      while(targetsOptions.length%8 !==7 ) targetsOptions.push(null);
+      while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3 ) targetsOptions.push(null);
       targetsOptions.push(new DescriptionOptions('return',()=>{ masterService.descriptionHandler.nextDescription(false) }))
     }
     return new Description(()=>`${targets.map(target=>`${target.name}:${target.stats.hitpoints}`).join('\n')}`,targetsOptions)
@@ -242,14 +243,14 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
         },!item.isBattleUsable || item.disabled(user))
       )
     }
-    if(options.length <= 10)
+    if(options.length <= MAXOPTIONSNUMBERPERPAGE)
     {
-      while(options.length < 9) options.push(null);
+      while(options.length < MAXOPTIONSNUMBERPERPAGE-1) options.push(null);
       options.push(new DescriptionOptions('return',()=>{ masterService.descriptionHandler.nextDescription(false) }))
     }
     else
     {
-      while(options.length%8 !==7 ) options.push(null);
+      while(options.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3 ) options.push(null);
       options.push(new DescriptionOptions('return',()=>{ masterService.descriptionHandler.nextDescription(false) }))
     }
     return new Description(()=>`${items.map(item=>item.name).join('\n')}`,options)
