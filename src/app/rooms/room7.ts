@@ -9,6 +9,7 @@ import { Room } from "../classes/maps/room";
 import { MasterService } from "../classes/masterService";
 import { ItemTest } from '../classes/Items/ItemTest';
 import { PerkUpgradeable } from '../classes/Perk/PerkUpgradeable';
+import { DescriptionSelectItemFromMap } from '../classes/Descriptions/CommonOptions';
 
 export function room(masterService:MasterService):Room
 {
@@ -89,7 +90,7 @@ export function room(masterService:MasterService):Room
       if(!perk) user.addPerk(new PerkUpgradeable(this.masterService));
       else perk.level++;
     }),
-    new DescriptionOptions("option2",function(){}),
+    DescriptionSelectItemFromMap(masterService),
     new DescriptionOptions("option2",function(){}),
     new DescriptionOptions("option3",function(){})
   ]
