@@ -1,0 +1,5 @@
+<div [ngClass]="[spinnerType , 'number-spinner']">
+  <button class="btn-spinner btn-minus" (click)="changeInput(-1)">-</button>
+  <input type="number" class="input-spinner" min="1" max="100" #InputValue>
+  <button class="btn-spinner btn-plus" (click)="changeInput(1)">+</button>
+</div>

@@ -1,0 +1,53 @@
+.number-spinner
+{
+    --side:25px;
+    display:flex;
+    padding:2px;
+    background:white;
+    border-radius:0.3em;
+}
+.number-spinner.vertical
+{
+    flex-direction:column;
+    width:var(--side);
+    height:min-content;
+}
+.number-spinner.horizontal
+{
+    width:min-content;
+    height:var(--side);
+}
+.input-spinner
+{
+    border:0;
+    background:#0000;
+    text-align:center;
+    width:var(--side);
+    height:var(--side);
+}
+.number-spinner.vertical .input-spinner
+{
+    padding:4px 0;
+}
+.number-spinner.horizontal .input-spinner
+{
+    max-width:50%;
+    padding:0 4px;
+}
+.btn-spinner
+{
+    width:var(--side);
+    height:var(--side);
+}
+
+.input-spinner::-webkit-outer-spin-button,
+.input-spinner::-webkit-inner-spin-button
+{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-spinner
+{
+  -moz-appearance: textfield;
+}
