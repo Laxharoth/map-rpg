@@ -13,7 +13,6 @@ export function selectItem(masterService:MasterService):Description
   {
     const playerAction = (target: Character[])=>{
       const [descriptions] = user.useItem(item,target)
-      console.log(descriptions.length,descriptions)
       masterService.descriptionHandler
         .tailDescription(descriptions,'item')
         .flush(descriptions.length-1)
