@@ -1,0 +1,4 @@
+<div class="shop-item" (click)="Emit()">
+  <span class="name">{{ item.name }}</span>
+  <span class="amount" *ngIf="isFinite(item.amount)">x{{ item.amount }}</span>
+</div>
