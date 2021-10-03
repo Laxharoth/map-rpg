@@ -62,7 +62,7 @@ export class DescriptionComponent implements OnInit {
 
   ngOnInit(): void {
     //get original description
-    this.updateDescription(this.descriptionhandler.currentDescription?.text());
+    this.updateDescription(this.descriptionhandler.currentDescription?.descriptionData());
     this.descriptionSubscription = this.descriptionhandler.onSetTextDescription().subscribe((description)=>{
       this.updateDescription(description)
     });
@@ -74,6 +74,12 @@ export class DescriptionComponent implements OnInit {
 
   private updateDescription(description: string)
   {
+    this.beforeInput  = ''
+    this.afterInput   = ''
+    this.beforeSelect = ''
+    this.afterSelect  = ''
+    if(typeof description !== 'string')
+    { this.beforeInput = 'ERROR description is not a string'; return; }
     //originally assume has not input or select
     this.hasInput = false;
     this.hasSelect = false;
