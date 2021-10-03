@@ -7,9 +7,14 @@
         <app-party *ngIf="currentGameState === 'battle'"
          [masterService]="masterService"
          [partyType]="'ENEMY'"></app-party>
-      </div>
-      <div class="app-gui-upper-right">
-        <app-description [descriptionhandler]="masterService.descriptionHandler"></app-description>
+        </div>
+        <div class="app-gui-upper-right">
+          <app-description [descriptionhandler]="masterService.descriptionHandler"
+          *ngIf="currentGameState === 'map' ||
+                 currentGameState === 'battle'||
+                 currentGameState === 'item' "
+          ></app-description>
+          <app-shop-interface *ngIf="currentGameState === 'shop'" [masterService]="masterService"></app-shop-interface>
       </div>
     </div>
     <div class="app-gui-lower">
