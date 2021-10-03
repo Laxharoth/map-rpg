@@ -1,0 +1,40 @@
+<div class="shop-interface">
+  <div class="shop-section">
+    <div class="inventary-wrapper">
+      <div class="inventary">
+        <ul class="inventary-list">
+          <li class="initial-inventary" *ngFor="let item of shop.shopInventoryAfterSale" [ngClass]="{'disabled': item.amount === 0}">
+            <app-shop-item [item]="item" (ShopItemEvent) = "shopSellItem($event)"></app-shop-item>
+          </li>
+          <li class="sale-inventary" *ngFor="let item of shop.sale.items2Shop">
+            <app-shop-item [item]="item" (ShopItemEvent) = "shopRemoveBuyItem($event)"></app-shop-item>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <app-number-spinner (SpinnerChangedEvent)="setShopAmount($event)"
+      [spinnerType]="'horizontal'"
+      [initialValue]="shopAmount">
+    </app-number-spinner>
+  </div>
+  <div class="player-section">
+    <div class="inventary-wrapper">
+      <div class="inventary">
+        <ul class="inventary-list">
+          <li class="initial-inventary" *ngFor="let item of shop.getCharacterInvetoryAfterSale(player)" [ngClass]="{'disabled': item.amount === 0}">
+            <app-shop-item [item]="item" (ShopItemEvent)="shopBuyItem($event)"></app-shop-item>
+          </li>
+          <li class="sale-inventary" *ngFor="let item of shop.sale.items2Character">
+            <app-shop-item [item]="item"
+              (ShopItemEvent)="shopRemoveSellItem($event)"></app-shop-item>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <app-number-spinner
+      (SpinnerChangedEvent)="setUserAmount($event)"
+      [spinnerType]="'horizontal'"
+      [initialValue]="playerAmount">
+    </app-number-spinner>
+  </div>
+</div>

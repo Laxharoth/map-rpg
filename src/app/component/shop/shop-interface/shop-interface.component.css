@@ -1,0 +1,51 @@
+.shop-interface
+{
+    display:flex;
+}
+.shop-section,.player-section
+{
+    display:flex;
+    flex-direction:column;
+    width:50%;
+}
+.inventary-wrapper
+{
+    height:40ch;
+    overflow:auto;
+    overflow-x:hidden;
+}
+.inventary-list
+{
+    --padding:3px;
+    display:flex;
+    flex-wrap:wrap;
+    list-style:none;
+    gap:3px;
+    margin:0;
+    padding:0;
+}
+.inventary-list li
+{
+    min-width:calc(45% - var(--padding)*2);
+    width: calc(15ch - var(--padding)*2);
+    height:calc(4ch - var(--padding)*2);
+    padding:var(--padding);
+    border-radius:0.4em;
+    overflow:hidden;
+    box-shadow: inset 0 0 var(--padding) currentColor;
+    position: relative;
+}
+.inventary-list li.disabled
+{
+    opacity:unset;
+}
+.inventary-list li.disabled::before
+{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:yellow;
+    opacity:0.3;
+}
+.initial-inventary { background:green; }
+.sale-inventary { background:red; }
