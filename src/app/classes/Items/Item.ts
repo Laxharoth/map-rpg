@@ -29,6 +29,7 @@ export abstract class Item implements storeable
    * @memberof Item
    */
   amount: number = 1;
+  basePrice: number = 0.0;
   protected readonly masterService: MasterService;
   /**
    * Creates an instance of Item.
@@ -141,7 +142,8 @@ export abstract class Item implements storeable
    */
   fromJson(options: {[key: string]: any}): void
   {
-    const {amount} = options;
-    this.amount = amount;
+    const {amount,basePrice} = options;
+    amount&&(this.amount = amount);
+    basePrice&&(this.basePrice = basePrice);
   }
 }
