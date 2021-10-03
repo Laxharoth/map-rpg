@@ -14,10 +14,6 @@ import { MasterService } from '../classes/masterService';
 @Injectable({
   providedIn: 'root'
 })
-/**
- //TODO Implement a way to disable move to other room
- //TODO make the move to other room a single method
- */
 export class MapHandlerService {
 
   private loadMapSubject = new Subject<Map>();
