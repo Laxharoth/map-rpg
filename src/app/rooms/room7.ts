@@ -10,6 +10,9 @@ import { MasterService } from "../classes/masterService";
 import { ItemTest } from '../classes/Items/ItemTest';
 import { PerkUpgradeable } from '../classes/Perk/PerkUpgradeable';
 import { DescriptionSelectItemFromMap } from '../classes/Descriptions/CommonOptions';
+import { Shop } from '../classes/Shop/Shop';
+import { SetShopDescription } from '../classes/Descriptions/ShopDescription';
+import { StaticShop } from '../classes/Shop/StaticShop';
 
 export function room(masterService:MasterService):Room
 {
@@ -74,6 +77,7 @@ export function room(masterService:MasterService):Room
   })
   const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription()});
   const roomOptions =[
+    new DescriptionOptions("Shop",makeShop),
     new DescriptionOptions("option1",function(){masterService.flagsHandler.setFlag("",0)}),
     new DescriptionOptions("test battle",function(){ descriptionBattle(masterService,new testformation(masterService) ) }),
     equipMelee,
@@ -91,7 +95,6 @@ export function room(masterService:MasterService):Room
       else perk.level++;
     }),
     DescriptionSelectItemFromMap(masterService),
-    new DescriptionOptions("option2",function(){}),
     new DescriptionOptions("option3",function(){})
   ]
   const roomDescription  = new Description(function(){return `This actually looks the same`},roomOptions)
@@ -132,5 +135,15 @@ export function room(masterService:MasterService):Room
     icon:""
     })
   return room;
+
+  function makeShop():void
+  {
+    const shop = new StaticShop('test-shop'
+      ,['item-test','Shield test','Armor Test']
+      ,masterService
+      ,{'item-test':10,'Shield test':15,'Armor test':20}
+    );
+    SetShopDescription(masterService,shop);
+  }
 }
 
