@@ -14,6 +14,9 @@ import { StatusIconComponent } from './component/status-icon/status-icon.compone
 import { OverrideCssVarDirective } from './directive/override-css-var.directive';
 import { CharacterStatComponent } from './component/character-stat/character-stat.component';
 import { TabMenuComponent } from './component/tab-menu/tab-menu.component';
+import { ShopInterfaceComponent } from './component/shop/shop-interface/shop-interface.component';
+import { ShopItemComponent } from './component/shop/shop-item/shop-item.component';
+import { NumberSpinnerComponent } from './component/number-spinner/number-spinner.component';
 
 
 @NgModule({
@@ -30,6 +33,9 @@ import { TabMenuComponent } from './component/tab-menu/tab-menu.component';
     OverrideCssVarDirective,
     CharacterStatComponent,
     TabMenuComponent,
+    ShopInterfaceComponent,
+    ShopItemComponent,
+    NumberSpinnerComponent,
   ],
   imports: [
     BrowserModule,
