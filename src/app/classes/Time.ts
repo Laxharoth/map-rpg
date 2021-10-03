@@ -115,22 +115,21 @@ export class Time
     }
     function getNextTimeUnit(unitOffset: number, unitIndex: number, value: string) {
       unitOffset = unitIndex;
-      while ((isPartOfTimeUnit(value)) && unitOffset < value.length) { unitOffset++; }
+      while ((isPartOfTimeUnit(value,unitOffset)) && unitOffset < value.length) { unitOffset++; }
       const unit = value.substring(unitIndex, unitOffset);
       return { unit, unitOffset };
+    }
+    function isPartOfTimeUnit(value:string,unitOffset:number):boolean {
+      return isNaN(Number.parseInt(value[unitOffset])) && !['+', '-'].includes(value[unitOffset]);
     }
 
     function getNextQuantity(unitIndex: number, unitOffset: number, value: string) {
       unitIndex = unitOffset;
-      while ((isPartOfNumber(value)) && unitIndex < value.length) { unitIndex++; }
+      while ((isPartOfNumber(value,unitIndex)) && unitIndex < value.length) { unitIndex++; }
       const quantity = value.substring(unitOffset, unitIndex);
       return { quantity, unitIndex };
     }
-
-    function isPartOfTimeUnit(value:string) {
-      return isNaN(Number.parseInt(value[unitOffset])) && !['+', '-'].includes(value[unitOffset]);
-    }
-    function isPartOfNumber(value:string) {
+    function isPartOfNumber(value:string, unitIndex:number):boolean {
       return !isNaN(Number.parseInt(value[unitIndex])) || ['+', '-'].includes(value[unitIndex]);
     }
   }
