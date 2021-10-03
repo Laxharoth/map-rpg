@@ -13,7 +13,7 @@ import { game_state } from '../customTypes/states';
 })
 export class GameStateService {
   private gameStateSubject = new Subject<game_state>();
-  private _gameStatePriority:game_state[] = ['map','item','battle'];
+  private _gameStatePriority:game_state[] = ['map','item','battle','shop'];
   private _gameState:game_state[] = [];
   private _gameStateIndex:number = 0;
   constructor() {this.gameState = this._gameStatePriority[0]; }
