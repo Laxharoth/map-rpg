@@ -9,12 +9,12 @@ import { MasterService } from "../masterService";
  */
 export class Description
 {
-  text:() => string;
+  descriptionData:() => any;
   options: DescriptionOptions[];
 
-  constructor(text:()=>string,options:DescriptionOptions[])
+  constructor(descriptionData:()=>any,options:DescriptionOptions[])
   {
-    this.text = text;
+    this.descriptionData = descriptionData;
     this.options = options;
   }
 }
