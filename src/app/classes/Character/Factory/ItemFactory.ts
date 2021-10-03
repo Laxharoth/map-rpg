@@ -23,9 +23,9 @@ import { ItemTest } from '../../Items/ItemTest';
  */
 export function ItemFactory(masterService:MasterService,itemName:itemname,options:{[key: string]: any}):Item
 {
-  const equipment = new ItemSwitcher[itemName](masterService);
-  equipment.fromJson(options)
-  return equipment;
+  const item = new ItemSwitcher[itemName](masterService);
+  item.fromJson(options)
+  return item;
 }
 
 /** @type {[key: string]:Item.constructor} */
