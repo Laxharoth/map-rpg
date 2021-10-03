@@ -15,6 +15,8 @@ export function getInputs():{input:string,select:string}
   return {input:inputValue, select:selectValue};
 }
 
+export function removeItem<T>(array:T[],item:T):void { array.splice(array.indexOf(item),1); }
+
 /**
  * Pushes the descriptions in the fisrt array to the descriptions of the second
  * Pushes the strings in the first array to the strings of the second array
