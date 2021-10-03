@@ -74,11 +74,12 @@ export class DescriptionHandlerService {
 
     if(addToHistory)
     {
-      this.descriptionTextHistory.insertHead(this.descriptionList.head.value.text());
+      const history = this.descriptionList.head.value.descriptionData();
+      if(typeof history === "string") this.descriptionTextHistory.insertHead(history);
       this.pivot = this.descriptionTextHistory.head;
     }
     this.descriptionSubject.next(this.descriptionList.head.value);
-    this.descriptionTextSubject.next(this.descriptionList.head.value.text());
+    this.descriptionTextSubject.next(this.descriptionList.head.value.descriptionData());
     return this
   }
   /**
