@@ -16,13 +16,14 @@ export class ShopInterfaceComponent implements OnInit {
   playerAmount: number = 1;
   shop:Shop;
   player:Character;
-  @Input() masterService:MasterService;
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private masterService:MasterService)
+  {
     this.player = this.masterService.partyHandler.user;
     this.shop = this.masterService.descriptionHandler.currentDescription.descriptionData();
   }
+
+  ngOnInit(): void {}
+
   setShopAmount(amount:number)
   {
     this.shopAmount = amount

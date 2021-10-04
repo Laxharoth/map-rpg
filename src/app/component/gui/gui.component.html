@@ -3,18 +3,17 @@
     <div class="app-gui-upper">
       <div class="app-gui-upper-left">
         <app-map *ngIf="currentGameState === 'map'"
-         [masterService]="masterService" (moveEvent)="move($event)"></app-map>
+          (moveEvent)="move($event)"></app-map>
         <app-party *ngIf="currentGameState === 'battle'"
-         [masterService]="masterService"
          [partyType]="'ENEMY'"></app-party>
         </div>
         <div class="app-gui-upper-right">
-          <app-description [descriptionhandler]="masterService.descriptionHandler"
+          <app-description
           *ngIf="currentGameState === 'map' ||
                  currentGameState === 'battle'||
                  currentGameState === 'item' "
           ></app-description>
-          <app-shop-interface *ngIf="currentGameState === 'shop'" [masterService]="masterService"></app-shop-interface>
+          <app-shop-interface *ngIf="currentGameState === 'shop'" ></app-shop-interface>
       </div>
     </div>
     <div class="app-gui-lower">
@@ -26,10 +25,9 @@
     </div>
   </div>
   <div class="app-gui-right">
-    <app-tab-menu *ngIf="currentGameState === 'map'" [masterService]="masterService"></app-tab-menu>
+    <app-tab-menu *ngIf="currentGameState === 'map'" ></app-tab-menu>
 
     <app-party *ngIf="currentGameState === 'battle' && party.length>1"
-         [masterService]="masterService"
          [partyType]="'PARTY'"></app-party>
   </div>
 </div>

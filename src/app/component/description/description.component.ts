@@ -12,8 +12,6 @@ import { MasterService } from 'src/app/service/master.service';
 })
 export class DescriptionComponent implements OnInit {
 
-  @Input() descriptionhandler:DescriptionHandlerService;
-
   //strings for befor and after Input and select
   /**
    * Text to be displayed before the input element
@@ -59,14 +57,16 @@ export class DescriptionComponent implements OnInit {
 
   private descriptionSubscription:Subscription;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private masterService:MasterService)
+  {
     //get original description
-    this.updateDescription(this.descriptionhandler.currentDescription?.descriptionData());
-    this.descriptionSubscription = this.descriptionhandler.onSetTextDescription().subscribe((description)=>{
+    this.updateDescription(this.masterService.descriptionHandler.currentDescription?.descriptionData());
+    this.descriptionSubscription = this.masterService.descriptionHandler.onSetTextDescription().subscribe((description)=>{
       this.updateDescription(description)
     });
+  }
+
+  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {

@@ -10,14 +10,12 @@ import { MasterService } from "src/app/service/master.service";
 })
 export class PartyComponent implements OnInit {
 
-  @Input() masterService:MasterService;
-
   @Input() partyType!:'PARTY'|'ENEMY';
   private _user:Character;
   private _party:Character[];
   private userSubscription:Subscription;
   private partySubscription:Subscription;
-  constructor() {}
+  constructor(private masterService:MasterService) {}
 
   ngOnInit(): void {
     if(this.partyType==='PARTY')

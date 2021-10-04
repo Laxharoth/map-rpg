@@ -11,17 +11,17 @@ import { MasterService } from "src/app/service/master.service";
 })
 export class CharacterUserComponent implements OnInit {
 
-  @Input() masterService:MasterService;
 
   character:Character;
   private characterSubscription:Subscription;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private masterService:MasterService)
+  {
     this.character = this.masterService.partyHandler.user;
     this.characterSubscription = this.masterService.partyHandler.onUpdateUser().subscribe(data=>{ this.character = data; });
   }
+
+  ngOnInit(): void {}
 
   ngOnDestroy(): void { this.characterSubscription.unsubscribe(); }
 

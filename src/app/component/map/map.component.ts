@@ -12,7 +12,6 @@ import { MasterService } from "src/app/service/master.service";
 })
 export class MapComponent implements OnInit {
 
-  @Input() masterService:MasterService;
   @Output() moveEvent = new EventEmitter<string>();
 
   lockedMap:boolean;
@@ -28,12 +27,13 @@ export class MapComponent implements OnInit {
 
   @ViewChild('mapwrapper') mapWrapper: ElementRef;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private masterService:MasterService)
+  {
     this.InitializeSubscriptions();
     this.setLockedWASD()
   }
+
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.setMapOverflow();

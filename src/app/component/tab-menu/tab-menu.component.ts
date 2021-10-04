@@ -7,7 +7,6 @@ import { MasterService } from "src/app/service/master.service";
   styleUrls: ['./tab-menu.component.css']
 })
 export class TabMenuComponent implements OnInit {
-  @Input() masterService:MasterService;
   currentTab:tabs='user';
   constructor() {}
 
