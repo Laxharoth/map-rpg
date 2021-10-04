@@ -18,7 +18,6 @@ import { MAXOPTIONSNUMBERPERPAGE } from 'src/app/customTypes/constants';
   styleUrls  :['./gui.component.css']
 })
 export class GuiComponent implements OnInit {
-  masterService:MasterService;
   currentOptions:Array<DescriptionOptions|null>;
   currentGameState:game_state;
 
@@ -29,8 +28,7 @@ export class GuiComponent implements OnInit {
   private descriptionSubscription : Subscription;
   private gameStateSubscription : Subscription;
 
-  constructor() {
-    this.masterService = new MasterService()
+  constructor(private masterService:MasterService) {
     //debug to get savedata
     this.masterService.flagsHandler.load("save1",this.masterService);
     this.FirstTimeUserInitialize();
