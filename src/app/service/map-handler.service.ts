@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { Room } from '../classes/maps/room';
 import { Map } from '../classes/maps/map';
@@ -11,9 +10,6 @@ import { MasterService } from "src/app/service/master.service";
  * @export
  * @class MapHandlerService
  */
-@Injectable({
-  providedIn: 'root'
-})
 export class MapHandlerService {
 
   private loadMapSubject = new Subject<Map>();

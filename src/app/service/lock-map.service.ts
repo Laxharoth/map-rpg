@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 /**
@@ -7,9 +6,6 @@ import { Subject } from 'rxjs';
  * @export
  * @class LockMapService
  */
-@Injectable({
-  providedIn: 'root'
-})
 export class LockMapService {
 
   /**

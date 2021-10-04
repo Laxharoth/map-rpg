@@ -1,11 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Character } from '../classes/Character/Character';
 import { characterType } from '../customTypes/characterTypes';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class PartyService {
   private _user:Character;
   private _party: [(Character|null),(Character|null)] = [null,null];

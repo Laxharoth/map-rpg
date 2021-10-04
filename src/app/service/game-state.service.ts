@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { game_state } from '../customTypes/states';
 
@@ -8,9 +7,6 @@ import { game_state } from '../customTypes/states';
  * @export
  * @class GameStateService
  */
-@Injectable({
-  providedIn: 'root'
-})
 export class GameStateService {
   private gameStateSubject = new Subject<game_state>();
   private _gameStatePriority:game_state[] = ['map','item','battle','shop'];

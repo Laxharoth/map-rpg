@@ -1,11 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Character } from '../classes/Character/Character';
 import { EnemyFormation } from '../classes/Character/NPC/EnemyFormations/EnemyFormation';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class EnemyFormationService {
 
   private _enemyFormation:EnemyFormation;

@@ -1,6 +1,5 @@
 import { Description } from '../classes/Descriptions/Description';
 import { Observable, Subject } from 'rxjs';
-import { Injectable } from '@angular/core';
 import { DoubleLinkedList, DoubleLinkedListNode } from './../classes/DoubleLinkedList';
 import { LockMapService } from './lock-map.service';
 import { game_state } from '../customTypes/states';
@@ -12,9 +11,6 @@ import { GameStateService } from './game-state.service';
  * @export
  * @class DescriptionHandlerService
  */
-@Injectable({
-  providedIn: 'root'
-})
 export class DescriptionHandlerService {
   /**
    * An object with the descriptionLists

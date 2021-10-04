@@ -1,4 +1,3 @@
-import { Inject, Injectable, OnChanges } from '@angular/core';
 import { flags } from '../flags/flags';
 import { Observable, Subject } from 'rxjs';
 import { Time } from '../classes/Time';
@@ -12,9 +11,6 @@ import { loadPersistentNames, savePersistentNames } from '../classes/Character/F
  * @export
  * @class FlagHandlerService
  */
-@Injectable({
-  providedIn: 'root'
-})
 export class FlagHandlerService {
 
   /**
