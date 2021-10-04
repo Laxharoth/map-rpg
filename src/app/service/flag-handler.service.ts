@@ -2,7 +2,7 @@ import { Inject, Injectable, OnChanges } from '@angular/core';
 import { flags } from '../flags/flags';
 import { Observable, Subject } from 'rxjs';
 import { Time } from '../classes/Time';
-import { MasterService } from '../classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 import { CharacterFactory } from '../classes/Character/Factory/CharacterFactory';
 import { loadPersistentNames, savePersistentNames } from '../classes/Character/Factory/LoadPersistentCharacters';
 

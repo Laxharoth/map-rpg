@@ -1,6 +1,6 @@
 import { Description, DescriptionOptions } from "src/app/classes/Descriptions/Description";
 import { Item } from "src/app/classes/Items/Item";
-import { MasterService } from "src/app/classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { Character } from "../../Character";
 
 /**

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MasterService } from 'src/app/classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 
 @Component({
   selector: 'app-tab-menu',

@@ -9,7 +9,7 @@ import { MeleeTest } from "../../Equipment/Weapon/Melee/MeleeTest";
 import { MeleeUnharmed } from "../../Equipment/Weapon/Melee/MeleeUnharmed";
 import { RangedTest } from "../../Equipment/Weapon/Ranged/RangedTest";
 import { RangedUnharmed } from "../../Equipment/Weapon/Ranged/RangedUnharmed";
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { ItemTest } from '../../Items/ItemTest';
 
 /**

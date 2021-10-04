@@ -1,7 +1,7 @@
 import { characterType } from "src/app/customTypes/characterTypes";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { PerkCharm } from "../../Perk/PerkCharm";
 import { PerkFright } from "../../Perk/PerkFright";
 import { PerkGrappler } from "../../Perk/PerkGrappler";

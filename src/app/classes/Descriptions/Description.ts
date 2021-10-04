@@ -1,4 +1,4 @@
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 
 /**
  * A Representation of what the game will displayed (text and options)

@@ -1,5 +1,5 @@
 import { TimedStatusTest } from '../Status/TimedStatusTest';
-import { MasterService } from "src/app/classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { statusEnum, statusname, statusTimeEnum } from "src/app/customTypes/statusnames";
 import { Status } from "../Status/Status";
 

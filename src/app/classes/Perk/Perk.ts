@@ -3,7 +3,7 @@ import { perkname } from "src/app/customTypes/perkname";
 import { tag } from "src/app/customTypes/tags";
 import { Reaction } from "../Character/Reaction/Reaction";
 import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 
 /**
  * A object that represents a perk.

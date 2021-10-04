@@ -1,6 +1,6 @@
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { tag } from "src/app/customTypes/tags"
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { Character } from "../Character";
 
 /**

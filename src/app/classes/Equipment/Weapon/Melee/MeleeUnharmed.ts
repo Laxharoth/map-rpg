@@ -4,7 +4,7 @@ import { MeleeWeapon } from "./MeleeWeapon";
 import { tag } from 'src/app/customTypes/tags';
 import { OnePunch } from "src/app/classes/Items/SpecialAttack/OnePunch";
 import { SpecialAttack } from "src/app/classes/Items/SpecialAttack/SpecialAttack";
-import { MasterService } from "src/app/classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { meleename } from "src/app/customTypes/itemnames";
 
 export class MeleeUnharmed extends MeleeWeapon

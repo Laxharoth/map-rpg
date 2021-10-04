@@ -1,4 +1,4 @@
-import { MasterService } from 'src/app/classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 import { MAXOPTIONSNUMBERPERPAGE } from 'src/app/customTypes/constants';
 import { Character } from '../Character/Character';
 import { Description, DescriptionOptions } from './Description';

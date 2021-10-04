@@ -1,5 +1,5 @@
 import { characterType, persistentNames } from "src/app/customTypes/characterTypes";
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { Character } from "../Character";
 import { CharacterFactory } from "./CharacterFactory";
 

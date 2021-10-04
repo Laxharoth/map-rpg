@@ -2,7 +2,7 @@ import { ActionOutput, storeable } from "src/app/customTypes/customTypes";
 import { itemname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
 import { Character } from "../Character/Character";
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 
 /**
  * Model of game items.

@@ -1,4 +1,4 @@
-import { MasterService } from 'src/app/classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 import { characterType } from "src/app/customTypes/characterTypes";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { Character } from "../Character";

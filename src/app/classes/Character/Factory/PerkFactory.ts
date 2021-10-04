@@ -3,7 +3,7 @@ import { PerkGrappler } from './../../Perk/PerkGrappler';
 import { PerkFright } from './../../Perk/PerkFright';
 import { PerkCharm } from './../../Perk/PerkCharm';
 import { perkname, perknameEnum } from "src/app/customTypes/perkname";
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { PerkUpgradeable } from '../../Perk/PerkUpgradeable';
 import { Perk } from '../../Perk/Perk';
 

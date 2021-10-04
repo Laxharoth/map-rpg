@@ -1,7 +1,7 @@
 import { ItemTest } from './../../../Items/ItemTest';
 import { Description, DescriptionOptions } from "src/app/classes/Descriptions/Description";
 import { Item } from "src/app/classes/Items/Item";
-import { MasterService } from "src/app/classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
 import { Character } from "../../Character";
 import { enemyTest } from "../enemyTest";

@@ -3,7 +3,7 @@ import { enemyTest } from "../classes/Character/NPC/enemyTest";
 import { Description, DescriptionOptions } from "../classes/Descriptions/Description";
 import { descriptionBattle } from "../classes/Descriptions/BattleDescription";
 import { Room } from "../classes/maps/room";
-import { MasterService } from "../classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { roomFunction } from "../customTypes/customTypes";
 import { getInputs, randomBetween, randomCheck } from "../htmlHelper/htmlHelper.functions";
 

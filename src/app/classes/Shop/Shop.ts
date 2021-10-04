@@ -1,6 +1,6 @@
 import { Item } from 'src/app/classes/Items/Item';
 import { ItemFactory } from '../Character/Factory/ItemFactory';
-import { MasterService } from '../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { itemname } from './../../customTypes/itemnames';
 import { Character } from '../Character/Character';
 import { Sale } from './Sale';

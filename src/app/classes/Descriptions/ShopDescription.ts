@@ -1,5 +1,5 @@
 import { nextOption } from 'src/app/classes/Descriptions/CommonOptions';
-import { MasterService } from '../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { Shop } from "../Shop/Shop";
 import { Description, DescriptionOptions } from "./Description";
 

@@ -3,7 +3,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { Room } from '../classes/maps/room';
 import { Map } from '../classes/maps/map';
 import { roomFunction } from '../customTypes/customTypes';
-import { MasterService } from '../classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 
 /**
  * A service that allows the player to move in the map.

@@ -3,7 +3,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Map } from 'src/app/classes/maps/map';
-import { MasterService } from 'src/app/classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 
 @Component({
   selector: 'app-map',

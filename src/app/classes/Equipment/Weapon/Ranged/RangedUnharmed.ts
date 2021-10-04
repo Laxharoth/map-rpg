@@ -1,5 +1,5 @@
 import { Character } from "src/app/classes/Character/Character";
-import { MasterService } from "src/app/classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { damageTypes } from "src/app/customTypes/customTypes";
 import { rangedname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";

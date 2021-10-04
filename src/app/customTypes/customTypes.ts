@@ -1,6 +1,6 @@
 import { Description } from "../classes/Descriptions/Description";
 import { Room } from "../classes/maps/room";
-import { MasterService } from "../classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 
 export type roomFunction = (masterService:MasterService) => Room;
 export interface inputObject {default: string , placeholder: string}

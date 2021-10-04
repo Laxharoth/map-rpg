@@ -1,6 +1,6 @@
 import { Character } from 'src/app/classes/Character/Character';
 import { characterType, CharacterTypeValues } from "src/app/customTypes/characterTypes";
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { charTest } from "../NPC/characterTest";
 import { enemyTest } from "../NPC/enemyTest";
 import { JohnSmith } from "../NPC/JohnSmit";

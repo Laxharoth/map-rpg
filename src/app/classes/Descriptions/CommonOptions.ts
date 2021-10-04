@@ -1,4 +1,4 @@
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { DescriptionOptions } from "./Description";
 import { selectItem } from "./DescriptionUseItem";
 

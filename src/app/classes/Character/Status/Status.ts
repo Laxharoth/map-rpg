@@ -1,5 +1,5 @@
 import { Character } from "../Character";
-import { MasterService } from '../../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { ActionOutput, storeable } from 'src/app/customTypes/customTypes';
 import { tag } from 'src/app/customTypes/tags';
 import { statusname } from '../../../customTypes/statusnames';

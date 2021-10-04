@@ -1,7 +1,7 @@
 import { characterType } from "src/app/customTypes/characterTypes";
 import { ActionOutput } from "src/app/customTypes/customTypes";
 import { randomBetween } from "src/app/htmlHelper/htmlHelper.functions";
-import { MasterService } from "../../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { PerkPoisonRush } from "../../Perk/PerkPoisonRush";
 import { Character } from "../Character";
 import { StatusBlind } from "../Status/StatusTemporal/Ailments/StatusBlind";

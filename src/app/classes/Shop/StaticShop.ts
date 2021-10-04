@@ -1,4 +1,4 @@
-import { MasterService } from '../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { itemname } from './../../customTypes/itemnames';
 import { Shop } from './Shop';
 export class StaticShop extends Shop

@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Character } from 'src/app/classes/Character/Character';
 import { Item } from 'src/app/classes/Items/Item';
 import * as jQuery from 'jquery';
-import { MasterService } from 'src/app/classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 
 @Component({
   selector: 'app-shop-interface',

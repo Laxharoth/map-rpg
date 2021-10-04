@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 import { Subscription } from 'rxjs';
-import { MasterService } from 'src/app/classes/masterService';
+import { MasterService } from "src/app/service/master.service";
 import { charTest } from 'src/app/classes/Character/NPC/characterTest';
 import { game_state } from 'src/app/customTypes/states';
 import { Character } from 'src/app/classes/Character/Character';

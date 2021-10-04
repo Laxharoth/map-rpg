@@ -8,7 +8,7 @@
     </ul>
   </div>
   <div class="content">
-    <app-character-user *ngIf="currentTab==='user'" [masterService]="masterService"></app-character-user>
-    <app-party *ngIf="currentTab==='party'" [masterService]="masterService" [partyType]="'PARTY'"></app-party>
+    <app-character-user *ngIf="currentTab==='user'"></app-character-user>
+    <app-party *ngIf="currentTab==='party'" [partyType]="'PARTY'"></app-party>
   </div>
 </div>

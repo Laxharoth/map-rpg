@@ -4,7 +4,7 @@ import { pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions"
 import { Character } from "../Character/Character";
 import { EnemyFormation } from "../Character/NPC/EnemyFormations/EnemyFormation";
 import { Item } from "../Items/Item";
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { Description, DescriptionOptions } from "./Description";
 
 /**

@@ -1,7 +1,7 @@
 import { Character } from 'src/app/classes/Character/Character';
 import { Subscription } from 'rxjs';
 import { Status } from "./Status";
-import { MasterService } from '../../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { Time } from '../../Time';
 
 /**

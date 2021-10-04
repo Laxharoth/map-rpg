@@ -2,7 +2,7 @@ import { MAXOPTIONSNUMBERPERPAGE } from "src/app/customTypes/constants";
 import { Character } from "../Character/Character";
 import { ItemFactory } from "../Character/Factory/ItemFactory";
 import { Item } from "../Items/Item";
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { Description, DescriptionOptions } from "./Description";
 
 /**

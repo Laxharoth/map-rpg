@@ -1,6 +1,6 @@
 import { storeable } from 'src/app/customTypes/customTypes';
 import { itemname } from 'src/app/customTypes/itemnames';
-import { MasterService } from '../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { Shop } from "./Shop";
 
 export class DynamicShop extends Shop implements storeable{

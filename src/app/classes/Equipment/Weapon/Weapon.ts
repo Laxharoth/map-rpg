@@ -3,7 +3,7 @@ import { ActionOutput, damageTypes } from './../../../customTypes/customTypes';
 import { Character } from "../../Character/Character";
 import { Equipment } from "../Equipment";
 import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/app/htmlHelper/htmlHelper.functions';
-import { MasterService } from '../../masterService';
+import { MasterService } from "src/app/service/master.service";
 import { weaponname } from 'src/app/customTypes/itemnames';
 
 /**

@@ -6,7 +6,7 @@ import { ShieldNoShield } from "../classes/Equipment/Shield/ShieldNoShield";
 import { MeleeUnharmed } from "../classes/Equipment/Weapon/Melee/MeleeUnharmed";
 import { RangedUnharmed } from "../classes/Equipment/Weapon/Ranged/RangedUnharmed";
 import { Room } from "../classes/maps/room";
-import { MasterService } from "../classes/masterService";
+import { MasterService } from "src/app/service/master.service";
 import { ItemTest } from '../classes/Items/ItemTest';
 import { PerkUpgradeable } from '../classes/Perk/PerkUpgradeable';
 import { DescriptionSelectItemFromMap } from '../classes/Descriptions/CommonOptions';

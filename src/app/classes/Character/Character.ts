@@ -13,7 +13,7 @@ import { MeleeWeapon } from "../Equipment/Weapon/Melee/MeleeWeapon";
 import { RangedWeapon } from "../Equipment/Weapon/Ranged/RangedWeapon";
 import { Item } from "../Items/Item";
 import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
-import { MasterService } from "../masterService";
+import { MasterService } from "src/app/service/master.service";
 import { Perk } from "../Perk/Perk";
 import { Reaction } from "./Reaction/Reaction";
 import { Status } from "./Status/Status";
