@@ -15,7 +15,17 @@ export function SetShopDescription(masterService:MasterService,shop:Shop):void
 
   function getShopOptions():DescriptionOptions[]{
     return [
+      checkoutButton(),
       nextOption(masterService)
     ]
   };
+
+  function checkoutButton():DescriptionOptions
+  {
+    const player = masterService.partyHandler.user;
+    return new DescriptionOptions('Checkout',()=>{
+      shop.CheckoutSale(player);
+      masterService.descriptionHandler.nextDescription(false);
+    },()=> shop.sale.total>player.originalstats.gold || !shop.sale.saleActionHasBeenMade )
+  }
 }
