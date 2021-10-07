@@ -13,10 +13,12 @@ import { DescriptionSelectItemFromMap } from '../classes/Descriptions/CommonOpti
 import { Shop } from '../classes/Shop/Shop';
 import { SetShopDescription } from '../classes/Descriptions/ShopDescription';
 import { StaticShop } from '../classes/Shop/StaticShop';
+import { DynamicShop } from '../classes/Shop/DynamicShop';
 
 export function room(masterService:MasterService):Room
 {
   const roomName = 'room7'
+  let dynamicShop = null;
   const $flag = (name:string) => masterService.flagsHandler.getFlag(name);
   const user = masterService.partyHandler.user;
   let melee = user.inventary[0];
@@ -78,6 +80,7 @@ export function room(masterService:MasterService):Room
   const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription()});
   const roomOptions =[
     new DescriptionOptions("Shop",makeShop),
+    new DescriptionOptions("Dynamic Shop",makeDynamicShop),
     new DescriptionOptions("option1",function(){masterService.flagsHandler.setFlag("",0)}),
     new DescriptionOptions("test battle",function(){ descriptionBattle(masterService,new testformation(masterService) ) }),
     equipMelee,
@@ -144,6 +147,18 @@ export function room(masterService:MasterService):Room
       ,{'item-test':10,'Shield test':15,'Armor test':20}
     );
     SetShopDescription(masterService,shop);
+  }
+  function makeDynamicShop():void
+  {
+    if(!dynamicShop)
+    {
+      dynamicShop = new DynamicShop('test-shop',masterService,{'item-test':10});
+      const items = {
+        'item-test':{options:{amount:5}},'Shield test':{options:{amount:5}},'Armor Test':{options:{amount:5}}
+      }
+      dynamicShop.fromJson(items)
+    }
+    SetShopDescription(masterService,dynamicShop);
   }
 }
 
