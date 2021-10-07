@@ -17,6 +17,9 @@ import { TabMenuComponent } from './component/tab-menu/tab-menu.component';
 import { ShopInterfaceComponent } from './component/shop/shop-interface/shop-interface.component';
 import { ShopItemComponent } from './component/shop/shop-item/shop-item.component';
 import { NumberSpinnerComponent } from './component/number-spinner/number-spinner.component';
+import { ShopDataComponentComponent } from './component/shop/shop-data-component/shop-data-component.component';
+import { ShopSaleComponentComponent } from './component/shop/shop-sale-component/shop-sale-component.component';
+import { ShopDataItemComponent } from './component/shop/shop-data-item/shop-data-item.component';
 
 
 @NgModule({
@@ -36,6 +39,9 @@ import { NumberSpinnerComponent } from './component/number-spinner/number-spinne
     ShopInterfaceComponent,
     ShopItemComponent,
     NumberSpinnerComponent,
+    ShopDataComponentComponent,
+    ShopSaleComponentComponent,
+    ShopDataItemComponent,
   ],
   imports: [
     BrowserModule,
