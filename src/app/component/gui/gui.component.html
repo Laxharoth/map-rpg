@@ -6,6 +6,7 @@
           (moveEvent)="move($event)"></app-map>
         <app-party *ngIf="currentGameState === 'battle'"
          [partyType]="'ENEMY'"></app-party>
+         <app-shop-data-component *ngIf="currentGameState === 'shop'"></app-shop-data-component>
         </div>
         <div class="app-gui-upper-right">
           <app-description
@@ -29,5 +30,6 @@
 
     <app-party *ngIf="currentGameState === 'battle' && party.length>1"
          [partyType]="'PARTY'"></app-party>
+    <app-shop-sale-component *ngIf="currentGameState === 'shop'"></app-shop-sale-component>
   </div>
 </div>
