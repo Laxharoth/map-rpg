@@ -4,6 +4,7 @@ import { Character } from 'src/app/classes/Character/Character';
 import { Item } from 'src/app/classes/Items/Item';
 import * as jQuery from 'jquery';
 import { MasterService } from "src/app/service/master.service";
+import { ShopCurrentItemService } from 'src/app/service/shop-current-item.service';
 
 @Component({
   selector: 'app-shop-interface',
@@ -16,7 +17,7 @@ export class ShopInterfaceComponent implements OnInit {
   playerAmount: number = 1;
   shop:Shop;
   player:Character;
-  constructor(private masterService:MasterService)
+  constructor(private masterService:MasterService,private shopCurrentItemService:ShopCurrentItemService)
   {
     this.player = this.masterService.partyHandler.user;
     this.shop = this.masterService.descriptionHandler.currentDescription.descriptionData();
@@ -47,5 +48,10 @@ export class ShopInterfaceComponent implements OnInit {
   shopRemoveSellItem(event:any)
   {
     this.shop.shopRemoveSellItem(event,this.playerAmount)
+  }
+  unsetItem(event:Event)
+  {
+    event.stopPropagation();
+    this.shopCurrentItemService.currentItem = null;
   }
 }

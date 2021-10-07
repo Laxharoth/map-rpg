@@ -1,5 +1,6 @@
-<div class="shop-interface">
-  <div class="shop-section">
+<div class="shop-interface" (mouseover)="unsetItem($event)" (mouseout)="unsetItem($event)">
+  <fieldset class="shop-section">
+    <legend>shop</legend>
     <div class="inventary-wrapper">
       <div class="inventary">
         <ul class="inventary-list">
@@ -16,15 +17,16 @@
       [spinnerType]="'horizontal'"
       [initialValue]="shopAmount">
     </app-number-spinner>
-  </div>
-  <div class="player-section">
+  </fieldset>
+  <fieldset class="player-section">
+    <legend>{{ player.name }}</legend>
     <div class="inventary-wrapper">
       <div class="inventary">
         <ul class="inventary-list">
           <li class="initial-inventary" *ngFor="let item of shop.getCharacterInvetoryAfterSale(player)" [ngClass]="{'disabled': item.amount === 0}">
             <app-shop-item [item]="item" (ShopItemEvent)="shopBuyItem($event)"></app-shop-item>
           </li>
-          <li class="sale-inventary" *ngFor="let item of shop.sale.items2Character">
+          <li class="sale-inventary" *ngFor="let item of shop.sale.items2Character" [ngClass]="{'overflow': shop.doesCharacterInventoryOverflows(player),'sale-inventary': true}">
             <app-shop-item [item]="item"
               (ShopItemEvent)="shopRemoveSellItem($event)"></app-shop-item>
           </li>
@@ -36,5 +38,5 @@
       [spinnerType]="'horizontal'"
       [initialValue]="playerAmount">
     </app-number-spinner>
-  </div>
+  </fieldset>
 </div>

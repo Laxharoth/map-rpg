@@ -1,3 +1,10 @@
+
+fieldset { border-radius: 0.5em; border-color: currentColor; border-style: solid;}
+legend
+{
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
 .shop-interface
 {
     display:flex;
@@ -48,4 +55,5 @@
     opacity:0.3;
 }
 .initial-inventary { background:green; }
-.sale-inventary { background:red; }
+.sale-inventary { background:yellow; }
+.overflow { background:red; }
