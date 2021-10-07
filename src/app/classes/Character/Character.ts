@@ -343,7 +343,12 @@ export abstract class Character implements storeable
     if(item.amount <= 0) return;
     if(this.inventary.length < this.inventarysize)
     {
-      this.inventary.push(item);
+      if(item.amount <= item.maxStack)
+      {
+        this.inventary.push(item);
+        return;
+      }
+      for(const itemsFromStack of item.breakIntoStacks())this.addItem(itemsFromStack);
       return;
     }
     this.masterService.descriptionHandler
