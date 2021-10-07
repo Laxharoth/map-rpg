@@ -124,13 +124,26 @@ export abstract class Item implements storeable
    * @memberof Item
    */
   get tags(): tag[] {return []};
+  breakIntoStacks():Item[]
+  {
+    const copy = Object.create(this);
+    const stacks:Item[] = [];
+    while(copy.amount>0)
+    {
+      const item = Object.create(copy);
+      item.amount = Math.min(copy.amount,copy.maxStack);
+      copy.amount-=item.amount;
+      stacks.push(item);
+    }
+    return stacks;
+  }
   /**
    * Stores the amount of items in the stack.
    *
    * @return {*}  {{[key: string]:any}}
    * @memberof Item
    */
-  toJson():{[key: string]:any}
+  toJson():{amount:number}
   {
     return {amount:this.amount}
   }
@@ -140,10 +153,11 @@ export abstract class Item implements storeable
    * @param {{[key: string]: any}} options
    * @memberof Item
    */
-  fromJson(options: {[key: string]: any}): void
+  fromJson(options: {amount:number,basePrice?:number}): void
   {
     const {amount,basePrice} = options;
     amount&&(this.amount = amount);
     basePrice&&(this.basePrice = basePrice);
   }
+  get description(): string {return 'Item Description';}
 }
