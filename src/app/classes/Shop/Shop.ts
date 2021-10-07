@@ -166,3 +166,12 @@ export class Shop
     return items;
   }
 }
+
+export const ErrorShop = function()
+{
+  let errorShop = null;
+  return function(masterService:MasterService){
+    if(!errorShop)errorShop =new Shop('ERROR NOT SHOP PROVIDED',[],masterService)
+    return errorShop
+  }
+}()
