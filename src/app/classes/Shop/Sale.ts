@@ -27,6 +27,10 @@ export class Sale
     shopItem.amount-=amount;
     (shopItem.amount<=0) && removeItem(this.items2Shop, shopItem);
   }
+  get saleActionHasBeenMade():boolean
+  {
+    return Boolean(this.items2Character.length || this.items2Shop.length);
+  }
 
   private __total():number
   {
