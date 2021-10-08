@@ -156,8 +156,8 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
   });
   const descriptionOptionEscape = new DescriptionOptions("Escape", () => {
     masterService.descriptionHandler
-      .tailDescription(enemy.attemptEscape([user].concat(party)),'battle')
-      .nextDescription(false);
+      .headDescription(enemy.attemptEscape([user].concat(party)),'battle')
+      .setDescription(false);
   });
   const options = [
     descriptionOptionAttack,
