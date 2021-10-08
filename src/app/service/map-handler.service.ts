@@ -22,7 +22,7 @@ export class MapHandlerService {
   private readonly masterService: MasterService;
   private gameStateSubscription: Subscription;
 
-  private currentRoom:Room = new Room({onEnter:_=>{},onExit:_=>{},icon:''});
+  private currentRoom:Room = new Room({onEnter:()=>{},onExit:()=>{},icon:''});
   currentMap:Map;
 
   constructor(masterService:MasterService)
@@ -166,8 +166,9 @@ export class MapHandlerService {
     {
       this.masterService.flagsHandler.setFlag("currentroom",roomName);
       this.currentRoom.onExit();
+      foundRoom.onEnter();
+      this.currentRoom.afterMoveTo(roomName);
       this.currentRoom=foundRoom;
-      this.currentRoom.onEnter();
       this.coordinates = coordinates;
       this.coordinatesSubject.next(this.coordinates);
       return true;

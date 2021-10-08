@@ -20,14 +20,24 @@ export class Room{
   /**
    * Perform an action before moving to a room.
    *
+   * @param {string} roomName The name of the room to be moved.
+   * @returns true if can move to the specified room.
    * @memberof Room
    */
   beforeMoveTo: (roomName:string) => boolean;
+  /**
+   * Perform an action after moving to a room.
+   *
+   * @param {string} roomName The name of the room to be moved.
+   * @memberof Room
+   */
+  afterMoveTo: (roomName:string) => void;
   icon        : string;
-  constructor({onEnter,onExit,beforeMoveTo=(roomName:string) => true,icon}) {
+  constructor({onEnter,onExit,beforeMoveTo=(roomName:string) => true,afterMoveTo=(roomName:string)=>{},icon}) {
     this.onEnter       = onEnter;
     this.onExit        = onExit;
     this.beforeMoveTo  = beforeMoveTo;
+    this.afterMoveTo   = afterMoveTo;
     this.icon          = icon;
   }
 }
