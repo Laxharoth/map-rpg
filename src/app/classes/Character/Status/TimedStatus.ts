@@ -81,7 +81,7 @@ export abstract class TimedStatus extends Status{
     this.currentTime = time.getMinutes();
     if (this.remainingTime <= 0) {
       const [message] = target.removeStatus(this);
-      this.masterService.descriptionHandler.tailDescription(message,'map');
+      this.masterService.descriptionHandler.headDescription(message,'status').setDescription(false);
     }
   }
   /**
