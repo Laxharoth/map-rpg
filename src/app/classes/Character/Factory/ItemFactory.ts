@@ -21,7 +21,7 @@ import { ItemTest } from '../../Items/ItemTest';
  * @param {{[key: string]: any}} options The options from the item created with the  storeable.toJson
  * @return {Item} An Item with the loaded options
  */
-export function ItemFactory(masterService:MasterService,itemName:itemname,options:{[key: string]: any}):Item
+export function ItemFactory(masterService:MasterService,itemName:itemname,options:{amount?:number,basePrice?:number}):Item
 {
   const item = new ItemSwitcher[itemName](masterService);
   item.fromJson(options)
