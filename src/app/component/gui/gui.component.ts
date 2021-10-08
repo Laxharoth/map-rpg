@@ -66,7 +66,7 @@ export class GuiComponent implements OnInit {
       default:
         if(isnumber(event.key)){
           let number = event.key==='0'? 10: parseInt(event.key)
-          if(!isNaN(number)){
+          if(!isNaN(number) && !this.currentOptions?.[number-1]?.disabled){
             this.currentOptions?.[number-1]?.action();
           }
         }
