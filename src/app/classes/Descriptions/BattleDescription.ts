@@ -54,7 +54,7 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
     updateDisables:{
       const specials = user.specialAttacks;
       descriptionOptionSpecial.disabled = specials.length <= 0 || specials.every(item => item.disabled(user));
-      descriptionOptionItem.disabled = user.inventary.length <= 0 || user.inventary.every(item => item.disabled(user));
+      descriptionOptionItem.disabled = user.inventory.length <= 0 || user.inventory.every(item => item.disabled(user));
     }
 
     for(  const character of  getPossibleTarget( [user].concat(party).concat(enemy.enemies) )  )
@@ -144,7 +144,7 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
   });
   const descriptionOptionItem = new DescriptionOptions("Item", () => {
     masterService.descriptionHandler
-      .headDescription(selectItem(user.inventary),'battle')
+      .headDescription(selectItem(user.inventory),'battle')
       .setDescription(false);
   });
   const descriptionOptionDefend = new DescriptionOptions("Defend", () => {

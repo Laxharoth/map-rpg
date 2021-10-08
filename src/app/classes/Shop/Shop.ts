@@ -72,7 +72,7 @@ export class Shop
     const reduceInventory = {}
     for(const boughtItem of this.sale.items2Shop)
     { reduceInventory[boughtItem.name] = boughtItem.amount; }
-    for(const item of character.inventary)
+    for(const item of character.inventory)
     {
       const copy = Object.create(item);
       const amountCanReduceOfItem = reduceInventory[item.name]||0;
@@ -87,7 +87,7 @@ export class Shop
   addItem(item:Item):void
   {
     if(!item){console.warn("Item not found, Is null or undefined."); return;}
-    this.fitItemIntoInventary(item);
+    this.fitItemIntoinventory(item);
     if(item.amount <= 0) return;
     this.shopItems.push(item);
   }
@@ -103,7 +103,7 @@ export class Shop
   {
     const copyItemsAmount: { [key: string]: number; } = {};
     for (const item of this.sale.items2Shop) { copyItemsAmount[item.name] = item.amount; }
-    for (const characteritem of character.inventary)
+    for (const characteritem of character.inventory)
     {
       if (copyItemsAmount.hasOwnProperty(characteritem.name))
       {
@@ -128,14 +128,14 @@ export class Shop
     if(!this.calculatedPlayerOverflow)
     {
       this.calculatedPlayerOverflow = true;
-      this.currectPlayerOverflow =  character.inventarysize
+      this.currectPlayerOverflow =  character.inventorysize
                                     <
                                     this.mergeCharacterItems(character)
                                       .reduce((acc, item) => acc + Math.ceil(item.amount/item.maxStack),0);
     }
     return this.currectPlayerOverflow;
   }
-  private fitItemIntoInventary(item: Item):void
+  private fitItemIntoinventory(item: Item):void
   {
     if(item.amount<=0)return;
     for (const shopItem of this.shopItems)

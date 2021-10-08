@@ -10,7 +10,7 @@ import { ShopCurrentItemService } from 'src/app/service/shop-current-item.servic
 export class ShopItemComponent implements OnInit {
 
   @Input() item:Item;
-  @Input() inventaryOverflow:boolean = false;
+  @Input() inventoryOverflow:boolean = false;
   @Output() ShopItemEvent = new EventEmitter<Item>();
   constructor(private shopService: ShopCurrentItemService){ }
 

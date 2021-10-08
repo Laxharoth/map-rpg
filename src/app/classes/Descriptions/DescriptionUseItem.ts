@@ -6,7 +6,7 @@ export function selectItem(masterService:MasterService):Description
 {
   const user = masterService.partyHandler.user;
   const party= masterService.partyHandler.party;
-  const items = user.inventary;
+  const items = user.inventory;
   const options:DescriptionOptions[]=[]
   const returnOption = new DescriptionOptions('return',()=>{ masterService.descriptionHandler.nextDescription(false) });
   for(const item of items)

@@ -6,12 +6,12 @@ import { MasterService } from "src/app/service/master.service";
 import { Description, DescriptionOptions } from "./Description";
 
 /**
- * Returns a description to drop items if adding a item to inventary exceeds max inventary.
+ * Returns a description to drop items if adding a item to inventory exceeds max inventory.
  *
  * @export
  * @param {MasterService} masterService The master service.
  * @param {Item} item The item tring to add.
- * @param {Character} character The character to add the inventary.
+ * @param {Character} character The character to add the inventory.
  * @return {*}  {Description}
  */
 export const AddExceedItem = function(){
@@ -44,27 +44,27 @@ export const AddExceedItem = function(){
     const dropItemOption: DescriptionOptions = new DescriptionOptions('Drop Item',nextItemInList);
     /** @type {*} {DescriptionOptions[]} Option to replace the homologue item with the excess Item*/
     const ExceedItemOptions:DescriptionOptions[] = [];
-    /** @type {*} {Description} Description to replace item in inventary with excee item.*/
+    /** @type {*} {Description} Description to replace item in inventory with excee item.*/
     const ExceedItemDescription:Description =  new Description(
       ()=>`Fitting ->${excessItemList[0].name}x${excessItemList[0].amount}`
-      +`\nItems in inventary:\n${character.inventary.map(item => `->${item.name}`).join('\n')}`
+      +`\nItems in inventory:\n${character.inventory.map(item => `->${item.name}`).join('\n')}`
       ,ExceedItemOptions
       )
-    //Fill the optionns with items in character in inventary.
+    //Fill the optionns with items in character in inventory.
     updateExceedItemOptions();
     return ExceedItemDescription;
     /**
-     * Replaces the item in inventary with the current first excessItemList.
+     * Replaces the item in inventory with the current first excessItemList.
      *
      * @param {Item} characteritem The item to replace.
      */
-    function removeItemFromInventary(characteritem: Item){
+    function removeItemFrominventory(characteritem: Item){
         const item = excessItemList[0];
         if (characteritem.constructor !== item.constructor) {
-          //Remove the selected item from the in inventary
-          const index = character.inventary.indexOf(characteritem);
-          character.inventary.splice(index, 1);
-          //Adds the new item to the inventary
+          //Remove the selected item from the in inventory
+          const index = character.inventory.indexOf(characteritem);
+          character.inventory.splice(index, 1);
+          //Adds the new item to the inventory
           character.addItem(item);
         }
         //Changes to the next item in the excessItemList
@@ -81,25 +81,25 @@ export const AddExceedItem = function(){
       return masterService.descriptionHandler.setDescription(false);
     }
     /**
-     * Changeds the DescriptionOptions to update new inventary.
+     * Changeds the DescriptionOptions to update new inventory.
      *
      * @return {*}
      */
     function updateExceedItemOptions():void
     {
       ExceedItemOptions.splice(0,ExceedItemOptions.length)
-      if (character.inventary.length + 1 < MAXOPTIONSNUMBERPERPAGE) {
-        for (const characteritem of character.inventary)
-          ExceedItemOptions.push(new DescriptionOptions(characteritem.name,()=>removeItemFromInventary(characteritem)));
-        while (character.inventary.length + 1 < MAXOPTIONSNUMBERPERPAGE)
+      if (character.inventory.length + 1 < MAXOPTIONSNUMBERPERPAGE) {
+        for (const characteritem of character.inventory)
+          ExceedItemOptions.push(new DescriptionOptions(characteritem.name,()=>removeItemFrominventory(characteritem)));
+        while (character.inventory.length + 1 < MAXOPTIONSNUMBERPERPAGE)
           ExceedItemOptions.push(null);
         ExceedItemOptions.push(dropItemOption);
         return;
       }
-      for (let index = 0; index < character.inventary.length; index++)
+      for (let index = 0; index < character.inventory.length; index++)
       {
-        const characteritem = character.inventary[index];
-        ExceedItemOptions.push(new DescriptionOptions(characteritem.name,()=>removeItemFromInventary(characteritem)));
+        const characteritem = character.inventory[index];
+        ExceedItemOptions.push(new DescriptionOptions(characteritem.name,()=>removeItemFrominventory(characteritem)));
         if (ExceedItemOptions.length % MAXOPTIONSNUMBERPERPAGE-2 === MAXOPTIONSNUMBERPERPAGE-3)
           ExceedItemOptions.push(dropItemOption);
       }

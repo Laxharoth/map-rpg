@@ -21,10 +21,10 @@ export function room(masterService:MasterService):Room
   let dynamicShop = null;
   const $flag = (name:string) => masterService.flagsHandler.getFlag(name);
   const user = masterService.partyHandler.user;
-  let melee = user.inventary[0];
-  let ranged = user.inventary[1];
-  let shield = user.inventary[2];
-  let armor = user.inventary[3];
+  let melee = user.inventory[0];
+  let ranged = user.inventory[1];
+  let shield = user.inventory[2];
+  let armor = user.inventory[3];
   const equipMelee = new DescriptionOptions(user.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
     if(user.meleeWeapon instanceof MeleeUnharmed)
     {

@@ -65,8 +65,8 @@ export abstract class Character implements storeable
   private timedStatus:TimedStatus[] = [];
   private battleStatus:StatusBattle[] = [];
   abstract readonly characterType:characterType;
-  inventarysize = 9;
-  inventary:Item[] = [];
+  inventorysize = 9;
+  inventory:Item[] = [];
 
   private static __meleeUnharmed__:MeleeUnharmed;
   private static __rangedUnharmed__:RangedUnharmed;
@@ -330,7 +330,7 @@ export abstract class Character implements storeable
     return  action(target);
   }
   /**
-   * Adds Item to the inventary.
+   * Adds Item to the inventory.
    *
    * @param {Item} item The item to add.
    * @return {*}  {void}
@@ -339,13 +339,13 @@ export abstract class Character implements storeable
   addItem(item:Item):void
   {
     if(!item){console.warn("Item not found, Is null or undefined."); return;}
-    this.fitItemIntoInventary(item);
+    this.fitItemIntoinventory(item);
     if(item.amount <= 0) return;
-    if(this.inventary.length < this.inventarysize)
+    if(this.inventory.length < this.inventorysize)
     {
       if(item.amount <= item.maxStack)
       {
-        this.inventary.push(item);
+        this.inventory.push(item);
         return;
       }
       for(const itemsFromStack of item.breakIntoStacks())this.addItem(itemsFromStack);
@@ -358,25 +358,25 @@ export abstract class Character implements storeable
     return;
   }
   /**
-   * Uses an item from Inventary or SpecialAttack.
+   * Uses an item from inventory or SpecialAttack.
    *
    * @param {(number|Item|SpecialAttack)} itemIndexOrItem If number, the index of the array, If object, the actuall Item.
    * @param {Character[]} targets The targets the item will affect.
-   * @param {('inventary'|'special')} [sourceItem=null] If index is provided the array is required.
+   * @param {('inventory'|'special')} [sourceItem=null] If index is provided the array is required.
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  useItem(itemIndexOrItem: number|Item|SpecialAttack,targets: Character[],sourceItem:'inventary'|'special'=null):ActionOutput
+  useItem(itemIndexOrItem: number|Item|SpecialAttack,targets: Character[],sourceItem:'inventory'|'special'=null):ActionOutput
   {
     if(itemIndexOrItem instanceof SpecialAttack)return this._useSpecialAttack(itemIndexOrItem,targets);
     if(itemIndexOrItem instanceof Item)return this._useItem(itemIndexOrItem,targets);
     if(sourceItem === 'special')return this._useSpecialAttack(itemIndexOrItem,targets);
-    if(sourceItem === 'inventary')return this._useItem(itemIndexOrItem,targets);
+    if(sourceItem === 'inventory')return this._useItem(itemIndexOrItem,targets);
     console.warn('item instance not provided or source not provided')
     return [[],[]]
   }
   /**
-   * Unequip melee weapon and adds it to the inventary.
+   * Unequip melee weapon and adds it to the inventory.
    *
    * @memberof Character
    */
@@ -388,7 +388,7 @@ export abstract class Character implements storeable
     this.addItem(melee);
   }
   /**
-   * Unequip ranged weapon and adds it to the inventary.
+   * Unequip ranged weapon and adds it to the inventory.
    *
    * @memberof Character
    */
@@ -400,7 +400,7 @@ export abstract class Character implements storeable
     this.addItem(ranged);
   }
   /**
-   * Unequip armor and adds it to the inventary.
+   * Unequip armor and adds it to the inventory.
    *
    * @memberof Character
    */
@@ -412,7 +412,7 @@ export abstract class Character implements storeable
     this.addItem(armor);
   }
   /**
-   * Unequip shield and adds it to the inventary.
+   * Unequip shield and adds it to the inventory.
    *
    * @memberof Character
    */
@@ -588,16 +588,16 @@ export abstract class Character implements storeable
     this.stats.energypoints = currentenergy;
   }
   /**
-   * Check if the Item can be Inserted into the Inventary.
+   * Check if the Item can be Inserted into the inventory.
    *
    * @private
    * @param {Item} item
    * @memberof Character
    */
-  private fitItemIntoInventary(item: Item):void
+  private fitItemIntoinventory(item: Item):void
   {
     if(item.amount<=0)return;
-    for (const characteritem of this.inventary)
+    for (const characteritem of this.inventory)
     {
       if (characteritem.constructor === item.constructor)
       {
@@ -733,7 +733,7 @@ export abstract class Character implements storeable
     }
   }
   /**
-   * Use an actial item from Inventary
+   * Use an actial item from inventory
    *
    * @private
    * @param {(number|Item)} itemIndexOrItem The Index of the item or the item.
@@ -744,16 +744,16 @@ export abstract class Character implements storeable
   private _useItem(itemIndexOrItem: number|Item,targets: Character[]):ActionOutput
   {
     let itemIndex:number;
-    if(itemIndexOrItem instanceof Item)itemIndex = this.inventary.indexOf(itemIndexOrItem);
+    if(itemIndexOrItem instanceof Item)itemIndex = this.inventory.indexOf(itemIndexOrItem);
     else itemIndex = itemIndexOrItem;
     if(itemIndex < 0) return [[],[]]
-    const item = this.inventary[itemIndex];
+    const item = this.inventory[itemIndex];
     const useItemDescription:ActionOutput =[[],[]]
     item.amount--;
     if (item.amount<=0)
     {
-      const index = this.inventary.indexOf(item);
-      this.inventary.splice(index,1);
+      const index = this.inventory.indexOf(item);
+      this.inventory.splice(index,1);
     }
     for(const target of targets)
     { pushBattleActionOutput(item.itemEffect(this,target),useItemDescription) }
@@ -854,8 +854,8 @@ export abstract class Character implements storeable
       storeables['armor']  = {name:this._armor.name,options:this._armor.toJson()};
     if(this._shield)
       storeables['shield'] = {name:this._shield.name,options:this._shield.toJson()};
-    storeables['inventary'] = []
-    for(const item of this.inventary)storeables['inventary'].push({name:item.name,options:item.toJson()});
+    storeables['inventory'] = []
+    for(const item of this.inventory)storeables['inventory'].push({name:item.name,options:item.toJson()});
     storeables['perk'] = []
     for(const perk of this.perks)storeables['perk'].push({name:perk.name,options:perk.toJson()});
     return storeables
@@ -875,7 +875,7 @@ export abstract class Character implements storeable
     (options['ranged'])&& (this._rangedWeapon=ItemFactory(this.masterService,options['ranged'].name,options['ranged'].options) as RangedWeapon);
     (options['armor']) && (this._armor=ItemFactory(this.masterService,options['armor'].name,options['armor'].options) as Armor);
     (options['shield'])&& (this._shield=ItemFactory(this.masterService,options['shield'].name,options['shield'].options) as Shield);
-    if(options['inventary']) for(const item of options['inventary']){ this.addItem(ItemFactory(this.masterService,item.name,item.options)) };
+    if(options['inventory']) for(const item of options['inventory']){ this.addItem(ItemFactory(this.masterService,item.name,item.options)) };
     if(options['perk'])for(const perk of options['perk']){ this.addPerk(PerkFactory(this.masterService,perk.name,perk.options))};
     this.applyStatus();
   }

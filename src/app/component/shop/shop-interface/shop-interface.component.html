@@ -1,13 +1,13 @@
 <div class="shop-interface" (mouseover)="unsetItem($event)" (mouseout)="unsetItem($event)">
   <fieldset class="shop-section">
     <legend>shop</legend>
-    <div class="inventary-wrapper">
-      <div class="inventary">
-        <ul class="inventary-list">
-          <li class="initial-inventary" *ngFor="let item of shop.shopInventoryAfterSale" [ngClass]="{'disabled': item.amount === 0}">
+    <div class="inventory-wrapper">
+      <div class="inventory">
+        <ul class="inventory-list">
+          <li class="initial-inventory" *ngFor="let item of shop.shopInventoryAfterSale" [ngClass]="{'disabled': item.amount === 0}">
             <app-shop-item [item]="item" (ShopItemEvent) = "shopSellItem($event)"></app-shop-item>
           </li>
-          <li class="sale-inventary" *ngFor="let item of shop.sale.items2Shop">
+          <li class="sale-inventory" *ngFor="let item of shop.sale.items2Shop">
             <app-shop-item [item]="item" (ShopItemEvent) = "shopRemoveBuyItem($event)"></app-shop-item>
           </li>
         </ul>
@@ -20,13 +20,13 @@
   </fieldset>
   <fieldset class="player-section">
     <legend>{{ player.name }}</legend>
-    <div class="inventary-wrapper">
-      <div class="inventary">
-        <ul class="inventary-list">
-          <li class="initial-inventary" *ngFor="let item of shop.getCharacterInvetoryAfterSale(player)" [ngClass]="{'disabled': item.amount === 0}">
+    <div class="inventory-wrapper">
+      <div class="inventory">
+        <ul class="inventory-list">
+          <li class="initial-inventory" *ngFor="let item of shop.getCharacterInvetoryAfterSale(player)" [ngClass]="{'disabled': item.amount === 0}">
             <app-shop-item [item]="item" (ShopItemEvent)="shopBuyItem($event)"></app-shop-item>
           </li>
-          <li class="sale-inventary" *ngFor="let item of shop.sale.items2Character" [ngClass]="{'overflow': shop.doesCharacterInventoryOverflows(player),'sale-inventary': true}">
+          <li class="sale-inventory" *ngFor="let item of shop.sale.items2Character" [ngClass]="{'overflow': shop.doesCharacterInventoryOverflows(player),'sale-inventory': true}">
             <app-shop-item [item]="item"
               (ShopItemEvent)="shopRemoveSellItem($event)"></app-shop-item>
           </li>
