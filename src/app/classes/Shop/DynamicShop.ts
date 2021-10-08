@@ -3,6 +3,7 @@ import { storeable } from 'src/app/customTypes/customTypes';
 import { MasterService } from "src/app/service/master.service";
 import { ItemFactory } from '../Character/Factory/ItemFactory';
 import { Shop } from "./Shop";
+import { Item } from '../Items/Item';
 
 export class DynamicShop extends Shop implements storeable{
 
@@ -13,7 +14,12 @@ export class DynamicShop extends Shop implements storeable{
     super(name,[],masterService,{})
     this.shopPrices = shopPrices
   }
-  // TODO save the shop inventary
+  addItem(item:Item):void
+  {
+    super.addItem(item);
+    if(this.shopPrices?.[item.name])
+    { item.basePrice = this.shopPrices[item.name]; }
+  }
   toJson(): {[key: string]:{options:{amount:number}} } {
     const shopSavedata:{[key: string]:{options:{amount:number}} } = {}
     for(const item of this.shopItems)
@@ -23,7 +29,6 @@ export class DynamicShop extends Shop implements storeable{
     }
     return shopSavedata
   }
-  //TODO load the shop inventary
   fromJson(options: {[key: string]:{options:{amount:number}} }): void {
     for(const [key,{options:itemOptions}] of Object.entries(options))
     {
