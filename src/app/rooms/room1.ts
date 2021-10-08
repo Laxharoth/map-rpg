@@ -1,11 +1,10 @@
 import { testformation } from "../classes/Character/NPC/EnemyFormations/testformation";
-import { enemyTest } from "../classes/Character/NPC/enemyTest";
 import { Description, DescriptionOptions } from "../classes/Descriptions/Description";
 import { descriptionBattle } from "../classes/Descriptions/BattleDescription";
 import { Room } from "../classes/maps/room";
 import { MasterService } from "src/app/service/master.service";
 import { roomFunction } from "../customTypes/customTypes";
-import { getInputs, randomBetween, randomCheck } from "../htmlHelper/htmlHelper.functions";
+import { getInputs, randomCheck } from "../htmlHelper/htmlHelper.functions";
 
 export function room(roomName: string):roomFunction
 {
@@ -16,8 +15,8 @@ export function room(roomName: string):roomFunction
       return masterService.flagsHandler.getFlag(name)
     };
 
-  const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription(false)});
-  const yesOption      = (action:()=>void)=>new DescriptionOptions("Yes",function(){action()});
+  const nextOption    = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription(false)});
+  const yesOption     = (action:()=>void)=>new DescriptionOptions("Yes",function(){action()});
   const noOption      = new DescriptionOptions("No",function(){masterService.descriptionHandler.nextDescription()});
   const nextOptionInputs = new DescriptionOptions("next",function(){
     const {input,select} = getInputs();
@@ -81,8 +80,8 @@ export function room(roomName: string):roomFunction
     ,[yesOption(()=>{
       masterService.descriptionHandler.nextDescription();
       masterService.descriptionHandler.tailDescription([flyDescription1, flyDescription2,flyDescription3],'map');
-      masterService.flagsHandler.addTime('30m');
       masterService.mapHandler.loadRoom('room1');
+      masterService.flagsHandler.addTime('30m');
     }),noOption])
     roomOptions.splice(2,0, new DescriptionOptions("Cannon",function(){
       masterService.descriptionHandler.headDescription(cannonDescription,'map');
@@ -121,9 +120,11 @@ export function room(roomName: string):roomFunction
       }
     },
     beforeMoveTo(roomName){
+      return true;
+    },
+    afterMoveTo(roomName){
       if(roomName!=='room1')
       {masterService.flagsHandler.addTime('5m')}
-      return true;
     },
     icon:""
   })
