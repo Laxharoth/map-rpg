@@ -99,17 +99,21 @@ export class Shop
     this.sale.items2Shop = [];
     this.sale.items2Character =[];
   }
-  private CheckoutSaleUpdateCharacterItems(character: Character) {
+  private CheckoutSaleUpdateCharacterItems(character: Character)
+  {
     const copyItemsAmount: { [key: string]: number; } = {};
     for (const item of this.sale.items2Shop) { copyItemsAmount[item.name] = item.amount; }
-    for (const characteritem of character.inventary) {
-      if (copyItemsAmount.hasOwnProperty(characteritem.name)) {
+    for (const characteritem of character.inventary)
+    {
+      if (copyItemsAmount.hasOwnProperty(characteritem.name))
+      {
         const reduceAmount = Math.min(characteritem.amount, copyItemsAmount[characteritem.name]);
         characteritem.amount -= reduceAmount;
         copyItemsAmount[characteritem.name] -= reduceAmount;
       }
     }
-    for (const item of this.sale.items2Character) character.addItem(item);
+    for (const item of this.sale.items2Character)
+    { character.addItem(ItemFactory(this.masterService,item.name,{amount:item.amount})); }
     character.originalstats.gold-=this.sale.total;
   }
   private CheckoutSaleUpdateShopInventory() {
