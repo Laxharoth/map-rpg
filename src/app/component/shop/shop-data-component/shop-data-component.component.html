@@ -1,5 +1,4 @@
 <div class="shop-data-component double-border">
-  <!-- TODO  add shop items with price -->
   <div class="shop-data-items" *ngIf="!currentItem">
     <div class="shop-data-items-list-wrapper">
       <div class="shop-data-items-list-wrapper-innter">
@@ -11,10 +10,9 @@
       </div>
     </div>
   </div>
-  <!-- TODO  add item hovered -->
   <div class="shop-data-current-" *ngIf="currentItem">
-    <p>{{ currentItem.name }}</p>
-    <p>{{ currentItem.description }}</p>
-    <p>{{ currentItem.basePrice }}</p>
+    <p class="name">{{ currentItem.name }}</p>
+    <p class="description">{{ currentItem.description }}</p>
+    <p class="price">{{ currentItem.basePrice }}</p>
   </div>
 </div>

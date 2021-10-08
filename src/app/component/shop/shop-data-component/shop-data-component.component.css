@@ -1,0 +1,18 @@
+.shop-data-items-list
+{
+    list-style:none;
+    padding:0;
+}
+
+.name
+{
+    font-weight:bold;
+}
+.description
+{
+    font-style:italic;
+}
+.price::before
+{
+    content:"$";
+}
