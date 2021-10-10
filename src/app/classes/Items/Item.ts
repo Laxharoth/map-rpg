@@ -159,5 +159,9 @@ export abstract class Item implements storeable
     amount&&(this.amount = amount);
     basePrice&&(this.basePrice = basePrice);
   }
-  get description(): string {return 'Item Description';}
+  get description(): string
+  {
+    if(this.tags.length === 0) return '';
+    return `tags:\n\t ${this.tags.join(', ')}`;
+  }
 }

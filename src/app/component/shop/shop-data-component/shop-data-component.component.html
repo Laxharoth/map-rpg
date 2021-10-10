@@ -1,4 +1,4 @@
-<div class="shop-data-component double-border">
+<div class="shop-data-component">
   <div class="shop-data-items" *ngIf="!currentItem">
     <div class="shop-data-items-list-wrapper">
       <div class="shop-data-items-list-wrapper-innter">
@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="shop-data-current-" *ngIf="currentItem">
+  <div class="shop-data-current" *ngIf="currentItem">
     <p class="name">{{ currentItem.name }}</p>
     <p class="description">{{ currentItem.description }}</p>
     <p class="price">{{ currentItem.basePrice }}</p>

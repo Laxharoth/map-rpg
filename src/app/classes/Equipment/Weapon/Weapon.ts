@@ -131,4 +131,38 @@ export abstract class Weapon extends Equipment
     const check = randomBetween(minaccuracy,maxaccuracy+this.accuracy);
     return check - target.roundStats.evasion;
   }
+
+  get description():string
+  {
+    let equipmentDescripiton = '';
+    if(Math.max(...Object.values(this.damageTypes)))
+    {
+      equipmentDescripiton = 'Damage:';
+      let even = true;
+      for(const [stat,value] of Object.entries(this.damageTypes))
+      {
+        if(value===0)continue;
+        if(even) equipmentDescripiton+='\n';
+        even=!even;
+        equipmentDescripiton+=`\t${Weapon.aliasDamageType(stat)}:${value}`;
+      }
+    }
+    return  equipmentDescripiton+
+            `\n${super.description}`
+  }
+
+  private static aliasDamageType(type: string):string
+  {
+    switch (type)
+    {
+      case "heatdamage"   :return "heat  ";
+      case "energydamage" :return "energy";
+      case "frostdamage"  :return "frost ";
+      case "slashdamage"  :return "slash ";
+      case "bluntdamage"  :return "blunt ";
+      case "piercedamage" :return "pierce";
+      case "poisondamage" :return "poison";
+    }
+    return "";
+  }
 }

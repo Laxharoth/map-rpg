@@ -98,5 +98,58 @@ export abstract class Equipment extends Item
     for(const key of Object.keys(this.resistanceStats))
     { character.resistance[key] += this.resistanceStats[key]}
   }
+
+  get description():string
+  {
+    let equipmentDescripitonStats='';
+    let equipmentDescripitonResistance='';
+    if(Math.max(...Object.values(this.statsModifier)))
+    {
+      equipmentDescripitonStats = 'stats:';
+      let even = true;
+      for(const [stat,value] of Object.entries(this.statsModifier))
+      {
+        if(value===0)continue;
+        if(even) equipmentDescripitonStats+='\n';
+        even=!even;
+        equipmentDescripitonStats+=`\t${stat}:${value}`;
+      }
+    }
+    if(Math.max(...Object.values(this.resistanceStats)))
+    {
+      equipmentDescripitonResistance = 'resistance:';
+      let even = true;
+      for(const [stat,value] of Object.entries(this.resistanceStats))
+      {
+        if(value===0)continue;
+        if(even) equipmentDescripitonResistance+='\n';
+        even=!even;
+        equipmentDescripitonResistance+=`\t${Equipment.aliasStatType(stat)}:${value}`;
+      }
+    }
+    return  equipmentDescripitonStats+`${equipmentDescripitonStats.length?'\n':''}`+
+            `${equipmentDescripitonResistance}`+`${equipmentDescripitonResistance.length?'\n':''}`+
+            `${super.description}`
+  }
+  private static aliasStatType(type: string):string
+  {
+    switch (type)
+    {
+      case "hitpoints"    :return "hp";
+      case "energypoints" :return "sp";
+      case "attack"       :return "atk";
+      case "aim"          :return "aim";
+      case "defence"      :return "def";
+      case "speed"        :return "spd";
+      case "evasion"      :return "evs";
+      case "heatresistance"   :return "heat";
+      case "energyresistance" :return "energy";
+      case "frostresistance"  :return "frost";
+      case "slashresistance"  :return "slash";
+      case "bluntresistance"  :return "blunt";
+      case "pierceresistance" :return "pierce";
+      case "poisonresistance" :return "poison";
+    }
+    return "";
   }
 }
