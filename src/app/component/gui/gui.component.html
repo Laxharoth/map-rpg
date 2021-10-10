@@ -1,7 +1,7 @@
 <div tabindex="0" class="app-gui">
   <div class="app-gui-left">
     <div class="app-gui-upper">
-      <div class="app-gui-upper-left">
+      <div class="app-gui-upper-left double-border">
         <app-map *ngIf="currentGameState === 'map'"
           (moveEvent)="move($event)"></app-map>
         <app-party *ngIf="currentGameState === 'battle'"
@@ -26,7 +26,7 @@
       ></app-description-options>
     </div>
   </div>
-  <div class="app-gui-right">
+  <div class="app-gui-right double-border">
     <app-tab-menu *ngIf="currentGameState === 'map'" ></app-tab-menu>
 
     <app-party *ngIf="currentGameState === 'battle' && party.length>1"
