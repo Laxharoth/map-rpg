@@ -119,7 +119,7 @@ export abstract class EnemyFormation
   protected exitOption(exitString:string):DescriptionOptions
   {
     return new DescriptionOptions(exitString,()=>{
-      this.masterService.descriptionHandler.nextDescription(false);
+      this.masterService.descriptionHandler.flush(0).nextDescription(false);
     })
   }
 }
