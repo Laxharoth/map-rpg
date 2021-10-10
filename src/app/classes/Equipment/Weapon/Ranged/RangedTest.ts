@@ -6,10 +6,8 @@ import { RangedWeapon } from "./RangedWeapon";
 
 export class RangedTest extends RangedWeapon
 {
-  protected equipmentStats: characterStats = {};
+  protected _damageTypes:damageTypes = {piercedamage:20,energydamage:10}
   protected accuracy: number=70;
   get name(): rangedname { return 'Ranged Test'; }
-  constructor(masterService:MasterService)
-  { super(masterService,{},{piercedamage:20,energydamage:10}) }
   canEquip(character: Character): boolean { return true; }
 }

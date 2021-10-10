@@ -23,7 +23,16 @@ export abstract class Weapon extends Equipment
    * @type {damageTypes}
    * @memberof Weapon
    */
-  protected damageTypes:damageTypes = {};
+  protected _damageTypes:damageTypes = {};
+  private filledDamageTypes:boolean = false;
+  protected get damageTypes():damageTypes {
+    if(!this.filledDamageTypes)
+    {
+      this.filledDamageTypes = true;
+      this._damageTypes = fillMissingWeaponDamage(this.damageTypes);
+    }
+    return this._damageTypes;
+  }
   /**
    * The probability that the weapon will hit the target.
    *
@@ -42,18 +51,6 @@ export abstract class Weapon extends Equipment
    * @memberof Weapon
    */
   abstract get name():weaponname;
-  /**
-   * Creates an instance of Weapon.
-   * Fills the missing weapon damage properties.
-   * @param {MasterService} masterService
-   * @memberof Weapon
-   */
-  constructor(masterService:MasterService,equipmentStats: characterStats={},damageTypes: damageTypes={})
-  {
-    super(masterService,equipmentStats)
-    this.damageTypes = damageTypes;
-    this.damageTypes = fillMissingWeaponDamage(this.damageTypes)
-  }
   /**
    * Applies damage to a target.
    *

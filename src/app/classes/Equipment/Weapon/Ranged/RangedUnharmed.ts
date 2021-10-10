@@ -7,7 +7,6 @@ import { RangedWeapon } from "./RangedWeapon";
 
 export class RangedUnharmed extends RangedWeapon
 {
-  protected equipmentStats: characterStats ={};
   maxStack = 0;
   protected accuracy = 50;
   get name(): rangedname { return 'a rock'; }

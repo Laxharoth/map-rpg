@@ -6,8 +6,7 @@ import { Shield } from "./Shield";
 
 export class ShieldTest extends Shield
 {
-  constructor(masterService:MasterService)
-  { super(masterService,{defence:20, bluntresistance:10,pierceresistance:5}) }
+  protected equipmentStats:characterStats = {defence:20, bluntresistance:10,pierceresistance:5};
   get name(): shieldname { return 'Shield test'; }
   canEquip(character: Character): boolean { return true; }
 }

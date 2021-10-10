@@ -6,8 +6,7 @@ import { Armor } from "./Armor";
 
 export class ArmorTest extends Armor
 {
-  constructor(masterService:MasterService)
-  { super(masterService,{defence:20,pierceresistance:10,speed:-5}) }
+  protected equipmentStats: characterStats = {defence:20,pierceresistance:10,speed:-5};
   get name(): armorname { return "Armor Test"; }
   canEquip(character: Character): boolean { return true; }
 }

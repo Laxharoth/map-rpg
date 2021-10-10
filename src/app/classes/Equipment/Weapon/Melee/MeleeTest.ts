@@ -7,8 +7,8 @@ import { MeleeWeapon } from './MeleeWeapon'
 export class MeleeTest extends MeleeWeapon
 {
   protected accuracy: number = 100;
-  constructor(masterService:MasterService)
-  { super(masterService,{attack:20},{bluntdamage:30}) }
+  protected equipmentStats: characterStats = {attack:20};
+  protected _damageTypes:damageTypes = {bluntdamage:30};
   get name(): meleename { return 'Melee test'; }
   canEquip(character: Character): boolean { return true; }
 }

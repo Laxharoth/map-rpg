@@ -46,38 +46,27 @@ export abstract class Equipment extends Item
    * @memberof Equipment
    */
   abstract get tags():tag[];
-  /**
-   * The stats that are going to be applied to the character-
-   *
-   * @protected
-   * @abstract
-   * @type {characterStats}
-   * @memberof Equipment
-   */
+  /** * The stats that are going to be applied to the character */
   protected equipmentStats: characterStats = {};
-  protected statsModifier:physicStats;
-  protected resistanceStats:resistanceStats;
-  constructor(masterService:MasterService,equipmentStats:characterStats={})
+  protected _statsModifier:physicStats = null;
+  protected _resistanceStats:resistanceStats = null;
+  protected get statsModifier()
   {
-    super(masterService);
-    this.equipmentStats = equipmentStats;
-    ({physic:this.statsModifier,resistance:this.resistanceStats} = loadCharacterStats(this.equipmentStats))
+    //Initialize stats the first time is required.
+    if(!this._statsModifier)this.setEquipmentStats()
+    return this._statsModifier;
   }
-  /**
-   * The reactions the equipment privides.
-   *
-   * @readonly
-   * @type {Reaction[]}
-   * @memberof Equipment
-   */
+  protected get resistanceStats()
+  {
+    //Initialize stats the first time is required.
+    if(!this._resistanceStats)this.setEquipmentStats()
+    return this._resistanceStats;
+  }
+  constructor(masterService:MasterService)
+  { super(masterService); }
+  /** * The reactions the equipment privides. */
   get reactions(): Reaction[]{return []};
-  /**
-   * The special attacks the equipment privides
-   *
-   * @readonly
-   * @type {SpecialAttack[]}
-   * @memberof Equipment
-   */
+  /** * The special attacks the equipment privides */
   get specials():SpecialAttack[]{return []};
 
   get isBattleUsable(): boolean{return true;};
@@ -103,6 +92,12 @@ export abstract class Equipment extends Item
     for(const key of Object.keys(this.resistanceStats))
     { character.resistance[key] += this.resistanceStats[key]}
   }
+  /**
+   * Removes stat modifiers to the equiped character.
+   *
+   * @param {Character} character
+   * @memberof Equipment
+   */
   removeModifier(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
@@ -143,6 +138,15 @@ export abstract class Equipment extends Item
             `${equipmentDescripitonResistance}`+`${equipmentDescripitonResistance.length?'\n':''}`+
             `${super.description}`
   }
+  /**
+   * Divides the equipmentStats into _statsModifier and _resistanceStats
+   *
+   * @private
+   * @memberof Equipment
+   */
+  private setEquipmentStats():void
+  { ({physic:this._statsModifier,resistance:this._resistanceStats} = loadCharacterStats(this.equipmentStats)) }
+
   private static aliasStatType(type: string):string
   {
     switch (type)
@@ -164,4 +168,5 @@ export abstract class Equipment extends Item
     }
     return "";
   }
+
 }
