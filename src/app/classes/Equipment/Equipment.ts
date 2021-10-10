@@ -85,6 +85,11 @@ export abstract class Equipment extends Item
   get isEnemyUsable(): boolean {return false;};
   get isSelfUsable() : boolean {return true;};
   get isSingleTarget(): boolean {return true;};
+  itemEffect(user:Character,target: Character):ActionOutput
+  {
+    this.applyModifiers(user);
+    return super.itemEffect(user, user);
+  }
   /**
    * Applies stat modifiers to the equiped character.
    *
@@ -97,6 +102,13 @@ export abstract class Equipment extends Item
     { character.stats[key] += this.statsModifier[key]}
     for(const key of Object.keys(this.resistanceStats))
     { character.resistance[key] += this.resistanceStats[key]}
+  }
+  removeModifier(character:Character):void
+  {
+    for(const key of Object.keys(this.statsModifier))
+    { character.stats[key] -= this.statsModifier[key]}
+    for(const key of Object.keys(this.resistanceStats))
+    { character.resistance[key] -= this.resistanceStats[key]}
   }
 
   get description():string

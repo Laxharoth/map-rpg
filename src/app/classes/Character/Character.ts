@@ -394,6 +394,7 @@ export abstract class Character implements storeable
     if(melee)melee.amount++
     this._meleeWeapon = null;
     this.addItem(melee);
+    melee&&melee.removeModifier(this)
   }
   /**
    * Unequip ranged weapon and adds it to the inventory.
@@ -406,6 +407,7 @@ export abstract class Character implements storeable
     if(ranged)ranged.amount++;
     this._rangedWeapon = null;
     this.addItem(ranged);
+    ranged&&ranged.removeModifier(this)
   }
   /**
    * Unequip armor and adds it to the inventory.
@@ -418,6 +420,7 @@ export abstract class Character implements storeable
     if(armor)armor.amount++;
     this._armor = null;
     this.addItem(armor);
+    armor&&armor.removeModifier(this)
   }
   /**
    * Unequip shield and adds it to the inventory.
@@ -430,6 +433,7 @@ export abstract class Character implements storeable
     if(shield)shield.amount++;
     this._shield = null;
     this.addItem(shield);
+    shield&&shield.removeModifier(this)
   }
 
   /**
