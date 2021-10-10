@@ -1,0 +1,14 @@
+.shop-data-item
+{
+    display:flex;
+    font-size:115%;
+    justify-content:space-between;
+}
+.shop-data-item-name
+{
+    font-style:italic;
+}
+.shop-data-item-price
+{
+    margin:auto;
+}
