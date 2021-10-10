@@ -18,5 +18,9 @@ export class ShopItemComponent implements OnInit {
 
   Emit(){ this.ShopItemEvent.emit(this.item); }
   isFinite(number: number): boolean {return isFinite(number)}
-  setItem(event:Event){event.stopPropagation();this.shopService.currentItem = this.item;}
+  setItem(event:Event)
+  {
+    event?.stopPropagation();
+    this.shopService.currentItem = this.item;
+  }
 }

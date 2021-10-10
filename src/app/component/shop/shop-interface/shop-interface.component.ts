@@ -51,7 +51,7 @@ export class ShopInterfaceComponent implements OnInit {
   }
   unsetItem(event:Event)
   {
-    event.stopPropagation();
+    event?.stopPropagation();
     this.shopCurrentItemService.currentItem = null;
   }
 }
