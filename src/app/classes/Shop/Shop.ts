@@ -13,12 +13,14 @@ export class Shop
   private currectPlayerOverflow = false;
   protected masterService:MasterService;
   get name():string { return this._name; }
+  description:()=>string;
   shopItems:Item[]=[];
   sale = new Sale();
 
-  constructor(name:string,shopItemNames:itemname[],masterService:MasterService,shopPrices:{[key:string]:number}={})
+  constructor(name:string,shopItemNames:itemname[],description:()=>string,masterService:MasterService,shopPrices:{[key:string]:number}={})
   {
     this._name = name;
+    this.description=description;
     this.masterService= masterService;
     for(const itemname of shopItemNames)
     {
@@ -175,7 +177,7 @@ export const ErrorShop = function()
 {
   let errorShop = null;
   return function(masterService:MasterService){
-    if(!errorShop)errorShop =new Shop('ERROR NOT SHOP PROVIDED',[],masterService)
+    if(!errorShop)errorShop =new Shop('ERROR',[],()=>"NOT SHOP PROVIDED",masterService)
     return errorShop
   }
 }()

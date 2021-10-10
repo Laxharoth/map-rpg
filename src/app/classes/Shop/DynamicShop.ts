@@ -8,10 +8,10 @@ import { Item } from '../Items/Item';
 export class DynamicShop extends Shop implements storeable{
 
   private shopPrices:{[key:string]:number};
-  constructor(name:string,masterService: MasterService,shopPrices:{[key:string]:number}={})
+  constructor(name:string,description:()=>string,masterService: MasterService,shopPrices:{[key:string]:number}={})
   {
     //itemas are added from json
-    super(name,[],masterService,{})
+    super(name,[],description,masterService,{})
     this.shopPrices = shopPrices
   }
   addItem(item:Item):void
