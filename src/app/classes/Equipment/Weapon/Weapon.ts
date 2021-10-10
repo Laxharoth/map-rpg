@@ -24,7 +24,6 @@ export abstract class Weapon extends Equipment
    * @memberof Weapon
    */
   protected damageTypes:damageTypes = {};
-  protected statsModifier:characterStats = {};
   /**
    * The probability that the weapon will hit the target.
    *
@@ -49,9 +48,10 @@ export abstract class Weapon extends Equipment
    * @param {MasterService} masterService
    * @memberof Weapon
    */
-  constructor(masterService:MasterService)
+  constructor(masterService:MasterService,equipmentStats: characterStats={},damageTypes: damageTypes={})
   {
-    super(masterService)
+    super(masterService,equipmentStats)
+    this.damageTypes = damageTypes;
     this.damageTypes = fillMissingWeaponDamage(this.damageTypes)
   }
   /**
@@ -106,13 +106,13 @@ export abstract class Weapon extends Equipment
   {
     let finalDamage:number = 0;
     const damageRelation = this.damagestat(user) / this.defencestat(target);
-    finalDamage += (damageRelation * this.damageTypes.slashdamage||0  / (100 - target.roundStats.slashresistance));
-    finalDamage += (damageRelation * this.damageTypes.bluntdamage||0  / (100 - target.roundStats.bluntresistance));
-    finalDamage += (damageRelation * this.damageTypes.piercedamage||0 / (100 - target.roundStats.pierceresistance));
-    finalDamage += (damageRelation * this.damageTypes.poisondamage||0 / (100 - target.roundStats.poisonresistance));
-    finalDamage += (damageRelation * this.damageTypes.heatdamage||0   / (100 - target.roundStats.heatresistance));
-    finalDamage += (damageRelation * this.damageTypes.energydamage||0 / (100 - target.roundStats.energyresistance));
-    finalDamage += (damageRelation * this.damageTypes.frostdamage||0  / (100 - target.roundStats.frostresistance));
+    finalDamage += (damageRelation * this.damageTypes.slashdamage||0  / (100 - target.roundResistance.slashresistance));
+    finalDamage += (damageRelation * this.damageTypes.bluntdamage||0  / (100 - target.roundResistance.bluntresistance));
+    finalDamage += (damageRelation * this.damageTypes.piercedamage||0 / (100 - target.roundResistance.pierceresistance));
+    finalDamage += (damageRelation * this.damageTypes.poisondamage||0 / (100 - target.roundResistance.poisonresistance));
+    finalDamage += (damageRelation * this.damageTypes.heatdamage||0   / (100 - target.roundResistance.heatresistance));
+    finalDamage += (damageRelation * this.damageTypes.energydamage||0 / (100 - target.roundResistance.energyresistance));
+    finalDamage += (damageRelation * this.damageTypes.frostdamage||0  / (100 - target.roundResistance.frostresistance));
     return Math.round(finalDamage)||0;
   }
   /**

@@ -1,3 +1,4 @@
+import { loadCharacterStats } from 'src/app/htmlHelper/htmlHelper.functions';
 import { ActionOutput, characterStats, physicStats, resistanceStats, storeable } from "src/app/customTypes/customTypes";
 import { equipmentname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
@@ -17,6 +18,7 @@ import { SpecialAttack } from "../Items/SpecialAttack/SpecialAttack";
  */
 export abstract class Equipment extends Item
 {
+  maxStack = 1;
   /**
    * The name of the equipment
    *
@@ -55,6 +57,12 @@ export abstract class Equipment extends Item
   protected equipmentStats: characterStats = {};
   protected statsModifier:physicStats;
   protected resistanceStats:resistanceStats;
+  constructor(masterService:MasterService,equipmentStats:characterStats={})
+  {
+    super(masterService);
+    this.equipmentStats = equipmentStats;
+    ({physic:this.statsModifier,resistance:this.resistanceStats} = loadCharacterStats(this.equipmentStats))
+  }
   /**
    * The reactions the equipment privides.
    *
