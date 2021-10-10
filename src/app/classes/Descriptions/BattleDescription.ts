@@ -83,7 +83,7 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
   function round(playerAction:(target:Character[])=>ActionOutput,playerTarget:Character[]):void
   {
     for(const character of attackOrder()){
-      if(character.stats.hitpoints <= 0)
+      if(character.currentCoreStats.hitpoints <= 0)
       {
         battleRoundString.push(`${character.name} can't move`);
         pushBattleActionOutput(character.onDefeated(),[battleRoundDescription,battleRoundString])
@@ -204,7 +204,7 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
       while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3 ) targetsOptions.push(null);
       targetsOptions.push(new DescriptionOptions('return',()=>{ masterService.descriptionHandler.nextDescription(false) }))
     }
-    return new Description(()=>`${targets.map(target=>`${target.name}:${target.stats.hitpoints}`).join('\n')}`,targetsOptions)
+    return new Description(()=>`${targets.map(target=>`${target.name}:${target.currentCoreStats.hitpoints}`).join('\n')}`,targetsOptions)
   }
 
   ///////////////////////////////////////////////////////
@@ -284,7 +284,7 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
       }
       else
       {
-        user.healHitPoints(user.originalstats.hitpoints);
+        user.healHitPoints(user.coreStats.hitpoints);
         masterService.descriptionHandler
           .tailDescription( enemy.onEnemyVictory([user].concat(party)) ,'battle')
           .nextDescription(false);
