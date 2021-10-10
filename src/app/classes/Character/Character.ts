@@ -1,4 +1,4 @@
-import { ActionOutput, characterStats, storeable } from "src/app/customTypes/customTypes";
+import { ActionOutput, characterStats, coreStats, physicStats, resistanceStats, storeable } from "src/app/customTypes/customTypes";
 import { statusname } from "src/app/customTypes/statusnames";
 import { tag } from "src/app/customTypes/tags";
 import { loadCharacterStats, pushBattleActionOutput } from "src/app/htmlHelper/htmlHelper.functions";
@@ -39,27 +39,33 @@ import { perkname } from "src/app/customTypes/perkname";
  */
 export abstract class Character implements storeable
 {
+  coreStats:coreStats;
+  currentCoreStats:coreStats;
   /**
    * The original stats of the character.
    *
    * @type {characterStats}
    * @memberof Character
    */
-  originalstats:characterStats;
+  originalstats:physicStats;
+  originalResistance:resistanceStats;
   /**
    * The current stats of the character after appling equipment, status, etc modifiers.
    *
    * @type {characterStats}
    * @memberof Character
    */
-  stats:characterStats;
+  stats:physicStats;
+  resistance:resistanceStats;
   /**
    * The current status of the character after appling equipment during a battle round.
    *
    * @type {characterStats}
    * @memberof Character
    */
-  roundStats:characterStats;
+  roundStats:physicStats;
+  roundResistance:resistanceStats;
+  gold:number = 0;
   private perks:Perk[] = [];
   private statuses:Status[] = [];
   private timedStatus:TimedStatus[] = [];
@@ -128,8 +134,10 @@ export abstract class Character implements storeable
     masterService:MasterService)
   {
     this.masterService = masterService;
-    this.originalstats = loadCharacterStats(originalstats)
+    ({core:this.coreStats,physic:this.originalstats,resistance:this.originalResistance} = loadCharacterStats(originalstats))
+    this.currentCoreStats = {...this.coreStats};
     this.stats = {...this.originalstats};
+    this.resistance = {...this.originalResistance};
     this.initializeUnharmed();
     this.applyStatus();
   }
@@ -461,7 +469,7 @@ export abstract class Character implements storeable
   {
     const reactDescription:ActionOutput = [[],[]]
     if( this.hasTag('paralized') ||
-        this.stats.hitpoints<=0  ||
+        this.currentCoreStats.hitpoints<=0  ||
         this.__endbattle__         )
       return reactDescription;
     for(const reaction of this.reactions){ pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription);}
@@ -476,10 +484,10 @@ export abstract class Character implements storeable
    */
   takeDamage(damage:number):number
   {
-    const hitpointsBeforeDamage = this.stats.hitpoints;
-    this.stats.hitpoints=Math.max(0,this.stats.hitpoints-damage);
+    const hitpointsBeforeDamage = this.currentCoreStats.hitpoints;
+    this.currentCoreStats.hitpoints=Math.max(0,this.currentCoreStats.hitpoints-damage);
     this.masterService.updateCharacter(this);
-    return this.stats.hitpoints-hitpointsBeforeDamage;
+    return this.currentCoreStats.hitpoints-hitpointsBeforeDamage;
   }
   /**
    * Heals hitpoints from the character up to original hitpoints.
@@ -490,10 +498,10 @@ export abstract class Character implements storeable
    */
   healHitPoints(hitpointsgain:number):number
   {
-    const hitpointsBeforeHeal = this.stats.hitpoints;
-    this.stats.hitpoints=Math.min(this.originalstats.hitpoints,this.stats.hitpoints+hitpointsgain);
+    const hitpointsBeforeHeal = this.currentCoreStats.hitpoints;
+    this.currentCoreStats.hitpoints=Math.min(this.coreStats.hitpoints,this.currentCoreStats.hitpoints+hitpointsgain);
     this.masterService.updateCharacter(this);
-    return this.stats.hitpoints-hitpointsBeforeHeal;
+    return this.currentCoreStats.hitpoints-hitpointsBeforeHeal;
   }
   /**
    * Gets the current status of the character.
@@ -502,7 +510,7 @@ export abstract class Character implements storeable
    * @type {string}
    * @memberof Character
    */
-  get currentStatusString():string { return `${this.name} looks like they are ${this.stats.hitpoints} in a scale of 0 to ${this.originalstats.hitpoints}`}
+  get currentStatusString():string { return `${this.name} looks like they are ${this.currentCoreStats.hitpoints} in a scale of 0 to ${this.coreStats.hitpoints}`}
 
   /**
    * Removes all the Battle Status without trigger reactions.
@@ -580,12 +588,10 @@ export abstract class Character implements storeable
    */
   private applyStatus():void
   {
-    const {hitpoints:currentlife=this.originalstats.hitpoints,energypoints:currentenergy=this.originalstats.energypoints} = this.stats;
-    this.stats = {...this.originalstats}
-    for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this); }
+    this.stats = {...this.originalstats};
+    this.resistance = {...this.originalResistance};
+    for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this); console.log(equipment)}
     for(const status of this.statuses.concat(this.timedStatus)){ status.applyEffect(this); }
-    this.stats.hitpoints = currentlife;
-    this.stats.energypoints = currentenergy;
   }
   /**
    * Check if the Item can be Inserted into the inventory.
@@ -843,7 +849,9 @@ export abstract class Character implements storeable
   {
     const storeables = {};
     storeables['type'] = this.characterType;
-    storeables['originalStats'] = {...this.originalstats};
+    storeables['originalStats'] = {...this.coreStats, ...this.originalstats, ...this.originalResistance};
+    storeables['currentCore']  = {...this.currentCoreStats}
+    storeables['gold'] = this.gold;
     storeables['status'] = []
     for(const status of this.iterStatus())storeables['status'].push({name:status.name,options:status.toJson()})
     if(this._meleeWeapon)
@@ -868,8 +876,9 @@ export abstract class Character implements storeable
    */
   fromJson(options: {[key: string]: any}): void
   {
-    if(options['originalStats'])
-    this.originalstats = loadCharacterStats(options['originalStats']);
+    if(options['originalStats']) ({core:this.coreStats,physic:this.originalstats,resistance:this.originalResistance} = loadCharacterStats(options['originalStats']));
+    if(options['currentCore'])this.currentCoreStats = {...options['currentCore']}
+    if(options['gold']) this.gold = options['gold'];
     if(options['status'])for(const status of options['status']){ this.addStatus(StatusFactory(this.masterService,status.name,status.options))}
     (options['melee']) && (this._meleeWeapon=ItemFactory(this.masterService,options['melee'].name,options['melee'].options) as MeleeWeapon);
     (options['ranged'])&& (this._rangedWeapon=ItemFactory(this.masterService,options['ranged'].name,options['ranged'].options) as RangedWeapon);
@@ -878,5 +887,6 @@ export abstract class Character implements storeable
     if(options['inventory']) for(const item of options['inventory']){ this.addItem(ItemFactory(this.masterService,item.name,item.options)) };
     if(options['perk'])for(const perk of options['perk']){ this.addPerk(PerkFactory(this.masterService,perk.name,perk.options))};
     this.applyStatus();
+
   }
 }

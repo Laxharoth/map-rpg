@@ -26,6 +26,6 @@ export function SetShopDescription(masterService:MasterService,shop:Shop):void
     return new DescriptionOptions('Checkout',()=>{
       shop.CheckoutSale(player);
       masterService.descriptionHandler.nextDescription(false);
-    },()=> shop.sale.total>player.originalstats.gold || !shop.sale.saleActionHasBeenMade )
+    },()=> shop.sale.total>player.gold || !shop.sale.saleActionHasBeenMade )
   }
 }

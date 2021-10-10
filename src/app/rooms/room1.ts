@@ -62,7 +62,7 @@ export function room(roomName: string):roomFunction
       new DescriptionOptions("add 1 hour",function(){ masterService.flagsHandler.addTime("1h") }),
       null,
     new DescriptionOptions("add 1 month",function(){ masterService.flagsHandler.addTime("1M") }),
-    new DescriptionOptions("add 100 gold",function(){ masterService.partyHandler.user.originalstats.gold += 100}),
+    new DescriptionOptions("add 100 gold",function(){ masterService.partyHandler.user.gold += 100}),
   ]
   if($flag("caninroom1")){
     roomOptions.splice(2,0,new DescriptionOptions("kick can",function(){

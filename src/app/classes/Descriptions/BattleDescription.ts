@@ -29,15 +29,15 @@ export function descriptionBattle(masterService:MasterService,enemy:EnemyFormati
   masterService.gameStateHandler.gameState = 'battle'
 
   function enemyIsDefended():boolean
-  { return enemy.enemies.every(character=>character.stats.hitpoints<=0); }
+  { return enemy.enemies.every(character=>character.currentCoreStats.hitpoints<=0); }
   function partyIsDefended():boolean
-  { return user.stats.hitpoints<=0; }
+  { return user.currentCoreStats.hitpoints<=0; }
   function getPossibleTarget(group:Character[]):Character[]
-  { return group.filter(character => character.stats.hitpoints>0); }
+  { return group.filter(character => character.currentCoreStats.hitpoints>0); }
   function attackOrder():Character[] {
     return [user]
-          .concat(party.filter((character) => character.stats.hitpoints>0))
-          .concat(enemy.enemies.filter((character) => character.stats.hitpoints>0))
+          .concat(party.filter((character) => character.currentCoreStats.hitpoints>0))
+          .concat(enemy.enemies.filter((character) => character.currentCoreStats.hitpoints>0))
           .sort((character,other)=> character.stats.speed > other.stats.speed ? -1:1)
   }
   let fistRound = true;

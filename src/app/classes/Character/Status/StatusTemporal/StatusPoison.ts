@@ -17,7 +17,7 @@ export class StatusPoison extends StatusBattle
     return [[],[`Poison causes ${damage} points of damage to ${target.name}`]];
   }
   canApply(target:Character): boolean
-  { return super.canApply(target) && randomCheck(target.roundStats.poisonresistance); }
+  { return super.canApply(target) && randomCheck(target.roundResistance.poisonresistance); }
   onStatusGainded(target: Character): ActionOutput
   { return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} has been poisoned.`]]); }
   onStatusRemoved(target: Character): ActionOutput
@@ -25,9 +25,9 @@ export class StatusPoison extends StatusBattle
 
   private calculatePoisonDamage(target: Character):number
   {
-    const basedamage = target.stats.hitpoints*1/8;
+    const basedamage = target.coreStats.hitpoints*1/8;
     const turnModifier = (5-this.DURATION)**2 / 100;
-    const resistanceModifier = Math.max(0,100-target.stats.poisonresistance)/100;
+    const resistanceModifier = Math.max(0,100-target.resistance.poisonresistance)/100;
     const turndamage = basedamage*(1+turnModifier)*resistanceModifier;
     return Math.floor(turndamage)
   }

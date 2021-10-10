@@ -1,6 +1,7 @@
-import { ActionOutput, characterStats, storeable } from "src/app/customTypes/customTypes";
+import { ActionOutput, characterStats, physicStats, resistanceStats, storeable } from "src/app/customTypes/customTypes";
 import { equipmentname } from "src/app/customTypes/itemnames";
 import { tag } from "src/app/customTypes/tags";
+import { MasterService } from "src/app/service/master.service";
 import { Character } from "../Character/Character";
 import { Reaction } from "../Character/Reaction/Reaction";
 import { Item } from "../Items/Item";
@@ -51,8 +52,9 @@ export abstract class Equipment extends Item
    * @type {characterStats}
    * @memberof Equipment
    */
-  protected readonly abstract statsModifier:characterStats;
-
+  protected equipmentStats: characterStats = {};
+  protected statsModifier:physicStats;
+  protected resistanceStats:resistanceStats;
   /**
    * The reactions the equipment privides.
    *
@@ -84,6 +86,9 @@ export abstract class Equipment extends Item
   applyModifiers(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
-    { character.stats[key] = this.statsModifier[key]}
+    { character.stats[key] += this.statsModifier[key]}
+    for(const key of Object.keys(this.resistanceStats))
+    { character.resistance[key] += this.resistanceStats[key]}
+  }
   }
 }

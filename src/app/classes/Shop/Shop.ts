@@ -114,7 +114,7 @@ export class Shop
     }
     for (const item of this.sale.items2Character)
     { character.addItem(ItemFactory(this.masterService,item.name,{amount:item.amount})); }
-    character.originalstats.gold-=this.sale.total;
+    character.gold-=this.sale.total;
   }
   private CheckoutSaleUpdateShopInventory() {
     const shopInventoryAfterSale = this.shopInventoryAfterSale;

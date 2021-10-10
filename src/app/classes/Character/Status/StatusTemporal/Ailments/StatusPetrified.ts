@@ -21,14 +21,14 @@ export class StatusPetrified extends StatusBattle
   get name(): statusname { return 'Petrified'; }
   onStatusGainded(target: Character): ActionOutput
   {
-      this.previousPoison = target.stats.poisonresistance;
-      target.stats.poisonresistance = 100;
-      if(target.stats?.poisonresistance)target.stats.poisonresistance=100;
+      this.previousPoison = target.resistance.poisonresistance;
+      target.resistance.poisonresistance = 100;
+      if(target.resistance?.poisonresistance)target.resistance.poisonresistance=100;
       return super.onStatusGainded(target);
   }
   onStatusRemoved(target: Character): ActionOutput
   {
-      target.stats.poisonresistance = this.previousPoison;
+      target.resistance.poisonresistance = this.previousPoison;
       return super.onStatusRemoved(target);
   }
   private getPoison(target: Character):StatusPoison

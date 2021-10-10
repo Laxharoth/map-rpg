@@ -1,10 +1,18 @@
-<div class="shop-sale double-border">
-  <div class="character-money-wrapper">
-    <p class="character-money-text">{{ player.name }}</p>
-    <p class="character-money-amount">{{ player.originalstats.gold }}</p>
+<div class="shop-sale">
+  <div class="shop-img"></div>
+  <div class="shop-description-wrapper double-border">
+    <div class="shop-description">
+      {{ shop.description() }}
+    </div>
   </div>
-  <div class="sale-balance">
-    <p class="sale-money-text">{{ shop.name||'' }}</p>
-    <p class="sale-money-amount">{{ shop.sale.total||0 }}</p>
+  <div class="shop-money-wrapper">
+    <div class="character-money-wrapper">
+      <p class="character-money-text">{{ player.name }}</p>
+      <p class="character-money-amount">{{ player.gold }}</p>
+    </div>
+    <div class="sale-balance">
+      <p class="sale-money-text">{{ shop.name||'' }}</p>
+      <p class="sale-money-amount">{{ shop.sale.total||0 }}</p>
+    </div>
   </div>
 </div>
