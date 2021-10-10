@@ -15,8 +15,20 @@ export function getInputs():{input:string,select:string}
   const selectValue = select?.value||null;
   return {input:inputValue, select:selectValue};
 }
-
-export function removeItem<T>(array:T[],item:T):void { array.splice(array.indexOf(item),1); }
+/**
+ * Removes an element from the an array if the element is in the array.
+ *
+ * @export
+ * @template T
+ * @param {T[]} array The Array.
+ * @param {T} item The element to remove.
+ * @return {*}  {boolean} If the element was removed.
+ */
+export function removeItem<T>(array:T[],item:T):boolean
+{
+  const element = array.splice(array.indexOf(item),1);
+  return Boolean(element.length);
+}
 
 /**
  * Pushes the descriptions in the fisrt array to the descriptions of the second
