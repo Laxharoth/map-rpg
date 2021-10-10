@@ -10,10 +10,13 @@ import { MasterService } from "src/app/service/master.service";
 import { ItemTest } from '../classes/Items/ItemTest';
 import { PerkUpgradeable } from '../classes/Perk/PerkUpgradeable';
 import { DescriptionSelectItemFromMap } from '../classes/Descriptions/CommonOptions';
-import { Shop } from '../classes/Shop/Shop';
 import { SetShopDescription } from '../classes/Descriptions/ShopDescription';
 import { StaticShop } from '../classes/Shop/StaticShop';
 import { DynamicShop } from '../classes/Shop/DynamicShop';
+import { MeleeWeapon } from '../classes/Equipment/Weapon/Melee/MeleeWeapon';
+import { RangedWeapon } from '../classes/Equipment/Weapon/Ranged/RangedWeapon';
+import { Shield } from '../classes/Equipment/Shield/Shield';
+import { Armor } from '../classes/Equipment/Armor/Armor';
 
 export function room(masterService:MasterService):Room
 {
@@ -21,13 +24,10 @@ export function room(masterService:MasterService):Room
   let dynamicShop = null;
   const $flag = (name:string) => masterService.flagsHandler.getFlag(name);
   const user = masterService.partyHandler.user;
-  let melee = user.inventory[0];
-  let ranged = user.inventory[1];
-  let shield = user.inventory[2];
-  let armor = user.inventory[3];
   const equipMelee = new DescriptionOptions(user.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
     if(user.meleeWeapon instanceof MeleeUnharmed)
     {
+      const melee = user.inventory.find(item=>item instanceof MeleeWeapon)
       user.useItem(melee,[user]);
       this.text='Unequip'
     }
@@ -37,10 +37,11 @@ export function room(masterService:MasterService):Room
       this.text='Equip Melee'
     }
     console.log(user)
-  })
+  },user.inventory.every(item=>!(item instanceof MeleeWeapon)))
   const equipRanged = new DescriptionOptions(user.rangedWeapon instanceof RangedUnharmed?'Equip ranged':"Unequip",function(){
     if(user.rangedWeapon instanceof RangedUnharmed)
     {
+      const ranged = user.inventory.find(item=>item instanceof RangedWeapon)
       user.useItem(ranged,[user]);
       this.text='Unequip'
     }
@@ -50,10 +51,11 @@ export function room(masterService:MasterService):Room
       this.text='Equip ranged'
     }
     console.log(user)
-  })
+  },user.inventory.every(item=>!(item instanceof RangedWeapon)))
   const equipShield = new DescriptionOptions(user.shield instanceof ShieldNoShield?'Equip Shield':"Unequip",function(){
     if(user.shield instanceof ShieldNoShield)
     {
+      const shield = user.inventory.find(item=>item instanceof Shield)
       user.useItem(shield,[user]);
       this.text='Unequip'
     }
@@ -63,10 +65,11 @@ export function room(masterService:MasterService):Room
       this.text='Equip Shield'
     }
     console.log(user)
-  })
+  },user.inventory.every(item=>!(item instanceof Shield)))
   const equipArmor = new DescriptionOptions(user.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip",function(){
     if(user.armor instanceof ArmorNoArmor)
     {
+      const armor = user.inventory.find(item=>item instanceof Armor)
       user.useItem(armor,[user]);
       this.text='Unequip'
     }
@@ -76,7 +79,7 @@ export function room(masterService:MasterService):Room
       this.text='Equip Armor'
     }
     console.log(user)
-  })
+  },user.inventory.every(item=>!(item instanceof Armor)))
   const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription()});
   const roomOptions =[
     new DescriptionOptions("Shop",makeShop),
@@ -143,6 +146,7 @@ export function room(masterService:MasterService):Room
   {
     const shop = new StaticShop('test-shop'
       ,['item-test','Shield test','Armor Test']
+      ,()=>'this is a static stock shop'
       ,masterService
       ,{'item-test':10,'Shield test':15,'Armor test':20}
     );
@@ -152,7 +156,7 @@ export function room(masterService:MasterService):Room
   {
     if(!dynamicShop)
     {
-      dynamicShop = new DynamicShop('test-shop',masterService,{'item-test':10});
+      dynamicShop = new DynamicShop('test-shop',()=>'This is a dynamic stock shop',masterService,{'item-test':10});
       const items = {
         'item-test':{options:{amount:5}},'Shield test':{options:{amount:5}},'Armor Test':{options:{amount:5}}
       }
