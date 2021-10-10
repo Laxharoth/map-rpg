@@ -1,13 +1,12 @@
 .single-stat
 {
 
-  --stat-padding:3px;
+  --padding:3px;
   --margin-separator:1px;
   --statname-size : 35%;
   display: grid;
   grid-template-columns: var(--statname-size)  calc(100% - var(--statname-size) );
   position: relative;
-  padding:var(--stat-padding);
   margin-top:var(--margin-separator);;
 }
 .single-stat:last-of-type

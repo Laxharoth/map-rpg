@@ -23,11 +23,13 @@
 }
 .app-gui-upper-left
 {
+  --padding:10px;
   overflow-y: auto;
   overflow-x: hidden;
   display:inline-block;
   width : 25%;
 }
+.app-gui-upper-left>*{--padding:0;}
 .app-gui-upper-right
 {
   display:inline-block;
@@ -38,11 +40,13 @@
 
 .app-gui-right
 {
+  --padding:10px;
   height: 100%;
   width  :25%;
   background-color:green;
   position: relative;
 }
+.app-gui-right>*{--padding:0;}
 
 @media screen and (max-width: 700px) {
   .app-gui-left

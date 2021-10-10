@@ -19,9 +19,15 @@ body{
   opacity: 0.3;
 }
 
+div
+{
+  padding:var(--padding);
+  width:calc(100% - var(--padding)*2);
+}
+
 .double-border
 {
-  padding: 10px;
+  padding: var(--padding);
   position: relative;
 }
 .double-border::before

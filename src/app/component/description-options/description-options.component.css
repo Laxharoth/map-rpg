@@ -1,5 +1,6 @@
 .app-gui-option-wrapper
 {
+  --padding:5px;
   display: block;
   height: 5rem;
 }
@@ -8,7 +9,7 @@
 {
   display: grid;
   grid-template-columns: 18% 18% 18% 18% 18% ;
-  gap : 1%;
+  gap : 0.7%;
 }
 
 .app-gui-option button

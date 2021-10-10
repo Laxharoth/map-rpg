@@ -3,16 +3,24 @@
     list-style:none;
     padding:0;
 }
-
+.shop-data-current
+{
+    --padding:20px;
+    padding: 5px var(--padding);
+    outline: 1px solid currentColor;
+    border-radius:.4em;
+}
 .name
 {
-    font-weight:bold;
+  font-weight:bold;
 }
 .description
 {
-    font-style:italic;
+  font-style:italic;
+  white-space:pre-wrap;
 }
 .price::before
 {
-    content:"$";
+    content:"Price:$";
 }
+

@@ -1,9 +1,13 @@
 .user
 {
+  --padding:15px;
   display: flex;
   flex-direction:column;
-  padding: 15px;
 }
+
+.character-name,
+.stats,
+.status{--padding:10px;}
 
 .character-name
 {
@@ -22,7 +26,6 @@
 .status
 {
   display: flex;
-  padding: 10px;
   margin-top: 5px;
   flex-direction: row;
   flex-wrap: wrap;
