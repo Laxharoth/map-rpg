@@ -39,6 +39,7 @@ export class GuiComponent implements OnInit {
   private gameStateSubscription : Subscription;
 
   constructor(private masterService:MasterService) {
+    this.register_master_service_subservice();
     //debug to get savedata
     this.masterService.flagsHandler.load("save1",this.masterService);
     this.FirstTimeUserInitialize();
@@ -49,6 +50,36 @@ export class GuiComponent implements OnInit {
 
     this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
     this.masterService.flagsHandler.addTime(0);
+  private register_master_service_subservice() {
+    const gameSaver  = new GameSaver(this.masterService);
+    const lockmap      = new LockMapService();
+    const enemyHandler  = new EnemyFormationService();
+    const gameStateHandler   = new GameStateService();
+    const mapHandler   = new MapHandlerService(this.masterService,gameStateHandler);
+    const descriptionHandler = new DescriptionHandlerService(lockmap, gameStateHandler);
+    const flagsHandler = new FlagHandlerService(gameSaver);
+    const partyHandler = new PartyService(gameSaver);
+    const timeHandler = new TimeHandler(flagsHandler)
+    const updateCharacter=(character:Character)=>
+    {
+      if(character===this.masterService.partyHandler.user) return this.masterService.partyHandler.updateUser()
+
+      for(let partyIndeX = 0; partyIndeX < this.masterService.partyHandler.party?.length; partyIndeX++)
+      if(this.masterService.partyHandler.party[partyIndeX]===character)return this.masterService.partyHandler.updatePartyMember(partyIndeX)
+
+      for(let enemyIndeX = 0; enemyIndeX < this.masterService.enemyHandler.enemyFormation?.enemies.length; enemyIndeX++)
+      if(this.masterService.enemyHandler.enemyFormation.enemies[enemyIndeX]===character)return this.masterService.enemyHandler.updateEnemy(enemyIndeX)
+    }
+    this.masterService.register("lockmap", lockmap);
+    this.masterService.register("flagsHandler", flagsHandler);
+    this.masterService.register("partyHandler", partyHandler);
+    this.masterService.register("enemyHandler", enemyHandler);
+    this.masterService.register("gameStateHandler", gameStateHandler);
+    this.masterService.register("descriptionHandler", descriptionHandler);
+    this.masterService.register("mapHandler", mapHandler);
+    this.masterService.register("gameSaver", gameSaver);
+    this.masterService.register("updateCharacter",updateCharacter)
+    this.masterService.register("timeHandler",timeHandler)
   }
 
   ngOnInit(): void { }

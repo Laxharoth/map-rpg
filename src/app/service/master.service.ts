@@ -11,42 +11,10 @@ import { MasterServiceSubServiceMap } from 'src/gameLogic/configurable/subservic
  * @export
  * @class MasterService
  */
-export class MasterService
+export class MasterService extends MasterServiceSubServiceMap
 {
-  private _lockmap:LockMapService
-  private _descriptionHandler:DescriptionHandlerService
-  private _flagsHandler:FlagHandlerService
-  private _mapHandler:MapHandlerService
-  private _partyHandler:PartyService
-  private _enemyHandler:EnemyFormationService
-  private _gameStateHandler:GameStateService
-
-  constructor()
+  register(name:string,service:any)
   {
-    this._lockmap = new LockMapService();
-    this._flagsHandler = new FlagHandlerService();
-    this._partyHandler = new PartyService();
-    this._enemyHandler = new EnemyFormationService();
-    this._gameStateHandler = new GameStateService();
-    this._descriptionHandler = new DescriptionHandlerService(this._lockmap,this._gameStateHandler);
-    this._mapHandler = new MapHandlerService(this);
-  }
-  get lockmap(){return this._lockmap;}
-  get descriptionHandler(){return this._descriptionHandler;}
-  get flagsHandler(){return this._flagsHandler;}
-  get mapHandler(){return this._mapHandler;}
-  get partyHandler(){return this._partyHandler;}
-  get enemyHandler(){return this._enemyHandler;}
-  get gameStateHandler(){return this._gameStateHandler;}
-
-  updateCharacter(character:Character):void
-  {
-    if(character===this.partyHandler.user) return this.partyHandler.updateUser()
-
-    for(let partyIndeX = 0; partyIndeX < this.partyHandler.party?.length; partyIndeX++)
-    if(this.partyHandler.party[partyIndeX]===character)return this.partyHandler.updatePartyMember(partyIndeX)
-
-    for(let enemyIndeX = 0; enemyIndeX < this.enemyHandler.enemyFormation?.enemies.length; enemyIndeX++)
-    if(this.enemyHandler.enemyFormation.enemies[enemyIndeX]===character)return this.enemyHandler.updateEnemy(enemyIndeX)
+    Object.defineProperty(this,name,{get:function(){return service;}});
   }
 }
