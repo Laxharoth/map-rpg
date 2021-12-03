@@ -41,7 +41,8 @@ export class GuiComponent implements OnInit {
   constructor(private masterService:MasterService) {
     this.register_master_service_subservice();
     //debug to get savedata
-    this.masterService.flagsHandler.load("save1",this.masterService);
+    this.masterService.gameSaver.load("save1");
+
     this.FirstTimeUserInitialize();
     //debug to test having a team member
     this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
