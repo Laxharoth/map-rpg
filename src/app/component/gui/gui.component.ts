@@ -45,12 +45,13 @@ export class GuiComponent implements OnInit {
 
     this.FirstTimeUserInitialize();
     //debug to test having a team member
-    this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
     this.currentGameState = this.masterService.gameStateHandler.gameState;
     this.InitializeSubscriptions();
 
     this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
-    this.masterService.flagsHandler.addTime(0);
+    this.masterService.timeHandler.addTime(0);
+  }
+
   private register_master_service_subservice() {
     const gameSaver  = new GameSaver(this.masterService);
     const lockmap      = new LockMapService();
@@ -170,8 +171,12 @@ export class GuiComponent implements OnInit {
   }
 
   private FirstTimeUserInitialize() {
+    if(this.masterService.gameSaver?.MainCharacter?.[0]) {
+      this.masterService.partyHandler.user = this.masterService.gameSaver.MainCharacter[0];
+    }
     if (!this.masterService.partyHandler.user) {
-      const user = new charTest(this.masterService, 'player');
+      const user = new MainCharacter({ hitpoints:200, energypoints:100, attack : 20, aim: 20, defence : 20, speed : 20, evasion : 20, }
+                                      ,this.masterService, 'player');
       const meleeTest1 = new MeleeTest(this.masterService);
       const rangedTest1 = new RangedTest(this.masterService);
       const shieldTest1 = new ShieldTest(this.masterService);
@@ -179,6 +184,7 @@ export class GuiComponent implements OnInit {
       user.addPerk(new PerkUpgradeable(this.masterService));
       user.addItem(meleeTest1); user.addItem(rangedTest1); user.addItem(shieldTest1); user.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
+      this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
     }
   }
 }

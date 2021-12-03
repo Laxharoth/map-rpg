@@ -16,8 +16,8 @@ export class MapComponent implements OnInit {
   lockedMap:boolean;
   LockedWASD = {UP:false,DOWN:false,LEFT:false,RIGHT:false}
   currentCoordinates=[0,0];
-  currentMap:Map;
-  timeValues:{ Years: number; Months: number; Days: number; Hours: number; Minutes: number; };
+  currentMap:GameMap;
+  timeValues:TimeValues;
 
   private mapSubscription:Subscription;
   private lockmapSubscription:Subscription;
@@ -78,7 +78,7 @@ export class MapComponent implements OnInit {
     this.currentCoordinates = this.masterService.mapHandler.coordinates;
     this.lockedMap = this.masterService.lockmap.isMapLocked();
     this.currentMap = this.masterService.mapHandler.currentMap;
-    this.timeValues = this.masterService.flagsHandler.getTimeValues();
+    this.timeValues = this.masterService.timeHandler.getTimeValues();
     this.coordinatesSubscription = this.masterService.mapHandler.onCoordinatesChanged().subscribe(changedCoordinates => {
       this.currentCoordinates = changedCoordinates;
       this.setLockedWASD();
@@ -86,6 +86,6 @@ export class MapComponent implements OnInit {
     });
     this.mapSubscription = this.masterService.mapHandler.onLoadMap().subscribe(loadedMap => { this.currentMap = loadedMap; });
     this.lockmapSubscription = this.masterService.lockmap.onMapLockChanged().subscribe(isMapLocked => { this.lockedMap = isMapLocked; });
-    this.timeSubscription = this.masterService.flagsHandler.onTimeChanged().subscribe(time => { this.timeValues = time.getTimeValues(); });
+    this.timeSubscription = this.masterService.timeHandler.onTimeChanged().subscribe(time => { this.timeValues = time.getTimeValues(); });
   }
 }
