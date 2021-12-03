@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Item } from 'src/app/classes/Items/Item';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ShopCurrentItemService } from 'src/app/service/shop-current-item.service';
+import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 
 @Component({
   selector: 'app-shop-item',
@@ -9,9 +9,9 @@ import { ShopCurrentItemService } from 'src/app/service/shop-current-item.servic
 })
 export class ShopItemComponent implements OnInit {
 
-  @Input() item:Item;
+  @Input() item:GameItem;
   @Input() inventoryOverflow:boolean = false;
-  @Output() ShopItemEvent = new EventEmitter<Item>();
+  @Output() ShopItemEvent = new EventEmitter<GameItem>();
   constructor(private shopService: ShopCurrentItemService){ }
 
   ngOnInit(): void {}

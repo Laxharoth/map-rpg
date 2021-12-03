@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Character } from 'src/app/classes/Character/Character';
 import { MasterService } from "src/app/service/master.service";
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 
 @Component({
   selector: 'app-party',

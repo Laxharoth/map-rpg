@@ -1,4 +1,4 @@
-import { Directive, Input, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 export interface CssVariable {
   name: string;
   value: string;

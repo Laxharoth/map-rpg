@@ -1,6 +1,6 @@
-import { Observable, Subject } from 'rxjs';
-import { Item } from 'src/app/classes/Items/Item';
 import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 
 @Injectable({
   providedIn: 'root'

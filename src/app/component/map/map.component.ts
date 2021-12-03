@@ -1,9 +1,8 @@
-import { ElementRef, Input, ViewChild } from '@angular/core';
-import { Output, EventEmitter } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Map } from 'src/app/classes/maps/map';
 import { MasterService } from "src/app/service/master.service";
+import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
+import { TimeValues } from 'src/gameLogic/custom/ClassHelper/Time';
 
 @Component({
   selector: 'app-map',

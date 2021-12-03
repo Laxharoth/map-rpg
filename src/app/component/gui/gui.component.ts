@@ -1,16 +1,26 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
 import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
-import { charTest } from 'src/app/classes/Character/NPC/characterTest';
-import { game_state } from 'src/app/customTypes/states';
-import { Character } from 'src/app/classes/Character/Character';
-import { MeleeTest } from 'src/app/classes/Equipment/Weapon/Melee/MeleeTest';
-import { RangedTest } from 'src/app/classes/Equipment/Weapon/Ranged/RangedTest';
-import { ShieldTest } from 'src/app/classes/Equipment/Shield/ShieldTest';
-import { ArmorTest } from 'src/app/classes/Equipment/Armor/ArmorTest';
-import { PerkUpgradeable } from 'src/app/classes/Perk/PerkUpgradeable';
-import { MAXOPTIONSNUMBERPERPAGE } from 'src/app/customTypes/constants';
+import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
+import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacter/MainCharacter';
+import { charTest } from 'src/gameLogic/custom/Class/Character/NPC/characterTest';
+import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+import { ArmorTest } from 'src/gameLogic/custom/Class/Equipment/Armor/ArmorTest';
+import { ShieldTest } from 'src/gameLogic/custom/Class/Equipment/Shield/ShieldTest';
+import { MeleeTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeTest';
+import { RangedTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedTest';
+import { PerkUpgradeable } from 'src/gameLogic/custom/Class/Perk/PerkUpgradeable';
+import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
+import { DescriptionHandlerService } from 'src/gameLogic/custom/subservice/description-handler';
+import { EnemyFormationService } from 'src/gameLogic/custom/subservice/enemy-formation';
+import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
+import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
+import { LockMapService } from 'src/gameLogic/custom/subservice/lock-map';
+import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';
+import { PartyService } from 'src/gameLogic/custom/subservice/party';
+import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
 
 @Component({
   selector   : 'app-gui',

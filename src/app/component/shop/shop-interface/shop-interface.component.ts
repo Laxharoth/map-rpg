@@ -1,10 +1,8 @@
-import { Shop } from './../../../classes/Shop/Shop';
-import { Component, Input, OnInit } from '@angular/core';
-import { Character } from 'src/app/classes/Character/Character';
-import { Item } from 'src/app/classes/Items/Item';
-import * as jQuery from 'jquery';
+import { Component, OnInit } from '@angular/core';
 import { MasterService } from "src/app/service/master.service";
 import { ShopCurrentItemService } from 'src/app/service/shop-current-item.service';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Shop } from 'src/gameLogic/custom/Class/Shop/Shop';
 
 @Component({
   selector: 'app-shop-interface',

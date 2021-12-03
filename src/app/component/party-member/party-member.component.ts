@@ -1,6 +1,7 @@
-import { Character } from 'src/app/classes/Character/Character';
-import { Component, OnInit, Input } from '@angular/core';
-import { Status } from 'src/app/classes/Character/Status/Status';
+import { Component, Input, OnInit } from '@angular/core';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Status } from 'src/gameLogic/custom/Class/Status/Status';
+
 
 @Component({
   selector: 'app-party-member',

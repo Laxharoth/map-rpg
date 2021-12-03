@@ -1,8 +1,7 @@
-import { ErrorShop } from './../../../classes/Shop/Shop';
 import { Component, OnInit } from '@angular/core';
-import { Character } from 'src/app/classes/Character/Character';
-import { Shop } from 'src/app/classes/Shop/Shop';
 import { MasterService } from 'src/app/service/master.service';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { ErrorShop, Shop } from 'src/gameLogic/custom/Class/Shop/Shop';
 
 @Component({
   selector: 'app-shop-sale-component',

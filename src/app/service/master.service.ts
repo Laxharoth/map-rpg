@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Character } from '../classes/Character/Character';
-import { DescriptionHandlerService } from "../service/description-handler.service";
-import { EnemyFormationService } from "../service/enemy-formation.service";
-import { FlagHandlerService } from "../service/flag-handler.service";
-import { GameStateService } from "../service/game-state.service";
-import { LockMapService } from "../service/lock-map.service";
-import { MapHandlerService } from "../service/map-handler.service";
-import { PartyService } from "../service/party.service";
-
+import { MasterServiceSubServiceMap } from 'src/gameLogic/configurable/subservice/MasterServiceSubServiceMap';
 
 @Injectable({
   providedIn: 'root'

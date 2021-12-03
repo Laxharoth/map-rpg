@@ -29,7 +29,7 @@
   <div class="app-gui-right double-border">
     <app-tab-menu *ngIf="currentGameState === 'map'" ></app-tab-menu>
 
-    <app-party *ngIf="currentGameState === 'battle' && party.length>1"
+    <app-party *ngIf="currentGameState === 'battle'"
          [partyType]="'PARTY'"></app-party>
     <app-shop-data-component *ngIf="currentGameState === 'shop'"></app-shop-data-component>
   </div>

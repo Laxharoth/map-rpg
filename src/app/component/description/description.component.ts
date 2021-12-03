@@ -1,8 +1,5 @@
-import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { inputObject } from 'src/app/customTypes/customTypes';
-import { DescriptionHandlerService } from 'src/app/service/description-handler.service';
 import { MasterService } from 'src/app/service/master.service';
 
 @Component({
@@ -134,3 +131,4 @@ export class DescriptionComponent implements OnInit {
     return { beforeInput, afterInput };
   }
 }
+export interface inputObject {default: string , placeholder: string}

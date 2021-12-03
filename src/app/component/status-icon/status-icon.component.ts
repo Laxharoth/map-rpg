@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { Status } from 'src/app/classes/Character/Status/Status';
+import { Status } from 'src/gameLogic/custom/Class/Status/Status';
 
 @Component({
   selector: 'app-status-icon',

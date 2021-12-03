@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, Sanitizer, SecurityContext } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Character } from 'src/app/classes/Character/Character';
-import { Status } from 'src/app/classes/Character/Status/Status';
 import { MasterService } from "src/app/service/master.service";
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Status } from 'src/gameLogic/custom/Class/Status/Status';
 
 @Component({
   selector: 'app-character-user',

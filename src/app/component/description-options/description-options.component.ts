@@ -1,6 +1,5 @@
-import { Input } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { DescriptionOptions } from 'src/app/classes/Descriptions/Description';
+import { Component, Input, OnInit } from '@angular/core';
+import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 
 @Component({
   selector: 'app-description-options',

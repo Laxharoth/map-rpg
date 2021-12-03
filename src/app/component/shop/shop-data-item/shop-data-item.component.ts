@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Item } from 'src/app/classes/Items/Item';
+import { Component, Input, OnInit } from '@angular/core';
+import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 
 @Component({
   selector: 'app-shop-data-item',
@@ -8,7 +8,7 @@ import { Item } from 'src/app/classes/Items/Item';
 })
 export class ShopDataItemComponent implements OnInit {
 
-  @Input() item:Item;
+  @Input() item:GameItem;
   constructor() { }
 
   ngOnInit(): void {

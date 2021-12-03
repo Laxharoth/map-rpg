@@ -1,9 +1,9 @@
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Component, Input, OnInit } from '@angular/core';
-import { Item } from 'src/app/classes/Items/Item';
-import { ErrorShop, Shop } from 'src/app/classes/Shop/Shop';
 import { MasterService } from 'src/app/service/master.service';
 import { ShopCurrentItemService } from 'src/app/service/shop-current-item.service';
+import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
+import { ErrorShop, Shop } from 'src/gameLogic/custom/Class/Shop/Shop';
 
 @Component({
   selector: 'app-shop-data-component',
@@ -13,7 +13,7 @@ import { ShopCurrentItemService } from 'src/app/service/shop-current-item.servic
 export class ShopDataComponentComponent implements OnInit {
 
   shop: Shop;
-  currentItem:Item=null;
+  currentItem:GameItem=null;
   currentItemSubscription:Subscription;
 
   constructor(private masterService:MasterService, private shopCurrentItemService:ShopCurrentItemService)
