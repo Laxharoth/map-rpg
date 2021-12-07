@@ -24,7 +24,6 @@ import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { loadCharacterStats, pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
-import { v4 as uuidv4 } from 'uuid';
 import { Reaction } from "./Reaction/Reaction";
 
 /**
@@ -38,7 +37,6 @@ import { Reaction } from "./Reaction/Reaction";
  */
 export abstract class Character implements storeable
 {
-  uid:string;
   coreStats:coreStats;
   currentCoreStats:coreStats;
   /** * The original stats of the character. */
@@ -94,7 +92,6 @@ export abstract class Character implements storeable
   constructor( originalstats:characterStats,
     masterService:MasterService)
   {
-    this.uid = uuidv4();
     this.masterService = masterService;
     ({core:this.coreStats,physic:this.originalstats,resistance:this.originalResistance} = loadCharacterStats(originalstats))
     this.currentCoreStats = {...this.coreStats};
@@ -833,7 +830,7 @@ export abstract class Character implements storeable
    */
   toJson(): CharacterStoreable
   {
-    const storeables:CharacterStoreable = {Factory:"Character", type:this.characterType,uid:this.uid};
+    const storeables:CharacterStoreable = {Factory:"Character", type:this.characterType};
     storeables['originalStats'] = {...this.coreStats, ...this.originalstats, ...this.originalResistance};
     storeables['currentCore']  = {...this.currentCoreStats}
     storeables['gold'] = this.gold;
@@ -863,7 +860,6 @@ export abstract class Character implements storeable
   {
     if(options['originalStats']) ({core:this.coreStats,physic:this.originalstats,resistance:this.originalResistance} = loadCharacterStats(options['originalStats']));
     if(options['currentCore'])this.currentCoreStats = {...options['currentCore']}
-    if(options['uid'])this.uid = options['uid'];
     if(options['gold']) this.gold = options['gold'];
     if(options['status'])for(const status of options['status']){ this.addStatus(StatusFactory(this.masterService,status.name,status.options))}
     (options['melee']) && (this._meleeWeapon=ItemFactory(this.masterService,options['melee'].name,options['melee'].options) as MeleeWeapon);
@@ -879,7 +875,6 @@ export abstract class Character implements storeable
 export type CharacterStoreable = {
   Factory:factoryname;
   type:characterType;
-  uid:string;
   originalStats?:coreStats&physicStats&resistanceStats;
   currentCore?:coreStats;
   gold?:number;

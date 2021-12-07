@@ -11,16 +11,18 @@ import { Character, CharacterStoreable } from "src/gameLogic/custom/Class/Charac
 export abstract class PersistentCharacter extends Character
 {
   protected abstract _name:string;
+  protected uuid:string;
   get name():string {return this._name};
-  toJson()
+  toJson():PersistentCharacterStoreable
   {
-    const userjson = super.toJson();
-    userjson.name = this._name;
+    const userjson:PersistentCharacterStoreable = {uuid:this.uuid,name:this.name,...super.toJson()};
     return userjson;
   }
-  fromJson(options:CharacterStoreable): void
+  fromJson(options:PersistentCharacterStoreable): void
   {
     super.fromJson(options);
     this._name = options.name;
   }
 }
+
+export type PersistentCharacterStoreable = {uuid:string;name:string}&CharacterStoreable
