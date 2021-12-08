@@ -1,60 +1,24 @@
 .app-gui
 {
-  display: flex;
-  top:0;
-  left:0;
-  height:100%;
-  width :100%;
-  background-color : blue;
-  flex-direction: row;
-}
-.app-gui-left
-{
-  max-width:75%;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-.app-gui-upper
-{
-  height : 75%;
-  width: 100%;
-  display: flex;
-}
-.app-gui-upper-left
-{
-  --padding:10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display:inline-block;
-  width : 25%;
-}
-.app-gui-upper-left>*{--padding:0;}
-.app-gui-upper-right
-{
-  display:inline-block;
-  width: 50%;
-  padding: 1em;
-  flex-grow: 1;
-}
-
-.app-gui-right
-{
-  --padding:10px;
   height: 100%;
-  width  :25%;
-  background-color:green;
-  position: relative;
+  display: flex;
+  background-color : blue;
+  flex-direction: column;
 }
-.app-gui-right>*{--padding:0;}
-
-@media screen and (max-width: 700px) {
-  .app-gui-left
-  {
-    max-width:70%;
-  }
-  .app-gui-right
-  {
-    width : 30%;
-  }
+.app-gui-up,
+.app-gui-down
+{
+  width: 100%;
+}
+.app-gui-up
+{
+  flex-grow: 1;
+}
+.app-gui-down
+{
+  height:30%;
+}
+.app-gui-up>div
+{
+  height: 100%;
 }

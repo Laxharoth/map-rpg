@@ -1,36 +1,22 @@
-<div tabindex="0" class="app-gui">
-  <div class="app-gui-left">
-    <div class="app-gui-upper">
-      <div class="app-gui-upper-left double-border">
-        <app-map *ngIf="currentGameState === 'map'"
-          (moveEvent)="move($event)"></app-map>
-        <app-party *ngIf="currentGameState === 'battle'"
-         [partyType]="'ENEMY'"></app-party>
-         <app-shop-sale-component *ngIf="currentGameState === 'shop'"></app-shop-sale-component>
-        </div>
-        <div class="app-gui-upper-right">
-          <app-description
-          *ngIf="currentGameState === 'map' ||
-                 currentGameState === 'battle'||
-                 currentGameState === 'status'||
-                 currentGameState === 'item' "
-          ></app-description>
-          <app-shop-interface *ngIf="currentGameState === 'shop'" ></app-shop-interface>
-      </div>
+<div class="app-gui">
+  <div class="app-gui-up">
+    <div *ngIf="currentGameState === 'map'">
+      <app-map-gui></app-map-gui>
     </div>
-    <div class="app-gui-lower">
-      <app-description-options [currentOptions]="currentOptions"
-        [isSubsetOfOptions]="isSubsetOfOptions()"
-        [isFirst]="isFirst()"
-        [isLast]="isLast()"
-      ></app-description-options>
+    <div *ngIf="currentGameState === 'battle'">
+      <app-battle-gui></app-battle-gui>
+    </div>
+    <div *ngIf="currentGameState === 'item'">
+      <app-item-gui></app-item-gui>
+    </div>
+    <div *ngIf="currentGameState === 'shop'">
+      <app-shop-gui></app-shop-gui>
+    </div>
+    <div *ngIf="currentGameState === 'status'">
+      <app-status-gui></app-status-gui>
     </div>
   </div>
-  <div class="app-gui-right double-border">
-    <app-tab-menu *ngIf="currentGameState === 'map'" ></app-tab-menu>
-
-    <app-party *ngIf="currentGameState === 'battle'"
-         [partyType]="'PARTY'"></app-party>
-    <app-shop-data-component *ngIf="currentGameState === 'shop'"></app-shop-data-component>
+  <div class="app-gui-down">
+    <app-description-options></app-description-options>
   </div>
 </div>
