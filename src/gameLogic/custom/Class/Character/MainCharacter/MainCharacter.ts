@@ -1,16 +1,19 @@
 import { MasterService } from "src/app/service/master.service";
 import { ActionOutput, Character, characterStats } from "src/gameLogic/custom/Class/Character/Character";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { PersistentCharacter } from "../NPC/PersistentCharacter";
 
-export class MainCharacter extends Character
+export class MainCharacter extends PersistentCharacter
 {
+  protected _name: string;
   characterType:characterType = "main-character";
-  private _name: string;
+  uuid = this.characterType;
+
   constructor(originalStats:characterStats,masterService:MasterService,name:string)
   {
     super(originalStats,masterService);
-    this._name = name;
     masterService.gameSaver.register("MainCharacter",this)
+    this._name = name;
   }
 
   get name(): string {
