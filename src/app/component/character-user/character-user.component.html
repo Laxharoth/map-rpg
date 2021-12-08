@@ -1,4 +1,4 @@
-<div class="user double-border" *ngIf="character">
+<div class="user" *ngIf="character">
   <div class="name hp double-border">
     <div class="character-name">{{ character.name }}</div>
     <app-character-stat [statName]="'hp'" [statValue]="character.currentCoreStats.hitpoints" [maxValue]="character.coreStats.hitpoints" [barColor]="'cyan'"></app-character-stat>

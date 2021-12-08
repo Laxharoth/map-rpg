@@ -2,6 +2,8 @@
 {
   --padding:15px;
   display: flex;
+  padding:0 var(--padding);
+  height: calc(100% - var(--padding)*2);
   flex-direction:column;
 }
 
@@ -18,17 +20,17 @@
 
 .stats
 {
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
-  margin-top: 5px;
 }
 
 .status
 {
-  display: flex;
   margin-top: 5px;
-  flex-direction: row;
   flex-wrap: wrap;
-  flex-grow: 1;
   column-gap: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
 }
