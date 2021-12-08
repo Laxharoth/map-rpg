@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
@@ -6,13 +6,11 @@ import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacter/MainCharacter';
 import { charTest } from 'src/gameLogic/custom/Class/Character/NPC/characterTest';
-import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { ArmorTest } from 'src/gameLogic/custom/Class/Equipment/Armor/ArmorTest';
 import { ShieldTest } from 'src/gameLogic/custom/Class/Equipment/Shield/ShieldTest';
 import { MeleeTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeTest';
 import { RangedTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedTest';
 import { PerkUpgradeable } from 'src/gameLogic/custom/Class/Perk/PerkUpgradeable';
-import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { DescriptionHandlerService } from 'src/gameLogic/custom/subservice/description-handler';
 import { EnemyFormationService } from 'src/gameLogic/custom/subservice/enemy-formation';
 import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
@@ -28,14 +26,8 @@ import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
   styleUrls  :['./gui.component.css']
 })
 export class GuiComponent implements OnInit {
-  currentOptions:Array<DescriptionOptions|null>;
   currentGameState:game_state;
 
-  private descriptionOptions:Array<DescriptionOptions|null>;
-  private offset = 0;
-  private size   = MAXOPTIONSNUMBERPERPAGE-2;
-
-  private descriptionSubscription : Subscription;
   private gameStateSubscription : Subscription;
 
   constructor(private masterService:MasterService) {
@@ -52,6 +44,16 @@ export class GuiComponent implements OnInit {
     this.masterService.timeHandler.addTime(0);
   }
 
+  ngOnInit(): void { }
+
+  ngOnDestroy(): void {
+    this.gameStateSubscription.unsubscribe();
+  }
+  private InitializeSubscriptions() {
+    this.gameStateSubscription = this.masterService.gameStateHandler.onSetGameState().subscribe(gameState => {
+      this.currentGameState = gameState;
+    });
+  }
   private register_master_service_subservice() {
     const gameSaver  = new GameSaver(this.masterService);
     const lockmap      = new LockMapService();
@@ -83,84 +85,6 @@ export class GuiComponent implements OnInit {
     this.masterService.register("updateCharacter",updateCharacter)
     this.masterService.register("timeHandler",timeHandler)
   }
-
-  ngOnInit(): void { }
-
-  ngOnDestroy(): void {
-    this.descriptionSubscription.unsubscribe();
-    this.gameStateSubscription.unsubscribe();
-  }
-
-  @HostListener('body:keydown',["$event"])
-  mapmove(event: any): void
-  {
-    const isnumber = (string: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(string)?string:'';
-    switch(event.key){
-      case ' ':case 'Enter':this.currentOptions?.[0].action();break;
-      default:
-        if(isnumber(event.key)){
-          let number = event.key==='0'? 10: parseInt(event.key)
-          if(!isNaN(number) && !this.currentOptions?.[number-1]?.disabled){
-            this.currentOptions?.[number-1]?.action();
-          }
-        }
-        ;
-    }
-  }
-
-  get enemyFormation():Character[]
-  { return this.masterService.enemyHandler.enemyFormation.enemies }
-  get party():Character[]
-  {
-    const party = [this.masterService.partyHandler.user].concat(this.masterService.partyHandler.party)
-    return party;
-  }
-
-  isSubsetOfOptions():boolean{ return this.descriptionOptions.length>MAXOPTIONSNUMBERPERPAGE; }
-
-  isFirst():boolean{ return this.currentOptions?.[0] === this.descriptionOptions?.[0]; }
-
-  isLast():boolean{
-    let compareOptioinIndex = 0;
-    while(this.currentOptions?.[compareOptioinIndex+1] !== null && compareOptioinIndex !=7)compareOptioinIndex++;
-    return this.currentOptions?.[compareOptioinIndex]===this.descriptionOptions?.slice(-1)?.[0];
-  }
-
-  private setCurrentOptions()
-  {
-    this.currentOptions = this.descriptionOptions;
-    if(this.descriptionOptions.length <= MAXOPTIONSNUMBERPERPAGE) return;
-    let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+this.size)
-    while(aux_currentOptions.length< this.size) {aux_currentOptions.push(null);}
-    aux_currentOptions.push(this.prevOptions);
-    aux_currentOptions.push(this.nextOptions);
-
-    this.currentOptions = aux_currentOptions;
-  }
-
-  private prevOptions = new DescriptionOptions("<<<",()=>{
-    if(this.isFirst())return;
-    this.offset-=this.size;
-    this.setCurrentOptions();
-  }, ()=>this.isFirst())
-
-  private nextOptions = new DescriptionOptions(">>>",()=>{
-    if(this.isLast())return;
-    this.offset+=this.size;
-    this.setCurrentOptions();
-  },()=>this.isLast())
-
-  private InitializeSubscriptions() {
-    this.descriptionSubscription = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
-      this.offset = 0;
-      this.descriptionOptions = description.options;
-      this.setCurrentOptions();
-    });
-    this.gameStateSubscription = this.masterService.gameStateHandler.onSetGameState().subscribe(gameState => {
-      this.currentGameState = gameState;
-    });
-  }
-
   private FirstTimeUserInitialize() {
     if(this.masterService.gameSaver?.MainCharacter?.[0]) {
       this.masterService.partyHandler.user = this.masterService.gameSaver.MainCharacter[0];
