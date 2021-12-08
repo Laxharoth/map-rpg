@@ -1,0 +1,12 @@
+.app-battle-gui
+{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.app-battle-gui_description
+{
+  padding: 1em;
+  flex-grow: 1;
+}
