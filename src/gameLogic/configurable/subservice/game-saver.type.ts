@@ -1,3 +1,4 @@
+import { PersistentCharacter } from 'src/gameLogic/custom/Class/Character/NPC/PersistentCharacter';
 import { FlagHandlerService } from "src/gameLogic/core/subservice/flag-handler";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
@@ -17,7 +18,7 @@ export interface GameSaverMap extends GameSaveNamesFields
 {
   MainCharacter:Character[];
   Party:Character[];
-  PersistentCharacter:Character[];
+  PersistentCharacter:PersistentCharacter[];
   PersistentShop:Shop[];
   Flags:[FlagHandlerService];
 }
