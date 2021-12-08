@@ -1,16 +1,17 @@
-import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { Observable, Subject } from 'rxjs';
-import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { GameSaverMap } from 'src/gameLogic/configurable/subservice/game-saver.type';
 import { MasterService } from 'src/app/service/master.service';
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
+import { GameSaverMap } from 'src/gameLogic/configurable/subservice/game-saver.type';
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { PersistentCharacter } from 'src/gameLogic/custom/Class/Character/NPC/PersistentCharacter';
+import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 
 export class PartyService implements storeable{
   private _user: Character;
-  private _party: [(Character | null), (Character | null)] = [null, null];
-  persistents: { [key: string]: Character } = {};
+  private _party: [PersistentCharacter,PersistentCharacter] = [null, null];
+  persistents: { [key: string]: PersistentCharacter } = {};
 
   private partySubject = new Subject < Character > ();
   private partyMemberSubject = new Subject < [number, Character] > ();
@@ -36,7 +37,7 @@ export class PartyService implements storeable{
     this.updateUser()
   }
 
-  setPartyMember(value: Character, index: 0 | 1) {
+  setPartyMember(value: PersistentCharacter, index: 0 | 1) {
     if (![0, 1].includes(index)) return console.warn(`PartyMember index can be only 0|1 not:${index}`)
     this._party[index] = value;
     this.updatePartyMember(index);
