@@ -4,6 +4,7 @@ import { MasterService } from "src/app/service/master.service";
 import { GameStateService } from './game-state';
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
 import { Room, roomFunction } from 'src/gameLogic/custom/Class/maps/room';
+import { LockMapService } from './lock-map';
 
 /**
  * A service that allows the player to move in the map.
@@ -26,13 +27,13 @@ export class MapHandlerService {
   private currentRoom:Room = new Room({onEnter:()=>{},onExit:()=>{},icon:''});
   currentMap:GameMap;
 
-  constructor(masterService:MasterService,gameStateHandler:GameStateService)
+  constructor(masterService:MasterService,gameStateHandler:GameStateService, lockmap:LockMapService)
   {
     this.masterService = masterService;
     this.currentMap = new GameMap()
     this.gameStateSubscription = gameStateHandler.onSetGameState().subscribe(gameState=>{
-      masterService.lockmap.lockMap('game-state-lock');
-      if(gameState === 'map') masterService.lockmap.unlockMap('game-state-lock');
+      lockmap.lockMap('game-state-lock');
+      if(gameState === 'map') lockmap.unlockMap('game-state-lock');
     })
   }
 

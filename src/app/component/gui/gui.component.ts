@@ -59,7 +59,7 @@ export class GuiComponent implements OnInit {
     const lockmap      = new LockMapService();
     const enemyHandler  = new EnemyFormationService();
     const gameStateHandler   = new GameStateService();
-    const mapHandler   = new MapHandlerService(this.masterService,gameStateHandler);
+    const mapHandler   = new MapHandlerService(this.masterService,gameStateHandler,lockmap);
     const descriptionHandler = new DescriptionHandlerService(lockmap, gameStateHandler);
     const flagsHandler = new FlagHandlerService(gameSaver);
     const partyHandler = new PartyService(gameSaver);
