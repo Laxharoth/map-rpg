@@ -49,6 +49,7 @@ export abstract class Character implements storeable
   roundStats:physicStats;
   roundResistance:resistanceStats;
   gold:number = 0;
+  uuid:string;
   private perks:Perk[] = [];
   private statuses:Status[] = [];
   private timedStatus:TimedStatus[] = [];
