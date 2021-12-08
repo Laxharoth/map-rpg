@@ -71,7 +71,8 @@ export class GameMap{
   findRoomByCoordinates(y:number, x:number):{room:roomFunction,roomName:string}
   {
     const roomName = this.roomsNames[y]?.[x];
-    return {room:this.rooms[y]?.[x]
-            ,roomName:roomName};
+    const room = this.rooms[y]?.[x];
+    return {room:room,
+            roomName:roomName};
   }
 }
