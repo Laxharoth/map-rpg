@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Description, DescriptionOptions, descriptionString } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 
 /**
@@ -30,6 +30,7 @@ export abstract class EnemyFormation
    * @memberof EnemyFormation
    */
   constructor( masterService:MasterService){this.masterService =masterService;}
+  get IsDefeated():boolean{ return this.enemies.every(character=>character.currentCoreStats.hitpoints<=0); }
   /**
    * Gets the private array of enemies.
    *
@@ -69,15 +70,15 @@ export abstract class EnemyFormation
    * Returns a description of whether escaped or not.
    *
    * @param {Character[]} party The player party
-   * @return {*}  {Description}
+   * @return {*}  {[()=>string,boolean]} the description text and if the escape wass successfull
    * @memberof EnemyFormation
    */
-  attemptEscape(party: Character[]):Description
+  attemptEscape(party: Character[]):[descriptionString,boolean]
   {
-    if(!this.escapeCheck(party))return this.escapeFail();
+    if(!this.escapeCheck(party))return [this.escapeFail(),false];
     for(const character of party){character.onEndBattle();}
     this.masterService.gameStateHandler.gameState = 'map'
-    return this.escapeSuccess();
+    return [this.escapeSuccess(),true];
   }
 
   /**
@@ -88,7 +89,7 @@ export abstract class EnemyFormation
    * @return {*}  {Description}
    * @memberof EnemyFormation
    */
-  protected abstract escapeSuccess():Description;
+  protected abstract escapeSuccess():descriptionString;
   /**
    * Returs as description of the player party failed to escape
    *
@@ -97,7 +98,7 @@ export abstract class EnemyFormation
    * @return {*}  {Description}
    * @memberof EnemyFormation
    */
-  protected abstract escapeFail():Description;
+  protected abstract escapeFail():descriptionString;
   /**
    * Determine if the player can escape the enemy.
    *

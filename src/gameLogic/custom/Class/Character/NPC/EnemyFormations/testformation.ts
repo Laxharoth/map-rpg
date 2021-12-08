@@ -1,3 +1,4 @@
+import { descriptionString } from './../../../Descriptions/Description';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
@@ -17,14 +18,14 @@ export class testformation extends EnemyFormation
       this._enemies = [new enemyTest(this.masterService)]
   }
 
-  get descriptionMessage():string {return `${this.masterService.partyHandler.user.name} escapes`}
+  private descriptionMessage():string {return `${this.masterService.partyHandler.user.name} escapes`}
 
-  protected escapeSuccess():Description
+  protected escapeSuccess():descriptionString
   {
     const nextOption = this.exitOption("Exit");
-    return new Description(()=>this.descriptionMessage,[nextOption]);
+    return this.descriptionMessage;
   }
-  protected escapeFail():Description
+  protected escapeFail():descriptionString
   {
     throw Error("");
   }
