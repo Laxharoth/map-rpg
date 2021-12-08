@@ -70,18 +70,15 @@ export class MapHandlerService {
       return;
     }
 
-    if(this.currentRoom.beforeMoveTo(roomName))
+    if(!this.currentRoom.beforeMoveTo(roomName))return;
+    this.currentRoomName = roomName;
+    if(mapname !== this.currentMapName)
     {
-      this.currentRoomName = roomName;
-
-      if(mapname !== this.currentMapName)
-      {
-        this.currentMapName = mapname;
-        this.loadMap(mapname);
-      }
-      //check if room is loaded if not wait for the subscription
-      this.loadRoomHelper(roomName);
+      this.currentMapName = mapname;
+      this.loadMap(mapname);
     }
+    //check if room is loaded if not wait for the subscription
+    this.loadRoomHelper(roomName);
   }
 
   /**
@@ -91,7 +88,7 @@ export class MapHandlerService {
    * @return {*}
    * @memberof MapHandlerService
    */
-  moveInsideMap(DIRECTION:string):void
+  moveInsideMap(DIRECTION:direction):void
   {
     let [y,x] = this.coordinates;
     switch (DIRECTION)
@@ -102,7 +99,10 @@ export class MapHandlerService {
       case "RIGHT":x++;break;
       default:return;
     }
-    this.loadRoomHelper([y,x]);
+    const {roomName=null} = this.currentMap.findRoomByCoordinates(y,x)
+    if(!roomName)return;//out of map border
+    if(!this.currentRoom.beforeMoveTo(roomName))return;
+    this.loadRoomHelper(roomName);
   }
 
   /**
@@ -134,7 +134,7 @@ export class MapHandlerService {
    * @return {*}  {boolean} if the room changes.
    * @memberof MapHandlerService
    */
-  private loadRoomHelper(roomnameORcoordinates: string|number[]):boolean
+  private loadRoomHelper(roomnameORcoordinates: string):boolean
   {
     if(this.masterService.lockmap.isMapLocked())return false;
     let shouldChangeRoom = false;
@@ -142,28 +142,12 @@ export class MapHandlerService {
     let room:roomFunction;
     let coordinates:number[];
     let roomName:string;
-    if(typeof(roomnameORcoordinates)==="string")
-    {
-      roomName = roomnameORcoordinates;
-      this.masterService.flagsHandler.setFlag('currentroom',roomName);
-      ({room,coordinates} = this.currentMap.findRoomByName(roomName))
-      foundRoom = room?.(this.masterService);
-      if(foundRoom && this.currentRoom !== foundRoom && this.currentRoom.beforeMoveTo(roomName))
-        shouldChangeRoom = true;
-    }
-    else
-    {
-      coordinates = roomnameORcoordinates;
-      const [y,x] = coordinates;
-      ({room,roomName} = this.currentMap.findRoomByCoordinates(y,x))
-      foundRoom = room?.(this.masterService)
-      if(roomName && this.currentRoom.beforeMoveTo(roomName))
-      {
-        this.currentRoomName = roomName;
-        if(foundRoom && this.currentRoom !==foundRoom)
-          shouldChangeRoom = true;
-      }
-    }
+    roomName = roomnameORcoordinates;
+    this.masterService.flagsHandler.setFlag('currentroom',roomName);
+    ({room,coordinates} = this.currentMap.findRoomByName(roomName))
+    foundRoom = room?.(this.masterService);
+    if(foundRoom && this.currentRoom !== foundRoom)
+      shouldChangeRoom = true;
     if(shouldChangeRoom)
     {
       this.masterService.flagsHandler.setFlag("currentroom",roomName);
@@ -179,3 +163,5 @@ export class MapHandlerService {
   }
 
 }
+
+export type direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
