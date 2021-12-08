@@ -16,6 +16,8 @@ export class Description
     this.options = options;
   }
 }
+export type descriptionData=() => any;
+export type descriptionString=() => string;
 
 /**
  * A representation of the options (buttons) for a description.
