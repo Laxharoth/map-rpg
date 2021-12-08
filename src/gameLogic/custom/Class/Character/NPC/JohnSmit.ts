@@ -13,7 +13,7 @@ export class JohnSmith extends PersistentCharacter
     super({},masterService);
     masterService.gameSaver.register('PersistentCharacter',this)
   }
-  IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
     throw new Error("Method not implemented.");
   }
 }

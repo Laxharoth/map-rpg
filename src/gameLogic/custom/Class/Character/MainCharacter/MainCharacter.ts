@@ -19,7 +19,7 @@ export class MainCharacter extends PersistentCharacter
   get name(): string {
     return this._name;
   }
-  IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
     throw new Error("Method not implemented.");
   }
 

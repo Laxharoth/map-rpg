@@ -49,7 +49,7 @@ export abstract class Character implements storeable
   roundStats:physicStats;
   roundResistance:resistanceStats;
   gold:number = 0;
-  uuid:string;
+
   private perks:Perk[] = [];
   private statuses:Status[] = [];
   private timedStatus:TimedStatus[] = [];
@@ -814,6 +814,18 @@ export abstract class Character implements storeable
   }
   /**
    * The automatic action to perform.
+   * @memberof Character
+   */
+  IA_Action():ActionOutput
+  {
+    const party = [this.masterService.partyHandler.user]
+                  .concat(this.masterService.partyHandler.party)
+    const enemy = this.masterService.enemyHandler.enemyFormation.enemies;
+    return this._IA_Action(party,enemy)
+  }
+
+  /**
+   * The logic behind the action.
    *
    * @abstract
    * @param {Character[]} ally The player party.
@@ -821,7 +833,7 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  abstract IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
+  protected abstract _IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
 
   /**
    * Stores character type, originalstats, status, equipment,items and perks

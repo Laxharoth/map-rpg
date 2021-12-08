@@ -23,7 +23,7 @@ export class enemyTest extends Character
   get name(): string {
       return 'test enemy';
   }
-  IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
       const target = randomBetween(0,ally.length-1);
       switch (randomBetween(0,2))
       {

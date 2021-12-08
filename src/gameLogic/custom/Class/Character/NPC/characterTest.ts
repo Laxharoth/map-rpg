@@ -28,7 +28,7 @@ export class charTest extends PersistentCharacter
 
   get name(): string { return this._name; }
   set name(name: string) { this._name = name;}
-  IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
       const target = randomBetween(0,enemy.length-1);
       switch (randomBetween(0,2))
       {
