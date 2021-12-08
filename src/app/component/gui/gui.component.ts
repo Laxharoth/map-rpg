@@ -91,20 +91,11 @@ export class GuiComponent implements OnInit {
     this.gameStateSubscription.unsubscribe();
   }
 
-  move(direction:any)
-  {
-    this.masterService.mapHandler.moveInsideMap(direction);
-  }
   @HostListener('body:keydown',["$event"])
   mapmove(event: any): void
   {
-    if(event.target.tagName.toLowerCase()==='input')return;
     const isnumber = (string: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(string)?string:'';
     switch(event.key){
-      case 'w':case 'ArrowUp' :this.move("UP");break;
-      case 'a':case 'ArrowLeft' :this.move("LEFT");break;
-      case 's':case 'ArrowDown' :this.move("DOWN");break;
-      case 'd':case 'ArrowRight':this.move("RIGHT");break;
       case ' ':case 'Enter':this.currentOptions?.[0].action();break;
       default:
         if(isnumber(event.key)){

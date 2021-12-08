@@ -1,0 +1,19 @@
+.app-map-gui
+{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.app-map-gui_map
+{
+  padding: 2em;
+}
+.app-map-gui_description
+{
+  padding: 1em;
+  flex-grow: 1;
+}
+.app-map-gui_menu
+{
+  width:25%;
+}
