@@ -1,10 +1,8 @@
 <div class="app-gui-option-wrapper">
-  <div class="app-gui-option-grid">
-    <div class="app-gui-option" *ngFor="let option of currentOptions; let nthOption = index;">
-      <button *ngIf="option?.action" (click)="option.action()"
-      [disabled]="option.disabled">
-        {{ option.text }}
-      </button>
-    </div>
+  <div class="app-gui-option" *ngFor="let option of currentOptions; let nthOption = index;">
+    <button *ngIf="option?.action" (click)="option.action()"
+    [disabled]="option.disabled">
+      {{ option.text }}
+    </button>
   </div>
 </div>
