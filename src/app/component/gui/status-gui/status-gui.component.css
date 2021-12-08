@@ -1,0 +1,11 @@
+.app-status-gui
+{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.app-status-gui_description
+{
+  padding:1em;
+  flex-grow: 1;
+}
