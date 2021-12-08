@@ -7,6 +7,7 @@ export class JohnSmith extends PersistentCharacter
 {
   protected _name: string = "John Smith";
   characterType: characterType= 'john';
+  uuid=this.characterType;
   constructor(masterService:MasterService)
   {
     super({},masterService);

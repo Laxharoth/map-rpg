@@ -61,14 +61,14 @@ export class PartyService implements storeable{
       Factory: "CurrentParty",
       type: 'party',
       RequiredKey: "PersistentCharacter",
-      characterUiPosition1: this._party[0]?.uid||null,
-      characterUiPosition2: this._party[1]?.uid||null,
+      characterUiPosition1: this._party[0]?.uuid||null,
+      characterUiPosition2: this._party[1]?.uuid||null,
     }
   }
   fromJson(options:PartyStoreable)
   {
-    this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uid === options.characterUiPosition1)||null,0)
-    this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uid === options.characterUiPosition2)||null,1)
+    this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uuid === options.characterUiPosition1)||null,0)
+    this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uuid === options.characterUiPosition2)||null,1)
   }
 }
 export type PartyStoreable = {Factory: "CurrentParty"; type: 'party'; RequiredKey:"PersistentCharacter"; characterUiPosition1:string; characterUiPosition2:string}

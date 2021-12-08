@@ -12,6 +12,7 @@ export class charTest extends PersistentCharacter
 {
   protected _name!: string;
   characterType:characterType = "test character";
+  uuid = this.characterType;
   constructor(masterService:MasterService ,name:string='')
   { super({
       hitpoints:200, energypoints:100,
