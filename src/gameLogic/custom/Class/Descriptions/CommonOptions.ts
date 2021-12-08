@@ -10,7 +10,7 @@ export function DescriptionSelectItemFromMap(masterService:MasterService):Descri
   })
 }
 
-export function nextOption(masterService:MasterService):DescriptionOptions
+export function nextOption(masterService:MasterService,btnString:string="Next"):DescriptionOptions
 {
-  return new DescriptionOptions("Next",()=>{masterService.descriptionHandler.nextDescription()})
+  return new DescriptionOptions(btnString,()=>{masterService.descriptionHandler.nextDescription()})
 }
