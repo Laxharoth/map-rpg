@@ -117,3 +117,7 @@ export const fillMissingWeaponDamage = (function() {
     return weaponDamages;
   }
 })()
+
+export function MakeFilledArray<T>(array_size: number,default_value: T): T[] {
+  return Array.from(Array(array_size).map(_=>default_value))
+}
