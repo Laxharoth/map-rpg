@@ -73,10 +73,10 @@ export abstract class Equipment extends GameItem
   get isEnemyUsable(): boolean {return false;};
   get isSelfUsable() : boolean {return true;};
   get isSingleTarget(): boolean {return true;};
-  itemEffect(user:Character,target: Character):ActionOutput
+  protected _itemEffect(user:Character,target: Character):ActionOutput
   {
     this.applyModifiers(user);
-    return super.itemEffect(user, user);
+    return [[],[]];
   }
   /**
    * Applies stat modifiers to the equiped character.

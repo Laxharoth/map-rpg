@@ -31,12 +31,11 @@ export abstract class Shield extends Equipment{
    * @return {*}  {ActionOutput}
    * @memberof Shield
    */
-  itemEffect(user:Character,target: Character): ActionOutput
+  protected _itemEffect(user:Character,target: Character): ActionOutput
   {
-    const output = super.itemEffect(user, user);
     user.unequipShield();
     user.shield = this;
-    return output;
+    return super._itemEffect(user, target);
   }
   /**
    * Adds the StatusDefend to the character with the shield.

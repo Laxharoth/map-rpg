@@ -33,12 +33,11 @@ export abstract class MeleeWeapon extends Weapon
    * @return {*}  {ActionOutput}
    * @memberof MeleeWeapon
    */
-  itemEffect(user:Character,target: Character): ActionOutput
+  protected _itemEffect(user:Character,target: Character): ActionOutput
   {
-    const output = super.itemEffect(user, user);
     user.unequipMelee();
     user.meleeWeapon = this;
-    return output;
+    return super._itemEffect(user, target);
   }
   get tags(): tag[] { return ['melee weapon']; }
 }

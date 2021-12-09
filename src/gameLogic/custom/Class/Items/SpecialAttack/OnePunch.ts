@@ -11,11 +11,10 @@ export class OnePunch extends SpecialAttack
   get isEnemyUsable(): boolean { return true; }
   get isSelfUsable(): boolean { return false; }
   get isSingleTarget(): boolean { return true; }
-  itemEffect(user:Character ,target: Character): ActionOutput {
+  protected _itemEffect(user:Character ,target: Character): ActionOutput {
       this.cooldown  =  Infinity;
       target.takeDamage(Infinity);
       const specialDescription:ActionOutput = [[this.specialDescription(user,target)],[]]
-      pushBattleActionOutput(super.itemEffect(user,target),specialDescription)
       return specialDescription;
   }
 

@@ -42,12 +42,11 @@ export abstract class RangedWeapon extends Weapon
    * @return {*}  {ActionOutput}
    * @memberof RangedWeapon
    */
-  itemEffect(user:Character,target: Character): ActionOutput
+  protected _itemEffect(user:Character,target: Character): ActionOutput
   {
-    const output = super.itemEffect(user, user);
     user.unequipRanged();
     user.rangedWeapon = this;
-    return output;
+    return super._itemEffect(user, target);
   }
 }
 

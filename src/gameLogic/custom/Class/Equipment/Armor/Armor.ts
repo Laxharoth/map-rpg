@@ -30,12 +30,11 @@ export abstract class Armor extends Equipment
    * @return {*}  {ActionOutput}
    * @memberof Armor
    */
-  itemEffect(user:Character,target: Character): ActionOutput
+  protected _itemEffect(user:Character,target: Character): ActionOutput
   {
-    const output = super.itemEffect(user, user);
     user.unequipArmor();
     user.armor = this;
-    return output;
+    return super._itemEffect(user, target);
   }
   get tags(): tag[] { return ['armor']; }
 }

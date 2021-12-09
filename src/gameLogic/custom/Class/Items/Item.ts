@@ -1,3 +1,5 @@
+import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { MasterService } from "src/app/service/master.service";
 import { factoryname } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { storeable } from "src/gameLogic/core/Factory/Factory";
@@ -112,11 +114,24 @@ export abstract class GameItem implements storeable
    * The action the item perform.
    *
    * @param {Character} user The Character that uses the item.
-   * @param {Character} target The target of the item.
+   * @param {Character} targets The target of the item.
    * @return {*}  {ActionOutput}
    * @memberof Item
    */
-  itemEffect(user:Character,target: Character):ActionOutput { return target.react(this.tags,user) };
+  itemEffect(user:Character,targets: Character|Character[]):ActionOutput {
+    const description :ActionOutput = [[],[]]
+    if(!(targets instanceof Array))targets = [targets]
+    this.amount--;
+    if(this.amount<=0){ removeItem(user.inventory,this) }
+    for(const target of targets)
+    {
+      pushBattleActionOutput(this._itemEffect(user,target),description);
+      pushBattleActionOutput(target.react(this.tags,user),description);
+    }
+    return  description
+  };
+
+  protected abstract _itemEffect(user:Character,target: Character):ActionOutput;
   /**
    * Teh tags associated with the item.
    *

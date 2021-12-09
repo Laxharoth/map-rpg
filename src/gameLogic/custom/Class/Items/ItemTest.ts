@@ -12,7 +12,7 @@ export class ItemTest extends GameItem
   get isEnemyUsable(): boolean { return false; }
   get isSelfUsable(): boolean { return true; }
   get isSingleTarget(): boolean { return false; }
-  itemEffect(user:Character,target: Character): ActionOutput
+  protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     const healHitPoints = target.healHitPoints(10);
     return [[this.itemEffectDescription(target, healHitPoints)],[]];

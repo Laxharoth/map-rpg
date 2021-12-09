@@ -13,11 +13,11 @@ export class SpecialGrab extends SpecialAttack
   get isSelfUsable(): boolean { return false }
   get isSingleTarget(): boolean { return true }
 
-  itemEffect(user:Character,target: Character): ActionOutput {
+  protected _itemEffect(user:Character,target: Character): ActionOutput {
       const description:ActionOutput = [[],[]];
       pushBattleActionOutput(user.addStatus(new StatusGrappling(this.masterService,target)),description)
       pushBattleActionOutput(target.addStatus(new StatusGrappled(this.masterService,user)),description)
       this.cooldown = 6;
-      return pushBattleActionOutput(super.itemEffect(user,target),description);
+      return description;
   }
 }
