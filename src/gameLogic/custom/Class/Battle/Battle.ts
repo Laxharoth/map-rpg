@@ -100,8 +100,8 @@ export class Battle {
 
     for (const character of getUndefeatedTarget([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
       const [description, string] = character.startRound();
-      this.startRoundDescription.push(...description)
-      this.startRoundString.push(...string)
+      this.startRoundDescription.push(...description);
+      this.startRoundString.push(string.join('\n'));
     }
     this.startRoundDescription.push(new Description(() => `${this.startRoundString.join("\n\n")}`, this.player.hasTag('paralized') ? [this.playerParalizedOption] : this.battle_options));
     this.master_service.descriptionHandler
