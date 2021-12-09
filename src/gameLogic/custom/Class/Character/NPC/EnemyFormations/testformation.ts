@@ -18,12 +18,9 @@ export class testformation extends EnemyFormation
       this._enemies = [new enemyTest(this.masterService)]
   }
 
-  private descriptionMessage():string {return `${this.masterService.partyHandler.user.name} escapes`}
-
   protected escapeSuccess():descriptionString
   {
-    const nextOption = this.exitOption("Exit");
-    return this.descriptionMessage;
+    return ()=>`${this.masterService.partyHandler.user.name} escapes`;
   }
   protected escapeFail():descriptionString
   {
