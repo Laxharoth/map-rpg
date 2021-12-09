@@ -737,16 +737,7 @@ export abstract class Character implements storeable
     else itemIndex = itemIndexOrItem;
     if(itemIndex < 0) return [[],[]]
     const item = this.inventory[itemIndex];
-    const useItemDescription:ActionOutput =[[],[]]
-    item.amount--;
-    if (item.amount<=0)
-    {
-      const index = this.inventory.indexOf(item);
-      this.inventory.splice(index,1);
-    }
-    for(const target of targets)
-    { pushBattleActionOutput(item.itemEffect(this,target),useItemDescription) }
-    return useItemDescription;
+    return item.itemEffect(this,targets);
   }
   /**
    * Use a special attack from the equpments, perks or status.
