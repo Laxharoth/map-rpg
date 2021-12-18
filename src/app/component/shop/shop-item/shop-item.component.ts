@@ -15,12 +15,18 @@ export class ShopItemComponent implements OnInit {
   constructor(private shopService: ShopCurrentItemService){ }
 
   ngOnInit(): void {}
-
-  Emit(){ this.ShopItemEvent.emit(this.item); }
-  isFinite(number: number): boolean {return isFinite(number)}
-  setItem(event:Event)
+  ngOnDestroy(): void { this.unsetItem() }
+  Emit()
   {
-    event?.stopPropagation();
+    this.ShopItemEvent.emit(this.item);
+  }
+  isFinite(number: number): boolean {return isFinite(number)}
+  setItem()
+  {
     this.shopService.currentItem = this.item;
+  }
+  unsetItem()
+  {
+    this.shopService.currentItem = null;
   }
 }

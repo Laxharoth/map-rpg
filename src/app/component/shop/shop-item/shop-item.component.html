@@ -1,7 +1,9 @@
 <div
   [ngClass]="{'item-overflow': inventoryOverflow,'shop-item':true}"
   (click)="Emit()"
-  (mouseover)="setItem($event)">
+  (mouseover)="setItem()"
+  (mouseleave)="unsetItem()"
+  >
   <span class="name">{{ item.name }}</span>
   <span class="amount" *ngIf="isFinite(item.amount)">x{{ item.amount }}</span>
 </div>
