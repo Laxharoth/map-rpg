@@ -48,8 +48,8 @@ export class Battle {
    * @param {Character[]} playerTarget
    */
   round(playerAction: (target: Character[]) => ActionOutput, playerTarget: Character[]): void {
-    const partyIsDefeated = () => { return getUndefeatedTarget([this.player].concat(this.party)).length === 0 }
-    const turn_characters = attackOrder(getUndefeatedTarget([this.player].concat(this.party).concat(this.enemy_formation.enemies)))
+    const partyIsDefeated = () => { return get_undefeated_target([this.player].concat(this.party)).length === 0 }
+    const turn_characters = attack_order(get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies)))
     for (const character of turn_characters) {
       //check if was defeated this round
       if (character.current_energy_stats.hitpoints <= 0) {
@@ -74,6 +74,7 @@ export class Battle {
         break;
       }
     }
+    for(const character of [this.player].concat(this.party).concat(this.enemy_formation.enemies))character.onEndBattle();
     if (this.enemy_formation.IsDefeated) {
       this.battleRoundDescription.push(this.endBattlePlayerWins())
     } else if (partyIsDefeated()) {
@@ -105,7 +106,7 @@ export class Battle {
     this.special_option.disabled = specials.length <= 0 || specials.every(item => item.disabled(this.player));
     this.item_option.disabled = this.player.inventory.length <= 0 || this.player.inventory.every(item => item.disabled(this.player));
 
-    for (const character of getUndefeatedTarget([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
+    for (const character of get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
       const [description, string] = character.startRound();
       this.startRoundDescription.push(...description);
       this.startRoundString.push(string.join('\n'));
@@ -169,8 +170,8 @@ export class Battle {
       options.push(new DescriptionOptions(item.name, () => {
         const targets = []
           .concat(item.isSelfUsable ? [this.player] : [])
-          .concat(item.isPartyUsable ? getUndefeatedTarget(this.party) : [])
-          .concat(item.isEnemyUsable ? getUndefeatedTarget(this.enemy_formation.enemies) : [])
+          .concat(item.isPartyUsable ? get_undefeated_target(this.party) : [])
+          .concat(item.isEnemyUsable ? get_undefeated_target(this.enemy_formation.enemies) : [])
         if (item.isSingleTarget && targets.length > 1) {
           return this.selectTarget(targets, playerAction)
         }
@@ -221,14 +222,14 @@ export class Battle {
     ], [])
   })
   protected attack_option = new DescriptionOptions("Attack", () => {
-    const targets = getUndefeatedTarget(this.enemy_formation.enemies);
+    const targets = get_undefeated_target(this.enemy_formation.enemies);
     const playerAction = (target: Character[]) => this.player.Attack(target);
     if (targets.length === 1)
       return this.round(playerAction, targets);
     this.selectTarget(targets, playerAction);
   });
   protected shoot_option = new DescriptionOptions("Shoot ", () => {
-    const targets = getUndefeatedTarget(this.enemy_formation.enemies);
+    const targets = get_undefeated_target(this.enemy_formation.enemies);
     const playerAction = (target: Character[]) => this.player.Shoot(target);
     if (targets.length === 1)
       return this.round(playerAction, targets);
