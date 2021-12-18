@@ -1,4 +1,5 @@
-import { ActionOutput, Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Status, StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
 
 /**

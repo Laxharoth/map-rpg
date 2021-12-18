@@ -1,13 +1,13 @@
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
-import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Description } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
-import { attackOrder, getUndefeatedTarget } from './Battle.functions';
+import { attack_order, get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Descriptions/CommonOptions';
 export class Battle {
   player: Character;

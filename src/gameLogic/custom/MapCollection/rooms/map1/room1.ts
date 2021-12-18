@@ -1,3 +1,5 @@
+import { battle_options } from './../../../Class/Battle/Battle.type';
+import { Battle } from './../../../Class/Battle/Battle';
 import { nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";

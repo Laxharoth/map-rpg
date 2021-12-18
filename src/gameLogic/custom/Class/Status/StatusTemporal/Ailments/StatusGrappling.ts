@@ -1,5 +1,6 @@
+import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 import { MasterService } from "src/app/service/master.service";
-import { ActionOutput, Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";

@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { ActionOutput, Character, characterStats, physicStats, resistanceStats } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';

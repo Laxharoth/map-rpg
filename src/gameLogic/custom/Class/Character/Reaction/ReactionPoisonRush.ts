@@ -1,6 +1,7 @@
 import { Reaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction';
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { ActionOutput, Character } from "../Character";
+import { Character } from "../Character";
+import { ActionOutput } from "../Character.type";
 
 export class PoisonRush extends Reaction
 {

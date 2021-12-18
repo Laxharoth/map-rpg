@@ -3,7 +3,8 @@ import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelpe
 import { MasterService } from "src/app/service/master.service";
 import { factoryname } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { storeable } from "src/gameLogic/core/Factory/Factory";
-import { ActionOutput, Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 

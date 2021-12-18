@@ -1,4 +1,4 @@
-import { Character, characterStats } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { CalculatedStats, characterStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { MeleeWeapon } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeWeapon';
 import { damageTypes } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';

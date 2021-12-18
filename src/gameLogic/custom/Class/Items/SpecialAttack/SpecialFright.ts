@@ -1,4 +1,5 @@
-import { ActionOutput, Character } from "src/gameLogic/custom/Class/Character/Character";
+import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { StatusFright } from "src/gameLogic/custom/Class/Status/StatusTemporal/Ailments/StatusFright";

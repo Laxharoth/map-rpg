@@ -1,7 +1,9 @@
 import { MasterService } from "src/app/service/master.service";
-import { ActionOutput, Character, characterStats } from "src/gameLogic/custom/Class/Character/Character";
+import { Character, CharacterStoreable } from "src/gameLogic/custom/Class/Character/Character";
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
-import { PersistentCharacter } from "../NPC/PersistentCharacter";
+import { CharacterBattleClass } from "../../CharacterBattleClass/CharacterBattleClass";
+import { TestMainCharacterBattleClass } from "../../CharacterBattleClass/testMainCharacterBattleClass";
 
 export class MainCharacter extends Character
 {

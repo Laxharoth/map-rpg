@@ -1,4 +1,6 @@
+import { MasterService } from "src/app/service/master.service";
 import { Character, CharacterStoreable } from "src/gameLogic/custom/Class/Character/Character";
+import { characterStats } from "src/gameLogic/custom/Class/Character/Character.type";
 
 /**
  * A character with a name, adds/loads the name to/from the storeable json.

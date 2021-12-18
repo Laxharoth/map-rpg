@@ -23,7 +23,9 @@ import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.typ
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
-import { loadCharacterStats, pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
+import { TestCharacterBattleClass } from "../CharacterBattleClass/testCharacterBattleClass";
 import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
 import { Reaction } from "./Reaction/Reaction";
 

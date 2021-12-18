@@ -1,5 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
-import { ActionOutput, Character } from "src/gameLogic/custom/Class/Character/Character";
+import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { PersistentCharacter } from "src/gameLogic/custom/Class/Character/NPC/PersistentCharacter";
 import { PerkCharm } from "src/gameLogic/custom/Class/Perk/PerkCharm";
 import { PerkFright } from "src/gameLogic/custom/Class/Perk/PerkFright";

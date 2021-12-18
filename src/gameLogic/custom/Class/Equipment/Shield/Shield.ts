@@ -1,4 +1,5 @@
-import { ActionOutput, Character } from "src/gameLogic/custom/Class/Character/Character";
+import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
 import { shieldname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { StatusDefend } from "src/gameLogic/custom/Class/Status/StatusTemporal/StatusDefend";

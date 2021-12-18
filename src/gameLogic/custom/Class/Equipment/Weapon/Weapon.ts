@@ -1,4 +1,5 @@
-import { ActionOutput, Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
 import { weaponname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';

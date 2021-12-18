@@ -1,4 +1,4 @@
-import { Character, characterStats } from "src/gameLogic/custom/Class/Character/Character";
+import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { shieldname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Shield } from "src/gameLogic/custom/Class/Equipment/Shield/Shield";

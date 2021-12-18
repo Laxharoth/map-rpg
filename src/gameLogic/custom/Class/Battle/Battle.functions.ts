@@ -1,3 +1,4 @@
+import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 
 export function get_undefeated_target(group:Character[]):Character[]

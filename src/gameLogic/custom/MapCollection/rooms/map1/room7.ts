@@ -1,3 +1,4 @@
+import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
@@ -14,6 +15,7 @@ import { Room } from "src/gameLogic/custom/Class/maps/room";
 import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable";
 import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
+import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 
 export function room(masterService:MasterService):Room
 {

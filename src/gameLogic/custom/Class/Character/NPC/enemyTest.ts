@@ -1,5 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
-import { ActionOutput, Character } from "src/gameLogic/custom/Class/Character/Character";
+import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
