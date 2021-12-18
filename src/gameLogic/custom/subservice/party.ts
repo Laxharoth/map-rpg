@@ -61,7 +61,7 @@ export class PartyService implements storeable{
     return {
       Factory: "CurrentParty",
       type: 'party',
-      RequiredKey: "PersistentCharacter",
+      dependency_gamesave_object_key: "PersistentCharacter",
       characterUiPosition1: this._party[0]?.uuid||null,
       characterUiPosition2: this._party[1]?.uuid||null,
     }
@@ -72,7 +72,13 @@ export class PartyService implements storeable{
     this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uuid === options.characterUiPosition2)||null,1)
   }
 }
-export type PartyStoreable = {Factory: "CurrentParty"; type: 'party'; RequiredKey:"PersistentCharacter"; characterUiPosition1:string; characterUiPosition2:string}
-export const SetCurrentParty:FactoryFunction = (masterService:MasterService, _type,options:PartyStoreable)=>{
-    masterService.partyHandler.fromJson(options)
-  }
+export type PartyStoreable = {
+  Factory: "CurrentParty";
+  type: 'party';
+  dependency_gamesave_object_key: "PersistentCharacter";
+  characterUiPosition1: string;
+  characterUiPosition2: string;
+}
+export const SetCurrentParty: FactoryFunction = (masterService: MasterService, options: PartyStoreable) => {
+  masterService.partyHandler.fromJson(options)
+}
