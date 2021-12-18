@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
+import { fillItemStoreable, GameItem, ItemStoreable } from "src/gameLogic/custom/Class/Items/Item";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Sale } from 'src/gameLogic/custom/Class/Shop/Sale';
 import { ItemFactory } from "src/gameLogic/custom/Factory/ItemFactory";
@@ -25,7 +25,7 @@ export class Shop
     for(const itemname of shopItemNames)
     {
       if(this.shopItems.some(item=>item.name==itemname))continue;
-      const item = ItemFactory(this.masterService,itemname,{basePrice:shopPrices?.[itemname]});
+      const item = ItemFactory(this.masterService,fillItemStoreable({type:itemname,basePrice:shopPrices?.itemname}));
       this.shopItems.push(item);
     }
   }
@@ -115,7 +115,7 @@ export class Shop
       }
     }
     for (const item of this.sale.items2Character)
-    { character.addItem(ItemFactory(this.masterService,item.name,{amount:item.amount})); }
+    { character.addItem(ItemFactory(this.masterService,fillItemStoreable({type:item.name,amount:item.amount}))); }
     character.gold-=this.sale.total;
   }
   private CheckoutSaleUpdateShopInventory() {

@@ -181,9 +181,17 @@ export abstract class GameItem implements storeable
     return `tags:\n\t ${this.tags.join(', ')}`;
   }
 }
+
+export function fillItemStoreable(item_data:{type:itemname,[key:string]:any})
+{
+  const item_storeable:ItemStoreable = { Factory:"Item", type:item_data.type }
+  item_storeable.amount = item_data?.amount;
+  item_storeable.basePrice = item_data?.basePrice;
+  return item_storeable
+}
 export type ItemStoreable ={
   Factory:factoryname;
   type:itemname;
-  amount:number;
+  amount?:number;
   basePrice?:number;
 }

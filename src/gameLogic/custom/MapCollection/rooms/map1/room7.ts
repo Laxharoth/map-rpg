@@ -18,7 +18,7 @@ import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 export function room(masterService:MasterService):Room
 {
   const roomName = 'room7'
-  let dynamicShop = null;
+  let dynamicShop:DynamicShop = null;
   const $flag = (name:flagname) => masterService.flagsHandler.getFlag(name);
   const user = masterService.partyHandler.user;
   const equipMelee = new DescriptionOptions(user.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
@@ -153,8 +153,14 @@ export function room(masterService:MasterService):Room
     if(!dynamicShop)
     {
       dynamicShop = new DynamicShop('test-shop',()=>'This is a dynamic stock shop',masterService,{'item-test':10});
-      const items = {
-        'item-test':{options:{amount:5}},'Shield test':{options:{amount:5}},'Armor Test':{options:{amount:5}}
+      const items:ShopStoreable = {
+        Factory:"Shop",
+        type:"this.name",
+        Items:[
+          fillItemStoreable({type:'item-test',amount:5}),
+          fillItemStoreable({type:'Shield test',amount:5}),
+          fillItemStoreable({type:'Armor Test',amount:5}),
+        ]
       }
       dynamicShop.fromJson(items)
     }
