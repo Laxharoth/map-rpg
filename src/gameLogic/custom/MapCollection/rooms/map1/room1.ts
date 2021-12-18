@@ -71,9 +71,25 @@ export function room(roomName: string): roomFunction {
       new DescriptionOptions("add 1 hour", function () {
         masterService.timeHandler.addTime("1h")
       }),
-      (roomName==='room24')?new DescriptionOptions("Map2", function (){
+      (roomName === 'room24') ? new DescriptionOptions("Map2", function () {
         masterService.mapHandler.loadRoom("room25")
-      }):null,
+      }) : null,
+      new DescriptionOptions("add  20 exp",function () {
+        masterService.partyHandler.user.gain_experience(20);
+      }),
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       new DescriptionOptions("add 1 month", function () {
         masterService.timeHandler.addTime("1M")
       }),
@@ -134,7 +150,18 @@ export function room(roomName: string): roomFunction {
         masterService.descriptionHandler.tailDescription(roomDescription, 'map')
         masterService.descriptionHandler.nextDescription();
         if (randomCheck(10)) {
-          descriptionBattle(masterService, new testformation(masterService))
+          new Battle(masterService, new testformation(masterService),
+          function (battle_options:battle_options)
+          {
+            const options=[
+              battle_options[0],
+              battle_options[3],
+              battle_options[7],
+              battle_options[13],,
+            ]
+            battle_options.splice(0,battle_options.length,...options)
+          }
+          ).startRound()
         }
       },
       onExit: () => {
