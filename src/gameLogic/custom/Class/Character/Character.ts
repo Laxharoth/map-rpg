@@ -50,9 +50,9 @@ export abstract class Character implements storeable
   gold:number = 0;
 
   private perks:Perk[] = [];
-  private statuses:Status[] = [];
-  private timedStatus:TimedStatus[] = [];
-  private battleStatus:StatusBattle[] = [];
+  private status:Status[] = [];
+  private timed_status:TimedStatus[] = [];
+  private battle_status:StatusBattle[] = [];
   protected character_battle_class:CharacterBattleClass;
   abstract readonly characterType:characterType;
   inventorysize = 9;
@@ -170,9 +170,9 @@ export abstract class Character implements storeable
   onDefeated():ActionOutput
   {
     let description:ActionOutput =[[],[]]
-    for(const status of this. battleStatus)
+    for(const status of this. battle_status)
     { pushBattleActionOutput(status.onStatusRemoved(this),description) }
-    this.battleStatus = [];
+    this.battle_status = [];
     return description;
   }
 
@@ -225,7 +225,7 @@ export abstract class Character implements storeable
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
     if(status instanceof StatusBattle)return this.addBattleStatus(status)
     else if(status instanceof TimedStatus)return this.addTimedStatus(status);
-    this.statuses.push(status);
+    this.status.push(status);
     this.masterService.updateCharacter(this);
     return status.onStatusGainded(this)
   }
@@ -267,7 +267,7 @@ export abstract class Character implements storeable
     pushBattleActionOutput(this.removeRegularStatus(status),removeStatusDescription);
     pushBattleActionOutput(this.removeTimedStatus  (status),removeStatusDescription);
     pushBattleActionOutput(this.removeBattleStatus (status),removeStatusDescription);
-    this.applyStatus();
+    this.calculateStats();
     return removeStatusDescription;
   }
   /**
@@ -491,8 +491,8 @@ export abstract class Character implements storeable
    */
   onEndBattle():void
   {
-    const removeStatus = this.battleStatus
-    this.battleStatus = [];
+    const removeStatus = this.battle_status
+    this.battle_status = [];
     this.__endbattle__ = true;
     for(const status of removeStatus)status.onStatusRemoved(this);
     this.__endbattle__ = false;
@@ -539,7 +539,7 @@ export abstract class Character implements storeable
   protected startRoundApplyStatus():ActionOutput
   {
     const statusDescription:ActionOutput = [[],[]]
-    for(const status of this.battleStatus)
+    for(const status of this.battle_status)
     { pushBattleActionOutput(status.applyEffect(this),statusDescription) }
     return statusDescription;
   }
@@ -565,13 +565,7 @@ export abstract class Character implements storeable
    * @private
    * @memberof Character
    */
-  private applyStatus():void
-  {
-    this.stats = {...this.originalstats};
-    this.resistance = {...this.originalResistance};
-    for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this);}
-    for(const status of this.statuses.concat(this.timedStatus)){ status.applyEffect(this); }
-  }
+  private applyStatus():void { for(const status of this.status.concat(this.timed_status)){ status.applyEffect(this); } }
   /**
    * Check if the Item can be Inserted into the inventory.
    *
@@ -608,16 +602,16 @@ export abstract class Character implements storeable
   {
     if(status instanceof StatusBattle)
     {
-      if(removeItem(this.battleStatus, status))return status.onStatusRemoved(this);
+      if(removeItem(this.battle_status, status))return status.onStatusRemoved(this);
       return [[],[]]
     }
     let removeStatusDescription: ActionOutput = [[],[]];
-    let statusIndex = this.battleStatus.findIndex(characterStatus => (status===characterStatus.name));
+    let statusIndex = this.battle_status.findIndex(characterStatus => (status===characterStatus.name));
     while (statusIndex >= 0)
     {
-      const [statusRemoved] = this.battleStatus.splice(statusIndex, 1);
+      const [statusRemoved] = this.battle_status.splice(statusIndex, 1);
       removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = this.battleStatus.findIndex(characterStatus => (status===characterStatus.name));
+      statusIndex = this.battle_status.findIndex(characterStatus => (status===characterStatus.name));
     }
     return removeStatusDescription ;
   }
@@ -634,16 +628,16 @@ export abstract class Character implements storeable
   {
     if(status instanceof TimedStatus)
     {
-      if(removeItem(this.timedStatus, status)) return status.onStatusRemoved(this);
+      if(removeItem(this.timed_status, status)) return status.onStatusRemoved(this);
       return [[],[]]
     }
     let removeStatusDescription: ActionOutput = [[],[]]
-    let statusIndex = this.timedStatus.findIndex(characterStatus => (status === characterStatus.name));
+    let statusIndex = this.timed_status.findIndex(characterStatus => (status === characterStatus.name));
     while (statusIndex >= 0)
     {
-      const [statusRemoved] = this.timedStatus.splice(statusIndex, 1);
+      const [statusRemoved] = this.timed_status.splice(statusIndex, 1);
       removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = this.timedStatus.findIndex(characterStatus => (status === characterStatus.name));
+      statusIndex = this.timed_status.findIndex(characterStatus => (status === characterStatus.name));
     }
     return removeStatusDescription ;
   }
@@ -660,16 +654,16 @@ export abstract class Character implements storeable
   {
     if(status instanceof Status)
     {
-      if(removeItem(this.statuses, status))return status.onStatusRemoved(this);
+      if(removeItem(this.status, status))return status.onStatusRemoved(this);
       return [[],[]]
     }
     let removeStatusDescription: ActionOutput = [[],[]]
-    let statusIndex = this.statuses.findIndex(characterStatus => (status===characterStatus.name));
+    let statusIndex = this.status.findIndex(characterStatus => (status===characterStatus.name));
     while (statusIndex >= 0)
     {
-      const [statusRemoved] = this.statuses.splice(statusIndex, 1);
+      const [statusRemoved] = this.status.splice(statusIndex, 1);
       removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = this.statuses.findIndex(characterStatus => (status===characterStatus.name));
+      statusIndex = this.status.findIndex(characterStatus => (status===characterStatus.name));
     }
     return removeStatusDescription ;
   }
@@ -684,7 +678,7 @@ export abstract class Character implements storeable
   private addBattleStatus(status: StatusBattle): ActionOutput
   {
     const statusDescription:ActionOutput = [[],[]]
-    this.battleStatus.push(status);
+    this.battle_status.push(status);
     pushBattleActionOutput(status.onStatusGainded(this),statusDescription)
     return statusDescription;
   }
@@ -699,7 +693,7 @@ export abstract class Character implements storeable
   private addTimedStatus(status: TimedStatus): ActionOutput
   {
     const [statusDescription, statusString]:ActionOutput = [[],[]];
-    this.timedStatus.push(status);
+    this.timed_status.push(status);
     pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString]);
     return [statusDescription, statusString];
   }
