@@ -1,6 +1,5 @@
 .status
 {
-  --status-size:1.3rem;
   --status-padding:2px;
   display: flex;
   height: var(--status-size);

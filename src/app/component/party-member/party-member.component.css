@@ -1,13 +1,15 @@
 .user,.status-wrapper{--padding:10px;}
 .status-wrapper
 {
-  display: flex;
+  --status-size:1.3rem;
   margin-top: 5px;
+  flex-wrap: wrap;
+  column-gap: 5px;
+  display: flex;
+  height: var(--status-size);
   flex-direction: row;
   flex-direction: row-reverse;
-  flex-wrap: wrap;
   flex-grow: 1;
-  column-gap: 5px;
 }
 
 app-status-icon:nth-child(n+5) { display: none; }
