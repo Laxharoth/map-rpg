@@ -11,6 +11,9 @@
     <app-character-stat [statName]="'speed'" [statValue]="character.original_stats.speed"></app-character-stat>
     <app-character-stat [statName]="'evasion'" [statValue]="character.original_stats.intelligence"></app-character-stat>
   </div>
+  <div class="experience">
+    <app-user-experience></app-user-experience>
+  </div>
   <div class="status double-border">
     <app-status-icon *ngFor="let status of getCharacterStatus()" [status]="status"></app-status-icon>
   </div>
