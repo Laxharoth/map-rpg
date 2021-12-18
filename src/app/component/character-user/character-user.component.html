@@ -5,11 +5,11 @@
     <app-character-stat [statName]="'energy'" [statValue]="character.currentCoreStats.energypoints" [maxValue]="character.coreStats.energypoints"></app-character-stat>
   </div>
   <div class="stats double-border">
-    <app-character-stat [statName]="'attack'" [statValue]="character.stats.attack"></app-character-stat>
-    <app-character-stat [statName]="'aim'" [statValue]="character.stats.aim"></app-character-stat>
-    <app-character-stat [statName]="'defence'" [statValue]="character.stats.defence"></app-character-stat>
-    <app-character-stat [statName]="'speed'" [statValue]="character.stats.speed"></app-character-stat>
-    <app-character-stat [statName]="'evasion'" [statValue]="character.stats.evasion"></app-character-stat>
+    <app-character-stat [statName]="'attack'" [statValue]="character.original_stats.strenght"></app-character-stat>
+    <app-character-stat [statName]="'aim'" [statValue]="character.original_stats.aim"></app-character-stat>
+    <app-character-stat [statName]="'defence'" [statValue]="character.original_stats.stamina"></app-character-stat>
+    <app-character-stat [statName]="'speed'" [statValue]="character.original_stats.speed"></app-character-stat>
+    <app-character-stat [statName]="'evasion'" [statValue]="character.original_stats.intelligence"></app-character-stat>
   </div>
   <div class="status double-border">
     <app-status-icon *ngFor="let status of getCharacterStatus()" [status]="status"></app-status-icon>

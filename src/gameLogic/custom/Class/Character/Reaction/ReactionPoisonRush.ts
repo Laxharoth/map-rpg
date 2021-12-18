@@ -6,7 +6,7 @@ export class PoisonRush extends Reaction
 {
   protected whatTriggers: tag[][] = [['status ended' , 'poison']];
   protected action(source: Character, target: Character): ActionOutput {
-      target.roundStats.attack*=4;
+      target.calculated_stats.physical_attack*=4;
       return [[],['Overcoming poison grants extra attack']]
   }
 }

@@ -17,9 +17,9 @@ export class StatusRestrained extends StatusBattle
   get description(): string {
       return 'Being grabbed by something impedes movements.'
   }
-  protected effect(target: Character): ActionOutput {
-      target.roundStats.speed = 0;
-      return [[],[`${target.name} is being like tied or something`]];
+  protected effect(target: Character): ActionOutput { return [[],[`${target.name} is being like tied or something`]]; }
+  applyModifiers(character: Character): void {
+      character.calculated_stats.initiative = 0;
   }
   get name(): statusname {
       return 'Restrained';

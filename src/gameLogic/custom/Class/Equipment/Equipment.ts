@@ -1,11 +1,11 @@
 import { MasterService } from "src/app/service/master.service";
 import { ActionOutput, Character, characterStats, physicStats, resistanceStats } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput, CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { equipmentname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { loadCharacterStats } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
 /**
  * A item that can be equiped to a character.
@@ -17,6 +17,7 @@ import { loadCharacterStats } from 'src/gameLogic/custom/functions/htmlHelper.fu
  */
 export abstract class Equipment extends GameItem
 {
+  private equipmentStats: CalculatedStats={};
   maxStack = 1;
   /**
    * The name of the equipment
@@ -46,21 +47,10 @@ export abstract class Equipment extends GameItem
    */
   abstract get tags():tag[];
   /** * The stats that are going to be applied to the character */
-  protected equipmentStats: characterStats = {};
-  protected _statsModifier:physicStats = null;
-  protected _resistanceStats:resistanceStats = null;
-  protected get statsModifier()
-  {
-    //Initialize stats the first time is required.
-    if(!this._statsModifier)this.setEquipmentStats()
-    return this._statsModifier;
-  }
-  protected get resistanceStats()
-  {
-    //Initialize stats the first time is required.
-    if(!this._resistanceStats)this.setEquipmentStats()
-    return this._resistanceStats;
-  }
+  protected _stats_modifier:CalculatedStats = {};
+  protected _resistance_stats:ResistanceStats = {};
+  protected get statsModifier() { return this._stats_modifier; }
+  protected get resistanceStats() { return this._resistance_stats; }
   constructor(masterService:MasterService)
   { super(masterService); }
   /** * The reactions the equipment privides. */
@@ -87,9 +77,9 @@ export abstract class Equipment extends GameItem
   applyModifiers(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
-    { character.stats[key] += this.statsModifier[key]}
+    { character.calculated_stats[key] += this.statsModifier[key]}
     for(const key of Object.keys(this.resistanceStats))
-    { character.resistance[key] += this.resistanceStats[key]}
+    { character.calculated_resistance[key] += this.resistanceStats[key]}
   }
   /**
    * Removes stat modifiers to the equiped character.
@@ -100,9 +90,9 @@ export abstract class Equipment extends GameItem
   removeModifier(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
-    { character.stats[key] -= this.statsModifier[key]}
+    { character.calculated_stats[key] -= this.statsModifier[key]}
     for(const key of Object.keys(this.resistanceStats))
-    { character.resistance[key] -= this.resistanceStats[key]}
+    { character.calculated_resistance[key] -= this.resistanceStats[key]}
   }
 
   get description():string
@@ -137,14 +127,6 @@ export abstract class Equipment extends GameItem
             `${equipmentDescripitonResistance}`+`${equipmentDescripitonResistance.length?'\n':''}`+
             `${super.description}`
   }
-  /**
-   * Divides the equipmentStats into _statsModifier and _resistanceStats
-   *
-   * @private
-   * @memberof Equipment
-   */
-  private setEquipmentStats():void
-  { ({physic:this._statsModifier,resistance:this._resistanceStats} = loadCharacterStats(this.equipmentStats)) }
 
   private static aliasStatType(type: string):string
   {

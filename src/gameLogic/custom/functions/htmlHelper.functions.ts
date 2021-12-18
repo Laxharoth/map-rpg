@@ -1,4 +1,4 @@
-import { ActionOutput, characterStats, coreStats, physicStats, resistanceStats } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput, characterStats, EnergyStats, CoreStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { damageTypes } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
 
 /**
@@ -68,30 +68,6 @@ export function randomCheck(percent:number):boolean
 {
   return percent >= Math.random()*100;
 }
-
-/**
- *  Fills missing CharacterStats
- *
- * @param {*} {characterStats} characterStats The original character stats (can have attributes missing)
- * @return {*} {characterStats} The stats with all the possible attributes.
- */
-export const loadCharacterStats = (function ()
-{
-  const _defaultStats:characterStats = { hitpoints : 1, energypoints : 0,
-    attack : 0, aim: 0, defence : 0, speed : 0, evasion : 0,
-    heatresistance: 0, energyresistance:0, frostresistance:0, slashresistance: 0, bluntresistance:0, pierceresistance: 0, poisonresistance : 0,}
-  return function (characterStats:characterStats):{core:coreStats,physic:physicStats,resistance:resistanceStats}
-  {
-    const myStats:characterStats = {..._defaultStats}
-    for(const key of Object.keys(characterStats))
-      myStats[key] = characterStats[key]
-    return {
-      core:{hitpoints:myStats['hitpoints'],energypoints:myStats['energypoints']},
-      physic:{attack : myStats['attack'], aim: myStats['aim'], defence : myStats['defence'], speed : myStats['speed'], evasion : myStats['evasion']},
-      resistance:{heatresistance: myStats['heatresistance'], energyresistance:myStats['energyresistance'], frostresistance:myStats['frostresistance'], slashresistance: myStats['slashresistance'], bluntresistance:myStats['bluntresistance'], pierceresistance: myStats['pierceresistance'], poisonresistance : myStats['poisonresistance']}
-    };
-  }
-})()
 
 /**
  *  Fills missing weapon damageTypes

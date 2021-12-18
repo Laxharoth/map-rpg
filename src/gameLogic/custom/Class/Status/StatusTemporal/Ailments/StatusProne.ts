@@ -10,9 +10,9 @@ export class StatusProne extends StatusBattle
   get description(): string {
       return 'Is prone'
   }
-  protected effect(target: Character): ActionOutput {
-      target.roundStats.speed *= 0.8;
-      return [[],[]]
+  applyModifiers(character: Character): void {
+      character.calculated_stats.initiative *= 0.8;
+      character.calculated_stats.physical_defence *= 0.8;
   }
   get name(): statusname { return 'Prone'; }
   get tags(): tag[] { return super.tags.concat(['prone']); }

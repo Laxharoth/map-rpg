@@ -9,9 +9,8 @@ export class StatusInvisible extends StatusBattle
   get description(): string {
       return 'Hides in plain sight';
   }
-  protected effect(target: Character): ActionOutput {
-      target.roundStats.evasion *= 1.2;
-      return [[],[]];
+  applyModifiers(character: Character): void {
+    character.calculated_stats.evasion *= 1.2;
   }
   get name(): statusname { return 'Invisible'; }
   get tags(): tag[] { return super.tags.concat(['aim','invisible']);}

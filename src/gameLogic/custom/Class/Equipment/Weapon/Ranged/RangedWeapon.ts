@@ -15,8 +15,8 @@ import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functio
  */
 export abstract class RangedWeapon extends Weapon
 {
-  protected damagestat(user   : Character):number{return user.stats.aim;}
-  protected defencestat(target: Character):number{return target.stats.defence;}
+  protected damagestat(user   : Character):number{return user.calculated_stats.ranged_attack;}
+  protected defencestat(target: Character):number{return target.calculated_stats.ranged_defence;}
   abstract get name():rangedname;
   attack(user:Character,target:Character):ActionOutput
   {
@@ -53,7 +53,6 @@ export abstract class RangedWeapon extends Weapon
 export class RangedUnharmed extends RangedWeapon
 {
   maxStack = 0;
-  protected accuracy = 50;
   get name(): rangedname { return 'a rock'; }
   canEquip(character: Character): boolean { return true; }
   get tags(): tag[] { return ['ranged unharmed']; }

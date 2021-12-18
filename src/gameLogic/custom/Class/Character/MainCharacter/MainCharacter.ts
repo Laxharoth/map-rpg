@@ -9,9 +9,9 @@ export class MainCharacter extends PersistentCharacter
   characterType:characterType = "main-character";
   uuid = this.characterType;
 
-  constructor(originalStats:characterStats,masterService:MasterService,name:string)
+  constructor(masterService:MasterService,name:string)
   {
-    super(originalStats,masterService);
+    super(masterService,new TestMainCharacterBattleClass());
     masterService.gameSaver.register("MainCharacter",this)
     this._name = name;
   }

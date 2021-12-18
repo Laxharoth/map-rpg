@@ -10,7 +10,7 @@ export class JohnSmith extends PersistentCharacter
   uuid=this.characterType;
   constructor(masterService:MasterService)
   {
-    super({},masterService);
+    super(masterService);
     masterService.gameSaver.register('PersistentCharacter',this)
   }
   _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {

@@ -14,16 +14,12 @@ export class charTest extends PersistentCharacter
   characterType:characterType = "test character";
   uuid = this.characterType;
   constructor(masterService:MasterService ,name:string='')
-  { super({
-      hitpoints:200, energypoints:100,
-      attack : 20, aim: 20, defence : 20, speed : 20, evasion : 20,
-      },masterService);
+  { super(masterService);
       this._name = name
       this.addPerk(new PerkCharm(masterService))
       this.addPerk(new PerkGrappler(masterService))
       this.addPerk(new PerkFright(masterService))
       this.addStatus(new TimedStatusTest(masterService));
-      masterService.gameSaver.register('PersistentCharacter',this)
   }
 
   get name(): string { return this._name; }

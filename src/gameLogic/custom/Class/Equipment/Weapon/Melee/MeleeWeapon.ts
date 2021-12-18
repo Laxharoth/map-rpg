@@ -1,4 +1,5 @@
 import { ActionOutput, Character, characterStats } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput, CalculatedStats, characterStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { damageTypes, Weapon } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
 import { meleename } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { OnePunch } from 'src/gameLogic/custom/Class/Items/SpecialAttack/OnePunch';
@@ -16,8 +17,8 @@ import { randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functio
  */
 export abstract class MeleeWeapon extends Weapon
 {
-  protected damagestat(user   : Character):number{return user.stats.attack;}
-  protected defencestat(target: Character):number{return target.stats.defence;}
+  protected damagestat(user   : Character):number{return user.calculated_stats.physical_attack;}
+  protected defencestat(target: Character):number{return target.calculated_stats.physical_defence;}
   abstract get name():meleename;
   protected accuracyTest(user:Character,target:Character)
   {
@@ -46,8 +47,7 @@ export class MeleeUnharmed extends MeleeWeapon
 {
   readonly onePunch = new OnePunch(this.masterService);
   maxStack = 0;
-  protected accuracy: number = 100;
-  protected equipmentStats: characterStats = {evasion:30};
+  protected _stats_modifier: CalculatedStats = {accuracy:30};
   protected _damageTypes:damageTypes = {bluntdamage:10};
   get name(): meleename { return 'hand'; }
   canEquip(character: Character): boolean { return true; }

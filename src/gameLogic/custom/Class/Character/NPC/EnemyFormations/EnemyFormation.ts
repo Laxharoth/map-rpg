@@ -30,7 +30,7 @@ export abstract class EnemyFormation
    * @memberof EnemyFormation
    */
   constructor( masterService:MasterService){this.masterService =masterService;}
-  get IsDefeated():boolean{ return this.enemies.every(character=>character.currentCoreStats.hitpoints<=0); }
+  get IsDefeated():boolean{ return this.enemies.every(character=>character.current_energy_stats.hitpoints<=0); }
   /**
    * Gets the private array of enemies.
    *

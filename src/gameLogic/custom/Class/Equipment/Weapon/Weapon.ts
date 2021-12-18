@@ -38,7 +38,6 @@ export abstract class Weapon extends Equipment
    * @type {number}
    * @memberof Weapon
    */
-  protected abstract accuracy:number;
   /**
    * Can only be a weaponname
    *
@@ -100,13 +99,13 @@ export abstract class Weapon extends Equipment
   {
     let finalDamage:number = 0;
     const damageRelation = this.damagestat(user) / this.defencestat(target);
-    finalDamage += (damageRelation * this.damageTypes.slashdamage||0  / (100 - target.roundResistance.slashresistance));
-    finalDamage += (damageRelation * this.damageTypes.bluntdamage||0  / (100 - target.roundResistance.bluntresistance));
-    finalDamage += (damageRelation * this.damageTypes.piercedamage||0 / (100 - target.roundResistance.pierceresistance));
-    finalDamage += (damageRelation * this.damageTypes.poisondamage||0 / (100 - target.roundResistance.poisonresistance));
-    finalDamage += (damageRelation * this.damageTypes.heatdamage||0   / (100 - target.roundResistance.heatresistance));
-    finalDamage += (damageRelation * this.damageTypes.energydamage||0 / (100 - target.roundResistance.energyresistance));
-    finalDamage += (damageRelation * this.damageTypes.frostdamage||0  / (100 - target.roundResistance.frostresistance));
+    finalDamage += (damageRelation * this.damageTypes.slashdamage||0  / (100 - target.calculated_resistance.slashresistance));
+    finalDamage += (damageRelation * this.damageTypes.bluntdamage||0  / (100 - target.calculated_resistance.bluntresistance));
+    finalDamage += (damageRelation * this.damageTypes.piercedamage||0 / (100 - target.calculated_resistance.pierceresistance));
+    finalDamage += (damageRelation * this.damageTypes.poisondamage||0 / (100 - target.calculated_resistance.poisonresistance));
+    finalDamage += (damageRelation * this.damageTypes.heatdamage||0   / (100 - target.calculated_resistance.heatresistance));
+    finalDamage += (damageRelation * this.damageTypes.energydamage||0 / (100 - target.calculated_resistance.energyresistance));
+    finalDamage += (damageRelation * this.damageTypes.frostdamage||0  / (100 - target.calculated_resistance.frostresistance));
     return Math.round(finalDamage)||0;
   }
   /**
@@ -122,8 +121,8 @@ export abstract class Weapon extends Equipment
     let [minaccuracy,maxaccuracy] = [0,100];
     if(user.hasTag('blind')) maxaccuracy -= 20;
     if(user.hasTag('aim')) maxaccuracy += 20;
-    const check = randomBetween(minaccuracy,maxaccuracy+this.accuracy);
-    return check - target.roundStats.evasion;
+    const check = randomBetween(minaccuracy,maxaccuracy+user.calculated_stats.accuracy);
+    return check
   }
 
   get description():string

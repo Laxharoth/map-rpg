@@ -72,6 +72,6 @@ export function selectItem(masterService:MasterService):Description
        while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3) targetsOptions.push(null);
        targetsOptions.push(returnOption)
      }
-     return new Description(()=>`${targets.map(target=>`${target.name}:${target.currentCoreStats.hitpoints}`).join('\n')}`,targetsOptions)
+     return new Description(()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,targetsOptions)
    }
 }

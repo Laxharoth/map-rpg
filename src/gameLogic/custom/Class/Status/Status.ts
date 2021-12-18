@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { storeable } from "src/gameLogic/core/Factory/Factory";
-import { ActionOutput, Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput, CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction';
 import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack';
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
@@ -19,6 +19,8 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
 export abstract class Status implements storeable
 {
   protected masterService:MasterService;
+  protected _stats_modifier:CalculatedStats = {};
+  protected _resistance_stats:ResistanceStats = {};
   constructor(masterService:MasterService){this.masterService=masterService;}
   /**
    * The name of the status.
@@ -47,7 +49,7 @@ export abstract class Status implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Status
    */
-  protected abstract effect(target: Character):ActionOutput
+  protected effect(target: Character):ActionOutput { return [[],[]] }
   /**
    * Apply the effect on the character.
    * Also check if the character can react to the effect of the status.
@@ -59,6 +61,13 @@ export abstract class Status implements storeable
   applyEffect(target: Character):ActionOutput{
     const effect = this.effect(target);
     return pushBattleActionOutput(target.react(this.tags,target), effect);
+  }
+  applyModifiers(character:Character):void
+  {
+    for(const [key,value] of Object.entries(this._stats_modifier))
+    { character.calculated_stats[key] += value}
+    for(const [key,value] of Object.entries(this._resistance_stats))
+    { character.calculated_resistance[key] += value}
   }
   /**
    * Check if the status can be added to the character.
@@ -75,7 +84,10 @@ export abstract class Status implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Status
    */
-  onStatusGainded(target: Character):ActionOutput{ return target.react(this.tags.concat(['status gained']),target) };
+  onStatusGainded(target: Character):ActionOutput{
+    this.applyModifiers(target);
+    return target.react(this.tags.concat(['status gained']),target)
+  };
   /**
    * Defines what to do when the status is removed from the character.
    *

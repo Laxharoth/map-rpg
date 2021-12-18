@@ -21,10 +21,7 @@ export class StatusGrappling extends StatusBattle implements StatusPreventAttack
   get description(): string {
   return 'Being grabbed by something impedes movements.';
   }
-  protected effect(target: Character): ActionOutput {
-    target.roundStats.speed = 0;
-      return [[],[`${target.name} is grabbing ${this._target.name}`]];
-    }
+  protected effect(target: Character): ActionOutput { return [[],[`${target.name} is grabbing ${this._target.name}`]]; }
     get name(): statusname {
       return 'Grappling';
     }

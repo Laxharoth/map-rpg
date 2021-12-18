@@ -20,14 +20,12 @@
 
 .stats
 {
-  margin-top: 5px;
   display: flex;
   flex-direction: column;
 }
 
 .status
 {
-  margin-top: 5px;
   flex-wrap: wrap;
   column-gap: 10px;
   display: flex;

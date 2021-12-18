@@ -13,12 +13,11 @@ export class StatusRangedAttack extends StatusBattle
   get description(): string {
     return 'Using a ranged attack puts space between you and the enemy.\nIncreased evasion by 10%.';
   }
-  protected effect(target: Character): ActionOutput {
-    target.roundStats.evasion+= 5 + 3/5 * target.originalstats.speed;
-    target.roundStats.evasion*=1.10;
-    return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} takes some space to shoot.`]]);
+  applyModifiers(character: Character): void {
+    character.calculated_stats.evasion+= 5 + 3/5 * character.original_stats.speed;
+    character.calculated_stats.evasion*=1.10;
   }
   onStatusGainded(target: Character)
-  { return pushBattleActionOutput(super.onStatusGainded(target),this.effect(target) )}
+  { return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} takes some space to shoot.`]] )}
   get tags(): tag[] { return super.tags.concat(['aim'])}
 }

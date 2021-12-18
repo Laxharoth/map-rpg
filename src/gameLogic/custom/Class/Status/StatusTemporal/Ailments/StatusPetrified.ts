@@ -7,32 +7,24 @@ import { StatusPoison } from "../StatusPoison";
 export class StatusPetrified extends StatusBattle
 {
   protected DURATION: number = 4;
-  private previousPoison:number;
+  protected _resistance_stats: ResistanceStats = {poisonresistance:100};
   get description(): string {
       throw new Error("Method not implemented.");
   }
   protected effect(target: Character): ActionOutput {
-      target.roundStats.defence*=1.2;
       const poison = this.getPoison(target);
       if(poison)poison.extraDuration = 1;
-      return [[],[]];
+      return super.effect(target);
+  }
+  applyModifiers(character: Character): void {
+    character.calculated_stats.physical_defence*=1.2;
+    character.calculated_stats.ranged_defence*=1.2;
+    character.calculated_stats.initiative = 0;
+    super.applyModifiers(character);
   }
   get name(): statusname { return 'Petrified'; }
-  onStatusGainded(target: Character): ActionOutput
-  {
-      this.previousPoison = target.resistance.poisonresistance;
-      target.resistance.poisonresistance = 100;
-      if(target.resistance?.poisonresistance)target.resistance.poisonresistance=100;
-      return super.onStatusGainded(target);
-  }
-  onStatusRemoved(target: Character): ActionOutput
-  {
-      target.resistance.poisonresistance = this.previousPoison;
-      return super.onStatusRemoved(target);
-  }
-  private getPoison(target: Character):StatusPoison
-  {
-    return target.getStatus('Poison') as StatusPoison;
-  }
+  onStatusGainded(target: Character): ActionOutput { return super.onStatusGainded(target); }
+  onStatusRemoved(target: Character): ActionOutput { return super.onStatusRemoved(target); }
+  private getPoison(target: Character):StatusPoison { return target.getStatus('Poison') as StatusPoison; }
   get tags(): tag[] { return super.tags.concat(['paralized','petrified'])}
 }

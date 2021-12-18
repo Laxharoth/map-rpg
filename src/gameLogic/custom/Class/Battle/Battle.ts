@@ -45,7 +45,7 @@ export class Battle {
     const turn_characters = attackOrder(getUndefeatedTarget([this.player].concat(this.party).concat(this.enemy_formation.enemies)))
     for (const character of turn_characters) {
       //check if was defeated this round
-      if (character.currentCoreStats.hitpoints <= 0) {
+      if (character.current_energy_stats.hitpoints <= 0) {
         pushBattleActionOutput(character.onDefeated(), [this.battleRoundDescription, this.battleRoundString])
         continue;
       }
@@ -142,7 +142,7 @@ export class Battle {
     }
     this.master_service.descriptionHandler
       .headDescription(new Description(
-          () => `${targets.map(target=>`${target.name}:${target.currentCoreStats.hitpoints}`).join('\n')}`,
+          () => `${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
           targetsOptions
         ),
         'battle'
@@ -188,6 +188,7 @@ export class Battle {
   private endBattlePlayerWins() {
     const nextOption = new DescriptionOptions('next', () => {
       this.player.healHitPoints(10);
+      this.player.gain_experience(20);
       this.master_service.descriptionHandler
         .tailDescription(this.enemy_formation.onPartyVictory([this.player].concat(this.party)), 'battle')
         .nextDescription(false);
@@ -199,7 +200,7 @@ export class Battle {
   }
   private endBattleEnemyWins() {
     const nextOption = new DescriptionOptions('next', () => {
-      this.player.healHitPoints(this.player.coreStats.hitpoints);
+      this.player.healHitPoints(this.player.energy_stats.hitpoints);
       this.master_service.descriptionHandler
         .tailDescription(this.enemy_formation.onEnemyVictory([this.player].concat(this.party)), 'battle')
         .nextDescription(false);

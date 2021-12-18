@@ -22,10 +22,8 @@ export class StatusGrappled extends StatusBattle  implements StatusPreventAttack
   get description(): string {
       return 'Being grabbed by something impedes movements.'
   }
-  protected effect(target: Character): ActionOutput {
-      target.roundStats.speed = 0;
-      return [[],[`${target.name} is being grabbed by ${this._source.name}`]];
-  }
+  protected effect(target: Character): ActionOutput { return [[],[`${target.name} is being grabbed by ${this._source.name}`]]; }
+  applyModifiers(character: Character): void { character.calculated_stats.initiative = 0; }
   onStatusGainded(target: Character):ActionOutput
   {
     this._target = target;

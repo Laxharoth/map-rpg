@@ -7,10 +7,7 @@ export class enemyTest extends Character
 {
   characterType:characterType = 'test enemy';
   constructor(masterService:MasterService)
-  { super({
-      hitpoints:100, energypoints:100,
-      attack : 10, aim: 10, defence : 10, speed : 10, evasion : 10,
-      },masterService)
+  { super(masterService)
       // this.addStatus(new StatusPoison(masterService))
       // this.addStatus(new StatusBlind(masterService));
       // this.addStatus(new StatusInvisible(masterService));

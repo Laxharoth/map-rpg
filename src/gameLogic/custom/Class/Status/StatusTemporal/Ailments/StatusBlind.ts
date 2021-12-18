@@ -10,9 +10,8 @@ export class StatusBlind extends StatusBattle
   get description(): string {
       return 'Reduces accuracy and evasion';
   }
-  protected effect(target: Character): ActionOutput {
-      target.roundStats.evasion=Math.round(0.8*target.roundStats.evasion);
-      return [[],[]];
+  applyModifiers(character: Character): void {
+    character.calculated_stats.accuracy=Math.round(0.8*character.calculated_stats.accuracy);
   }
   get tags(): tag[] { return super.tags.concat(['blind'])}
 }
