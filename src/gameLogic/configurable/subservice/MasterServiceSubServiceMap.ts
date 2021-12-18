@@ -21,6 +21,6 @@ export class MasterServiceSubServiceMap
   enemyHandler?:EnemyFormationService;
   gameStateHandler?:GameStateService;
   timeHandler?:TimeHandler;
-  gameSaver:GameSaver&GameSaverMap;
-  updateCharacter:(character:Character) => void;
+  gameSaver?:GameSaver&GameSaverMap;
+  updateCharacter?:(character:Character) => void;
 }
