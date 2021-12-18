@@ -1,0 +1,16 @@
+.app-shop-gui {
+  display: flex;
+}
+.app-shop-gui_shop-sale,
+.app-shop-gui_shop-data {
+  width: 20%;
+}
+
+.app-shop-gui_shop-interface {
+  width: 60%;
+  flex-grow: 1;
+}
+
+.app-shop-gui_shop-data {
+  padding: 1em;
+}
