@@ -836,6 +836,9 @@ export abstract class Character implements storeable
    */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
 
+  total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
+  current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }
+
   /**
    * Stores character type, originalstats, status, equipment,items and perks
    *
