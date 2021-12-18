@@ -19,6 +19,12 @@ import { ShopSaleComponentComponent } from './component/shop/shop-sale-component
 import { StatusIconComponent } from './component/status-icon/status-icon.component';
 import { TabMenuComponent } from './component/tab-menu/tab-menu.component';
 import { OverrideCssVarDirective } from './directive/override-css-var.directive';
+import { MapGuiComponent } from './component/gui/map-gui/map-gui.component';
+import { BattleGuiComponent } from './component/gui/battle-gui/battle-gui.component';
+import { ItemGuiComponent } from './component/gui/item-gui/item-gui.component';
+import { ShopGuiComponent } from './component/gui/shop-gui/shop-gui.component';
+import { StatusGuiComponent } from './component/gui/status-gui/status-gui.component';
+import { UserExperienceComponent } from './component/user-experience/user-experience.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +46,12 @@ import { OverrideCssVarDirective } from './directive/override-css-var.directive'
     ShopDataComponentComponent,
     ShopSaleComponentComponent,
     ShopDataItemComponent,
+    MapGuiComponent,
+    BattleGuiComponent,
+    ItemGuiComponent,
+    ShopGuiComponent,
+    StatusGuiComponent,
+    UserExperienceComponent,
   ],
   imports: [
     BrowserModule,
