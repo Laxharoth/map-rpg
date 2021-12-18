@@ -1,3 +1,4 @@
+import { ItemStoreable } from './../Class/Items/Item';
 import { MasterService } from 'src/app/service/master.service';
 import { ArmorNoArmor } from 'src/gameLogic/custom/Class/Equipment/Armor/Armor';
 import { ArmorTest } from 'src/gameLogic/custom/Class/Equipment/Armor/ArmorTest';
@@ -21,9 +22,9 @@ import { ItemTest } from 'src/gameLogic/custom/Class/Items/ItemTest';
  * @param {{[key: string]: any}} options The options from the item created with the  storeable.toJson
  * @return {Item} An Item with the loaded options
  */
-export function ItemFactory(masterService:MasterService,itemName:itemname,options:{amount?:number,basePrice?:number}):GameItem
+export function ItemFactory(masterService:MasterService,options:ItemStoreable):GameItem
 {
-  const item = new ItemSwitcher[itemName](masterService);
+  const item = new ItemSwitcher[options.type](masterService);
   item.fromJson(options)
   return item;
 }

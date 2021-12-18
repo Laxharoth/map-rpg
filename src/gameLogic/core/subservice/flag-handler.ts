@@ -86,6 +86,6 @@ export class FlagHandlerService implements storeable{
   }
 }
 
-export const MasterFlagsSetter:FactoryFunction = (masterService:MasterService, _type:string, options:StoreableType) => {
+export const MasterFlagsSetter:FactoryFunction = (masterService:MasterService, options:StoreableType) => {
     masterService.flagsHandler.fromJson(options);
   }

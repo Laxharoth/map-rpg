@@ -17,7 +17,7 @@ export enum FactoryName{
   "CurrentParty"="CurrentParty",
 }
 export type factoryname= `${FactoryName}`;
-export type FactoryFunction = (masterService:MasterService,type:string,options:{[key: string]: any})=>any;
+export type FactoryFunction = (masterService:MasterService,options:{[key: string]: any})=>any;
 
 export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   Item: ItemFactory,

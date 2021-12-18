@@ -12,9 +12,9 @@ import { TimedStatusTest } from "src/gameLogic/custom/Class/Status/TimedStatusTe
  * @param {{[key: string]: any}} options The options from the status created with the storeable.toJson
  * @return {*}  {Status} An Status with the loaded options
  */
-export function StatusFactory(masterService:MasterService,statusname:statusname,options:{[key: string]: any}):Status
+export function StatusFactory(masterService:MasterService,options:{[key: string]: any}):Status
 {
-  const status = new statusSwitcher[statusname](masterService);
+  const status = new statusSwitcher[options.type](masterService);
   status.fromJson(options);
   return status;
 }

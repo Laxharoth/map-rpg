@@ -15,9 +15,9 @@ import { characterType, CharacterTypeValues } from "src/gameLogic/custom/Factory
  * @param {{[key: string]:any}} options The options from the character created with the  storeable.toJson
  * @return {Character} A character with the loaded options.
  */
-export function CharacterFactory(masterService:MasterService,characterType:characterType,options:CharacterStoreable):Character
+export function CharacterFactory(masterService:MasterService,options:CharacterStoreable):Character
 {
-  const character = CharacterSwitcher[characterType](masterService)
+  const character = CharacterSwitcher[options.type](masterService)
   character.fromJson(options);
   return character;
 }
@@ -27,5 +27,5 @@ const CharacterSwitcher:{[key in CharacterTypeValues]:(masterService:MasterServi
   'test character':(masterService:MasterService)=>new charTest(masterService,''),
   'test enemy':(masterService:MasterService)=>new enemyTest(masterService),
   'john':(masterService:MasterService)=>new JohnSmith(masterService),
-  'main-character':(masterService:MasterService)=>new MainCharacter({},masterService,''),
+  'main-character':(masterService:MasterService)=>new MainCharacter(masterService,''),
 }

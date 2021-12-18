@@ -16,8 +16,8 @@ import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable
  * @param {{[key: string]: any}} options The options from the perk created with the storeable.toJson
  * @return {Perk} An Perk with the loaded options
  */
-export function PerkFactory(masterService:MasterService,perkname:perkname,options:{[key: string]: any}):Perk {
-  const perk = new PerkSwitcher[perkname](masterService);
+export function PerkFactory(masterService:MasterService,options:{[key: string]: any}):Perk {
+  const perk = new PerkSwitcher[options.type](masterService);
   perk.fromJson(options);
   return perk;
 }

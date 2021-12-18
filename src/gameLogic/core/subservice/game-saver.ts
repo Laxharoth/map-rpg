@@ -30,13 +30,11 @@ export class GameSaver
       for (const persistent_game_instance of persistent_game_instances)
       {
         //The required key has not been defined make it wait
-        if(persistent_game_instance.RequiredKey && (!this._persistent_game_instances[persistent_game_instance.RequiredKey]))
+        if(persistent_game_instance?.dependency_gamesave_object_key && (!this._persistent_game_instances[persistent_game_instance.dependency_gamesave_object_key]))
         {waitingKeys.push(key); break;}
         //persistent objects should register themselves
         Factory(
           this.masterService,
-          persistent_game_instance.Factory,
-          persistent_game_instance.type,
           persistent_game_instance
         )
       }
