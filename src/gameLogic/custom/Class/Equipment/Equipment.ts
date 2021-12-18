@@ -19,32 +19,11 @@ export abstract class Equipment extends GameItem
 {
   private equipmentStats: CalculatedStats={};
   maxStack = 1;
-  /**
-   * The name of the equipment
-   *
-   * @readonly
-   * @abstract
-   * @type {equipmentname}
-   * @memberof Equipment
-   */
+  /** * The name of the equipment */
   abstract get name():equipmentname;
-  /**
-   * Check if can be equiped to the character.
-   *
-   * @abstract
-   * @param {Character} character The character to be equiped to.
-   * @return {*}  {boolean}
-   * @memberof Equipment
-   */
+  /** * Check if can be equiped to the character. */
   abstract canEquip(character:Character ):boolean;
-  /**
-   * The tags associated with the equipment.
-   *
-   * @readonly
-   * @abstract
-   * @type {tag[]}
-   * @memberof Equipment
-   */
+  /** * The tags associated with the equipment. */
   abstract get tags():tag[];
   /** * The stats that are going to be applied to the character */
   protected _stats_modifier:CalculatedStats = {};
@@ -132,13 +111,12 @@ export abstract class Equipment extends GameItem
   {
     switch (type)
     {
-      case "hitpoints"    :return "hp";
-      case "energypoints" :return "sp";
-      case "attack"       :return "atk";
-      case "aim"          :return "aim";
-      case "defence"      :return "def";
-      case "speed"        :return "spd";
-      case "evasion"      :return "evs";
+      case "physical_attack"  :return "atk";
+      case "ranged_attack"    :return "rnge";
+      case "physical_defence" :return "def";
+      case "ranged_defence"   :return "rdef";
+      case "accuracy"         :return "acc";
+      case "evasion"          :return "evs";
       case "heatresistance"   :return "heat";
       case "energyresistance" :return "energy";
       case "frostresistance"  :return "frost";
@@ -146,8 +124,8 @@ export abstract class Equipment extends GameItem
       case "bluntresistance"  :return "blunt";
       case "pierceresistance" :return "pierce";
       case "poisonresistance" :return "poison";
+      default:return "";
     }
-    return "";
   }
 
 }
