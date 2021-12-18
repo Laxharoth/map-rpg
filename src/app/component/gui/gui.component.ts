@@ -1,3 +1,4 @@
+import { PerkCharm } from './../../../gameLogic/custom/Class/Perk/PerkCharm';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
@@ -90,13 +91,13 @@ export class GuiComponent implements OnInit {
       this.masterService.partyHandler.user = this.masterService.gameSaver.MainCharacter[0];
     }
     if (!this.masterService.partyHandler.user) {
-      const user = new MainCharacter({ hitpoints:200, energypoints:100, attack : 20, aim: 20, defence : 20, speed : 20, evasion : 20, }
-                                      ,this.masterService, 'player');
+      const user = new MainCharacter(this.masterService, 'player');
       const meleeTest1 = new MeleeTest(this.masterService);
       const rangedTest1 = new RangedTest(this.masterService);
       const shieldTest1 = new ShieldTest(this.masterService);
       const armorTest1 = new ArmorTest(this.masterService);
       user.addPerk(new PerkUpgradeable(this.masterService));
+      user.addPerk(new PerkCharm(this.masterService));
       user.addItem(meleeTest1); user.addItem(rangedTest1); user.addItem(shieldTest1); user.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
       this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
