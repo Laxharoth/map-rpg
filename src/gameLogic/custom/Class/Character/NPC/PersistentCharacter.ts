@@ -10,6 +10,11 @@ import { Character, CharacterStoreable } from "src/gameLogic/custom/Class/Charac
  */
 export abstract class PersistentCharacter extends Character
 {
+  constructor(masterService:MasterService)
+  {
+    super(masterService)
+    masterService.gameSaver.register('PersistentCharacter',this)
+  }
   protected abstract _name:string;
   uuid:string;
   get name():string {return this._name};
