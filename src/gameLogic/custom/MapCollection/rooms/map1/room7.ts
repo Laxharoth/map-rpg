@@ -2,7 +2,6 @@ import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
-import { descriptionBattle } from "src/gameLogic/custom/Class/Descriptions/BattleDescription";
 import { DescriptionSelectItemFromMap } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
@@ -16,6 +15,7 @@ import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable
 import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
+import { Battle } from 'src/gameLogic/custom/Class/Battle/Battle';
 
 export function room(masterService:MasterService):Room
 {
@@ -83,7 +83,7 @@ export function room(masterService:MasterService):Room
   const roomOptions =[
     new DescriptionOptions("Shop",makeShop),
     new DescriptionOptions("Dynamic Shop",makeDynamicShop),
-    new DescriptionOptions("test battle",function(){ descriptionBattle(masterService,new testformation(masterService) ) }),
+    new DescriptionOptions("test battle",()=>new Battle(masterService, new testformation(masterService)).startRound()),
     equipMelee,
     equipRanged,
     equipShield,
