@@ -21,7 +21,13 @@ export class Battle {
   protected battleRoundDescription: Description[] = [];
   protected startRoundDescription: Description[] = [];
 
-  constructor(master_service: MasterService, enemy_formation: EnemyFormation) {
+  /**
+   *
+   * @param master_service The MasterService
+   * @param enemy_formation The EnemyFormation
+   * @param initialize_battle_options Sets up the battle options (should not be an arrow function)
+   */
+  constructor(master_service: MasterService, enemy_formation: EnemyFormation, post_initialize_battle_options: (battle_options:DescriptionOptions[])=>void=null) {
     this.player = master_service.partyHandler.user;
     this.party = master_service.partyHandler.party;
     this.enemy_formation = enemy_formation;
@@ -31,8 +37,9 @@ export class Battle {
       character.specialAttacks.forEach(attacker => {
         attacker.cooldown = 0
       })
-    })
-    this.initialize_battle_options();
+    });
+    this.battle_options = this.initialize_battle_options();
+    post_initialize_battle_options?.(this.battle_options);
   }
   /**
    * Iterates the character actions appling their actions.
@@ -259,8 +266,8 @@ export class Battle {
     this.startRoundDescription.push(new Description(descriptionText, [nextOption(this.master_service)]))
     this.round(playerAction, [])
   });
-  protected initialize_battle_options(): void {
-    this.battle_options = [
+  protected initialize_battle_options(): DescriptionOptions[] {
+    return [
       this.attack_option,
       this.shoot_option,
       this.special_option,
