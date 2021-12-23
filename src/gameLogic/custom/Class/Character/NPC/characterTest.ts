@@ -13,14 +13,13 @@ export class charTest extends PersistentCharacter
 {
   protected _name!: string;
   characterType:characterType = "test character";
-  uuid = this.characterType;
   constructor(masterService:MasterService ,name:string='')
   { super(masterService);
-      this._name = name
-      this.addPerk(new PerkCharm(masterService))
-      this.addPerk(new PerkGrappler(masterService))
-      this.addPerk(new PerkFright(masterService))
-      this.addStatus(new TimedStatusTest(masterService));
+    this._name = name
+    this.uuid = this._name;
+    this.addPerk(new PerkCharm(masterService))
+    this.addPerk(new PerkGrappler(masterService))
+    this.addPerk(new PerkFright(masterService))
   }
 
   get name(): string { return this._name; }
