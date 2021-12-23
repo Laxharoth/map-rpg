@@ -1,7 +1,6 @@
-import { PersistentCharacter } from 'src/gameLogic/custom/Class/Character/NPC/PersistentCharacter';
 import { FlagHandlerService } from "src/gameLogic/core/subservice/flag-handler";
-import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
+import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/Character';
 
 enum GameSaveNames {
   MainCharacter='MainCharacter',
@@ -10,15 +9,15 @@ enum GameSaveNames {
   PersistentShop='PersistentShop',
   Flags='Flags',
   Flags2='Flags2',
+  FactWeb='FactWeb',
 }
 export type gamesavenames = keyof typeof GameSaveNames;
-type GameSaveNamesFields = {[key in GameSaveNames]:any}
 
-export interface GameSaverMap extends GameSaveNamesFields
+export interface GameSaverMap
 {
-  MainCharacter:Character[];
-  Party:Character[];
-  PersistentCharacter:PersistentCharacter[];
+  MainCharacter:UniqueCharacter[];
+  Party:UniqueCharacter[];
+  PersistentCharacter:UniqueCharacter[];
   PersistentShop:Shop[];
   Flags:[FlagHandlerService];
 }
