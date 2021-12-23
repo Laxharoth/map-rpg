@@ -160,7 +160,6 @@ export class FactWeb implements storeable
   }
 }
 export const SetDataweb:FactoryFunction = (masterService:MasterService, options:DataWebStoreable) =>{
-  masterService.DataWeb = new FactWeb(masterService.timeHandler,masterService.gameSaver);
   masterService.DataWeb.fromJson(options);
 }
 
