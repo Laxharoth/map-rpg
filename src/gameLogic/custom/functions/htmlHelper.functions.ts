@@ -1,5 +1,6 @@
-import { ActionOutput, characterStats, EnergyStats, CoreStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { damageTypes } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
+import random from "random"
 
 /**
  * In descriptions that use input elements get the value of the input and select.
@@ -54,7 +55,7 @@ export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):
  * @return {*}  {number}
  */
 export function randomBetween(min:number, max:number):number{
-  return Math.floor(Math.random()*(max-min+1)+min);
+  return random.integer(min, max);
 }
 
 /**
@@ -66,7 +67,7 @@ export function randomBetween(min:number, max:number):number{
  */
 export function randomCheck(percent:number):boolean
 {
-  return percent >= Math.random()*100;
+  return percent >= random.float(0,100);
 }
 
 /**
@@ -96,4 +97,9 @@ export const fillMissingWeaponDamage = (function() {
 
 export function MakeFilledArray<T>(array_size: number,default_value: T): T[] {
   return Array.from(Array(array_size).map(_=>default_value))
+}
+
+export function floor_to(nuber_to_round:number,coefficient:number):number
+{
+  return Math.floor(nuber_to_round/coefficient)*coefficient;
 }
