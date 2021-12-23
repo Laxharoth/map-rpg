@@ -1,5 +1,5 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { ActionOutput, CalculatedStats, characterStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { damageTypes, Weapon } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
 import { meleename } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { OnePunch } from 'src/gameLogic/custom/Class/Items/SpecialAttack/OnePunch';
