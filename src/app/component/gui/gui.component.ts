@@ -66,7 +66,7 @@ export class GuiComponent implements OnInit {
     const descriptionHandler = new DescriptionHandlerService(lockmap, gameStateHandler);
     const flagsHandler = new FlagHandlerService(gameSaver);
     const partyHandler = new PartyService(gameSaver);
-    const timeHandler = new TimeHandler(flagsHandler)
+    const timeHandler = new TimeHandler(gameSaver)
     const data_web = new FactWeb(timeHandler, gameSaver);
     const updateCharacter=(character:Character)=>
     {

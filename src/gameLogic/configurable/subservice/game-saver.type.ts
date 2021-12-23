@@ -10,6 +10,7 @@ enum GameSaveNames {
   Flags='Flags',
   Flags2='Flags2',
   FactWeb='FactWeb',
+  TimeHandler='TimeHandler',
 }
 export type gamesavenames = keyof typeof GameSaveNames;
 

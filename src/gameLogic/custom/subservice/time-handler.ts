@@ -1,21 +1,18 @@
-import { Observable, Subject, Subscription } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { Time, TimeValues } from "src/gameLogic/custom/ClassHelper/Time";
 
-import { FlagHandlerService } from "src/gameLogic/core/subservice/flag-handler";
-
-export class TimeHandler {
+import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
+import { storeable } from "src/gameLogic/core/Factory/Factory";
+import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
+import { MasterService } from "src/app/service/master.service";
+//TODO separate from flag handler and use game-saver
+export class TimeHandler implements storeable{
   /** The ingame time. */
   private time: Time;
   private timeSubject = new Subject<Time>();
-  private gameFlagTime:number;
-  private AllFlagsChangeSubscription:Subscription;
 
-  constructor(flagsHandler:FlagHandlerService) {
-    this.time = new Time(flagsHandler.getFlag("time"));
-    Object.defineProperty(this, "gameFlagTime", {
-      get: () => this.time.getMinutes(),
-      set:(value:number) =>{flagsHandler.setFlag("time",this.time.getMinutes())}
-    })
+  constructor(game_saver:GameSaver) {
+    game_saver.register("TimeHandler",this);
   }
   /**
    * Adds time to the current ingame time.
@@ -25,7 +22,6 @@ export class TimeHandler {
    */
   addTime(time: number | string) {
     this.time.addTime(time);
-    this.gameFlagTime = this.time.getMinutes();
     this.timeSubject.next(this.time);
   }
   /**
@@ -39,7 +35,7 @@ export class TimeHandler {
   }
 
   /**
-   * Gest the current ingame time values.
+   * Gets the current ingame time values.
    *
    * @return {*}
    * @memberof FlagHandlerService
@@ -56,4 +52,23 @@ export class TimeHandler {
   get minutes() {
     return this.time.getMinutes();
   }
+
+  fromJson(options: timeHandlerStoreable): void {
+      this.time.setTime(options.minutes)
+  }
+  toJson(): timeHandlerStoreable {
+      return{
+        Factory: "TimeHandler",
+        type: "time",
+        minutes:this.time.getMinutes(),
+      }
+  }
+}
+export const SetTimeHandler:FactoryFunction = (masterService:MasterService,options:timeHandlerStoreable)=>{
+  masterService.timeHandler.fromJson(options)
+}
+type timeHandlerStoreable = {
+  Factory: "TimeHandler";
+  type: "time";
+  minutes:number;
 }

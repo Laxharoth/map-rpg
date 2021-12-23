@@ -17,6 +17,7 @@ export enum FactoryName{
   "Shop"='Shop',
   "CurrentParty"="CurrentParty",
   "FactWeb"="FactWeb",
+  "TimeHandler"="TimeHandler",
 }
 export type factoryname= `${FactoryName}`;
 export type FactoryFunction = (masterService:MasterService,options:{[key: string]: any})=>any;
@@ -30,4 +31,5 @@ export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   Shop: ShopFactory,
   CurrentParty: SetCurrentParty,
   FactWeb: SetDataweb,
+  TimeHandler: SetDataweb,
 }
