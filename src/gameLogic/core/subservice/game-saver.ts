@@ -3,7 +3,7 @@ import { gamesavenames } from 'src/gameLogic/configurable/subservice/game-saver.
 import { Factory, storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
 import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
-export class GameSaver
+export class  GameSaver
 {
   private _persistent_game_instances: {[key: string]:storeable[]} = {};
   private masterService:MasterService;
@@ -30,7 +30,8 @@ export class GameSaver
       for (const persistent_game_instance of persistent_game_instances)
       {
         //The required key has not been defined make it wait
-        if(persistent_game_instance?.dependency_gamesave_object_key && (!this._persistent_game_instances[persistent_game_instance.dependency_gamesave_object_key]))
+        if(persistent_game_instance?.dependency_gamesave_object_key &&
+          !persistent_game_instance.dependency_gamesave_object_key.every(key => this._persistent_game_instances[key]))
         {waitingKeys.push(key); break;}
         //persistent objects should register themselves
         Factory(

@@ -61,7 +61,7 @@ export class PartyService implements storeable{
     return {
       Factory: "CurrentParty",
       type: 'party',
-      dependency_gamesave_object_key: "PersistentCharacter",
+      dependency_gamesave_object_key: ["PersistentCharacter"],
       characterUiPosition1: this._party[0]?.uuid||null,
       characterUiPosition2: this._party[1]?.uuid||null,
     }
@@ -75,7 +75,7 @@ export class PartyService implements storeable{
 export type PartyStoreable = {
   Factory: "CurrentParty";
   type: 'party';
-  dependency_gamesave_object_key: "PersistentCharacter";
+  dependency_gamesave_object_key: ["PersistentCharacter"];
   characterUiPosition1: string;
   characterUiPosition2: string;
 }
