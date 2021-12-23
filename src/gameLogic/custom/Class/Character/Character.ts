@@ -56,6 +56,7 @@ export abstract class Character implements storeable
   private timed_status:TimedStatus[] = [];
   private battle_status:StatusBattle[] = [];
   protected character_battle_class:CharacterBattleClass;
+  protected abstract _name:string;
   abstract readonly characterType:characterType;
   inventorysize = 9;
   inventory:GameItem[] = [];
@@ -82,7 +83,7 @@ export abstract class Character implements storeable
   get shield():Shield { return this._shield || Character.__noShield__}
   set shield(equipment:Shield){this._shield=equipment}
 
-  abstract get name(): string;
+  get name(): string{ return this._name};
   private readonly masterService:MasterService
   private __endbattle__ = false;
 
@@ -92,8 +93,9 @@ export abstract class Character implements storeable
    * @param {MasterService} masterService The master service.
    * @memberof Character
    */
-  constructor(masterService:MasterService, character_battle_class=new TestCharacterBattleClass())
+  constructor(masterService:MasterService, character_battle_class=null)
   {
+    if(!character_battle_class)character_battle_class=new TestCharacterBattleClass()
     this.character_battle_class = character_battle_class;
     this.masterService = masterService;
     this.energy_stats = {...this.character_battle_class.initial_core_stats};
@@ -913,3 +915,18 @@ export type CharacterStoreable = {
   perk?:{name:perkname;options:PerkStoreable}[];
   [key: string]:any;
 }
+
+export abstract class UniqueCharacter extends Character {
+  uuid:string;
+  toJson():UniqueCharacterStoreable
+  {
+    const userjson:UniqueCharacterStoreable = {uuid:this.uuid,name:this.name,...super.toJson()};
+    return userjson;
+  }
+  fromJson(options:UniqueCharacterStoreable): void
+  {
+    super.fromJson(options);
+    this._name = options.name;
+  }
+}
+export type UniqueCharacterStoreable = {uuid:string;name:string}&CharacterStoreable

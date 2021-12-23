@@ -1,6 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { Character, CharacterStoreable } from "src/gameLogic/custom/Class/Character/Character";
-import { characterStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/Character";
 
 /**
  * A character with a name, adds/loads the name to/from the storeable json.
@@ -10,26 +9,11 @@ import { characterStats } from "src/gameLogic/custom/Class/Character/Character.t
  * @class PersistentCharacter
  * @extends {Character}
  */
-export abstract class PersistentCharacter extends Character
+export abstract class PersistentCharacter extends UniqueCharacter
 {
-  constructor(masterService:MasterService)
+  constructor(masterService:MasterService, character_battle_class=null)
   {
-    super(masterService)
+    super(masterService,character_battle_class)
     masterService.gameSaver.register('PersistentCharacter',this)
   }
-  protected abstract _name:string;
-  uuid:string;
-  get name():string {return this._name};
-  toJson():PersistentCharacterStoreable
-  {
-    const userjson:PersistentCharacterStoreable = {uuid:this.uuid,name:this.name,...super.toJson()};
-    return userjson;
-  }
-  fromJson(options:PersistentCharacterStoreable): void
-  {
-    super.fromJson(options);
-    this._name = options.name;
-  }
 }
-
-export type PersistentCharacterStoreable = {uuid:string;name:string}&CharacterStoreable

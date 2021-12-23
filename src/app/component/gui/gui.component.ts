@@ -21,6 +21,7 @@ import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';
 import { PartyService } from 'src/gameLogic/custom/subservice/party';
 import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
+import { TestMainCharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/testMainCharacterBattleClass';
 
 @Component({
   selector   : 'app-gui',
@@ -94,7 +95,7 @@ export class GuiComponent implements OnInit {
       this.masterService.partyHandler.user = this.masterService.gameSaver.MainCharacter[0];
     }
     if (!this.masterService.partyHandler.user) {
-      const user = new MainCharacter(this.masterService, 'player');
+      const user = new MainCharacter(this.masterService, 'player',new TestMainCharacterBattleClass());
       const meleeTest1 = new MeleeTest(this.masterService);
       const rangedTest1 = new RangedTest(this.masterService);
       const shieldTest1 = new ShieldTest(this.masterService);
