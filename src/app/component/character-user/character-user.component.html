@@ -1,8 +1,8 @@
 <div class="user" *ngIf="character">
   <div class="name hp double-border">
     <div class="character-name">{{ character.name }}</div>
-    <app-character-stat [statName]="'hp'" [statValue]="character.currentCoreStats.hitpoints" [maxValue]="character.coreStats.hitpoints" [barColor]="'cyan'"></app-character-stat>
-    <app-character-stat [statName]="'energy'" [statValue]="character.currentCoreStats.energypoints" [maxValue]="character.coreStats.energypoints"></app-character-stat>
+    <app-character-stat [statName]="'hp'" [statValue]="character.energy_stats.hitpoints" [maxValue]="character.current_energy_stats.hitpoints" [barColor]="'cyan'"></app-character-stat>
+    <app-character-stat [statName]="'energy'" [statValue]="character.energy_stats.energypoints" [maxValue]="character.current_energy_stats.energypoints"></app-character-stat>
   </div>
   <div class="stats double-border">
     <app-character-stat [statName]="'attack'" [statValue]="character.original_stats.strenght"></app-character-stat>
