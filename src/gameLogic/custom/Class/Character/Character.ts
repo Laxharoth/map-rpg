@@ -421,9 +421,9 @@ export abstract class Character implements storeable
    */
   iterStatus    = function*():Generator<Status, void,unknown>
                   {
-                    for(const status of this.statuses) yield status;
-                    for(const status of this.timedStatus) yield status;
-                    for(const status of this.battleStatus) yield status;
+                    for(const status of this.status) yield status;
+                    for(const status of this.timed_status) yield status;
+                    for(const status of this.battle_status) yield status;
                   }
 
   /**
