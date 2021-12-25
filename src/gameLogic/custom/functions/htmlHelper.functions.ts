@@ -103,3 +103,19 @@ export function floor_to(nuber_to_round:number,coefficient:number):number
 {
   return Math.floor(nuber_to_round/coefficient)*coefficient;
 }
+
+export const set_theme = (()=>{
+  enum theme_names_enum {
+    default="default"
+  }
+  type theme_name = `${theme_names_enum}`
+  const themes:{[key in theme_names_enum]:string} = {
+    default:"./assets/theme/default.css"
+  }
+  return (theme_name:theme_name=null)=>{
+    if(!theme_name)theme_name=localStorage.getItem('theme') as theme_name;
+    if(!theme_name)theme_name='default';
+    jQuery("#theme").attr("href",theme_name)
+    localStorage.setItem('theme',themes[theme_name]);
+  }
+})();

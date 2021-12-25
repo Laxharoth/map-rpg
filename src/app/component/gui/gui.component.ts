@@ -23,6 +23,7 @@ import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
 import { TestMainCharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/testMainCharacterBattleClass';
 import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
+import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
 @Component({
   selector   : 'app-gui',
@@ -35,6 +36,7 @@ export class GuiComponent implements OnInit {
   private gameStateSubscription : Subscription;
 
   constructor(private masterService:MasterService) {
+    set_theme()
     this.register_master_service_subservice();
     //debug to get savedata
     this.masterService.gameSaver.load("save1");
