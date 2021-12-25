@@ -52,7 +52,7 @@
               "content": "Make services classes",
               "id": 1633276447435,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -62,7 +62,7 @@
               "content": "Make MasterService a service",
               "id": 1633276447654,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -72,7 +72,7 @@
               "content": "Update all imports",
               "id": 1633276449755,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -82,7 +82,7 @@
               "content": "Fix service references and update @Inputs",
               "id": 1633276487919,
               "level": "default",
-              "done": false
+              "done": true
             }
           }
         ],
@@ -90,7 +90,7 @@
           "content": "In new branch make all services just classes then move the MasterService from class to actual service",
           "id": 1633276406265,
           "level": "default",
-          "done": false
+          "done": true
         }
       },
       {
@@ -103,7 +103,7 @@
               "content": "the item component will have output to send Item",
               "id": 1633483823317,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -116,7 +116,7 @@
                   "content": "Add all items with prices",
                   "id": 1633483781618,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -126,7 +126,7 @@
                   "content": "If item provided show data from that item",
                   "id": 1633483858139,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               }
             ],
@@ -134,7 +134,7 @@
               "content": "Add right shop component",
               "id": 1633483520636,
               "level": "default",
-              "done": false
+              "done": true
             }
           },
           {
@@ -147,7 +147,7 @@
                   "content": "show data from the sale",
                   "id": 1633483918674,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               },
               {
@@ -157,7 +157,7 @@
                   "content": "Show total.",
                   "id": 1633484064052,
                   "level": "default",
-                  "done": false
+                  "done": true
                 }
               }
             ],
@@ -165,7 +165,7 @@
               "content": "Add left shop component",
               "id": 1633483520819,
               "level": "default",
-              "done": false
+              "done": true
             }
           }
         ],
@@ -173,7 +173,7 @@
           "content": "Shop components",
           "id": 1633483503116,
           "level": "default",
-          "done": false
+          "done": true
         }
       }
     ],
@@ -183,7 +183,9 @@
       1633483520636,
       1633483781618,
       1633483520819,
-      1633483918674
-    ]
+      1633483918674,
+      1633276406265
+    ],
+    "schema": "https://github.com/Saber2pr/vsc-ext-todolist/blob/master/src/api/type.ts#L26"
   }
 }
