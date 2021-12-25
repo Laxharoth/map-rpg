@@ -7,6 +7,7 @@ import { PerkFactory } from "src/gameLogic/custom/Factory/PerkFactory";
 import { StatusFactory } from "src/gameLogic/custom/Factory/StatusFactory";
 import { SetDataweb } from "src/gameLogic/custom/subservice/fact-web";
 import { SetCurrentParty } from "src/gameLogic/custom/subservice/party";
+import { SetTimeHandler } from "src/gameLogic/custom/subservice/time-handler";
 
 export enum FactoryName{
   'Item'='Item',
@@ -31,5 +32,5 @@ export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   Shop: ShopFactory,
   CurrentParty: SetCurrentParty,
   FactWeb: SetDataweb,
-  TimeHandler: SetDataweb,
+  TimeHandler: SetTimeHandler,
 }
