@@ -27,7 +27,7 @@ export class MapHandlerService {
   private currentRoom:Room = new Room({onEnter:()=>{},onExit:()=>{},icon:''});
   currentMap:GameMap;
 
-  constructor(masterService:MasterService,gameStateHandler:GameStateService, lockmap:LockMapService)
+  constructor(masterService:MasterService,gameStateHandler:GameStateService, private lockmap:LockMapService)
   {
     this.masterService = masterService;
     this.currentMap = new GameMap()
@@ -63,6 +63,7 @@ export class MapHandlerService {
    */
   loadRoom(roomName: string):void
   {
+    if(this.lockmap.isMapLocked())return;
     const {map:mapname=null,room=null} = this.currentMap.roomcolection[roomName];
     if(!room)
     {
@@ -90,6 +91,7 @@ export class MapHandlerService {
    */
   moveInsideMap(DIRECTION:direction):void
   {
+    if(this.lockmap.isMapLocked())return;
     let [y,x] = this.coordinates;
     switch (DIRECTION)
     {
@@ -136,7 +138,6 @@ export class MapHandlerService {
    */
   private loadRoomHelper(roomnameORcoordinates: string):boolean
   {
-    if(this.masterService.lockmap.isMapLocked())return false;
     let shouldChangeRoom = false;
     let foundRoom:Room;
     let room:roomFunction;
