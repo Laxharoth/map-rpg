@@ -1,3 +1,4 @@
+import { Observable, Subject } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
 import { gamesavenames } from 'src/gameLogic/configurable/subservice/game-saver.type';
 import { Factory, storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
@@ -5,8 +6,9 @@ import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions'
 
 export class  GameSaver
 {
-  private _persistent_game_instances: {[key: string]:storeable[]} = {};
+  private _persistent_game_instances: {[key: string]:any[]} = {};
   private masterService:MasterService;
+  private change_persistent_instance:Subject<on_change_persistent_instance_event> = new Subject()
   constructor(masterService:MasterService){this.masterService=masterService;}
   save(savename: string)
   {
@@ -32,7 +34,7 @@ export class  GameSaver
         //The required key has not been defined make it wait
         if(persistent_game_instance?.dependency_gamesave_object_key &&
           !persistent_game_instance.dependency_gamesave_object_key.every(key => this._persistent_game_instances[key]))
-        {waitingKeys.push(key); break;}
+        { waitingKeys.push(key); break; }
         //persistent objects should register themselves
         Factory(
           this.masterService,
@@ -59,7 +61,17 @@ export class  GameSaver
       Object.defineProperty(this,key,{get: ()=>this._persistent_game_instances[key]})
     }
     this._persistent_game_instances[key].push(storeable)
+    this.change_persistent_instance.next([key,"register",storeable])
   }
   unregister(key: gamesavenames,storeable: storeable)
-  { removeItem(this._persistent_game_instances[key],storeable)}
+  {
+    removeItem(this._persistent_game_instances[key],storeable)
+    this.change_persistent_instance.next([key,"unregister",storeable])
+  }
+
+  on_change_persistent_instance():Observable<on_change_persistent_instance_event>
+  {
+    return this.change_persistent_instance.asObservable();
+  }
 }
+export type on_change_persistent_instance_event = [instance_name:gamesavenames,action:"register"|"unregister",instance:storeable]
