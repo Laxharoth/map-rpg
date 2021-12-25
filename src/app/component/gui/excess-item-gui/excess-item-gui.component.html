@@ -1,0 +1,10 @@
+<div class="app-excess-item-gui double-border">
+  <p>Inventary</p>
+  <div *ngFor="let dropable of character_inventory">
+    <app-dropable-item [dropable]="dropable"></app-dropable-item>
+  </div>
+  <p>Excess Items</p>
+  <div *ngFor="let dropable of excess_item_list">
+    <app-dropable-item [dropable]="dropable"></app-dropable-item>
+  </div>
+</div>

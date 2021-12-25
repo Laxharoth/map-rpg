@@ -1,0 +1,3 @@
+<div [ngClass]="{'border':true,'app-dropable-item': true,'dropped':dropped,'color-reverse':dropped}" [class]="color" (click)="toggleDrop()">
+  <span> {{ item.name }} x {{ item.amount }} </span>
+</div>

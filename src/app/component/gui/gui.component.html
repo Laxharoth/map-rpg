@@ -9,7 +9,10 @@
     <div *ngIf="currentGameState === 'item'" class="color-2">
       <app-item-gui></app-item-gui>
     </div>
-    <div *ngIf="currentGameState === 'shop'">
+    <div *ngIf="currentGameState === 'excess-item'" class="color-2">
+      <app-excess-item-gui></app-excess-item-gui>
+    </div>
+    <div *ngIf="currentGameState === 'shop'" class="color-2">
       <app-shop-gui></app-shop-gui>
     </div>
     <div *ngIf="currentGameState === 'status'" class="color-2">
