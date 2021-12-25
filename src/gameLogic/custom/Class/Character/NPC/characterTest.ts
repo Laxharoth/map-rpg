@@ -5,7 +5,6 @@ import { PersistentCharacter } from "src/gameLogic/custom/Class/Character/NPC/Pe
 import { PerkCharm } from "src/gameLogic/custom/Class/Perk/PerkCharm";
 import { PerkFright } from "src/gameLogic/custom/Class/Perk/PerkFright";
 import { PerkGrappler } from "src/gameLogic/custom/Class/Perk/PerkGrappler";
-import { TimedStatusTest } from "src/gameLogic/custom/Class/Status/TimedStatusTest";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
@@ -14,9 +13,14 @@ export class charTest extends PersistentCharacter
   protected _name!: string;
   characterType:characterType = "test character";
   constructor(masterService:MasterService ,name:string='')
-  { super(masterService);
+  {
+    super(masterService);
+    //@ts-ignore
+    this.masterService.gameSaver.unregister("PersistentCharacter",this)
     this._name = name
     this.uuid = this._name;
+    //@ts-ignore
+    this.masterService.gameSaver.register("PersistentCharacter",this)
     this.addPerk(new PerkCharm(masterService))
     this.addPerk(new PerkGrappler(masterService))
     this.addPerk(new PerkFright(masterService))
@@ -36,5 +40,14 @@ export class charTest extends PersistentCharacter
           case 2: return this.Defend([this]);
           default: return [[],[]];
       }
+  }
+  fromJson(options)
+  {
+    super.fromJson(options);
+    this.uuid = this._name;
+    //@ts-ignore
+    this.masterService.gameSaver.unregister("PersistentCharacter",this)
+    //@ts-ignore
+    this.masterService.gameSaver.register("PersistentCharacter",this)
   }
 }
