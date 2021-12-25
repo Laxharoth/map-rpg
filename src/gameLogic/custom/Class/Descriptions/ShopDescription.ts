@@ -15,7 +15,7 @@ export function SetShopDescription(masterService:MasterService,shop:Shop):void
   function getShopOptions():DescriptionOptions[]{
     return [
       checkoutButton(),
-      nextOption(masterService)
+      nextOption(masterService,"Cancel")
     ]
   };
 
