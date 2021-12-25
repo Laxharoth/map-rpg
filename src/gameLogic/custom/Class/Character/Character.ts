@@ -325,11 +325,11 @@ export abstract class Character implements storeable
       for(const itemsFromStack of item.breakIntoStacks())this.addItem(itemsFromStack);
       return;
     }
-    this.masterService.descriptionHandler
-      .tailDescription(AddExceedItem(this.masterService,item,this),'item')
-      .flush(0)
-      .setDescription(false);
-    return;
+    AddExceedItem(this.masterService,item,this)
+  }
+  dropItem(item: GameItem)
+  {
+    removeItem(this.inventory,item);
   }
   /**
    * Uses an item from inventory or SpecialAttack.

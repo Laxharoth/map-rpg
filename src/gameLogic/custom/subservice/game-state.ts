@@ -9,7 +9,7 @@ import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
  */
 export class GameStateService {
   private gameStateSubject = new Subject<game_state>();
-  private _gameStatePriority:game_state[] = ['map','item','status','battle','shop'];
+  private _gameStatePriority:game_state[] = ['map','item','excess-item','status','battle','shop'];
   private _gameState:game_state[] = [];
   private _gameStateIndex:number = 0;
   constructor() {this.gameState = this._gameStatePriority[0]; }
