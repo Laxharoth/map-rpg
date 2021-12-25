@@ -25,12 +25,12 @@ div
   width:calc(100% - var(--padding)*2);
 }
 
-.double-border
+.border,.double-border
 {
   padding: var(--padding);
   position: relative;
 }
-.double-border::before
+.border::before,.double-border::before
 {
   content: "";
   position: absolute;
@@ -63,3 +63,9 @@ div
 }
 
 ::before,::after { pointer-events: none; }
+
+button
+{
+  background:inherit;
+  filter: brightness(0.8);
+}
