@@ -7,6 +7,7 @@ import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { PersistentCharacter } from 'src/gameLogic/custom/Class/Character/NPC/PersistentCharacter';
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class PartyService implements storeable{
   private _user: Character;
@@ -15,11 +16,11 @@ export class PartyService implements storeable{
 
   private partySubject = new Subject < Character > ();
   private partyMemberSubject = new Subject < [number, Character] > ();
-  private gameSaver: GameSaver&GameSaverMap;
+  private unique_character_handler:UniqueCharacterHandler;
 
-  constructor(gameSaver: GameSaver) {
+  constructor(gameSaver: GameSaver,unique_character_handler:UniqueCharacterHandler) {
     this._user = null;
-    this.gameSaver = gameSaver as GameSaver&GameSaverMap;
+    this.unique_character_handler = unique_character_handler;
     gameSaver.register("Party",this)
   }
 
@@ -68,8 +69,8 @@ export class PartyService implements storeable{
   }
   fromJson(options:PartyStoreable)
   {
-    this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uuid === options.characterUiPosition1)||null,0)
-    this.setPartyMember(this.gameSaver.PersistentCharacter.find(character => character.uuid === options.characterUiPosition2)||null,1)
+    this.setPartyMember(this.unique_character_handler.get_character(options.characterUiPosition1)||null,0);
+    this.setPartyMember(this.unique_character_handler.get_character(options.characterUiPosition2)||null,1);
   }
 }
 export type PartyStoreable = {
