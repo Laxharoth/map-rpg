@@ -1,4 +1,3 @@
-import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/Character';
 export enum factNameListEnum
 {
   a="a"

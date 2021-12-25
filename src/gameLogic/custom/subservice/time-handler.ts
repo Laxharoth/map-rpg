@@ -5,7 +5,6 @@ import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
 import { storeable } from "src/gameLogic/core/Factory/Factory";
 import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { MasterService } from "src/app/service/master.service";
-//TODO separate from flag handler and use game-saver
 export class TimeHandler implements storeable{
   /** The ingame time. */
   private time: Time = new Time(0);

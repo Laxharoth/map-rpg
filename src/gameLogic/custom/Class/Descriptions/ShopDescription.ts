@@ -3,7 +3,6 @@ import { nextOption } from "src/gameLogic/custom/Class/Descriptions/CommonOption
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
 
-//TODO add DescriptionOptions to End Sale
 export function SetShopDescription(masterService:MasterService,shop:Shop):void
 {
   const options:DescriptionOptions[] = getShopOptions();

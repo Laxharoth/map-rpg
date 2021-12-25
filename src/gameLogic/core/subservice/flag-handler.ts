@@ -18,7 +18,6 @@ export class FlagHandlerService implements storeable{
   private gameFlags: { [key: string]: any; } = default_flags;
   /** Subject to check flags changes. */
   private flagsSubject = new Subject<flagname|"ALL">();
-  /** Subject to check time changes. */
 
   constructor(gameSaver: GameSaver) {
     gameSaver.register("Flags",this)
