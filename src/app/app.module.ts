@@ -25,6 +25,8 @@ import { ItemGuiComponent } from './component/gui/item-gui/item-gui.component';
 import { ShopGuiComponent } from './component/gui/shop-gui/shop-gui.component';
 import { StatusGuiComponent } from './component/gui/status-gui/status-gui.component';
 import { UserExperienceComponent } from './component/user-experience/user-experience.component';
+import { ExcessItemGuiComponent } from './component/gui/excess-item-gui/excess-item-gui.component';
+import { DropableItemComponent } from './component/dropable-item/dropable-item.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { UserExperienceComponent } from './component/user-experience/user-experi
     ShopGuiComponent,
     StatusGuiComponent,
     UserExperienceComponent,
+    ExcessItemGuiComponent,
+    DropableItemComponent,
   ],
   imports: [
     BrowserModule,
