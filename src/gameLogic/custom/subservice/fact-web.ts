@@ -9,6 +9,7 @@ import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { MasterService } from 'src/app/service/master.service';
 import { gamesavenames, GameSaverMap } from 'src/gameLogic/configurable/subservice/game-saver.type';
+import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class FactWeb implements storeable
 {
@@ -16,7 +17,7 @@ export class FactWeb implements storeable
   private static readonly SPREAD_COEFFICIENT = 20;
   private static readonly HASH_SEPARATOR = "<!¡>"
   private last_spread_time = 0;
-  private game_saver:GameSaver&GameSaverMap;
+  private unique_character_handler:UniqueCharacterHandler;
   private known_facts:Map<factName,Fact> = new Map();
   private character_map:Map<string,CharacterDataWebData> = new Map();
   private spread_subscriptions:Subscription;
@@ -27,10 +28,9 @@ export class FactWeb implements storeable
    * @param time_handler Creates a subscription to spread facts every set amount of time.
    * @param game_saver Required to get the characters from the unique characters.
    */
-  constructor(time_handler:TimeHandler, game_saver:GameSaver){
+  constructor(time_handler:TimeHandler, game_saver:GameSaver,unique_character_handler:UniqueCharacterHandler){
     game_saver.register("FactWeb",this);
-    this.game_saver = game_saver as GameSaver&GameSaverMap;
-    this.initialize_character_map();
+    this.unique_character_handler = unique_character_handler;
     this.create_subscriptions = ()=>{
       if(!this.spread_subscriptions)this.spread_subscriptions = time_handler.onTimeChanged().subscribe( time => this.spread_fact(time) )
     }
@@ -38,13 +38,15 @@ export class FactWeb implements storeable
 
   private initialize_character_map()
   {
-    for (const character of this.game_saver.MainCharacter?.concat(this.game_saver?.PersistentCharacter) as UniqueCharacter[])
-    {
-      this.character_map.set(character.uuid, {
-        known_facts: new Set(),
-        acquaintacer_map: new Map(),
-      });
-    }
+    for(const character of this.unique_character_handler.unique_characters)
+      this.initialize_character(character);
+  }
+
+  private initialize_character(character: UniqueCharacter) {
+    this.character_map.set(character.uuid, {
+      known_facts: new Set(),
+      acquaintacer_map: new Map(),
+    });
   }
 
   get_fact(fact_name:factName){ return this.known_facts.get(fact_name); }
@@ -56,11 +58,16 @@ export class FactWeb implements storeable
     this.known_facts.set(fact_name,fact);
     this.create_subscriptions();
     for(const character of who_knows)
+    {
+      if(!this.character_map.get(character.uuid))this.initialize_character(character);
       this.character_map.get(character.uuid).known_facts.add(fact_name);
+    }
   }
   register_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness)
   {
     if(character1===character2)return;
+    if(!this.character_map.get(character1.uuid))this.initialize_character(character1);
+    if(!this.character_map.get(character2.uuid))this.initialize_character(character2);
     this.character_map.get(character1.uuid).acquaintacer_map.set(character2.uuid,acquaintace);
     this.character_map.get(character2.uuid).acquaintacer_map.set(character1.uuid,acquaintace);
   }
@@ -130,25 +137,24 @@ export class FactWeb implements storeable
     }
   }
   fromJson(options: DataWebStoreable): void {
-    this.initialize_character_map();
-    const unique_characters = this.game_saver.MainCharacter.concat(this.game_saver.PersistentCharacter) as UniqueCharacter[]
-    //Load Facts
+    //clear all
     this.known_facts.clear();
+    this.character_map.clear();
+    this.initialize_character_map();
+    //Load Facts
     for(const [factname,fact_options] of options.known_facts)
     {
       const fact = new Fact('',0)
       fact.fromJson(fact_options)
       this.known_facts.set(factname,fact)
     }
-    //Clear character map
-    this.character_map.clear();
     //Load relationships
     for(const hashed_relationship of options.acquaintace_graph)
     {
       const [character1_id,character2_id,closeness] = FactWeb.unhash_acquaintance(hashed_relationship)
       this.register_character_link(
-        unique_characters.find(character=>character.uuid === character1_id),
-        unique_characters.find(character=>character.uuid === character2_id),
+        this.unique_character_handler.get_character(character1_id),
+        this.unique_character_handler.get_character(character2_id),
         closeness
       )
     }
@@ -160,7 +166,7 @@ export class FactWeb implements storeable
   }
 }
 export const SetDataweb:FactoryFunction = (masterService:MasterService, options:DataWebStoreable) =>{
-  masterService.DataWeb.fromJson(options);
+  masterService.FactWeb.fromJson(options);
 }
 
 type DataWebStoreable = {
