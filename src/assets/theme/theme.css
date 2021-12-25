@@ -1,0 +1,12 @@
+.color-1 { --background:var(--background-1);--color:var(--color-1); background:var(--background);color: var(--color); }
+.color-2 { --background:var(--background-2);--color:var(--color-2); background:var(--background);color: var(--color); }
+.color-3 { --background:var(--background-3);--color:var(--color-3); background:var(--background);color: var(--color); }
+.color-4 { --background:var(--background-4);--color:var(--color-4); background:var(--background);color: var(--color); }
+.color-5 { --background:var(--background-5);--color:var(--color-5); background:var(--background);color: var(--color); }
+.color-6 { --background:var(--background-5);--color:var(--color-5); background:var(--background);color: var(--color); }
+:is( .color-1, .color-2, .color-3, .color-4, .color-5, .color-6 ).color-reverse,
+:is( .color-1, .color-2, .color-3, .color-4, .color-5, .color-6 ) .color-reverse
+{ background:var(--color);color: var(--background); }
+:is( .color-1, .color-2, .color-3, .color-4, .color-5, .color-6 ).color-clear,
+:is( .color-1, .color-2, .color-3, .color-4, .color-5, .color-6 ) .color-clear
+{background:#0000;}

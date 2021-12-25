@@ -3,7 +3,6 @@
     --side:25px;
     display:flex;
     padding:2px;
-    background:white;
     border-radius:0.3em;
 }
 .number-spinner.vertical
@@ -20,7 +19,6 @@
 .input-spinner
 {
     border:0;
-    background:#0000;
     text-align:center;
     width:var(--side);
     height:var(--side);

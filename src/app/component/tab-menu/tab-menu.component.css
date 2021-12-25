@@ -19,9 +19,7 @@
 .tab-element
 {
   padding:0 0.6rem;
-  margin-left: -0.6rem;
   border: 1px solid black;
-  background:white;
   border-top-left-radius: 0.7em;
 }
 .tab-element:last-child { margin-left: 0; }

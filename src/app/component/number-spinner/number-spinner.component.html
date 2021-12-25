@@ -1,5 +1,5 @@
-<div [ngClass]="[spinnerType , 'number-spinner']">
+<div [ngClass]="[spinnerType , 'number-spinner', 'color-6 color-reverse']">
   <button class="btn-spinner btn-minus" (click)="changeInput(-1)">-</button>
-  <input type="number" class="input-spinner" min="1" max="100" #InputValue>
+  <input type="number" class="input-spinner color-clear" min="1" max="100" #InputValue>
   <button class="btn-spinner btn-plus" (click)="changeInput(1)">+</button>
 </div>
