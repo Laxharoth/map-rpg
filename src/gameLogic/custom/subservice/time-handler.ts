@@ -8,7 +8,7 @@ import { MasterService } from "src/app/service/master.service";
 //TODO separate from flag handler and use game-saver
 export class TimeHandler implements storeable{
   /** The ingame time. */
-  private time: Time;
+  private time: Time = new Time(0);
   private timeSubject = new Subject<Time>();
 
   constructor(game_saver:GameSaver) {
@@ -54,7 +54,7 @@ export class TimeHandler implements storeable{
   }
 
   fromJson(options: timeHandlerStoreable): void {
-      this.time.setTime(options.minutes)
+      options && this.time.setTime(options.minutes)
   }
   toJson(): timeHandlerStoreable {
       return{
