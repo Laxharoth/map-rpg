@@ -10,6 +10,7 @@ import { LockMapService } from 'src/gameLogic/custom/subservice/lock-map';
 import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';
 import { PartyService } from 'src/gameLogic/custom/subservice/party';
 import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
+import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
 
 
 export class MasterServiceSubServiceMap
@@ -23,6 +24,7 @@ export class MasterServiceSubServiceMap
   enemyHandler?:EnemyFormationService;
   gameStateHandler?:GameStateService;
   timeHandler?:TimeHandler;
-  DataWeb?:FactWeb;
+  FactWeb?:FactWeb;
+  UniqueCharacterHandler?:UniqueCharacterHandler;
   updateCharacter?:(character:Character) => void;
 }

@@ -22,6 +22,7 @@ import { PartyService } from 'src/gameLogic/custom/subservice/party';
 import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
 import { TestMainCharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/testMainCharacterBattleClass';
+import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
 
 @Component({
   selector   : 'app-gui',
@@ -67,7 +68,8 @@ export class GuiComponent implements OnInit {
     const flagsHandler = new FlagHandlerService(gameSaver);
     const partyHandler = new PartyService(gameSaver);
     const timeHandler = new TimeHandler(gameSaver)
-    const data_web = new FactWeb(timeHandler, gameSaver);
+    const unique_characters_handler = new UniqueCharacterHandler(gameSaver);
+    const data_web = new FactWeb(timeHandler, gameSaver,unique_characters_handler);
     const updateCharacter=(character:Character)=>
     {
       if(character===this.masterService.partyHandler.user) return this.masterService.partyHandler.updateUser()
@@ -86,9 +88,10 @@ export class GuiComponent implements OnInit {
     this.masterService.register("descriptionHandler", descriptionHandler);
     this.masterService.register("mapHandler", mapHandler);
     this.masterService.register("gameSaver", gameSaver);
-    this.masterService.register("updateCharacter",updateCharacter)
-    this.masterService.register("timeHandler",timeHandler)
-    this.masterService.register("FactWeb",data_web)
+    this.masterService.register("updateCharacter",updateCharacter);
+    this.masterService.register("timeHandler",timeHandler);
+    this.masterService.register("FactWeb",data_web);
+    this.masterService.register("UniqueCharacterHandler",unique_characters_handler);
   }
   private FirstTimeUserInitialize() {
     if(this.masterService.gameSaver?.MainCharacter?.[0]) {
