@@ -27,7 +27,7 @@ export function room(masterService:MasterService):Room
     if(user.meleeWeapon instanceof MeleeUnharmed)
     {
       const melee = user.inventory.find(item=>item instanceof MeleeWeapon)
-      user.useItem(melee,[user]);
+      user.useItem(melee,[user]).excecute();
       this.text='Unequip'
     }
     else
