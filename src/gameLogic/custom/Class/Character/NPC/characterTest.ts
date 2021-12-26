@@ -1,3 +1,4 @@
+import { EmptyCommand } from './../../Battle/BattleCommand';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
@@ -7,6 +8,7 @@ import { PerkFright } from "src/gameLogic/custom/Class/Perk/PerkFright";
 import { PerkGrappler } from "src/gameLogic/custom/Class/Perk/PerkGrappler";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { BattleCommand } from "../../Battle/BattleCommand";
 
 export class charTest extends PersistentCharacter
 {
@@ -28,7 +30,7 @@ export class charTest extends PersistentCharacter
 
   get name(): string { return this._name; }
   set name(name: string) { this._name = name;}
-  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
       const target = randomBetween(0,enemy.length-1);
       switch (randomBetween(0,2))
       {
@@ -38,7 +40,7 @@ export class charTest extends PersistentCharacter
           case 1: return this.Shoot(enemy);
           //DEFEND
           case 2: return this.Defend([this]);
-          default: return [[],[]];
+          default: return new EmptyCommand(this, enemy);
       }
   }
   fromJson(options)

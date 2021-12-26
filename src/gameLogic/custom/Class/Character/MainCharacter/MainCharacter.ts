@@ -2,6 +2,7 @@ import { MasterService } from "src/app/service/master.service";
 import { Character, CharacterStoreable, UniqueCharacter } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { BattleCommand } from "../../Battle/BattleCommand";
 import { CharacterBattleClass } from "../../CharacterBattleClass/CharacterBattleClass";
 
 export class MainCharacter extends UniqueCharacter
@@ -21,7 +22,7 @@ export class MainCharacter extends UniqueCharacter
   get name(): string {
     return this._name;
   }
-  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
     throw new Error("Method not implemented.");
   }
 }

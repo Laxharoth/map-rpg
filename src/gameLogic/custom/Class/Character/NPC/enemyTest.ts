@@ -1,8 +1,10 @@
+import { EmptyCommand } from './../../Battle/BattleCommand';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { BattleCommand } from "../../Battle/BattleCommand";
 
 export class enemyTest extends Character
 {
@@ -22,7 +24,7 @@ export class enemyTest extends Character
   get name(): string {
       return 'test enemy';
   }
-  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
       const target = randomBetween(0,ally.length-1);
       switch (randomBetween(0,2))
       {
@@ -32,7 +34,7 @@ export class enemyTest extends Character
           case 1: return this.Shoot([ally[target]]);
           //DEFEND
           case 2: return this.Defend([this]);
-          default: return [[],[]];
+          default: return new EmptyCommand(this,[]);
       }
   }
 }

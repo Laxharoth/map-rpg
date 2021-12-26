@@ -1,3 +1,4 @@
+import { BattleCommand } from './../../Battle/BattleCommand';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
@@ -14,7 +15,7 @@ export class JohnSmith extends PersistentCharacter
     super(masterService);
     masterService.gameSaver.register('PersistentCharacter',this)
   }
-  _IA_Action(ally: Character[], enemy: Character[]): ActionOutput {
+  _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
     throw new Error("Method not implemented.");
   }
 }

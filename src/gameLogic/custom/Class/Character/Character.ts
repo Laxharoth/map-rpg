@@ -24,6 +24,7 @@ import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
 import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
 import { TestCharacterBattleClass } from "../CharacterBattleClass/testCharacterBattleClass";
 import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
@@ -114,14 +115,19 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  Attack(targets:Character[]):ActionOutput
+  Attack(targets:Character[]):BattleCommand
   {
-    const attackDescription:ActionOutput = [[],[]];
     const weapon = this.meleeWeapon;
-    if(this.hasTag('double attack'))
-      this.attackWithWeapon(targets, weapon, attackDescription);
-    this.attackWithWeapon(targets, weapon, attackDescription);
-    return attackDescription;
+    return new BattleCommand(
+      this,targets,weapon.tags,
+      (targets)=>{
+        const attackDescription:ActionOutput = [[],[]];
+        if(this.hasTag('double attack'))
+          this.attackWithWeapon(targets, weapon, attackDescription);
+        this.attackWithWeapon(targets, weapon, attackDescription);
+        return attackDescription;
+      }
+    )
   }
   /**
    * Uses rangedWeapon to attack the target.
@@ -130,14 +136,19 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  Shoot(targets:Character[]):ActionOutput
+  Shoot(targets:Character[]):BattleCommand
   {
-    const attackDescription:ActionOutput = [[],[]];
     const weapon = this.rangedWeapon;
-    if(this.hasTag('double shoot'))
-      this.attackWithWeapon(targets, weapon, attackDescription);
-    this.attackWithWeapon(targets, weapon, attackDescription);
-    return attackDescription;
+    return new BattleCommand(
+      this,targets, weapon.tags,
+      (targets)=>{
+        const attackDescription:ActionOutput = [[],[]];
+        if(this.hasTag('double shoot'))
+          this.attackWithWeapon(targets, weapon, attackDescription);
+        this.attackWithWeapon(targets, weapon, attackDescription);
+        return attackDescription;
+      }
+    )
   }
   /**
    * Uses shield .defend
@@ -146,9 +157,14 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  Defend(target:Character[]):ActionOutput
+  Defend(target:Character[]):BattleCommand
   {
-    return this.shield.defend(this);
+    const shield = this.shield;
+    const defend_action = shield.defend(target)
+    return new BattleCommand(
+      this,target,shield.tags,
+      (target)=>defend_action
+    )
   }
   /**
    * Reset roundStats apply the battle status effects and cooldown the specials.
@@ -299,7 +315,7 @@ export abstract class Character implements storeable
     for(const status of this.iterStatus())
     {
       const preventAttackStatus = status as unknown as StatusPreventAttack;
-      if(isStatusPreventAttack(preventAttackStatus)      && !preventAttackStatus?.canAttack(target)) return preventAttackStatus.preventAttackDescription(target)
+      if(isStatusPreventAttack(preventAttackStatus) && !preventAttackStatus?.canAttack(target)) return preventAttackStatus.preventAttackDescription(target)
     }
     return  action(target);
   }
@@ -340,14 +356,14 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  useItem(itemIndexOrItem: number|GameItem|SpecialAttack,targets: Character[],sourceItem:'inventory'|'special'=null):ActionOutput
+  useItem(itemIndexOrItem: number|GameItem|SpecialAttack,targets: Character[],sourceItem:'inventory'|'special'=null):BattleCommand
   {
     if(itemIndexOrItem instanceof SpecialAttack)return this._useSpecialAttack(itemIndexOrItem,targets);
     if(itemIndexOrItem instanceof GameItem)return this._useItem(itemIndexOrItem,targets);
     if(sourceItem === 'special')return this._useSpecialAttack(itemIndexOrItem,targets);
     if(sourceItem === 'inventory')return this._useItem(itemIndexOrItem,targets);
     console.warn('item instance not provided or source not provided')
-    return [[],[]]
+    return new EmptyCommand(this,targets)
   }
   /**
    * Unequip melee weapon and adds it to the inventory.
@@ -710,14 +726,15 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  private _useItem(itemIndexOrItem: number|GameItem,targets: Character[]):ActionOutput
+  private _useItem(itemIndexOrItem: number|GameItem,targets: Character[]):BattleCommand
   {
     let itemIndex:number;
     if(itemIndexOrItem instanceof GameItem)itemIndex = this.inventory.indexOf(itemIndexOrItem);
     else itemIndex = itemIndexOrItem;
-    if(itemIndex < 0) return [[],[]]
+    if(itemIndex < 0) return new EmptyCommand(this,targets)
     const item = this.inventory[itemIndex];
-    return item.itemEffect(this,targets);
+    const item_action_output = item.itemEffect(this,targets);
+    return new BattleCommand( this,targets,item.tags,(targets)=>item_action_output )
   }
   /**
    * Use a special attack from the equpments, perks or status.
@@ -728,21 +745,23 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  private _useSpecialAttack(itemIndexOrItem: number|SpecialAttack,targets: Character[]):ActionOutput
+  private _useSpecialAttack(itemIndexOrItem: number|SpecialAttack,targets: Character[]):BattleCommand
   {
     let itemIndex:number;
     const characterSpecials = this.specialAttacks;
     if(itemIndexOrItem instanceof SpecialAttack)itemIndex = characterSpecials.indexOf(itemIndexOrItem);
     else itemIndex = itemIndexOrItem;
-    if(itemIndex < 0) return [[],[]]
+    if(itemIndex < 0) return new EmptyCommand(this,targets)
     const item = characterSpecials[itemIndex];
-    const descriptions:Description[] = []
-    const strings:string[] = []
-    if(targets.length === 1)
-    { pushBattleActionOutput(this.tryAttack(targets[0],(target: Character)=>item.itemEffect(this,target)),[descriptions,strings]) }
-    else for(const target of targets)
-    { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
-    return [descriptions,strings];
+    return new BattleCommand(this,targets,[],(targets)=>{
+      const descriptions:Description[] = []
+      const strings:string[] = []
+      if(targets.length === 1)
+      { pushBattleActionOutput(this.tryAttack(targets[0],(target: Character)=>item.itemEffect(this,target)),[descriptions,strings]) }
+      else for(const target of targets)
+      { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
+      return [descriptions,strings];
+    })
   }
   /**
    * Initializes the unharmed equpments.
@@ -775,7 +794,7 @@ export abstract class Character implements storeable
    * The automatic action to perform.
    * @memberof Character
    */
-  IA_Action():ActionOutput
+  IA_Action():BattleCommand
   {
     const party = [this.masterService.partyHandler.user]
                   .concat(this.masterService.partyHandler.party)
@@ -792,7 +811,7 @@ export abstract class Character implements storeable
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  protected abstract _IA_Action(ally: Character[], enemy: Character[]):ActionOutput;
+  protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
 
   total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
   current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }
