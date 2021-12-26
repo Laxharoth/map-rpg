@@ -454,11 +454,17 @@ export abstract class Character implements storeable
   react(whatTriggers:tag[],source: Character):ActionOutput
   {
     const reactDescription:ActionOutput = [[],[]]
-    if( this.hasTag('paralized') ||
-        this.current_energy_stats.hitpoints<=0  ||
-        this.__endbattle__         )
-      return reactDescription;
-    for(const reaction of this.reactions){ pushBattleActionOutput(reaction.reaction(whatTriggers,source,this),reactDescription);}
+    if( this.current_energy_stats.hitpoints<=0  || this.__endbattle__ )return reactDescription;
+    for(const reaction of this.reactions)
+    { pushBattleActionOutput(reaction.reaction(whatTriggers,this,source,[this]),reactDescription);}
+    return reactDescription
+  }
+  battle_command_react(battle_command:BattleCommand)
+  {
+    const reactDescription:ActionOutput = [[],[]]
+    if( this.current_energy_stats.hitpoints<=0  || this.__endbattle__ )return reactDescription;
+    for(const reaction of this.reactions)
+    { pushBattleActionOutput(reaction.reaction(battle_command.tags,this,battle_command.source,battle_command.target),reactDescription);}
     return reactDescription
   }
   /**
