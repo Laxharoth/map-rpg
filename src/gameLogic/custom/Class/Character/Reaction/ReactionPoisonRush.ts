@@ -6,8 +6,8 @@ import { ActionOutput } from "../Character.type";
 export class PoisonRush extends Reaction
 {
   protected whatTriggers: tag[][] = [['status ended' , 'poison']];
-  protected action(source: Character, target: Character): ActionOutput {
-      target.calculated_stats.physical_attack*=4;
+  protected action(react_character: Character,source:Character,target: Character[]): ActionOutput {
+    react_character.calculated_stats.physical_attack*=4;
       return [[],['Overcoming poison grants extra attack']]
   }
 }
