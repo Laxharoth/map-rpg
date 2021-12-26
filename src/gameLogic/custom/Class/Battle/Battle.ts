@@ -1,6 +1,5 @@
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Description } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
@@ -9,6 +8,7 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
 import { attack_order, get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Descriptions/CommonOptions';
+import { BattleCommand, EmptyCommand } from './BattleCommand';
 export class Battle {
   player: Character;
   party: Character[];
@@ -47,9 +47,10 @@ export class Battle {
    * @param {(target:Character[])=>ActionOutput} playerAction
    * @param {Character[]} playerTarget
    */
-  round(playerAction: (target: Character[]) => ActionOutput, playerTarget: Character[]): void {
+  round(playerAction: BattleCommand): void {
     const partyIsDefeated = () => { return get_undefeated_target([this.player].concat(this.party)).length === 0 }
     const turn_characters = attack_order(get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies)))
+    const battle_commands:BattleCommand[] = []
     for (const character of turn_characters) {
       //check if was defeated this round
       if (character.current_energy_stats.hitpoints <= 0) {
@@ -57,27 +58,30 @@ export class Battle {
         continue;
       }
       if (character === this.player) {
-        pushBattleActionOutput(playerAction(playerTarget), [this.battleRoundDescription, this.battleRoundString]);
+        battle_commands.push(playerAction)
         continue;
       }
-      pushBattleActionOutput(character.IA_Action(), [this.battleRoundDescription, this.battleRoundString])
+      battle_commands.push(character.IA_Action())
+    }
+    for(const battle_command of battle_commands) {
+      turn_characters.forEach(character=>pushBattleActionOutput([this.battleRoundDescription, this.battleRoundString],character.battle_command_react(battle_command)))
+      pushBattleActionOutput([this.battleRoundDescription, this.battleRoundString],battle_command.excecute())
       if (this.enemy_formation.IsDefeated) {
-        for (const enem of this.enemy_formation.enemies) {
+        for (const enem of this.enemy_formation.enemies)
           pushBattleActionOutput(enem.onDefeated(), [this.battleRoundDescription, this.battleRoundString]);
-        }
         break;
       }
       if (partyIsDefeated()) {
-        for (const ally of [this.player].concat(this.party)) {
+        for (const ally of [this.player].concat(this.party))
           pushBattleActionOutput(ally.onDefeated(), [this.battleRoundDescription, this.battleRoundString]);
-        };
         break;
       }
     }
-    for(const character of [this.player].concat(this.party).concat(this.enemy_formation.enemies))character.onEndBattle();
     if (this.enemy_formation.IsDefeated) {
+      for(const character of [this.player].concat(this.party).concat(this.enemy_formation.enemies))character.onEndBattle();
       this.battleRoundDescription.push(this.endBattlePlayerWins())
     } else if (partyIsDefeated()) {
+      for(const character of [this.player].concat(this.party).concat(this.enemy_formation.enemies))character.onEndBattle();
       this.battleRoundDescription.push(this.endBattleEnemyWins())
     } else {
       this.battleRoundDescription.push(this.roundMessage(this.battleRoundString))
@@ -130,11 +134,12 @@ export class Battle {
    * @param {(target:Character[])=>ActionOutput} playerAction
    * @return {*}  {Description}
    */
-  private selectTarget(targets: Character[], playerAction: (target: Character[]) => ActionOutput): void {
+  private selectTarget(targets: Character[], playerAction:BattleCommand): void {
     const targetsOptions: DescriptionOptions[] = [];
     for (const target of targets) {
       targetsOptions.push(new DescriptionOptions(target.name, () => {
-        this.round(playerAction, [target])
+        playerAction.target.splice(0,playerAction.target.length,target)
+        this.round(playerAction)
       }))
     }
     if (targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE) {
@@ -166,16 +171,16 @@ export class Battle {
   selectItem(items: GameItem[]): void {
     const options: DescriptionOptions[] = []
     for (const item of items) {
-      const playerAction = (target: Character[]) => this.player.useItem(item, target);
       options.push(new DescriptionOptions(item.name, () => {
         const targets = []
           .concat(item.isSelfUsable ? [this.player] : [])
           .concat(item.isPartyUsable ? get_undefeated_target(this.party) : [])
           .concat(item.isEnemyUsable ? get_undefeated_target(this.enemy_formation.enemies) : [])
+        const playerAction = this.player.useItem(item, targets);
         if (item.isSingleTarget && targets.length > 1) {
           return this.selectTarget(targets, playerAction)
         }
-        this.round(playerAction, targets);
+        this.round(playerAction);
       }, !item.isBattleUsable || item.disabled(this.player)))
     }
     if (options.length <= MAXOPTIONSNUMBERPERPAGE) {
@@ -216,23 +221,18 @@ export class Battle {
     return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
   }
   protected playerParalizedOption = new DescriptionOptions("Paralized", () => {
-    this.round((target: Character[]) => [
-      [],
-      []
-    ], [])
+    this.round(new EmptyCommand(this.player,[]))
   })
   protected attack_option = new DescriptionOptions("Attack", () => {
     const targets = get_undefeated_target(this.enemy_formation.enemies);
-    const playerAction = (target: Character[]) => this.player.Attack(target);
-    if (targets.length === 1)
-      return this.round(playerAction, targets);
+    const playerAction = this.player.Attack(targets);
+    if (targets.length === 1) return this.round(playerAction);
     this.selectTarget(targets, playerAction);
   });
   protected shoot_option = new DescriptionOptions("Shoot ", () => {
     const targets = get_undefeated_target(this.enemy_formation.enemies);
-    const playerAction = (target: Character[]) => this.player.Shoot(target);
-    if (targets.length === 1)
-      return this.round(playerAction, targets);
+    const playerAction = this.player.Shoot(targets);
+    if (targets.length === 1)return this.round(playerAction);
     this.selectTarget(targets, playerAction)
   });
   protected special_option = new DescriptionOptions("Special", () => {
@@ -242,11 +242,11 @@ export class Battle {
     this.selectItem(this.player.inventory);
   });
   protected defend_option = new DescriptionOptions("Defend", () => {
-    const playerAction = (target: Character[]) => this.player.Defend(target);
-    this.round(playerAction, [this.player]);
+    const playerAction = this.player.Defend([this.player]);
+    this.round(playerAction);
   });
   protected auto_option = new DescriptionOptions("Auto", () => {
-    this.round((target: Character[]) => this.player.IA_Action(), []);
+    this.round(this.player.IA_Action());
   });
   protected escape_option = new DescriptionOptions("Escape", () => {
     const [descriptionText, successfulEscaping] = this.enemy_formation.attemptEscape([this.player].concat(this.party))
@@ -258,14 +258,9 @@ export class Battle {
       return;
     }
     //player will do nothing
-    const playerAction: (target: Character[]) => ActionOutput = (target: Character[]) => {
-      return [
-        [],
-        []
-      ]
-    }
+    const playerAction= new EmptyCommand(this.player,[])
     this.startRoundDescription.push(new Description(descriptionText, [nextOption(this.master_service)]))
-    this.round(playerAction, [])
+    this.round(playerAction)
   });
   protected initialize_battle_options(): DescriptionOptions[] {
     return [
