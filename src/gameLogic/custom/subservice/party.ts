@@ -1,16 +1,15 @@
 import { Observable, Subject } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { GameSaverMap } from 'src/gameLogic/configurable/subservice/game-saver.type';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
-import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Character, UniqueCharacter } from 'src/gameLogic/custom/Class/Character/Character';
 import { PersistentCharacter } from 'src/gameLogic/custom/Class/Character/NPC/PersistentCharacter';
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class PartyService implements storeable{
-  private _user: Character;
+  private _user: UniqueCharacter;
   private _party: [PersistentCharacter,PersistentCharacter] = [null, null];
   persistents: { [key: string]: PersistentCharacter } = {};
 
@@ -24,20 +23,23 @@ export class PartyService implements storeable{
     gameSaver.register("Party",this)
   }
 
-  get user() {
-    return this._user;
+  get user():UniqueCharacter {
+    return this._user as UniqueCharacter;
   }
-  get party(): Character[] {
+  get party(): UniqueCharacter[] {
     return this._party.filter(character => character !== null);
   }
   getPersistent(characterType: characterType) {
     return this.persistents[characterType];
   }
-  set user(user: Character) {
+  set user(user: UniqueCharacter) {
     this._user = user;
     this.updateUser()
   }
 
+  is_party_member(character: Character): boolean {
+    return character===this._user || (this._party as Character[]).includes(character);
+  }
   setPartyMember(value: PersistentCharacter, index: 0 | 1) {
     if (![0, 1].includes(index)) return console.warn(`PartyMember index can be only 0|1 not:${index}`)
     this._party[index] = value;
