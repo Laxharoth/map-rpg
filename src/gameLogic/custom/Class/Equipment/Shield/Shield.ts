@@ -41,15 +41,21 @@ export abstract class Shield extends Equipment{
   /**
    * Adds the StatusDefend to the character with the shield.
    *
-   * @param {Character} target
+   * @param {Character} targets
    * @return {*}  {ActionOutput}
    * @memberof Shield
    */
-  defend(target : Character):ActionOutput
+  defend(targets:Character[]):ActionOutput
   {
-    const statusOutput = target.addStatus(new StatusDefend(this.masterService));
-    const reactionOutput = target.react(this.tags,target);
-    return pushBattleActionOutput(statusOutput,reactionOutput);
+    const output = [[],[]] as ActionOutput;
+    for(const target of targets)
+    {
+      const statusOutput = target.addStatus(new StatusDefend(this.masterService));
+      const reactionOutput = target.react(this.tags,target);
+      pushBattleActionOutput(statusOutput,reactionOutput)
+      pushBattleActionOutput(reactionOutput,output);
+    }
+    return output;
   }
   get tags(): tag[] { return ['shield']}
 }
