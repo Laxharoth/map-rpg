@@ -1,6 +1,7 @@
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 import { damageTypes } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
-import random from "random"
+import random from 'random'
+import * as jQuery from 'jquery'
 
 /**
  * In descriptions that use input elements get the value of the input and select.
