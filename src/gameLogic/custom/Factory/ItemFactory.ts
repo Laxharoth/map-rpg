@@ -11,6 +11,7 @@ import { RangedUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/Rang
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { armornameEnum, itemname, itemsEnum, meleenameEnum, rangednameEnum, shieldnameEnum } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { ItemTest } from 'src/gameLogic/custom/Class/Items/ItemTest';
+import { ShieldGuard } from '../Class/Equipment/Shield/ShieldGuard';
 
 
 /**
@@ -39,5 +40,6 @@ const ItemSwitcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armor
   'Shield test':ShieldTest,
   'No Armor':ArmorNoArmor,
   'Armor Test':ArmorTest,
-  'item-test':ItemTest
+  'item-test':ItemTest,
+  'Guard Shield':ShieldGuard,
 }

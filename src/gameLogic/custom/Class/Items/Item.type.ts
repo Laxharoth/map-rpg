@@ -9,6 +9,7 @@ export enum rangednameEnum{
 export enum shieldnameEnum{
   "No shield"="No shield",
   "Shield test"="Shield test",
+  "Guard Shield"="Guard Shield",
 }
 export enum armornameEnum{
   "No Armor"="No Armor",

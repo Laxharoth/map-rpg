@@ -23,4 +23,5 @@ export type tag = 'melee weapon'|
                   'petrified'|
                   'prone'|
                   'restrained'|
+                  'before-action'|
                   'sleep';
