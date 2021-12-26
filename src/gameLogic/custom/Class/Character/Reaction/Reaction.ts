@@ -12,27 +12,22 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
  * @constructor Initializes the masterService
  */
 export abstract class Reaction{
-  /**
-   * The list of tags the reaction should be triggered with.
-   *
-   * @protected
-   * @abstract
-   * @type {tag[][]}
-   * @memberof Reaction
-   * @constructor Initializes the masterService
-   */
+  /** The list of tags the reaction should be triggered with. */
   protected abstract whatTriggers: tag[][];
+  /** The list of tags the reaction should be never trigger. */
+  protected prevent_reaction:tag[][] = [['paralized'],['before-action']];
   /**
    * What the reaction does when it is triggered
    *
    * @protected
    * @abstract
+   * @param {Character} react_character The character who reacts
    * @param {Character} source The character whose action triggered the reaction.
    * @param {Character} target The character that does the reaction.
    * @return {*}  {ActionOutput}
    * @memberof Reaction
    */
-  protected abstract action(source:Character,target: Character):ActionOutput;
+  protected abstract action(react_character: Character,source:Character,target: Character[]):ActionOutput;
   protected masterService!:MasterService;
 
   /**
@@ -48,18 +43,30 @@ export abstract class Reaction{
    * Then applies the reaction.
    *
    * @param {tag[]} actionTags The tags of the action to react to.
+   * @param {Character} react_character The character who reacts
    * @param {Character} source The character whose action should trigger the reaction.
-   * @param {Character} target The character who does the reaction.
+   * @param {Character} targets The character who is going to be affected by the action.
    * @return {*}  {ActionOutput}
    * @memberof Reaction
    */
-  reaction(actionTags: tag[],source:Character,target:Character):ActionOutput
+  reaction(actionTags: tag[],react_character:Character,source:Character,targets:Character[]): ActionOutput
   {
+    //reaction is prevented
+    if(this.prevent_reaction.some(prevent_pattern => prevent_pattern.every(tag=>actionTags.includes(tag))))return [[],[]]
       for( const trigger of this.whatTriggers )
       {
           if(trigger.every(tag=>actionTags.includes(tag)))
-          { return this.action(source,target); }
+          {
+            //reaction is triggered
+            return this.action(react_character,source,targets)
+          }
       }
+      //reaction is not triggered
       return [[],[]]
   }
+}
+
+export abstract class BeforeActionReaction extends Reaction
+{
+  protected prevent_reaction: tag[][]= [['paralized']]
 }
