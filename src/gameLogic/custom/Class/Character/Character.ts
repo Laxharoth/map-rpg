@@ -189,7 +189,7 @@ export abstract class Character implements storeable
   {
     let timesFound = 0;
     for(const characterStatus of this.iterStatus())
-      if(this.compareStatusName(status, characterStatus))
+      if(compareStatusName(status, characterStatus))
         timesFound++;
     return timesFound;
   }
@@ -204,9 +204,9 @@ export abstract class Character implements storeable
   get specialAttacks(): SpecialAttack[]
   {
     const specials: SpecialAttack[] = []
-    for(const equipment of this.iterEquipment()) { this.pushSpecial(specials,equipment.specials) }
-    for(const perk of this.perks){this.pushSpecial(specials,perk.specials)}
-    for(const status of this.iterStatus()){this.pushSpecial(specials,status.specials)}
+    for(const equipment of this.iterEquipment()) { pushSpecial(specials,equipment.specials) }
+    for(const perk of this.perks){pushSpecial(specials,perk.specials)}
+    for(const status of this.iterStatus()){pushSpecial(specials,status.specials)}
     return specials
   };
 
@@ -282,7 +282,7 @@ export abstract class Character implements storeable
    * @memberof Character
    */
   getStatus(status: statusname):Status|null{
-    for(const characterStatus of this.iterStatus())if(this.compareStatusName(status, characterStatus))return characterStatus;
+    for(const characterStatus of this.iterStatus())if(compareStatusName(status, characterStatus))return characterStatus;
     return null;
   }
   /**
@@ -475,7 +475,6 @@ export abstract class Character implements storeable
   }
   gain_experience(experience:number):number {
     this.level_stats.experience+=experience;
-    console.log(this)
     this.masterService.updateCharacter(this);
     return experience;
   }
@@ -512,9 +511,9 @@ export abstract class Character implements storeable
   protected get reactions(): Reaction[]
   {
     const reactions: Reaction[] = []
-    for(const equipment of this.iterEquipment()) { this.pushReactions(reactions,equipment.reactions) }
-    for(const perk of this.perks){this.pushReactions(reactions,perk.reactions)}
-    for(const status of this.iterStatus()){this.pushReactions(reactions,status.reactions)}
+    for(const equipment of this.iterEquipment()) { pushReactions(reactions,equipment.reactions) }
+    for(const perk of this.perks){pushReactions(reactions,perk.reactions)}
+    for(const status of this.iterStatus()){pushReactions(reactions,status.reactions)}
     return reactions;
   };
   /**
@@ -701,38 +700,7 @@ export abstract class Character implements storeable
     pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString]);
     return [statusDescription, statusString];
   }
-  /**
-   * Pushes an array of Special Attack to another if not already present.
-   *
-   * @private
-   * @param {SpecialAttack[]} specials The original array
-   * @param {SpecialAttack[]} specials2push The array of specials that will be pushed.
-   * @memberof Character
-   */
-  private pushSpecial(specials:SpecialAttack[],specials2push:SpecialAttack[])
-  {
-    for(const special of specials2push)
-    {
-      if(specials.some(pushed => pushed.constructor === special.constructor))continue;
-      specials.push(special);
-    }
-  }
-  /**
-   * Pushes an array of reactions to another if not already present.
-   *
-   * @private
-   * @param {Reaction[]} reactions The original array
-   * @param {Reaction[]} reactions2push The array of reactions that will be pushed.
-   * @memberof Character
-   */
-  private pushReactions(reactions:Reaction[],reactions2push:Reaction[])
-  {
-    for(const reaction of reactions2push)
-    {
-      if(reactions.some(pushed => pushed.constructor === reaction.constructor))continue;
-      reactions.push(reaction);
-    }
-  }
+
   /**
    * Use an actial item from inventory
    *
@@ -802,18 +770,6 @@ export abstract class Character implements storeable
    */
   private attackWithWeapon(targets: Character[], weapon: Weapon, attackDescription: ActionOutput) {
     for (const target of targets) pushBattleActionOutput(this.tryAttack(target, (target: Character) => weapon.attack(this, target)), attackDescription);
-  }
-  /**
-   * Check if the statusname is the same as the second argument.
-   *
-   * @private
-   * @param {(string | Status)} status The status name to check.
-   * @param {Status} characterStatus The status to check.
-   * @return {*}
-   * @memberof Character
-   */
-  private compareStatusName(status: string | Status, characterStatus: Status) {
-    return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status;
   }
   /**
    * The automatic action to perform.
@@ -930,3 +886,46 @@ export abstract class UniqueCharacter extends Character {
   }
 }
 export type UniqueCharacterStoreable = {uuid:string;name:string}&CharacterStoreable
+
+
+/**
+   * Check if the statusname is the same as the second argument.
+   *
+   * @private
+   * @param {(string | Status)} status The status name to check.
+   * @param {Status} characterStatus The status to check.
+   * @return {*}
+   * @memberof Character
+   */
+ function compareStatusName(status: string | Status, characterStatus: Status):boolean{
+  return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status;
+}
+
+/**
+   * Pushes an array of Special Attack to another if not already present.
+   *
+   * @param {SpecialAttack[]} specials The original array
+   * @param {SpecialAttack[]} specials2push The array of specials that will be pushed.
+   */
+ function pushSpecial(specials:SpecialAttack[],specials2push:SpecialAttack[])
+ {
+   for(const special of specials2push)
+   {
+     if(specials.some(pushed => pushed.constructor === special.constructor))continue;
+     specials.push(special);
+   }
+ }
+ /**
+  * Pushes an array of reactions to another if not already present.
+  *
+  * @param {Reaction[]} reactions The original array
+  * @param {Reaction[]} reactions2push The array of reactions that will be pushed.
+  */
+ function pushReactions(reactions:Reaction[],reactions2push:Reaction[])
+ {
+   for(const reaction of reactions2push)
+   {
+     if(reactions.some(pushed => pushed.constructor === reaction.constructor))continue;
+     reactions.push(reaction);
+   }
+ }
