@@ -1,3 +1,4 @@
+import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { fillItemStoreable, GameItem, ItemStoreable } from "src/gameLogic/custom/Class/Items/Item";
@@ -112,6 +113,8 @@ export class Shop
         const reduceAmount = Math.min(characteritem.amount, copyItemsAmount[characteritem.name]);
         characteritem.amount -= reduceAmount;
         copyItemsAmount[characteritem.name] -= reduceAmount;
+        removeItem(character.inventory,characteritem)
+        if(characteritem.amount>0)character.addItem(characteritem);
       }
     }
     for (const item of this.sale.items2Character)

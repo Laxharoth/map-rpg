@@ -41,7 +41,7 @@ export function room(masterService:MasterService):Room
     if(user.rangedWeapon instanceof RangedUnharmed)
     {
       const ranged = user.inventory.find(item=>item instanceof RangedWeapon)
-      user.useItem(ranged,[user]);
+      user.useItem(ranged,[user]).excecute();
       this.text='Unequip'
     }
     else
@@ -55,7 +55,7 @@ export function room(masterService:MasterService):Room
     if(user.shield instanceof ShieldNoShield)
     {
       const shield = user.inventory.find(item=>item instanceof Shield)
-      user.useItem(shield,[user]);
+      user.useItem(shield,[user]).excecute();
       this.text='Unequip'
     }
     else
@@ -69,7 +69,7 @@ export function room(masterService:MasterService):Room
     if(user.armor instanceof ArmorNoArmor)
     {
       const armor = user.inventory.find(item=>item instanceof Armor)
-      user.useItem(armor,[user]);
+      user.useItem(armor,[user]).excecute();
       this.text='Unequip'
     }
     else
@@ -143,7 +143,7 @@ export function room(masterService:MasterService):Room
   function makeShop():void
   {
     const shop = new StaticShop('test-shop'
-      ,['item-test','Shield test','Armor Test']
+      ,['item-test','Shield test','Armor Test','Guard Shield']
       ,()=>'this is a static stock shop'
       ,masterService
       ,{'item-test':10,'Shield test':15,'Armor test':20}
