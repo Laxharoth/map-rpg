@@ -1,5 +1,4 @@
 import { MasterService } from "src/app/service/master.service";
-import { factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { AddExceedItem } from "src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem";
@@ -886,7 +885,7 @@ export abstract class Character implements storeable
   }
 }
 export type CharacterStoreable = {
-  Factory:factoryname;
+  Factory:"Character";
   type:characterType;
   originalCore?:EnergyStats;
   originalStats?:CoreStats;
