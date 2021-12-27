@@ -235,6 +235,13 @@ export abstract class Character implements storeable
    */
   hasTag(tag:tag):boolean { return this.tags.includes(tag); }
   /**
+   *TODO add description
+   *
+   * @return {*}  {boolean}
+   * @memberof Character
+   */
+  is_defeated():boolean{return this.current_energy_stats.hitpoints<=0}
+  /**
    * Adds status to the character. to the correct Array if able.
    *
    * @param {Status} status The status to add to the character.
