@@ -9,6 +9,7 @@ import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFo
 import { attack_order, get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Descriptions/CommonOptions';
 import { BattleCommand, EmptyCommand } from './BattleCommand';
+import { selectTarget } from '../Descriptions/DescriptionSelectTarget';
 export class Battle {
   player: Character;
   party: Character[];
@@ -135,29 +136,13 @@ export class Battle {
    * @return {*}  {Description}
    */
   private selectTarget(targets: Character[], playerAction:BattleCommand): void {
-    const targetsOptions: DescriptionOptions[] = [];
-    for (const target of targets) {
-      targetsOptions.push(new DescriptionOptions(target.name, () => {
-        playerAction.target.splice(0,playerAction.target.length,target)
-        this.round(playerAction)
-      }))
-    }
-    if (targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE) {
-      while (targetsOptions.length < MAXOPTIONSNUMBERPERPAGE - 1) targetsOptions.push(null);
-      targetsOptions.push(new DescriptionOptions('return', () => {
-        this.master_service.descriptionHandler.nextDescription(false)
-      }))
-    } else {
-      while (targetsOptions.length % MAXOPTIONSNUMBERPERPAGE - 2 !== MAXOPTIONSNUMBERPERPAGE - 3) targetsOptions.push(null);
-      targetsOptions.push(new DescriptionOptions('return', () => {
-        this.master_service.descriptionHandler.nextDescription(false)
-      }))
+    const select_target_action = (target:Character[]) => {
+      playerAction.target = target;
+      this.round(playerAction)
     }
     this.master_service.descriptionHandler
-      .headDescription(new Description(
-          () => `${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
-          targetsOptions
-        ),
+      .headDescription(
+        selectTarget(this.master_service,targets,select_target_action),
         'battle'
       )
       .setDescription(false);
