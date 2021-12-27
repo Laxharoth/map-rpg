@@ -16,19 +16,14 @@ export class BattleCommand
     this.action = action;
   }
   excecute():ActionOutput {
-    if(this.source.current_energy_stats.hitpoints<=0)return [[],[]]
     return this.action(this.target);
   }
 }
 export class EmptyCommand extends BattleCommand
 {
-  //@ts-ignore
-  constructor(source:Character, target: Character[]) { super(source, target); }
-  excecute():ActionOutput { return [[],[]]; }
+  constructor(source:Character, target: Character[]) { super(source, target,[],(target:Character[])=>[[],[]]); }
 }
 export class DefeatedCommand extends BattleCommand
 {
-  //@ts-ignore
-  constructor(source:Character, target: Character[]) { super(source, target); }
-  excecute():ActionOutput { return this.source.onDefeated(); }
+  constructor(source:Character, target: Character[]) { super(source, target,[],(target:Character[])=>this.source.onDefeated()); }
 }
