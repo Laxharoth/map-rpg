@@ -1,7 +1,6 @@
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { Description } from 'src/gameLogic/custom/Class/Descriptions/Description';
-import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
@@ -9,6 +8,7 @@ import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFo
 import { attack_order, get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Descriptions/CommonOptions';
 import { BattleCommand, EmptyCommand } from './BattleCommand';
+import { is_item_disabled_function, selectItem, valid_target_function } from '../Descriptions/DescriptionUseItem';
 import { selectTarget } from '../Descriptions/DescriptionSelectTarget';
 export class Battle {
   player: Character;
@@ -154,33 +154,8 @@ export class Battle {
    * @return {*}  {Description}
    */
   selectItem(items: GameItem[]): void {
-    const options: DescriptionOptions[] = []
-    for (const item of items) {
-      options.push(new DescriptionOptions(item.name, () => {
-        const targets = []
-          .concat(item.isSelfUsable ? [this.player] : [])
-          .concat(item.isPartyUsable ? get_undefeated_target(this.party) : [])
-          .concat(item.isEnemyUsable ? get_undefeated_target(this.enemy_formation.enemies) : [])
-        const playerAction = this.player.useItem(item, targets);
-        if (item.isSingleTarget && targets.length > 1) {
-          return this.selectTarget(targets, playerAction)
-        }
-        this.round(playerAction);
-      }, !item.isBattleUsable || item.disabled(this.player)))
-    }
-    if (options.length <= MAXOPTIONSNUMBERPERPAGE) {
-      while (options.length < MAXOPTIONSNUMBERPERPAGE - 1) options.push(null);
-      options.push(new DescriptionOptions('return', () => {
-        this.master_service.descriptionHandler.nextDescription(false)
-      }))
-    } else {
-      while (options.length % MAXOPTIONSNUMBERPERPAGE - 2 !== MAXOPTIONSNUMBERPERPAGE - 3) options.push(null);
-      options.push(new DescriptionOptions('return', () => {
-        this.master_service.descriptionHandler.nextDescription(false)
-      }))
-    }
     this.master_service.descriptionHandler
-      .headDescription(new Description(() => `${items.map(item=>item.name).join('\n')}`, options), 'battle')
+      .headDescription(this.use_Item_on_battle(items), 'battle')
       .setDescription(false);
   }
   private endBattlePlayerWins() {
@@ -265,4 +240,32 @@ export class Battle {
       this.escape_option,
     ]
   }
+  /**
+   * //TODO document method
+   *
+   * @param {GameItem[]} items
+   * @return {*}  {Description}
+   * @memberof Battle
+   */
+  private use_Item_on_battle(items:GameItem[]):Description
+  {
+    const use_item_on_battle = (item:GameItem,target:Character[])=>{
+      const battle_action =  this.player.useItem(item,target);
+      this.round(battle_action)
+    }
+    const is_valid_target:valid_target_function = (item:GameItem,target:Character)=>{
+      return (item.isPartyUsable&&this.party.includes(target))||
+      (item.isEnemyUsable&&this.enemy_formation.enemies.includes(target))||
+      (item.isSelfUsable&&this.player===(target))
+    }
+    const is_item_disabled:is_item_disabled_function = (character:Character,item:GameItem)=>!item.isBattleUsable||item.disabled(this.player)
+    return selectItem(this.master_service,
+      this.player,get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies)),
+      items,
+      'battle',
+      use_item_on_battle,
+      is_valid_target,
+      is_item_disabled)
+  }
+
 }
