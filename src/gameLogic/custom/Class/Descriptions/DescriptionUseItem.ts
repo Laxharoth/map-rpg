@@ -45,33 +45,4 @@ export function selectItem(masterService:MasterService):Description
     options.push(returnOption)
   }
   return new Description(()=>`${items.map(item=>item.name).join('\n')}`,options)
-  ///////////////////////////////////////////////////////
-  //SELECT TARGET
-  ///////////////////////////////////////////////////////
-  /**
-   * Returns options to select target.
-   *
-   * @param {Character[]} targets
-   * @param {(target:Character[])=>ActionOutput} playerAction
-   * @return {*}  {Description}
-   */
-   function selectTarget(targets:Character[],playerAction:(target:Character[])=>void):Description
-   {
-     const targetsOptions:DescriptionOptions[] = [];
-     for(const target of targets)
-     {
-       targetsOptions.push(new DescriptionOptions(target.name,()=>{ playerAction([target]) }))
-     }
-     if(targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE)
-     {
-       while(targetsOptions.length < MAXOPTIONSNUMBERPERPAGE-1) targetsOptions.push(null);
-       targetsOptions.push(returnOption)
-     }
-     else
-     {
-       while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3) targetsOptions.push(null);
-       targetsOptions.push(returnOption)
-     }
-     return new Description(()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,targetsOptions)
-   }
 }
