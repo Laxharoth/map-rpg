@@ -7,7 +7,7 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
 import { attack_order, get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Descriptions/CommonOptions';
-import { BattleCommand, EmptyCommand } from './BattleCommand';
+import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
 import { is_item_disabled_function, selectItem, valid_target_function } from '../Descriptions/DescriptionUseItem';
 import { selectTarget } from '../Descriptions/DescriptionSelectTarget';
 export class Battle {
@@ -53,18 +53,11 @@ export class Battle {
     const turn_characters = attack_order(get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies)))
     const battle_commands:BattleCommand[] = []
     for (const character of turn_characters) {
-      //check if was defeated this round
-      if (character.current_energy_stats.hitpoints <= 0) {
-        pushBattleActionOutput(character.onDefeated(), [this.battleRoundDescription, this.battleRoundString])
-        continue;
-      }
-      if (character === this.player) {
-        battle_commands.push(playerAction)
-        continue;
-      }
+      if (character === this.player) { battle_commands.push(playerAction); continue; }
       battle_commands.push(character.IA_Action())
     }
-    for(const battle_command of battle_commands) {
+    for(let battle_command of battle_commands) {
+      if(battle_command.source.is_defeated())battle_command=new DefeatedCommand(battle_command.source, battle_command.target);
       turn_characters.forEach(character=>pushBattleActionOutput([this.battleRoundDescription, this.battleRoundString],character.battle_command_react(battle_command)))
       pushBattleActionOutput([this.battleRoundDescription, this.battleRoundString],battle_command.excecute())
       if (this.enemy_formation.IsDefeated) {
