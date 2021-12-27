@@ -1,11 +1,11 @@
 import { MasterService } from "src/app/service/master.service";
 import { DescriptionOptions } from "./Description";
-import { selectItem } from "./DescriptionUseItem";
+import { selectItemOverworld } from "./DescriptionUseItem";
 
 export function DescriptionSelectItemFromMap(masterService:MasterService):DescriptionOptions
 {
   return new DescriptionOptions("Item",function(){
-    masterService.descriptionHandler.headDescription(selectItem(masterService),'item')
+    masterService.descriptionHandler.headDescription(selectItemOverworld(masterService),'item')
       .setDescription(false);
   })
 }
