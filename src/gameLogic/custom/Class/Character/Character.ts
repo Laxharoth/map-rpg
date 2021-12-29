@@ -170,9 +170,9 @@ export abstract class Character
   {
     const roundDescription:ActionOutput = [[],[]];
     roundDescription[1].push(this.currentStatusString);
-    this.calculateStats()
     pushBattleActionOutput(this.startRoundApplyStatus(),roundDescription)
     this.cooldownSpecials();
+    this.calculateStats()
     return roundDescription;
   }
   /**
@@ -580,18 +580,17 @@ export abstract class Character
   calculateStats():void {
     this.calculated_stats = this.character_battle_class.calculate_stats(this.original_stats as FullCoreStats);
     this.calculated_resistance = {...this.original_resistance};
-    for(const status of this.status.concat(this.timed_status)){ status.applyModifiers(this); }
     for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this); }
+    for(const status of this.iterStatus()){ status.applyModifiers(this); }
   }
 
   /**
-   * Resets the stats of the character except hitpoints  and energypoints.
-   * Apply modifiers of equipment and non Battle Status.
+   * Apply status effects.
    *
-   * @private
+   * @protected
    * @memberof Character
    */
-  private applyStatus():void { for(const status of this.status.concat(this.timed_status)){ status.applyEffect(this); } }
+  protected applyStatus():void { for(const status of this.status.concat(this.timed_status)){ status.applyEffect(this); } }
   /**
    * Check if the Item can be Inserted into the inventory.
    *
