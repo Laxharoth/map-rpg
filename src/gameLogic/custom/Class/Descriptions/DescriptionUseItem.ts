@@ -5,15 +5,16 @@ import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Desc
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
+import { BattleUseable } from '../Items/BattleUseable';
 import { selectTarget } from './DescriptionSelectTarget';
 
 export function selectItem(
   masterService:MasterService,
   action_source:Character,
   targets:Character[],
-  items:GameItem[],
+  items:BattleUseable[],
   game_state:game_state,
-  action:(item:GameItem,target:Character[])=>void,
+  action:(item:BattleUseable,target:Character[])=>void,
   is_valid_target:valid_target_function,
   is_item_disabled:is_item_disabled_function):Description
 {
@@ -63,11 +64,11 @@ export function selectItemOverworld(masterService:MasterService):Description
   const is_valid_target:valid_target_function=(item,target)=>{
     return (target===user && item.isSelfUsable)||(masterService.partyHandler.party.some((character:Character)=>character===target) && item.isPartyUsable)
   }
-  const is_item_disabled:is_item_disabled_function = (action_source,item)=>item.isBattleUsableOnly || item.disabled(action_source)
+  const is_item_disabled:is_item_disabled_function = (action_source,item)=>!item.isMapUsable || item.disabled(action_source)
   return selectItem(masterService,user,targets,user.inventory,'item',use_item_on_party,is_valid_target,is_item_disabled)
 }
 
-function discriminate_targets(item:GameItem,targets:Character[],is_valid_target:valid_target_function):Character[]
+function discriminate_targets(item:BattleUseable,targets:Character[],is_valid_target:valid_target_function):Character[]
 {
   const valid_targets:Character[] = []
   for(const target of targets)
@@ -77,5 +78,5 @@ function discriminate_targets(item:GameItem,targets:Character[],is_valid_target:
   return valid_targets;
 }
 
-export type valid_target_function = (item:GameItem,target:Character)=>boolean
-export type is_item_disabled_function = (character:Character,item:GameItem)=>boolean
+export type valid_target_function = (item:BattleUseable,target:Character)=>boolean
+export type is_item_disabled_function = (character:Character,item:BattleUseable)=>boolean

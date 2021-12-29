@@ -1,12 +1,12 @@
 import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { MasterService } from "src/app/service/master.service";
-import { factoryname } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { storeable } from "src/gameLogic/core/Factory/Factory";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
+import { BattleUseable } from './BattleUseable';
 
 /**
  * Model of game items.
@@ -17,7 +17,7 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
  * @implements {storeable}
  * @constructor Initializes the masterService
  */
-export abstract class GameItem implements storeable
+export abstract class GameItem implements BattleUseable, storeable
 {
   /**
    * The max number of items than can be held in a single stack.
@@ -66,7 +66,7 @@ export abstract class GameItem implements storeable
    * @type {boolean}
    * @memberof Item
    */
-  get isBattleUsableOnly(): boolean {return false;}
+  get isMapUsable(): boolean {return true;}
   /**
    * If the Item can be used on the player's party
    *
@@ -172,7 +172,7 @@ export abstract class GameItem implements storeable
    */
   fromJson(options: ItemStoreable): void
   {
-    const {amount,basePrice} = options;
+    const {amount=null,basePrice=null} = options;
     amount&&(this.amount = amount);
     basePrice&&(this.basePrice = basePrice);
   }
@@ -191,7 +191,7 @@ export function fillItemStoreable(item_data:{type:itemname,[key:string]:any})
   return item_storeable
 }
 export type ItemStoreable ={
-  Factory:factoryname;
+  Factory:"Item";
   type:itemname;
   amount?:number;
   basePrice?:number;

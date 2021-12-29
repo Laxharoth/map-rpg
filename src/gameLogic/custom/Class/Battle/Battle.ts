@@ -10,6 +10,7 @@ import { nextOption } from '../Descriptions/CommonOptions';
 import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
 import { is_item_disabled_function, selectItem, valid_target_function } from '../Descriptions/DescriptionUseItem';
 import { selectTarget } from '../Descriptions/DescriptionSelectTarget';
+import { BattleUseable } from '../Items/BattleUseable';
 export class Battle {
   player: Character;
   party: Character[];
@@ -80,7 +81,6 @@ export class Battle {
     } else {
       this.battleRoundDescription.push(this.roundMessage(this.battleRoundString))
     }
-
     this.master_service.descriptionHandler
       .flush(0)
       .tailDescription(this.battleRoundDescription, 'battle')
@@ -146,15 +146,15 @@ export class Battle {
    * @param {GameItem[]} items
    * @return {*}  {Description}
    */
-  selectItem(items: GameItem[]): void {
+  selectItem(items: BattleUseable[]): void {
     this.master_service.descriptionHandler
       .headDescription(this.use_Item_on_battle(items), 'battle')
       .setDescription(false);
   }
   private endBattlePlayerWins() {
+    pushBattleActionOutput(this.enemy_formation.give_experience([this.player].concat(this.party)),[this.battleRoundDescription, this.battleRoundString])
     const nextOption = new DescriptionOptions('next', () => {
       this.player.healHitPoints(10);
-      this.player.gain_experience(20);
       this.master_service.descriptionHandler
         .tailDescription(this.enemy_formation.onPartyVictory([this.player].concat(this.party)), 'battle')
         .nextDescription(false);
@@ -240,7 +240,7 @@ export class Battle {
    * @return {*}  {Description}
    * @memberof Battle
    */
-  private use_Item_on_battle(items:GameItem[]):Description
+  private use_Item_on_battle(items:BattleUseable[]):Description
   {
     const use_item_on_battle = (item:GameItem,target:Character[])=>{
       const battle_action =  this.player.useItem(item,target);
@@ -248,7 +248,7 @@ export class Battle {
     }
     const is_valid_target:valid_target_function = (item:GameItem,target:Character)=>{
       return (item.isPartyUsable&&this.party.includes(target))||
-      (item.isEnemyUsable&&this.enemy_formation.enemies.includes(target))||
+      (item.isEnemyUsable&&(this.enemy_formation.enemies as Character[]).includes(target))||
       (item.isSelfUsable&&this.player===(target))
     }
     const is_item_disabled:is_item_disabled_function = (character:Character,item:GameItem)=>!item.isBattleUsable||item.disabled(this.player)
@@ -260,5 +260,4 @@ export class Battle {
       is_valid_target,
       is_item_disabled)
   }
-
 }
