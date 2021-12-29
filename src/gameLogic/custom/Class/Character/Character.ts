@@ -62,24 +62,24 @@ export abstract class Character
   private static __noShield__:ShieldNoShield;
 
   /** * The currently equiped melee weapon. */
-  private _meleeWeapon:MeleeWeapon = null;
+  protected _meleeWeapon:MeleeWeapon = null;
   get meleeWeapon():MeleeWeapon { return this._meleeWeapon || Character.__meleeUnharmed__ }
   set meleeWeapon(equipment:MeleeWeapon){this._meleeWeapon=equipment}
   /** * The currently equiped rangedWeapon. */
-  private _rangedWeapon:RangedWeapon = null;
+  protected _rangedWeapon:RangedWeapon = null;
   get rangedWeapon():RangedWeapon { return this._rangedWeapon || Character.__rangedUnharmed__ }
   set rangedWeapon(equipment:RangedWeapon){this._rangedWeapon=equipment}
   /** * *The currently equiped armor. */
-  private _armor:Armor = null;
+  protected _armor:Armor = null;
   get armor():Armor { return this._armor || Character.__noArmor__}
   set armor(equipment:Armor){this._armor=equipment}
   /** * The currently equiped shield. */
-  private _shield:Shield = null;
+  protected _shield:Shield = null;
   get shield():Shield { return this._shield || Character.__noShield__}
   set shield(equipment:Shield){this._shield=equipment}
 
   get name(): string{ return this._name};
-  private readonly masterService:MasterService
+  protected readonly masterService:MasterService
   private __endbattle__ = false;
 
   /**
