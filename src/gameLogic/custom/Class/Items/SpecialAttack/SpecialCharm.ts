@@ -7,13 +7,14 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
 
 export class SpecialCharm extends SpecialAttack
 {
+  protected COOLDOWN: number=6;
   get name(): specialsname { return 'Charm'; }
   get isPartyUsable(): boolean { return false; }
   get isEnemyUsable(): boolean { return true; }
   get isSelfUsable() : boolean { return false; }
   get isSingleTarget(): boolean { return true; }
+  get description(): string { return "charm"}
   protected _itemEffect(user:Character,target: Character): ActionOutput {
-    this.cooldown = 6;
     return target.addStatus(new StatusCharm(this.masterService,user,target))
   }
 }

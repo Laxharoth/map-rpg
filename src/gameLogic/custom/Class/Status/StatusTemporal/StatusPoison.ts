@@ -17,7 +17,7 @@ export class StatusPoison extends StatusBattle
     return [[],[`Poison causes ${damage} points of damage to ${target.name}`]];
   }
   canApply(target:Character): boolean
-  { return super.canApply(target) && randomCheck(target.calculated_resistance.poisonresistance); }
+  { return super.canApply(target) && randomCheck(100-target.calculated_resistance.poisonresistance); }
   onStatusGainded(target: Character): ActionOutput
   { return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} has been poisoned.`]]); }
   onStatusRemoved(target: Character): ActionOutput

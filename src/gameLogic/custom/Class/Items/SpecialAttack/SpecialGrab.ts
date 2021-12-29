@@ -8,17 +8,18 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
 
 export class SpecialGrab extends SpecialAttack
 {
+  protected COOLDOWN = 6;
   get name(): specialsname { return 'Grab' }
   get isPartyUsable(): boolean { return false }
   get isEnemyUsable(): boolean { return true }
   get isSelfUsable(): boolean { return false }
   get isSingleTarget(): boolean { return true }
+  get description(): string{ return "grab"}
 
   protected _itemEffect(user:Character,target: Character): ActionOutput {
       const description:ActionOutput = [[],[]];
       pushBattleActionOutput(user.addStatus(new StatusGrappling(this.masterService,target)),description)
       pushBattleActionOutput(target.addStatus(new StatusGrappled(this.masterService,user)),description)
-      this.cooldown = 6;
       return description;
   }
 }

@@ -6,15 +6,15 @@ import { StatusFright } from "src/gameLogic/custom/Class/Status/StatusTemporal/A
 
 export class SpecialFright extends SpecialAttack
 {
+  protected COOLDOWN: number = 4;
   get name(): specialsname { return 'Fright' }
   get isPartyUsable(): boolean { return false }
   get isEnemyUsable(): boolean { return true }
   get isSelfUsable(): boolean { return false }
   get isSingleTarget(): boolean { return true }
-
+  get description(): string { return "fright"}
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
-      this.cooldown=4;
       return target.addStatus(new StatusFright(this.masterService,target,user))
   }
 }
