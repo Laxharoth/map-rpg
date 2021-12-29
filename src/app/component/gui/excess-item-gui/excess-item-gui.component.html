@@ -1,10 +1,14 @@
 <div class="app-excess-item-gui double-border">
-  <p>Inventary</p>
-  <div *ngFor="let dropable of character_inventory">
-    <app-dropable-item [dropable]="dropable"></app-dropable-item>
+  <div class="character-inventory">
+    <p>Inventary</p>
+    <div *ngFor="let dropable of character_inventory">
+      <app-dropable-item [dropable]="dropable"></app-dropable-item>
+    </div>
   </div>
-  <p>Excess Items</p>
-  <div *ngFor="let dropable of excess_item_list">
-    <app-dropable-item [dropable]="dropable"></app-dropable-item>
+  <div class="excess-item" *ngIf="excess_item_list.length>0">
+    <p>Excess Items</p>
+    <div *ngFor="let dropable of excess_item_list">
+      <app-dropable-item [dropable]="dropable"></app-dropable-item>
+    </div>
   </div>
 </div>
