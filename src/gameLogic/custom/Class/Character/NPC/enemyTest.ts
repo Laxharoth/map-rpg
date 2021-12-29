@@ -1,12 +1,13 @@
-import { EmptyCommand } from './../../Battle/BattleCommand';
 import { MasterService } from "src/app/service/master.service";
+import { BattleCommand, EmptyCommand } from 'src/gameLogic/custom/Class/Battle/BattleCommand';
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
+import { Enemy } from 'src/gameLogic/custom/Class/Character/Enemy/Enemy';
+import { ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
+import { itemname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
-import { BattleCommand } from "../../Battle/BattleCommand";
 
-export class enemyTest extends Character
+export class enemyTest extends Character implements Enemy
 {
   _name="enemyTest";
   characterType:characterType = 'test enemy';
@@ -36,5 +37,22 @@ export class enemyTest extends Character
           case 2: return this.Defend([this]);
           default: return new EmptyCommand(this,[]);
       }
+  }
+  get loot():ItemStoreable[]
+  {
+    return [
+      {
+        Factory:'Item',
+        type:this.select_loot(),
+      }
+    ]
+  }
+  base_experience: number = 20;
+
+  private select_loot():itemname
+  {
+    const selector = randomBetween(0,100);
+    if(selector<10)return 'Guard Shield'
+    return 'item-test'
   }
 }

@@ -1,7 +1,10 @@
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { MasterService } from "src/app/service/master.service";
-import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
 import { Description, DescriptionOptions, descriptionString } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
+import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { ActionOutput } from '../../Character.type';
 
 /**
  * An array of characters, with the functions for battle descriptions.
@@ -18,10 +21,10 @@ export abstract class EnemyFormation
    *
    * @protected
    * @abstract Can be initialize directly or in the constructor.
-   * @type {Character[]}
+   * @type {(Character&Enemy)[]}
    * @memberof EnemyFormation
    */
-  protected abstract _enemies:Character[];
+  protected abstract _enemies:(Character&Enemy)[];
   protected readonly masterService: MasterService;
 
   /**
@@ -35,10 +38,10 @@ export abstract class EnemyFormation
    * Gets the private array of enemies.
    *
    * @readonly
-   * @type {Character[]}
+   * @type {(Character&Enemy)[]}
    * @memberof EnemyFormation
    */
-  get enemies():Character[] {return this._enemies;}
+  get enemies():(Character&Enemy)[] {return this._enemies;}
 
   /**
    * Defines the description if the enemy party win.
@@ -65,7 +68,22 @@ export abstract class EnemyFormation
    * @return {*}  {Item[]}
    * @memberof EnemyFormation
    */
-  abstract loot():GameItem[];
+  loot():GameItem[]
+  {
+    return this._enemies.reduce((accumulator,enemy)=>accumulator.concat(enemy.loot.map(storeable=>ItemFactory(this.masterService,storeable))),[] as GameItem[])
+  }
+  give_experience(party: Character[]):ActionOutput
+  {
+    let experience_str:string[] = []
+    for(const party_member of party)
+    {
+      const experience = party_member.gain_experience(
+        this._enemies.reduce((accumulator,enemy)=>accumulator+calculate_experience(enemy,party_member),0)
+        )
+      experience_str.push(`${party_member.name} gains ${experience} experience`)
+    }
+    return [[],experience_str]
+  }
   /**
    * Returns a description of whether escaped or not.
    *
@@ -123,4 +141,9 @@ export abstract class EnemyFormation
       this.masterService.descriptionHandler.flush(0).nextDescription(false);
     })
   }
+}
+
+function calculate_experience(enemy:Enemy,character: Character):number
+{
+  return enemy.base_experience;
 }

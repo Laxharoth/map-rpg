@@ -8,6 +8,7 @@ import { MeleeTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/Mel
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemTest } from 'src/gameLogic/custom/Class/Items/ItemTest';
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { Enemy } from '../../Enemy/Enemy';
 
 export class testformation extends EnemyFormation
 {
@@ -16,6 +17,7 @@ export class testformation extends EnemyFormation
       super(masterService)
       //this._enemies = Array.from(Array(randomBetween(1,3))).map(_=>new enemyTest(this.masterService))
       this._enemies = [new enemyTest(this.masterService)]
+      this._enemies = [new enemyTest(this.masterService),new enemyTest(this.masterService)]
   }
 
   protected escapeSuccess():descriptionString
@@ -32,7 +34,7 @@ export class testformation extends EnemyFormation
   }
 
 
-  protected _enemies: Character[];
+  protected _enemies: (Character&Enemy)[];
   onEnemyVictory(party: Character[]): Description {
       return this.enemyVictory(party)
   }
