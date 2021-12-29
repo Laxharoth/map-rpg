@@ -59,8 +59,8 @@ export class Battle {
     }
     for(let battle_command of battle_commands) {
       if(battle_command.source.is_defeated())battle_command=new DefeatedCommand(battle_command.source, battle_command.target);
-      turn_characters.forEach(character=>pushBattleActionOutput([this.battleRoundDescription, this.battleRoundString],character.battle_command_react(battle_command)))
-      pushBattleActionOutput([this.battleRoundDescription, this.battleRoundString],battle_command.excecute())
+      turn_characters.forEach(character=>pushBattleActionOutput(character.battle_command_react(battle_command),[this.battleRoundDescription, this.battleRoundString]))
+      pushBattleActionOutput(battle_command.excecute(),[this.battleRoundDescription, this.battleRoundString])
       if (this.enemy_formation.IsDefeated) {
         for (const enem of this.enemy_formation.enemies)
           pushBattleActionOutput(enem.onDefeated(), [this.battleRoundDescription, this.battleRoundString]);
