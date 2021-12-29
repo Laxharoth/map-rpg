@@ -1,3 +1,4 @@
+import { PoisonPill } from './../Class/Items/PoisonPill';
 import { ItemStoreable } from './../Class/Items/Item';
 import { MasterService } from 'src/app/service/master.service';
 import { ArmorNoArmor } from 'src/gameLogic/custom/Class/Equipment/Armor/Armor';
@@ -9,7 +10,7 @@ import { MeleeUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee
 import { RangedTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedTest';
 import { RangedUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
-import { armornameEnum, itemname, itemsEnum, meleenameEnum, rangednameEnum, shieldnameEnum } from 'src/gameLogic/custom/Class/Items/Item.type';
+import { armornameEnum, itemsEnum, meleenameEnum, rangednameEnum, shieldnameEnum } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { ItemTest } from 'src/gameLogic/custom/Class/Items/ItemTest';
 import { ShieldGuard } from '../Class/Equipment/Shield/ShieldGuard';
 
@@ -42,4 +43,5 @@ const ItemSwitcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armor
   'Armor Test':ArmorTest,
   'item-test':ItemTest,
   'Guard Shield':ShieldGuard,
+  'Poison Pill':PoisonPill,
 }

@@ -23,6 +23,7 @@ export enum specialsnameEnum{
 }
 export enum itemsEnum{
   'item-test'='item-test',
+  'Poison Pill'='Poison Pill',
 }
 export type meleename = `${meleenameEnum}`;
 export type rangedname =`${rangednameEnum}`;
