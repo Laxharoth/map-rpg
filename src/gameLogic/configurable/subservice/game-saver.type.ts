@@ -1,6 +1,6 @@
 import { FlagHandlerService } from "src/gameLogic/core/subservice/flag-handler";
 import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
-import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/Character';
+import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 
 enum GameSaveNames {
   MainCharacter='MainCharacter',

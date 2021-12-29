@@ -1,5 +1,4 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { AddExceedItem } from "src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem";
 import { Armor, ArmorNoArmor } from "src/gameLogic/custom/Class/Equipment/Armor/Armor";
@@ -8,20 +7,16 @@ import { Shield, ShieldNoShield } from "src/gameLogic/custom/Class/Equipment/Shi
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon";
 import { Weapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Weapon";
-import { GameItem, ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
-import { itemname } from 'src/gameLogic/custom/Class/Items/Item.type';
+import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
-import { Perk, PerkStoreable } from "src/gameLogic/custom/Class/Perk/Perk";
+import { Perk } from "src/gameLogic/custom/Class/Perk/Perk";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
-import { Status, StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
+import { Status } from "src/gameLogic/custom/Class/Status/Status";
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { isStatusPreventAttack, StatusBattle, StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
-import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
-import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
-import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
 import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
@@ -38,7 +33,7 @@ import { Reaction } from "./Reaction/Reaction";
  * @implements {storeable}
  * @constructor Initializes the masterService Should be overridden to set originalStats
  */
-export abstract class Character implements storeable
+export abstract class Character
 {
   energy_stats:EnergyStats;
   level_stats:LevelStats;
@@ -827,97 +822,7 @@ export abstract class Character implements storeable
 
   total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
   current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }
-
-  /**
-   * Stores character type, originalstats, status, equipment,items and perks
-   *
-   * @return {*}  {{[key: string]:any}}
-   * @memberof Character
-   */
-  toJson(): CharacterStoreable
-  {
-    const storeables:CharacterStoreable = {Factory:"Character", type:this.characterType};
-    storeables['originalCore'] = this.energy_stats;
-    storeables['originalStats'] = this.original_stats;
-    storeables['originalResistance'] = this.original_resistance;
-    storeables['currentCore']  = this.current_energy_stats;
-    storeables['levelStats']  = this.level_stats;
-    storeables['gold'] = this.gold;
-    storeables['status'] = [];
-    for(const status of this.iterStatus())storeables['status'].push({name:status.name,options:status.toJson()})
-    if(this._meleeWeapon)
-      storeables['melee']  = {name:this._meleeWeapon.name,options:this._meleeWeapon.toJson()};
-    if(this._rangedWeapon)
-      storeables['ranged'] = {name:this._rangedWeapon.name,options:this._rangedWeapon.toJson()};
-    if(this._armor)
-      storeables['armor']  = {name:this._armor.name,options:this._armor.toJson()};
-    if(this._shield)
-      storeables['shield'] = {name:this._shield.name,options:this._shield.toJson()};
-    storeables['inventory'] = []
-    for(const item of this.inventory)storeables['inventory'].push({name:item.name,options:item.toJson()});
-    storeables['perk'] = []
-    for(const perk of this.perks)storeables['perk'].push({name:perk.name,options:perk.toJson()});
-    return storeables
-  }
-  /**
-   * loads originalstats, status, equipment,items and perks
-   *
-   * @param {{[key: string]: any}} options
-   * @memberof Character
-   */
-  fromJson(options: CharacterStoreable): void
-  {
-    if(options['originalCore'])this.energy_stats = options['originalCore']
-    if(options['originalStats'])this.original_stats = options['originalStats']
-    if(options['levelStats'])this.level_stats = options['levelStats']
-    if(options['originalResistance'])this.original_resistance = options['originalResistance']
-    if(options['currentCore'])this.current_energy_stats = options['currentCore']
-    if(options['gold']) this.gold = options['gold']
-    if(options['status'])for(const status of options['status']){ this.addStatus(StatusFactory(this.masterService,status.options))}
-    (options['melee']) && (this._meleeWeapon=ItemFactory(this.masterService,options['melee'].options) as MeleeWeapon);
-    (options['ranged'])&& (this._rangedWeapon=ItemFactory(this.masterService,options['ranged'].options) as RangedWeapon);
-    (options['armor']) && (this._armor=ItemFactory(this.masterService,options['armor'].options) as Armor);
-    (options['shield'])&& (this._shield=ItemFactory(this.masterService,options['shield'].options) as Shield);
-    if(options['inventory']) for(const item of options['inventory']){ this.addItem(ItemFactory(this.masterService,item.options)) };
-    if(options['perk'])for(const perk of options['perk']){ this.addPerk(PerkFactory(this.masterService,perk.options))};
-    this.calculateStats();
-    this.applyStatus();
-  }
 }
-export type CharacterStoreable = {
-  Factory:"Character";
-  type:characterType;
-  originalCore?:EnergyStats;
-  originalStats?:CoreStats;
-  levelStats?:LevelStats;
-  originalResistance?:ResistanceStats;
-  currentCore?:EnergyStats;
-  gold?:number;
-  status?:{name:statusname;options:StatusStoreable}[];
-  melee?:{name:itemname;options:ItemStoreable};
-  ranged?:{name:itemname;options:ItemStoreable};
-  armor?:{name:itemname;options:ItemStoreable};
-  shield?:{name:itemname;options:ItemStoreable};
-  inventory?:{name:itemname;options:ItemStoreable}[];
-  perk?:{name:perkname;options:PerkStoreable}[];
-  [key: string]:any;
-}
-
-export abstract class UniqueCharacter extends Character {
-  uuid:string;
-  toJson():UniqueCharacterStoreable
-  {
-    const userjson:UniqueCharacterStoreable = {uuid:this.uuid,name:this.name,...super.toJson()};
-    return userjson;
-  }
-  fromJson(options:UniqueCharacterStoreable): void
-  {
-    super.fromJson(options);
-    this._name = options.name;
-  }
-}
-export type UniqueCharacterStoreable = {uuid:string;name:string}&CharacterStoreable
-
 
 /**
    * Check if the statusname is the same as the second argument.
