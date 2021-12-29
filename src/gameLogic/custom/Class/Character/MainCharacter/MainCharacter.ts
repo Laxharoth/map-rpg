@@ -1,5 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
-import { Character, CharacterStoreable, UniqueCharacter } from "src/gameLogic/custom/Class/Character/Character";
+import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { CharacterStoreable, UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { BattleCommand } from "../../Battle/BattleCommand";
