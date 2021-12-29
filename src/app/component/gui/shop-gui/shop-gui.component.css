@@ -1,6 +1,7 @@
 .app-shop-gui {
   display: flex;
 }
+.app-shop-gui>div{height:100%;}
 .app-shop-gui_shop-sale,
 .app-shop-gui_shop-data {
   width: 20%;
@@ -12,5 +13,7 @@
 }
 
 .app-shop-gui_shop-data {
+  width: 20%;
   padding: 1em;
+  overflow: hidden;
 }
