@@ -1,9 +1,9 @@
 .user
 {
-  --padding:15px;
   display: flex;
-  padding:0 var(--padding);
-  height: calc(100% - var(--padding)*2);
+  padding:0;
+  height: 100%;
+  width: 100%;
   flex-direction:column;
 }
 
