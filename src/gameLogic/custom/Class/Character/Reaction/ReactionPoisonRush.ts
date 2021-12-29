@@ -3,7 +3,7 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { Character } from "../Character";
 import { ActionOutput } from "../Character.type";
 
-export class PoisonRush extends Reaction
+export class PoisonRushReaction extends Reaction
 {
   protected whatTriggers: tag[][] = [['status ended' , 'poison']];
   protected action(react_character: Character,source:Character,target: Character[]): ActionOutput {
