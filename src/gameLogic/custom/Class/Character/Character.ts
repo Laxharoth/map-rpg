@@ -46,10 +46,10 @@ export abstract class Character
   calculated_resistance:ResistanceStats;
   gold:number = 0;
 
-  private perks:Perk[] = [];
-  private status:Status[] = [];
-  private timed_status:TimedStatus[] = [];
-  private battle_status:StatusBattle[] = [];
+  protected perks:Perk[] = [];
+  protected status:Status[] = [];
+  protected timed_status:TimedStatus[] = [];
+  protected battle_status:StatusBattle[] = [];
   protected character_battle_class:CharacterBattleClass;
   protected abstract _name:string;
   abstract readonly characterType:characterType;
