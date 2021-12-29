@@ -17,17 +17,20 @@ export const AddExceedItem = function () {
   let dropping=false;
   const excessItemList: GameItem[] = [];
   const dropable_inventory=[],dropable_item=[];
-  return function (masterService: MasterService, item: GameItem, character: Character): void {
+  return function (masterService: MasterService, items: GameItem|GameItem[], character: Character): void {
+    if(items instanceof GameItem) items = [items];
     //If the item is already in the excessItemList adds to the stack
-    for (const itemInList of excessItemList) {
-      if (item.constructor === itemInList.constructor) {
-        MergeItemStacks(item, itemInList);
-        if (item.amount <= 0) break;
+    for (const item of items){
+      for (const itemInList of excessItemList) {
+        if (item.constructor === itemInList.constructor) {
+          MergeItemStacks(item, itemInList);
+          if (item.amount <= 0) break;
+        }
+        //If there are remaining items create a stack with remaining amount of items.
       }
+      if (item.amount > 0)
+        excessItemList.push(...create_stacks_with_remaining_items(item, masterService));
     }
-    //If there are remaining items create a stack with remaining amount of items.
-    if (item.amount > 0)
-      excessItemList.push(...create_stacks_with_remaining_items(item, masterService));
     //replace content of dropable lists
     const [_dropable_inventory,_dropable_item] = map_dropables(character.inventory,excessItemList)
     dropable_inventory.splice(0,dropable_inventory.length,..._dropable_inventory)
