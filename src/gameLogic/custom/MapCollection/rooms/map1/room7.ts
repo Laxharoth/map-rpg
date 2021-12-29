@@ -2,7 +2,7 @@ import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
-import { DescriptionSelectItemFromMap } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
+import { DescriptionSelectItemFromMap, drop_item } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
 import { Armor, ArmorNoArmor } from "src/gameLogic/custom/Class/Equipment/Armor/Armor";
@@ -16,6 +16,7 @@ import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { Battle } from 'src/gameLogic/custom/Class/Battle/Battle';
+import { AddExceedItem } from 'src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem';
 
 export function room(masterService:MasterService):Room
 {
@@ -93,6 +94,7 @@ export function room(masterService:MasterService):Room
       item.amount = 9;
       user.addItem(item);
     }),
+    drop_item(masterService,user),
     new DescriptionOptions("level up perk",function(){
       const perk = (user.getPerk('Perk Upgrade') as PerkUpgradeable);
       if(!perk) user.addPerk(new PerkUpgradeable(this.masterService));
@@ -143,7 +145,7 @@ export function room(masterService:MasterService):Room
   function makeShop():void
   {
     const shop = new StaticShop('test-shop'
-      ,['item-test','Shield test','Armor Test','Guard Shield']
+      ,['item-test','Shield test','Armor Test','Guard Shield','Poison Pill']
       ,()=>'this is a static stock shop'
       ,masterService
       ,{'item-test':10,'Shield test':15,'Armor test':20}
