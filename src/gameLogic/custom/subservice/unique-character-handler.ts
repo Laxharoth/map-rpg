@@ -1,4 +1,4 @@
-import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/Character';
+import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
 
 export class UniqueCharacterHandler

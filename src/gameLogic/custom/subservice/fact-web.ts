@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/Character';
+import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
 import { floor_to, randomCheck } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { Time } from './../ClassHelper/Time';
