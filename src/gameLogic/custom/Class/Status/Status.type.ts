@@ -19,6 +19,7 @@ export enum statusBattlesEnum{
   'Prone' ='Prone',
   'Restrained'  ='Restrained',
   'Sleep' ='Sleep',
+  'Poison Rush'='Poison Rush',
 }
 
 export type statusname =`${statusEnum}`| `${statusTimeEnum}`| `${statusBattlesEnum}`
