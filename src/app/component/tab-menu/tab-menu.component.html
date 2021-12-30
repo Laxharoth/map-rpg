@@ -10,6 +10,6 @@
   <div class="content">
     <app-character-user *ngIf="currentTab==='user'"></app-character-user>
     <app-party *ngIf="currentTab==='party'" [partyType]="'PARTY'"></app-party>
-    <app-equiped-equipment *ngIf="currentTab==='equipment'"></app-equiped-equipment>
+    <app-equipment-on-character [character]="player" *ngIf="currentTab==='equipment'"></app-equipment-on-character>
   </div>
 </div>

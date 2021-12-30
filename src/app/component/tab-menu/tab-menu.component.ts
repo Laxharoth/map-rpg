@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MasterService } from 'src/app/service/master.service';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 
 @Component({
   selector: 'app-tab-menu',
@@ -7,8 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TabMenuComponent implements OnInit {
   static _currentTab:tabs='user';
+  player:Character;
   get currentTab():tabs{return TabMenuComponent._currentTab};
-  constructor() {}
+  constructor(private masterService:MasterService){
+    this.player = masterService.partyHandler.user;
+  }
 
   ngOnInit(): void {
   }

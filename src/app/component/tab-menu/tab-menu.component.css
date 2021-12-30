@@ -21,13 +21,14 @@
   --fill:calc(100% - var(--padding)*2);
   height:var(--fill);
   width:var(--fill);
-  overflow-y: auto;
 }
 
 .tab-element {
   padding: 0 0.6rem;
   border: 1px solid black;
   border-top-left-radius: 0.7em;
+  flex-grow: 1;
+  margin-left: -10px;
 }
 
 .tab-element:last-child {
