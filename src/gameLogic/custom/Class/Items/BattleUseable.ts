@@ -2,8 +2,9 @@ import { tag } from "../../customTypes/tags";
 import { Character } from "../Character/Character";
 import { ActionOutput } from "../Character/Character.type";
 import { itemname } from "./Item.type";
+import { descriptable, GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
 
-export interface BattleUseable
+export interface BattleUseable extends descriptable
 {
   /**
    * The name of the Item.
@@ -84,6 +85,6 @@ export interface BattleUseable
    * @memberof Item
    */
   itemEffect(user:Character,targets: Character|Character[]):ActionOutput;
-  get description(): string;
+  get description(): GameElementDescriptionSection[];
   get tags(): tag[];
 }
