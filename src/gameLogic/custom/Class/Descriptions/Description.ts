@@ -75,3 +75,16 @@ export class DescriptionOptions
     return this._disabled();
   }
 }
+
+export class DescriptableDescriptionOptions extends DescriptionOptions
+{
+  descriptable:descriptable;
+  constructor(text  : string,
+    descriptable:descriptable,
+    action: () => void,
+    disabled: boolean|(() => boolean) = false)
+  {
+    super(text, action, disabled)
+    this.descriptable = descriptable;
+  }
+}
