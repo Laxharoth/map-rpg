@@ -3,5 +3,15 @@
   <div class="option" *ngFor="let option of currentOptions;">
     <app-btn-description-option [option]="option"></app-btn-description-option>
   </div>
+  <!-- fixed options -->
+  <div class="option" *ngFor="let option of fixed_options;">
+    <app-btn-description-option [option]="option"></app-btn-description-option>
+  </div>
+  <!-- next, before options -->
+  <div class="option">
+    <app-btn-description-option [option]="prevOptions"></app-btn-description-option>
+  </div>
+  <div class="option">
+    <app-btn-description-option [option]="nextOptions"></app-btn-description-option>
   </div>
 </div>

@@ -13,12 +13,12 @@ import { MakeFilledArray } from 'src/gameLogic/custom/functions/htmlHelper.funct
 export class DescriptionOptionsComponent implements OnInit {
 
   currentOptions:DescriptionOptions[];
+  fixed_options:DescriptionOptions[];
   private descriptionOptions:DescriptionOptions[];
 
   private getDescriptionOptionsSubscription : Subscription;
 
   private offset = 0;
-  private size   = MAXOPTIONSNUMBERPERPAGE-2;
 
   constructor(private masterService:MasterService) {
     this.InitializeSubscriptions()
@@ -46,39 +46,33 @@ export class DescriptionOptionsComponent implements OnInit {
     }
   }
   private isFirst():boolean{ return this.currentOptions?.[0] === this.descriptionOptions?.[0]; }
-  private isLast():boolean{ return this.offset+this.size >= this.descriptionOptions.length; }
+  private isLast():boolean{ return this.offset+MAXOPTIONSNUMBERPERPAGE >= this.descriptionOptions.length; }
   private InitializeSubscriptions() {
     this.getDescriptionOptionsSubscription = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
       this.offset = 0;
       this.descriptionOptions = description.options;
+      this.fixed_options = description.fixed_options;
       this.setCurrentOptions();
     });
     this.descriptionOptions = this.masterService.descriptionHandler.currentDescription.options;
+    this.fixed_options = this.masterService.descriptionHandler.currentDescription.fixed_options;
     this.setCurrentOptions();
   }
 
   private setCurrentOptions()
   {
-    if(this.descriptionOptions.length <= MAXOPTIONSNUMBERPERPAGE)
-    {
-      this.currentOptions = this.descriptionOptions.concat(MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-this.descriptionOptions.length,null));
-      return;
-    }
-    let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+this.size)
-    while(aux_currentOptions.length< this.size) {aux_currentOptions.push(null);}
-    aux_currentOptions.push(this.prevOptions);
-    aux_currentOptions.push(this.nextOptions);
-
+    let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+MAXOPTIONSNUMBERPERPAGE)
+    aux_currentOptions.push(...MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-aux_currentOptions.length,null))
     this.currentOptions = aux_currentOptions;
   }
-  private prevOptions = new DescriptionOptions("<<<",()=>{
+  prevOptions = new DescriptionOptions("<<<",()=>{
     if(this.isFirst())return;
-    this.offset-=this.size;
+    this.offset-=MAXOPTIONSNUMBERPERPAGE;
     this.setCurrentOptions();
   }, ()=>this.isFirst())
-  private nextOptions = new DescriptionOptions(">>>",()=>{
+  nextOptions = new DescriptionOptions(">>>",()=>{
     if(this.isLast())return;
-    this.offset+=this.size;
+    this.offset+=MAXOPTIONSNUMBERPERPAGE;
     this.setCurrentOptions();
   },()=>this.isLast())
 }

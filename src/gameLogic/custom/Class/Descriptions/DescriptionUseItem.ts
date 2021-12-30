@@ -1,9 +1,7 @@
 import { MasterService } from 'src/app/service/master.service';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
 import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
-import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
 import { BattleUseable } from '../Items/BattleUseable';
 import { selectTarget } from './DescriptionSelectTarget';
@@ -37,17 +35,9 @@ export function selectItem(
     },is_item_disabled(action_source,item))
     )
   }
-  if(options.length <= MAXOPTIONSNUMBERPERPAGE)
-  {
-    while(options.length < MAXOPTIONSNUMBERPERPAGE-1) options.push(null);
-    options.push(returnOption)
-  }
-  else
-  {
-    while(options.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3 ) options.push(null);
-    options.push(returnOption)
-  }
-  return new Description(()=>`${items.map(item=>item.name).join('\n')}`,options)
+  const use_item_description = new Description(()=>`${items.map(item=>item.name).join('\n')}`,options);
+  use_item_description.fixed_options[4] = returnOption;
+  return use_item_description
 }
 export function selectItemOverworld(masterService:MasterService):Description
 {
