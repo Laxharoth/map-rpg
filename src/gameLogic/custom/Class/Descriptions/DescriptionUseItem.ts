@@ -1,6 +1,7 @@
 import { MasterService } from 'src/app/service/master.service';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+import { drop_item, nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
+import { DescriptableDescriptionOptions, Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
 import { BattleUseable } from '../Items/BattleUseable';
@@ -22,7 +23,7 @@ export function selectItem(
   {
     const option_targets = discriminate_targets(item,targets,is_valid_target)
     const option_action = (target: Character[])=>{ action(item,target); }
-    options.push(new DescriptionOptions(item.name,()=>
+    options.push(new DescriptableDescriptionOptions(item.name,item,()=>
     {
       if(item.isSingleTarget && option_targets.length>1)
       {
