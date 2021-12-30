@@ -12,7 +12,7 @@
   </div>
   <div class="shop-data-current" *ngIf="currentItem">
     <p class="name">{{ currentItem.name }}</p>
-    <p class="description">{{ currentItem.description }}</p>
+    <app-descriptable-description [descriptable]="currentItem" [small]="false"></app-descriptable-description>
     <p class="price">{{ currentItem.basePrice }}</p>
   </div>
 </div>
