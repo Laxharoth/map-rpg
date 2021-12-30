@@ -56,7 +56,9 @@ export function selectItemOverworld(masterService:MasterService):Description
     return (target===user && item.isSelfUsable)||(masterService.partyHandler.party.some((character:Character)=>character===target) && item.isPartyUsable)
   }
   const is_item_disabled:is_item_disabled_function = (action_source,item)=>!item.isMapUsable || item.disabled(action_source)
-  return selectItem(masterService,user,targets,user.inventory,'item',use_item_on_party,is_valid_target,is_item_disabled)
+  const select_item_description = selectItem(masterService,user,targets,user.inventory,'item',use_item_on_party,is_valid_target,is_item_disabled)
+  select_item_description.fixed_options[3]=drop_item(masterService,user)
+  return select_item_description;
 }
 
 function discriminate_targets(item:BattleUseable,targets:Character[],is_valid_target:valid_target_function):Character[]
