@@ -8,10 +8,7 @@ import { Character } from 'src/gameLogic/custom/Class/Character/Character';
   styleUrls: ['./equiped-equipment.component.css']
 })
 export class EquipedEquipmentComponent implements OnInit {
-  player:Character;
-  constructor(private masterService:MasterService) {
-    this.player = this.masterService.partyHandler.user;
-  }
+  constructor() {}
 
   ngOnInit(): void {
   }
