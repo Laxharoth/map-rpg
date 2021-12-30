@@ -8,6 +8,7 @@ import { descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/
 })
 export class DescriptableDescriptionComponent implements OnInit {
   @Input() descriptable:descriptable;
+  @Input() small:boolean=true;
   constructor() { }
 
   ngOnInit(): void {
