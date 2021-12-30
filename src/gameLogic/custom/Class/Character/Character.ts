@@ -245,9 +245,8 @@ export abstract class Character
   addStatus(status: Status): ActionOutput{
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
     if(status instanceof StatusBattle)return this.addBattleStatus(status)
-    else if(status instanceof TimedStatus)return this.addTimedStatus(status);
+    if(status instanceof TimedStatus)return this.addTimedStatus(status);
     this.status.push(status);
-    this.masterService.updateCharacter(this);
     return status.onStatusGainded(this)
   }
   /**
@@ -479,7 +478,6 @@ export abstract class Character
   {
     const hitpointsBeforeDamage = this.current_energy_stats.hitpoints;
     this.current_energy_stats.hitpoints=Math.max(0,this.current_energy_stats.hitpoints-damage);
-    this.masterService.updateCharacter(this);
     return this.current_energy_stats.hitpoints-hitpointsBeforeDamage;
   }
   /**
@@ -493,12 +491,10 @@ export abstract class Character
   {
     const hitpointsBeforeHeal = this.current_energy_stats.hitpoints;
     this.current_energy_stats.hitpoints=Math.min(this.energy_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain);
-    this.masterService.updateCharacter(this);
     return this.current_energy_stats.hitpoints-hitpointsBeforeHeal;
   }
   gain_experience(experience:number):number {
     this.level_stats.experience+=experience;
-    this.masterService.updateCharacter(this);
     return experience;
   }
   /**
@@ -717,10 +713,10 @@ export abstract class Character
    */
   private addTimedStatus(status: TimedStatus): ActionOutput
   {
-    const [statusDescription, statusString]:ActionOutput = [[],[]];
+    const statusDescription:ActionOutput = [[],[]];
     this.timed_status.push(status);
-    pushBattleActionOutput(status.onStatusGainded(this),[statusDescription, statusString]);
-    return [statusDescription, statusString];
+    pushBattleActionOutput(status.onStatusGainded(this),statusDescription);
+    return statusDescription;
   }
 
   /**

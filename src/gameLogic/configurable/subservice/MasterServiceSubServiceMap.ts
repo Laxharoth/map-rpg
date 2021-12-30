@@ -26,5 +26,4 @@ export class MasterServiceSubServiceMap
   timeHandler?:TimeHandler;
   FactWeb?:FactWeb;
   UniqueCharacterHandler?:UniqueCharacterHandler;
-  updateCharacter?:(character:Character) => void;
 }

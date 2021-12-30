@@ -72,16 +72,6 @@ export class GuiComponent implements OnInit {
     const unique_characters_handler = new UniqueCharacterHandler(gameSaver);
     const partyHandler = new PartyService(gameSaver,unique_characters_handler);
     const data_web = new FactWeb(timeHandler, gameSaver,unique_characters_handler);
-    const updateCharacter=(character:Character)=>
-    {
-      if(character===this.masterService.partyHandler.user) return this.masterService.partyHandler.updateUser()
-
-      for(let partyIndeX = 0; partyIndeX < this.masterService.partyHandler.party?.length; partyIndeX++)
-      if(this.masterService.partyHandler.party[partyIndeX]===character)return this.masterService.partyHandler.updatePartyMember(partyIndeX)
-
-      for(let enemyIndeX = 0; enemyIndeX < this.masterService.enemyHandler.enemyFormation?.enemies.length; enemyIndeX++)
-      if(this.masterService.enemyHandler.enemyFormation.enemies[enemyIndeX]===character)return this.masterService.enemyHandler.updateEnemy(enemyIndeX)
-    }
     this.masterService.register("lockmap", lockmap);
     this.masterService.register("flagsHandler", flagsHandler);
     this.masterService.register("partyHandler", partyHandler);
@@ -90,7 +80,6 @@ export class GuiComponent implements OnInit {
     this.masterService.register("descriptionHandler", descriptionHandler);
     this.masterService.register("mapHandler", mapHandler);
     this.masterService.register("gameSaver", gameSaver);
-    this.masterService.register("updateCharacter",updateCharacter);
     this.masterService.register("timeHandler",timeHandler);
     this.masterService.register("FactWeb",data_web);
     this.masterService.register("UniqueCharacterHandler",unique_characters_handler);
