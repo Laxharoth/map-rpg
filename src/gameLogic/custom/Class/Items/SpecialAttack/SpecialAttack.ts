@@ -4,6 +4,7 @@ import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { ActionOutput } from "../../Character/Character.type";
+import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 import { BattleUseable } from "../BattleUseable";
 
 export abstract class SpecialAttack implements BattleUseable
@@ -19,7 +20,6 @@ export abstract class SpecialAttack implements BattleUseable
   abstract get isSingleTarget(): boolean;
   get isBattleUsable(): boolean { return true; }
   get isMapUsable(): boolean { return true; }
-  abstract get description(): string;
   abstract get name():specialsname;
   get tags():tag[]{ return []}
   itemEffect(user: Character, targets: Character | Character[]): ActionOutput {
@@ -36,4 +36,11 @@ export abstract class SpecialAttack implements BattleUseable
   protected abstract _itemEffect(user: Character, targets: Character): ActionOutput;
   disabled(user:Character): boolean { return this.cooldown > 0;}
   constructor(masterService:MasterService){this.masterService=masterService;}
+  get description(): GameElementDescriptionSection[]
+  {
+    return [
+      {name:"tags",section_items:this.tags.map(tag =>{return {name:'tag',value:tag}})},
+      {name:"cooldown",section_items:this.tags.map(tag =>{return {name:'cooldown',value:this.cooldown}})},
+    ]
+  }
 }

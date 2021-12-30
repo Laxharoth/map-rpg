@@ -3,6 +3,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
+import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 
 export class OnePunch extends SpecialAttack
 {
@@ -17,7 +18,10 @@ export class OnePunch extends SpecialAttack
       const specialDescription:ActionOutput = [[this.specialDescription(user,target)],[]]
       return specialDescription;
   }
-  get description(): string {return 'One-shots the target';}
+  get description(): GameElementDescriptionSection[]{ return [
+    {name: "description",section_items:[{name: "description",value:'One-shots the target'}]},
+    ...super.description
+  ]}
   ////////////////////
   /// SPECIAL DESCRIPTION
   ////////////////////

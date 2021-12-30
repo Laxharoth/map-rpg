@@ -3,6 +3,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
 import { weaponname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { GameElementDescriptionSection } from '../../GameElementDescription/GameElementDescription';
 
 /**
  * Type of equipment that can attack.
@@ -126,38 +127,29 @@ export abstract class Weapon extends Equipment
     return check
   }
 
-  get description():string
+  get description():GameElementDescriptionSection[]
   {
-    let equipmentDescripiton = '';
+    const damage_stats_description:GameElementDescriptionSection={name:'damage',section_items:[]};
     if(Math.max(...Object.values(this.damageTypes)))
+    for(const [stat,value] of Object.entries(this.damageTypes))
     {
-      equipmentDescripiton = 'Damage:';
-      let even = true;
-      for(const [stat,value] of Object.entries(this.damageTypes))
-      {
-        if(value===0)continue;
-        if(even) equipmentDescripiton+='\n';
-        even=!even;
-        equipmentDescripiton+=`\t${Weapon.aliasDamageType(stat)}:${value}`;
-      }
+      if(value===0)continue;
+      damage_stats_description.section_items.push({name:aliasDamageType[stat],value});
     }
-    return  equipmentDescripiton+
-            `\n${super.description}`
+    return  [
+      damage_stats_description,
+      ...super.description
+    ]
   }
 
-  private static aliasDamageType(type: string):string
-  {
-    switch (type)
-    {
-      case "heatdamage"   :return "heat  ";
-      case "energydamage" :return "energy";
-      case "frostdamage"  :return "frost ";
-      case "slashdamage"  :return "slash ";
-      case "bluntdamage"  :return "blunt ";
-      case "piercedamage" :return "pierce";
-      case "poisondamage" :return "poison";
-    }
-    return "";
-  }
+}
+const aliasDamageType={
+  "heatdamage"   : "heat  ",
+  "energydamage" : "energy",
+  "frostdamage"  : "frost ",
+  "slashdamage"  : "slash ",
+  "bluntdamage"  : "blunt ",
+  "piercedamage" : "pierce",
+  "poisondamage" : "poison",
 }
 export interface damageTypes {heatdamage?: number; energydamage?:number; frostdamage?:number; slashdamage?: number; bluntdamage?:number; piercedamage?: number; poisondamage? : number;}

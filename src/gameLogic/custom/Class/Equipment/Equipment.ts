@@ -6,6 +6,7 @@ import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { equipmentname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
+import { GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
 
 /**
  * A item that can be equiped to a character.
@@ -74,58 +75,42 @@ export abstract class Equipment extends GameItem
     { character.calculated_resistance[key] -= this.resistanceStats[key]}
   }
 
-  get description():string
+  get description():GameElementDescriptionSection[]
   {
-    let equipmentDescripitonStats='';
-    let equipmentDescripitonResistance='';
+    const equipmentDescripitonStats:GameElementDescriptionSection={name:'stats',section_items:[]};
+    const equipmentDescripitonResistance:GameElementDescriptionSection={name:'resistance',section_items:[]};
     if(Math.max(...Object.values(this.statsModifier)))
+    for(const [stat,value] of Object.entries(this.statsModifier))
     {
-      equipmentDescripitonStats = 'stats:';
-      let even = true;
-      for(const [stat,value] of Object.entries(this.statsModifier))
-      {
-        if(value===0)continue;
-        if(even) equipmentDescripitonStats+='\n';
-        even=!even;
-        equipmentDescripitonStats+=`\t${stat}:${value}`;
-      }
+      if(value===0)continue;
+      equipmentDescripitonStats.section_items.push({name:aliasStatType[stat],value});
     }
     if(Math.max(...Object.values(this.resistanceStats)))
+    for(const [stat,value] of Object.entries(this.resistanceStats))
     {
-      equipmentDescripitonResistance = 'resistance:';
-      let even = true;
-      for(const [stat,value] of Object.entries(this.resistanceStats))
-      {
-        if(value===0)continue;
-        if(even) equipmentDescripitonResistance+='\n';
-        even=!even;
-        equipmentDescripitonResistance+=`\t${Equipment.aliasStatType(stat)}:${value}`;
-      }
+      if(value===0)continue;
+      equipmentDescripitonResistance.section_items.push({name:aliasStatType[stat],value});
     }
-    return  equipmentDescripitonStats+`${equipmentDescripitonStats.length?'\n':''}`+
-            `${equipmentDescripitonResistance}`+`${equipmentDescripitonResistance.length?'\n':''}`+
-            `${super.description}`
+    return  [
+      equipmentDescripitonStats,
+      equipmentDescripitonResistance,
+      ...super.description,
+    ]
   }
-
-  private static aliasStatType(type: string):string
-  {
-    switch (type)
-    {
-      case "physical_attack"  :return "atk";
-      case "ranged_attack"    :return "rnge";
-      case "physical_defence" :return "def";
-      case "ranged_defence"   :return "rdef";
-      case "accuracy"         :return "acc";
-      case "evasion"          :return "evs";
-      case "heatresistance"   :return "heat";
-      case "energyresistance" :return "energy";
-      case "frostresistance"  :return "frost";
-      case "slashresistance"  :return "slash";
-      case "bluntresistance"  :return "blunt";
-      case "pierceresistance" :return "pierce";
-      case "poisonresistance" :return "poison";
-      default:return "";
-    }
-  }
-
+}
+const aliasStatType = {
+  "physical_attack"  : "atk",
+  "ranged_attack"    : "rnge",
+  "physical_defence" : "def",
+  "ranged_defence"   : "rdef",
+  "accuracy"         : "acc",
+  "evasion"          : "evs",
+  "initiative"       : "init",
+  "heatresistance"   : "heat",
+  "energyresistance" : "energy",
+  "frostresistance"  : "frost",
+  "slashresistance"  : "slash",
+  "bluntresistance"  : "blunt",
+  "pierceresistance" : "pierce",
+  "poisonresistance" : "poison",
 }

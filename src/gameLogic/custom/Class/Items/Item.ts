@@ -7,6 +7,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { BattleUseable } from './BattleUseable';
+import { GameElementDescriptionSection } from '../GameElementDescription/GameElementDescription';
 
 /**
  * Model of game items.
@@ -176,10 +177,12 @@ export abstract class GameItem implements BattleUseable, storeable
     amount&&(this.amount = amount);
     basePrice&&(this.basePrice = basePrice);
   }
-  get description(): string
+  private _description:GameElementDescriptionSection[];
+  get description(): GameElementDescriptionSection[]
   {
-    if(this.tags.length === 0) return '';
-    return `tags:\n\t ${this.tags.join(', ')}`;
+    if(!this._description)
+      this._description = [{name:"tags",section_items:this.tags.map(tag =>{return {name:'tag',value:tag}})}]
+    return this._description
   }
 }
 
@@ -195,4 +198,9 @@ export type ItemStoreable ={
   type:itemname;
   amount?:number;
   basePrice?:number;
+}
+export interface TagsDescriptionSection
+{
+  name:'tags';
+  section_items:{name:'tag';value:tag}[]
 }
