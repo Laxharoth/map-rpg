@@ -6,7 +6,16 @@ import { CharacterStatComponent } from './component/character-stat/character-sta
 import { CharacterUserComponent } from './component/character-user/character-user.component';
 import { DescriptionOptionsComponent } from './component/description-options/description-options.component';
 import { DescriptionComponent } from './component/description/description.component';
+import { DropableItemComponent } from './component/dropable-item/dropable-item.component';
+import { EquipedEquipmentComponent } from './component/equiped-equipment/equiped-equipment.component';
+import { EquipmentOnCharacterComponent } from './component/equipment-on-character/equipment-on-character.component';
+import { BattleGuiComponent } from './component/gui/battle-gui/battle-gui.component';
+import { ExcessItemGuiComponent } from './component/gui/excess-item-gui/excess-item-gui.component';
 import { GuiComponent } from './component/gui/gui.component';
+import { ItemGuiComponent } from './component/gui/item-gui/item-gui.component';
+import { MapGuiComponent } from './component/gui/map-gui/map-gui.component';
+import { ShopGuiComponent } from './component/gui/shop-gui/shop-gui.component';
+import { StatusGuiComponent } from './component/gui/status-gui/status-gui.component';
 import { MapComponent } from './component/map/map.component';
 import { NumberSpinnerComponent } from './component/number-spinner/number-spinner.component';
 import { PartyMemberComponent } from './component/party-member/party-member.component';
@@ -18,16 +27,11 @@ import { ShopItemComponent } from './component/shop/shop-item/shop-item.componen
 import { ShopSaleComponentComponent } from './component/shop/shop-sale-component/shop-sale-component.component';
 import { StatusIconComponent } from './component/status-icon/status-icon.component';
 import { TabMenuComponent } from './component/tab-menu/tab-menu.component';
-import { OverrideCssVarDirective } from './directive/override-css-var.directive';
-import { MapGuiComponent } from './component/gui/map-gui/map-gui.component';
-import { BattleGuiComponent } from './component/gui/battle-gui/battle-gui.component';
-import { ItemGuiComponent } from './component/gui/item-gui/item-gui.component';
-import { ShopGuiComponent } from './component/gui/shop-gui/shop-gui.component';
-import { StatusGuiComponent } from './component/gui/status-gui/status-gui.component';
 import { UserExperienceComponent } from './component/user-experience/user-experience.component';
-import { ExcessItemGuiComponent } from './component/gui/excess-item-gui/excess-item-gui.component';
-import { DropableItemComponent } from './component/dropable-item/dropable-item.component';
-import { EquipedEquipmentComponent } from './component/equiped-equipment/equiped-equipment.component';
+import { OverrideCssVarDirective } from './directive/override-css-var.directive';
+import { DescriptableDescriptionComponent } from './component/descriptable/descriptable-description/descriptable-description.component';
+import { DescriptionSwitchComponent } from './component/descriptable/description-switch/description-switch.component';
+import { BtnDescriptionOptionComponent } from './component/btn-description-option/btn-description-option.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +62,10 @@ import { EquipedEquipmentComponent } from './component/equiped-equipment/equiped
     ExcessItemGuiComponent,
     DropableItemComponent,
     EquipedEquipmentComponent,
+    EquipmentOnCharacterComponent,
+    DescriptableDescriptionComponent,
+    DescriptionSwitchComponent,
+    BtnDescriptionOptionComponent,
   ],
   imports: [
     BrowserModule,
