@@ -1,0 +1,9 @@
+<div class="app-gui-option">
+  <button class="color-6" *ngIf="option?.action" (click)="option.action()"
+  [disabled]="option.disabled">
+    {{ option.text }}
+  </button>
+  <div class="option-description color-1" *ngIf="is_descriptable && has_description">
+    <app-descriptable-description [descriptable]="descriptable"></app-descriptable-description>
+  </div>
+</div>

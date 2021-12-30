@@ -1,8 +1,7 @@
 <div class="app-gui-option-wrapper">
-  <div class="app-gui-option" *ngFor="let option of currentOptions; let nthOption = index;">
-    <button class="color-6" *ngIf="option?.action" (click)="option.action()"
-    [disabled]="option.disabled">
-      {{ option.text }}
-    </button>
+  <!-- options -->
+  <div class="option" *ngFor="let option of currentOptions;">
+    <app-btn-description-option [option]="option"></app-btn-description-option>
+  </div>
   </div>
 </div>
