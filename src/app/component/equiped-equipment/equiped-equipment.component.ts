@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MasterService } from 'src/app/service/master.service';
-import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Equipment } from 'src/gameLogic/custom/Class/Equipment/Equipment';
 
 @Component({
   selector: 'app-equiped-equipment',
@@ -8,9 +7,15 @@ import { Character } from 'src/gameLogic/custom/Class/Character/Character';
   styleUrls: ['./equiped-equipment.component.css']
 })
 export class EquipedEquipmentComponent implements OnInit {
+  @Input() equipment:Equipment;
+  @Output() equipment_emitter = new EventEmitter<Equipment>();
   constructor() {}
 
   ngOnInit(): void {
   }
 
+  emit()
+  {
+    this.equipment_emitter.emit(this.equipment)
+  }
 }

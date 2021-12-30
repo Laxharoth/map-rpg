@@ -1,0 +1,27 @@
+.equiped-equipment{
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.equipment-description{
+  --padding:5px;
+  position: absolute;
+  left: -100%;
+  opacity: 0;
+}
+
+.equipment-name
+{
+  display: inline-block;
+  width:60%;
+}
+.btn-unequip
+{
+  width:40%;
+}
+
+.equiped-equipment:hover .equipment-description
+{
+  opacity: 1;
+}
