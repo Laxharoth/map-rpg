@@ -56,7 +56,7 @@ export class RangedUnharmed extends RangedWeapon
   maxStack = 0;
   get name(): rangedname { return 'a rock'; }
   canEquip(character: Character): boolean { return true; }
-  get tags(): tag[] { return ['ranged unharmed']; }
+  get tags(): tag[] { return ['unequiped','ranged unharmed']; }
   calculateDamage(user:Character,target:Character):number { return 10; }
   get isSingleTarget(): boolean { return true; }
 }

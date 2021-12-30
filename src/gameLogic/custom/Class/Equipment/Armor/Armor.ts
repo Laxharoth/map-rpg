@@ -44,6 +44,6 @@ export class ArmorNoArmor extends Armor
 {
   get name(): armorname { return 'No Armor'; }
   canEquip(character: Character): boolean { return false; }
-  get tags(): tag[] { return ['no armor']; }
+  get tags(): tag[] { return ['unequiped','no armor']; }
   get isSingleTarget(): boolean { return true; }
 }

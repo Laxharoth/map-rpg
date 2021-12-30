@@ -64,6 +64,6 @@ export class ShieldNoShield extends Shield
 {
   get name(): shieldname { return 'No shield'; }
   canEquip(character: Character): boolean { return false; }
-  get tags(): tag[] { return ['no shield']; }
+  get tags(): tag[] { return ['unequiped','no shield']; }
   get isSingleTarget(): boolean { return true; }
 }

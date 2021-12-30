@@ -51,7 +51,7 @@ export class MeleeUnharmed extends MeleeWeapon
   protected _damageTypes:damageTypes = {bluntdamage:10};
   get name(): meleename { return 'hand'; }
   canEquip(character: Character): boolean { return true; }
-  get tags(): tag[] { return ['melee unharmed']; }
+  get tags(): tag[] { return ['unequiped','melee unharmed']; }
   get isSingleTarget(): boolean { return true;}
   get specials():SpecialAttack[]{return [this.onePunch]}
 }
