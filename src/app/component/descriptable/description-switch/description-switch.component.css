@@ -1,0 +1,28 @@
+.app-description-switch
+{
+  --padding:0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+.app-description-switch *
+{
+  margin: 0;
+}
+:is(.damage,.resistance,.stats)
+{
+    padding-bottom: 10px;
+}
+:is(.damage,.resistance,.stats) ul
+{
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    width: 25ch;
+    justify-items: space-between;
+}
+:is(.damage,.resistance,.stats) li
+{
+    width: 10ch;
+}
