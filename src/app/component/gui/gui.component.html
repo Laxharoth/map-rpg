@@ -18,6 +18,9 @@
     <div *ngIf="currentGameState === 'status'" class="color-2">
       <app-status-gui></app-status-gui>
     </div>
+    <div *ngIf="currentGameState === 'perk-tree'" class="color-2">
+      <app-select-perk-gui></app-select-perk-gui>
+    </div>
   </div>
   <div class="app-gui-down color-3">
     <app-description-options></app-description-options>
