@@ -15,10 +15,35 @@ import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { EnergyStats, CoreStats, ResistanceStats, LevelStats } from "./Character.type";
 import { Character } from "./Character";
+import { Description } from '../Descriptions/Description';
+import { tree_node } from '../CharacterBattleClass/ArrayTree';
+import { Upgrade } from '../Upgrade/Upgrade';
 
 
 export abstract class UniqueCharacter extends Character implements storeable {
   uuid: string;
+  level_up():void
+  {
+    const level = ++this.level_stats.level;
+    this.level_stats.perk_point = this.character_battle_class.level_up_perk_point[level]||0;
+    this.level_stats.upgrade_point = this.character_battle_class.level_up_upgrade_point[level]||0;
+  }
+  upgrade(current_level_upgrade_index:number):void
+  {
+    this.level_stats.upgrade_path.push(current_level_upgrade_index);
+    const upgrade = this.character_battle_class.upgrade_tree(this.masterService).get_node(this.level_stats.upgrade_path).value
+    this.level_stats.perk_point--;
+    this.addPerk(upgrade.upgrade);
+  }
+  upgrade_options(path: number[]):tree_node<Upgrade>[]
+  {
+    return this.character_battle_class.upgrade_tree(this.masterService).get_children(path);
+  }
+  emit_stat_up():void { this.masterService.descriptionHandler.headDescription(new Description(()=>this,[]),'stat-up') }
+  emit_perk_up():void { this.masterService.descriptionHandler.headDescription(new Description(()=>this,[]),'perk-tree');}
+  emit_level_up():void{ this.emit_perk_up();this.emit_stat_up(); }
+  total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
+  current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }
   /**
    * Stores character type, originalstats, status, equipment,items and perks
    *
@@ -64,7 +89,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
     if (options['originalStats'])
       this.original_stats = options['originalStats'];
     if (options['levelStats'])
-      this.level_stats = options['levelStats'];
+      this.level_stats = {...this.level_stats,...options['levelStats']};
     if (options['originalResistance'])
       this.original_resistance = options['originalResistance'];
     if (options['currentCore'])

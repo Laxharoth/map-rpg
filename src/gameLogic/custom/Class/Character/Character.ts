@@ -95,7 +95,7 @@ export abstract class Character
     this.masterService = masterService;
     this.energy_stats = {...this.character_battle_class.initial_core_stats};
     this.current_energy_stats = {...this.energy_stats};
-    this.level_stats = {experience:0, upgrade_point:0, level:0}
+    this.level_stats = {experience:0, upgrade_point:0, perk_point:0, level:0, upgrade_path:[]}
     this.original_stats = {...this.character_battle_class.initial_physic_stats};
     this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
     this.initializeUnharmed();
@@ -441,7 +441,6 @@ export abstract class Character
                     for(const status of this.timed_status) yield status;
                     for(const status of this.battle_status) yield status;
                   }
-
   /**
    * Checks all the reactions of the character.
    * Won't react if character is paralized, zero hitpoints or the battle ended.
@@ -814,9 +813,6 @@ export abstract class Character
    * @memberof Character
    */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
-
-  total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
-  current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }
 }
 
 /**

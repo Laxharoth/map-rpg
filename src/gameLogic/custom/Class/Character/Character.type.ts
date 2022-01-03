@@ -8,7 +8,9 @@ export interface EnergyStats {
 export interface LevelStats {
   experience:number,
   upgrade_point:number,
+  perk_point:number,
   level:number,
+  upgrade_path:number[],
 }
 export interface CoreStats {
   strenght?:number;
