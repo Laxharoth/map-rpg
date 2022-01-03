@@ -1,6 +1,7 @@
 import { MasterService } from "src/app/service/master.service";
 import { MasterFlagsSetter } from "src/gameLogic/core/subservice/flag-handler";
 import { ShopFactory } from "src/gameLogic/custom/Class/Shop/DynamicShop";
+import { UpgradeFactory } from "src/gameLogic/custom/Class/Upgrade/UpgradeFactory";
 import { CharacterFactory } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { ItemFactory } from "src/gameLogic/custom/Factory/ItemFactory";
 import { PerkFactory } from "src/gameLogic/custom/Factory/PerkFactory";
@@ -19,6 +20,7 @@ export enum FactoryName{
   "CurrentParty"="CurrentParty",
   "FactWeb"="FactWeb",
   "TimeHandler"="TimeHandler",
+  "Upgrade"="Upgrade",
 }
 export type factoryname= `${FactoryName}`;
 export type FactoryFunction = (masterService:MasterService,options:{[key: string]: any})=>any;
@@ -33,4 +35,5 @@ export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   CurrentParty: SetCurrentParty,
   FactWeb: SetDataweb,
   TimeHandler: SetTimeHandler,
+  Upgrade:UpgradeFactory,
 }
