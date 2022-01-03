@@ -1,0 +1,8 @@
+<div class="app-perk-up-item color-6 border"
+  [ngClass]="{'selected':is_selected, 'fixed':is_fixed}"
+  (click)="emit()">
+    {{ upgrade.name }}
+</div>
+<div class="upgrade-description display-on-hover-description color-1">
+  <app-descriptable-description [descriptable]="upgrade"></app-descriptable-description>
+</div>

@@ -1,0 +1,18 @@
+.app-perk-up-item
+{
+  position: relative;
+  --selected:0%;
+  --fixed:0%;
+  filter: brightness(calc( 20% + var(--selected) + var(--fixed) ));
+  padding: 0.5rem 0.7rem;
+}
+
+.app-perk-up-item.selected
+{
+  --selected:25%;
+}
+
+.app-perk-up-item.fixed
+{
+  --fixed:65%;
+}

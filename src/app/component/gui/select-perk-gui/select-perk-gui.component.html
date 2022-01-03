@@ -1,0 +1,12 @@
+<div class="app-select-perk-gui">
+  <div class="tree-perk-row" *ngFor="let item of [].constructor(selected_path.length+1); let row_depth=index">
+    <app-perk-up-row
+      [selected_path]="selected_path.slice(0,row_depth+1)"
+      [fixed_path]="fixed_path.slice(0,row_depth+1)"
+      [row]="row_depth"
+      [upgrades]="upgrade_options(selected_path.slice(0,row_depth))"
+      (selected_position_and_value)="update_selected_path($event)"
+      >
+  </app-perk-up-row>
+  </div>
+</div>
