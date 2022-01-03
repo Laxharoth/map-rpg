@@ -1,4 +1,9 @@
+import { MasterService } from 'src/app/service/master.service';
 import { EnergyStats, FullCalculatedStats, FullCoreStats, ResistanceStats } from '../Character/Character.type';
+import { Upgrade } from '../Upgrade/Upgrade';
+import { UpgradeOptions } from '../Upgrade/Upgrade.type';
+import { UpgradeFactory } from '../Upgrade/UpgradeFactory';
+import { ArrayTree, tree_node } from './ArrayTree';
 import { CharacterBattleClass, experience_cap } from './CharacterBattleClass';
 
 export class TestMainCharacterBattleClass extends CharacterBattleClass
@@ -35,4 +40,63 @@ export class TestMainCharacterBattleClass extends CharacterBattleClass
       initiative:Math.round(speed+intelligence)+10||0,
     }
   }
+
+  protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [
+    {value:{Factory:'Upgrade',type:'Charm'}      ,children:[
+      {value:{Factory:'Upgrade',type:'Fright'},children:[
+        {value:{Factory:'Upgrade',type:'Grappler'},children:[]},
+        {value:{Factory:'Upgrade',type:'Poison Rush'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Grappler'},children:[
+        {value:{Factory:'Upgrade',type:'Fright'},children:[]},
+        {value:{Factory:'Upgrade',type:'Poison Rush'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Poison Rush'},children:[
+        {value:{Factory:'Upgrade',type:'Fright'},children:[]},
+        {value:{Factory:'Upgrade',type:'Grappler'},children:[]},
+      ]},
+    ]},
+    {value:{Factory:'Upgrade',type:'Fright'}     ,children:[
+      {value:{Factory:'Upgrade',type:'Charm'},children:[
+        {value:{Factory:'Upgrade',type:'Grappler'},children:[]},
+        {value:{Factory:'Upgrade',type:'Poison Rush'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Grappler'},children:[
+        {value:{Factory:'Upgrade',type:'Charm'},children:[]},
+        {value:{Factory:'Upgrade',type:'Poison Rush'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Poison Rush'},children:[
+        {value:{Factory:'Upgrade',type:'Charm'},children:[]},
+        {value:{Factory:'Upgrade',type:'Grappler'},children:[]},
+      ]},
+    ]},
+    {value:{Factory:'Upgrade',type:'Grappler'}   ,children:[
+      {value:{Factory:'Upgrade',type:'Fright'},children:[
+        {value:{Factory:'Upgrade',type:'Charm'},children:[]},
+        {value:{Factory:'Upgrade',type:'Poison Rush'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Charm'},children:[
+        {value:{Factory:'Upgrade',type:'Fright'},children:[]},
+        {value:{Factory:'Upgrade',type:'Poison Rush'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Poison Rush'},children:[
+        {value:{Factory:'Upgrade',type:'Fright'},children:[]},
+        {value:{Factory:'Upgrade',type:'Charm'},children:[]},
+      ]},
+    ]},
+    {value:{Factory:'Upgrade',type:'Poison Rush'},children:[
+      {value:{Factory:'Upgrade',type:'Fright'},children:[
+        {value:{Factory:'Upgrade',type:'Grappler'},children:[]},
+        {value:{Factory:'Upgrade',type:'Charm'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Grappler'},children:[
+        {value:{Factory:'Upgrade',type:'Fright'},children:[]},
+        {value:{Factory:'Upgrade',type:'Charm'},children:[]},
+      ]},
+      {value:{Factory:'Upgrade',type:'Charm'},children:[
+        {value:{Factory:'Upgrade',type:'Fright'},children:[]},
+        {value:{Factory:'Upgrade',type:'Grappler'},children:[]},
+      ]},
+    ]},
+  ]
 }
