@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { Perk } from "src/gameLogic/custom/Class/Perk/Perk";
+import { Perk, PerkStoreable } from "src/gameLogic/custom/Class/Perk/Perk";
 import { perkname, perknameEnum } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { PerkCharm } from "src/gameLogic/custom/Class/Perk/PerkCharm";
 import { PerkFright } from "src/gameLogic/custom/Class/Perk/PerkFright";
@@ -16,7 +16,7 @@ import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable
  * @param {{[key: string]: any}} options The options from the perk created with the storeable.toJson
  * @return {Perk} An Perk with the loaded options
  */
-export function PerkFactory(masterService:MasterService,options:{[key: string]: any}):Perk {
+export function PerkFactory(masterService:MasterService,options:PerkStoreable):Perk {
   const perk = new PerkSwitcher[options.type](masterService);
   perk.fromJson(options);
   return perk;
