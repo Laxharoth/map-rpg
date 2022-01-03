@@ -32,6 +32,9 @@ import { OverrideCssVarDirective } from './directive/override-css-var.directive'
 import { DescriptableDescriptionComponent } from './component/descriptable/descriptable-description/descriptable-description.component';
 import { DescriptionSwitchComponent } from './component/descriptable/description-switch/description-switch.component';
 import { BtnDescriptionOptionComponent } from './component/btn-description-option/btn-description-option.component';
+import { SelectPerkGuiComponent } from './component/gui/select-perk-gui/select-perk-gui.component';
+import { PerkUpItemComponent } from './component/perk-up/perk-up-item/perk-up-item.component';
+import { PerkUpRowComponent } from './component/perk-up/perk-up-row/perk-up-row.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +69,9 @@ import { BtnDescriptionOptionComponent } from './component/btn-description-optio
     DescriptableDescriptionComponent,
     DescriptionSwitchComponent,
     BtnDescriptionOptionComponent,
+    SelectPerkGuiComponent,
+    PerkUpItemComponent,
+    PerkUpRowComponent,
   ],
   imports: [
     BrowserModule,
