@@ -1,7 +1,7 @@
 <div class="equiped-equipment">
   <span class="equipment-name">{{ equipment.name }}</span>
   <button class="btn-unequip" *ngIf="!equipment.tags.includes('unequiped')" class="btn" (click)="emit()">Unequip</button>
-  <div class="equipment-description hover-description color-1">
+  <div class="equipment-description hover-description color-1 display-on-hover-description">
     <app-descriptable-description [descriptable]="equipment"></app-descriptable-description>
   </div>
 </div>
