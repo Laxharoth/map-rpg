@@ -1,6 +1,6 @@
 import { battle_options } from './../../../Class/Battle/Battle.type';
 import { Battle } from './../../../Class/Battle/Battle';
-import { nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
+import { DescriptionSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
@@ -135,6 +135,7 @@ export function room(roomName: string): roomFunction {
     const roomDescription = new Description(function () {
       return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
     }, roomOptions)
+    roomDescription.fixed_options[0] = DescriptionSelectItemFromMap(masterService)
     const firstExit = new Description(function () {
       return `It was the first time`
     }, [nextoption]);
