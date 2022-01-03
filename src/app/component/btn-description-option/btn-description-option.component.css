@@ -9,14 +9,5 @@
 
 .option-description
 {
-  padding: 5px;
-  position:absolute;
   bottom:100%;
-  opacity: 0;
-  pointer-events:none;
-}
-
-.app-gui-option:hover .option-description
-{
-  opacity: 1;
 }

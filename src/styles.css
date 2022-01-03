@@ -69,3 +69,16 @@ button
   background:inherit;
   filter: brightness(0.8);
 }
+
+div.display-on-hover-description{
+  --padding:5px;
+  position: absolute;
+  width:max-content;
+  display:none;
+  pointer-events:none;
+  z-index: 100;
+}
+:hover > div.display-on-hover-description
+{
+  display:unset;
+}
