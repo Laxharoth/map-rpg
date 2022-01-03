@@ -85,6 +85,10 @@ export function room(masterService:MasterService):Room
     new DescriptionOptions("Shop",makeShop),
     new DescriptionOptions("Dynamic Shop",makeDynamicShop),
     new DescriptionOptions("test battle",()=>new Battle(masterService, new testformation(masterService)).startRound()),
+    new DescriptionOptions("Add perk point",()=>{
+      user.level_stats.perk_point=4;
+      user.emit_perk_up();
+    }),
     equipMelee,
     equipRanged,
     equipShield,
