@@ -5,6 +5,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { BattleCommand } from "../../Battle/BattleCommand";
 import { CharacterBattleClass } from "../../CharacterBattleClass/CharacterBattleClass";
+import { TestMainCharacterBattleClass } from "../../CharacterBattleClass/testMainCharacterBattleClass";
 
 export class MainCharacter extends UniqueCharacter
 {
@@ -15,7 +16,7 @@ export class MainCharacter extends UniqueCharacter
 
   constructor(masterService:MasterService,name:string, character_battle_class=null)
   {
-    super(masterService,character_battle_class);
+    super(masterService,character_battle_class?character_battle_class:new TestMainCharacterBattleClass());
     masterService.gameSaver.register("MainCharacter",this)
     this._name = name;
   }
