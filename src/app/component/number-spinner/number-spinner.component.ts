@@ -1,5 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as jQuery from 'jquery';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-number-spinner',
@@ -9,38 +8,34 @@ import * as jQuery from 'jquery';
 export class NumberSpinnerComponent implements OnInit {
 
   @Input() spinnerType:'horizontal'|'vertical'='horizontal';
-  @Input() initialValue:number;
+  @Input() min:number=0;
+  @Input() value:number;
+  @Input() max:number=100;
+  @Input() step:number=1;
+  @Input() show_input:boolean = true;
+  @Input() disable_up:boolean = false;
+  @Input() disable_down:boolean = false;
   @Output() SpinnerChangedEvent = new EventEmitter<number>();
-  @ViewChild('InputValue') inputValue: ElementRef;
+
   constructor() { }
 
   ngOnInit(): void {}
 
-  ngAfterViewInit(): void {
-    jQuery(this.inputValue.nativeElement)
-      .val(this.initialValue)
-      .on('change',()=>{this.emmitChange()});
-  }
+  ngAfterViewInit(): void {}
   changeInput(change:number)
   {
-    const $input = jQuery(this.inputValue.nativeElement)
-    const currentVal = Number.parseInt($input.val() as string);
-    const changedValue = currentVal + change
-    $input.val(changedValue)
-          .trigger('change');
+    const new_value = Math.max(
+      this.min,
+      Math.min(this.max,this.value+change)
+    );
+    if(this.value===new_value ||
+      (this.disable_up && this.value < new_value)||
+      (this.disable_down && this.value > new_value))return;
+    this.value = new_value;
+    this.emmitChange()
   }
   emmitChange()
   {
-    const $input = jQuery(this.inputValue.nativeElement)
-    const min = Number.parseFloat($input.attr('min'));
-    const max = Number.parseFloat($input.attr('max'));
-    $input.val(Math.max(min,this.InputValue))
-          .val(Math.min(max,this.InputValue))
-    this.SpinnerChangedEvent.emit(this.InputValue);
-  }
-  private get InputValue():number
-  {
-    const $input = jQuery(this.inputValue.nativeElement)
-    return Number.parseInt($input.val() as string) || this.initialValue;
+    this.SpinnerChangedEvent.emit(this.value);
   }
 }
