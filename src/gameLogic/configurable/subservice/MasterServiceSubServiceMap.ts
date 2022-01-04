@@ -6,6 +6,7 @@ import { DescriptionHandlerService } from 'src/gameLogic/custom/subservice/descr
 import { EnemyFormationService } from 'src/gameLogic/custom/subservice/enemy-formation';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
 import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
+import { InfoPageToggler } from 'src/gameLogic/custom/subservice/info-page-toggler';
 import { LockMapService } from 'src/gameLogic/custom/subservice/lock-map';
 import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';
 import { PartyService } from 'src/gameLogic/custom/subservice/party';
@@ -26,4 +27,5 @@ export class MasterServiceSubServiceMap
   timeHandler?:TimeHandler;
   FactWeb?:FactWeb;
   UniqueCharacterHandler?:UniqueCharacterHandler;
+  InfoPageToggler?:InfoPageToggler
 }
