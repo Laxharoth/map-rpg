@@ -136,6 +136,7 @@ export function room(roomName: string): roomFunction {
       return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
     }, roomOptions)
     roomDescription.fixed_options[0] = DescriptionSelectItemFromMap(masterService)
+    roomDescription.fixed_options[1] = new DescriptionOptions('info',()=>masterService.InfoPageToggler.toggle());
     const firstExit = new Description(function () {
       return `It was the first time`
     }, [nextoption]);
