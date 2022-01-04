@@ -9,6 +9,7 @@ export type tag = 'melee weapon'|
                   'double attack'|
                   'double shoot'|
                   'status gained'|
+                  'status regained'|
                   'status ended'|
                   'defend'|
                   'paralized'|
