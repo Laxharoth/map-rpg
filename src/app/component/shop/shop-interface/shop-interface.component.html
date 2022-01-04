@@ -15,7 +15,7 @@
     </div>
     <app-number-spinner (SpinnerChangedEvent)="setShopAmount($event)"
       [spinnerType]="'horizontal'"
-      [initialValue]="shopAmount">
+      [value]="shopAmount">
     </app-number-spinner>
   </fieldset>
   <fieldset class="player-section">
@@ -36,7 +36,7 @@
     <app-number-spinner
       (SpinnerChangedEvent)="setUserAmount($event)"
       [spinnerType]="'horizontal'"
-      [initialValue]="playerAmount">
+      [value]="playerAmount">
     </app-number-spinner>
   </fieldset>
 </div>
