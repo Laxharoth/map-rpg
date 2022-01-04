@@ -57,7 +57,7 @@ export class DescriptionHandlerService {
   }
   /**
    * Inserts descriptions at the start of a description list.
-   * Alto sets the current game state.
+   * Also sets the current game state.
    * @param {(Description|Description[])} description The description to insert
    * @param {game_state} gameState The game state the description list is associated with.
    * @return {*}  {DescriptionHandlerService} Itself
@@ -72,7 +72,7 @@ export class DescriptionHandlerService {
   }
   /**
    * Inserts descriptions right after the fist description of a description list.
-   * Alto sets the current game state.
+   * Also sets the current game state.
    * @param {(Description|Description[])} description The description to insert
    * @param {game_state} gameState The game state the description list is associated with.
    * @return {*}  {DescriptionHandlerService} Itself
@@ -87,7 +87,7 @@ export class DescriptionHandlerService {
   }
   /**
    * Inserts descriptions at the end of a description list.
-   * Alto sets the current game state.
+   * Also sets the current game state.
    * @param {(Description|Description[])} description The description to insert
    * @param {game_state} gameState The game state the description list is associated with.
    * @return {*}  {DescriptionHandlerService} Itself
