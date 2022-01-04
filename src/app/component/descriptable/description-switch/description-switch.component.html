@@ -11,7 +11,6 @@
     <p><span>cooldown:</span><span>{{ section.section_items[0].value }}</span></p>
   </div>
   <div class="description" *ngIf="section.name==='description' && section.section_items.length">
-    <p>description:</p>
     <pre>{{ section.section_items[0].value }}</pre>
   </div>
   <div class="stats" *ngIf="section.name==='stats' && section.section_items.length">
