@@ -15,7 +15,7 @@ export class StatusRangedAttack extends StatusBattle
     return 'Using a ranged attack puts space between you and the enemy.\nIncreased evasion by 10%.';
   }
   applyModifiers(character: Character): void {
-    character.calculated_stats.evasion+= 5 + 3/5 * character.original_stats.speed;
+    character.calculated_stats.evasion+= 5 + 3/5 * character.core_stats.speed;
     character.calculated_stats.evasion*=1.10;
   }
   onStatusGainded(target: Character)

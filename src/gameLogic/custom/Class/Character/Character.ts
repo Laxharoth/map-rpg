@@ -39,7 +39,7 @@ export abstract class Character
   level_stats:LevelStats;
   current_energy_stats:EnergyStats;
   /* The original stats of the character. */
-  original_stats:CoreStats;
+  core_stats:CoreStats;
   original_resistance:ResistanceStats;
   /* The current status of the character after appling equipment during a battle round. */
   calculated_stats:CalculatedStats;
@@ -51,6 +51,7 @@ export abstract class Character
   protected timed_status:TimedStatus[] = [];
   protected battle_status:StatusBattle[] = [];
   protected character_battle_class:CharacterBattleClass;
+  get battle_class():CharacterBattleClass { return this.character_battle_class;}
   protected abstract _name:string;
   abstract readonly characterType:characterType;
   inventorysize = 9;
@@ -96,7 +97,7 @@ export abstract class Character
     this.energy_stats = {...this.character_battle_class.initial_core_stats};
     this.current_energy_stats = {...this.energy_stats};
     this.level_stats = {experience:0, upgrade_point:0, perk_point:0, level:0, upgrade_path:[]}
-    this.original_stats = {...this.character_battle_class.initial_physic_stats};
+    this.core_stats = {...this.character_battle_class.initial_physic_stats};
     this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
     this.initializeUnharmed();
     this.calculateStats();
@@ -573,7 +574,7 @@ export abstract class Character
   protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cooldown = Math.max(0,special.cooldown-1) }
 
   calculateStats():void {
-    this.calculated_stats = this.character_battle_class.calculate_stats(this.original_stats as FullCoreStats);
+    this.calculated_stats = this.character_battle_class.calculate_stats(this.core_stats as FullCoreStats);
     this.calculated_resistance = {...this.original_resistance};
     for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this); }
     for(const status of this.iterStatus()){ status.applyModifiers(this); }

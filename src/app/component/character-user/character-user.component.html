@@ -5,11 +5,11 @@
     <app-character-stat [statName]="'energy'" [statValue]="character.energy_stats.energypoints" [maxValue]="character.current_energy_stats.energypoints"></app-character-stat>
   </div>
   <div class="stats border">
-    <app-character-stat [statName]="'attack'" [statValue]="character.original_stats.strenght"></app-character-stat>
-    <app-character-stat [statName]="'aim'" [statValue]="character.original_stats.aim"></app-character-stat>
-    <app-character-stat [statName]="'defence'" [statValue]="character.original_stats.stamina"></app-character-stat>
-    <app-character-stat [statName]="'speed'" [statValue]="character.original_stats.speed"></app-character-stat>
-    <app-character-stat [statName]="'evasion'" [statValue]="character.original_stats.intelligence"></app-character-stat>
+    <app-character-stat [statName]="'attack'" [statValue]="character.core_stats.strenght"></app-character-stat>
+    <app-character-stat [statName]="'aim'" [statValue]="character.core_stats.aim"></app-character-stat>
+    <app-character-stat [statName]="'defence'" [statValue]="character.core_stats.stamina"></app-character-stat>
+    <app-character-stat [statName]="'speed'" [statValue]="character.core_stats.speed"></app-character-stat>
+    <app-character-stat [statName]="'evasion'" [statValue]="character.core_stats.intelligence"></app-character-stat>
   </div>
   <div class="experience">
     <app-user-experience></app-user-experience>

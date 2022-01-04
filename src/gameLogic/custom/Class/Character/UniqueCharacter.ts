@@ -53,7 +53,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
   toJson(): CharacterStoreable {
     const storeables: CharacterStoreable = { Factory: "Character", type: this.characterType, uuid: this.uuid, name: this.name };
     storeables['originalCore'] = this.energy_stats;
-    storeables['originalStats'] = this.original_stats;
+    storeables['originalStats'] = this.core_stats;
     storeables['originalResistance'] = this.original_resistance;
     storeables['currentCore'] = this.current_energy_stats;
     storeables['levelStats'] = this.level_stats;
@@ -87,7 +87,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
     if (options['originalCore'])
       this.energy_stats = options['originalCore'];
     if (options['originalStats'])
-      this.original_stats = options['originalStats'];
+      this.core_stats = options['originalStats'];
     if (options['levelStats'])
       this.level_stats = {...this.level_stats,...options['levelStats']};
     if (options['originalResistance'])
