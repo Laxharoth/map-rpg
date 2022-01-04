@@ -1,0 +1,80 @@
+<div class="app-stat-up-gui">
+  <div class="stat">
+    <app-character-stat
+      [statName]="'strenght'"
+      [statValue]="core_stats.strenght"
+      [maxValue]="max_core_stats.strenght"
+    ></app-character-stat>
+    <app-number-spinner
+      [min]="character.core_stats.strenght"
+      [value]="core_stats.strenght"
+      [max]="max_core_stats.strenght"
+      [show_input]="false"
+      [disable_up]="upgrade_points===0"
+      (SpinnerChangedEvent)="update_stat($event,'strenght')"
+    ></app-number-spinner>
+  </div>
+  <div class="stat">
+    <app-character-stat
+      [statName]="'stamina'"
+      [statValue]="core_stats.stamina"
+      [maxValue]="max_core_stats.stamina"
+    ></app-character-stat>
+    <app-number-spinner
+      [min]="character.core_stats.stamina"
+      [value]="core_stats.stamina"
+      [max]="max_core_stats.stamina"
+      [show_input]="false"
+      [disable_up]="upgrade_points===0"
+      (SpinnerChangedEvent)="update_stat($event,'stamina')"
+    ></app-number-spinner>
+  </div>
+  <div class="stat">
+    <app-character-stat
+      [statName]="'aim'"
+      [statValue]="core_stats.aim"
+      [maxValue]="max_core_stats.aim"
+    ></app-character-stat>
+    <app-number-spinner
+      [min]="character.core_stats.aim"
+      [value]="core_stats.aim"
+      [max]="max_core_stats.aim"
+      [show_input]="false"
+      [disable_up]="upgrade_points===0"
+      (SpinnerChangedEvent)="update_stat($event,'aim')"
+    ></app-number-spinner>
+  </div>
+  <div class="stat">
+    <app-character-stat
+      [statName]="'speed'"
+      [statValue]="core_stats.speed"
+      [maxValue]="max_core_stats.speed"
+    ></app-character-stat>
+    <app-number-spinner
+      [min]="character.core_stats.speed"
+      [value]="core_stats.speed"
+      [max]="max_core_stats.speed"
+      [show_input]="false"
+      [disable_up]="upgrade_points===0"
+      (SpinnerChangedEvent)="update_stat($event,'speed')"
+    ></app-number-spinner>
+  </div>
+  <div class="stat">
+    <app-character-stat
+      [statName]="'intelligence'"
+      [statValue]="core_stats.intelligence"
+      [maxValue]="max_core_stats.intelligence"
+    ></app-character-stat>
+    <app-number-spinner
+      [min]="character.core_stats.intelligence"
+      [value]="core_stats.intelligence"
+      [max]="max_core_stats.intelligence"
+      [show_input]="false"
+      [disable_up]="upgrade_points===0"
+      (SpinnerChangedEvent)="update_stat($event,'intelligence')"
+    ></app-number-spinner>
+  </div>
+  <div>
+    remainint points: {{upgrade_points}}
+  </div>
+</div>
