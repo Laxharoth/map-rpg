@@ -89,6 +89,11 @@ export function room(masterService:MasterService):Room
       user.level_stats.perk_point=4;
       user.emit_perk_up();
     }),
+    new DescriptionOptions("Add stats point",()=>{
+      user.level_stats.level=4;
+      user.level_stats.upgrade_point=4;
+      user.emit_stat_up();
+    }),
     equipMelee,
     equipRanged,
     equipShield,
