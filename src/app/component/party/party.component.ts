@@ -30,9 +30,6 @@ export class PartyComponent implements OnInit {
     if(this.partyType==='ENEMY')
     {
       this._party= this.masterService.enemyHandler.enemyFormation.enemies;
-      this.partySubscription= this.masterService.enemyHandler.onUpdateEnemy().subscribe(([index, character])=>{
-        this._party[index] = character
-      })
     }
   }
 

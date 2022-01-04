@@ -17,17 +17,16 @@ export class FlagHandlerService implements storeable{
   /** The game flags */
   private gameFlags: { [key: string]: any; } = default_flags;
   /** Subject to check flags changes. */
-  private flagsSubject = new Subject<flagname|"ALL">();
+  private flagsSubject:Subject<flagname|"ALL">;
 
   constructor(gameSaver: GameSaver) {
     gameSaver.register("Flags",this)
   }
-  toJson(): StoreableType {
-    return {Factory:"Flags",type:"Flags",...this.gameFlags}
+  toJson(): FlagsOptions {
+    return {Factory:"Flags",type:"Flags",flags:this.gameFlags}
   }
-  fromJson(options: StoreableType): void {
-    for(const [flagname,flag] of Object.entries(options))
-    { this.gameFlags[flagname] = flag }
+  fromJson(options: FlagsOptions): void {
+    this.gameFlags = options.flags;
   }
 
   /**
@@ -46,7 +45,7 @@ export class FlagHandlerService implements storeable{
       return;
     }
     this.gameFlags[key] = value;
-    this.flagsSubject.next(key);
+    if(this.flagsSubject)this.flagsSubject.next(key);
   }
 
   /**
@@ -81,10 +80,12 @@ export class FlagHandlerService implements storeable{
   setFlags(gameFlags:{[key: string]:any})
   {
     this.gameFlags = gameFlags;
+    if(!this.flagsSubject)this.flagsSubject=new Subject<flagname|"ALL">()
     this.flagsSubject.next("ALL");
   }
 }
 
-export const MasterFlagsSetter:FactoryFunction = (masterService:MasterService, options:StoreableType) => {
+export const MasterFlagsSetter:FactoryFunction = (masterService:MasterService, options:FlagsOptions) => {
     masterService.flagsHandler.fromJson(options);
   }
+export type FlagsOptions = {Factory:"Flags";type:"Flags";flags:{[key : string]:any}}
