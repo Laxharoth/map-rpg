@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import {  EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, LevelStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import {  CoreStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, LevelStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Upgrade } from "../Upgrade/Upgrade";
 import { UpgradeOptions } from "../Upgrade/Upgrade.type";
 import { UpgradeFactory } from "../Upgrade/UpgradeFactory";
@@ -21,6 +21,7 @@ export abstract class CharacterBattleClass {
     pierceresistance: 0,
     poisonresistance: 0,
   };
+  max_core_stats:CoreStats[] = [1,2,3,4,5].map(level=>{return {aim:level*10,intelligence:level*10,speed:level*10,stamina:level*10,strenght:level*10}})
 
   constructor() {}
 
@@ -33,14 +34,9 @@ export abstract class CharacterBattleClass {
     }
     return this._upgrade_tree;
   }
-  total_experience_to_next_level(level:number):number
-  {
-    return this.experience_cap[level]||0;
-  }
-  current_level_experience(level_stats:LevelStats):number
-  {
-    return level_stats.experience - this.total_experience_to_next_level(level_stats.level-1)
-  }
+  total_experience_to_next_level(level:number):number { return this.experience_cap[level]||0; }
+  current_level_experience(level_stats:LevelStats):number { return level_stats.experience - this.total_experience_to_next_level(level_stats.level-1) }
+  max_core_at_level(level:number):CoreStats{return this.max_core_stats[level]}
   calculate_stats({
     strenght,
     stamina,
@@ -58,7 +54,6 @@ export abstract class CharacterBattleClass {
       initiative: 0,
     }
   }
-
   private initialize_upgrades(masterService: MasterService):tree_node<Upgrade>[]
   {
     if(this._upgrade_tree instanceof ArrayTree)return [this._upgrade_tree.root];
