@@ -1,3 +1,4 @@
+import { InfoPageToggler } from 'src/gameLogic/custom/subservice/info-page-toggler';
 import { PerkCharm } from './../../../gameLogic/custom/Class/Perk/PerkCharm';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -72,6 +73,7 @@ export class GuiComponent implements OnInit {
     const unique_characters_handler = new UniqueCharacterHandler(gameSaver);
     const partyHandler = new PartyService(gameSaver,unique_characters_handler);
     const data_web = new FactWeb(timeHandler, gameSaver,unique_characters_handler);
+    const info_page_toggler = new InfoPageToggler(descriptionHandler);
     this.masterService.register("lockmap", lockmap);
     this.masterService.register("flagsHandler", flagsHandler);
     this.masterService.register("partyHandler", partyHandler);
@@ -83,6 +85,7 @@ export class GuiComponent implements OnInit {
     this.masterService.register("timeHandler",timeHandler);
     this.masterService.register("FactWeb",data_web);
     this.masterService.register("UniqueCharacterHandler",unique_characters_handler);
+    this.masterService.register("InfoPageToggler",info_page_toggler);
   }
   private FirstTimeUserInitialize() {
     if(this.masterService.gameSaver?.MainCharacter?.[0]) {

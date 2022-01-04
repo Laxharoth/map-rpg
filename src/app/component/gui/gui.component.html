@@ -24,7 +24,9 @@
     <div *ngIf="currentGameState === 'stat-up'" class="color-2">
       <app-stat-up-gui></app-stat-up-gui>
     </div>
-
+    <div *ngIf="currentGameState === 'info'" class="color-2">
+      <app-info-page-gui></app-info-page-gui>
+    </div>
   </div>
   <div class="app-gui-down color-3">
     <app-description-options></app-description-options>
