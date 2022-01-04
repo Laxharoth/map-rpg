@@ -38,10 +38,10 @@ export class GameStateService {
     const pushStateInPriority=()=>{
       this._gameState.push(this._gameStatePriority[this._gameStateIndex]);
       this._gameStateIndex++;
-      this.gameStateSubject.next(this.gameState);
     }
     if(this._gameState.includes(state))return;
     while(this.gameState!==state){pushStateInPriority();}
+    this.gameStateSubject.next(this.gameState);
   }
   /**
    * Returns to the previous game state acording to the game state priority.
