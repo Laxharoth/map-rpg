@@ -47,7 +47,6 @@ export abstract class Character
   gold:number = 0;
 
   protected perks:Perk[] = [];
-  protected status:Status[] = [];
   protected timed_status:TimedStatus[] = [];
   protected battle_status:StatusBattle[] = [];
   protected character_battle_class:CharacterBattleClass;
@@ -244,11 +243,13 @@ export abstract class Character
    * @memberof Character
    */
   addStatus(status: Status): ActionOutput{
+    for(const character_status of this.iterStatus())
+    if(character_status.constructor === status.constructor)
+    return pushBattleActionOutput(this.react(this.tags.concat(['status regained']),this),[[],[`${this.name} is already affected by ${character_status.name}`]])
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
     if(status instanceof StatusBattle)return this.addBattleStatus(status)
     if(status instanceof TimedStatus)return this.addTimedStatus(status);
-    this.status.push(status);
-    return status.onStatusGainded(this)
+    return [[],[]]
   }
   /**
    * Adds perk if does not already has it.
@@ -285,7 +286,6 @@ export abstract class Character
   removeStatus(status:Status|statusname):ActionOutput
   {
     let removeStatusDescription:ActionOutput = [[],[]];
-    pushBattleActionOutput(this.removeRegularStatus(status),removeStatusDescription);
     pushBattleActionOutput(this.removeTimedStatus  (status),removeStatusDescription);
     pushBattleActionOutput(this.removeBattleStatus (status),removeStatusDescription);
     this.calculateStats();
@@ -438,7 +438,6 @@ export abstract class Character
    */
   iterStatus    = function*():Generator<Status, void,unknown>
                   {
-                    for(const status of this.status) yield status;
                     for(const status of this.timed_status) yield status;
                     for(const status of this.battle_status) yield status;
                   }
@@ -586,7 +585,7 @@ export abstract class Character
    * @protected
    * @memberof Character
    */
-  protected applyStatus():void { for(const status of this.status.concat(this.timed_status)){ status.applyEffect(this); } }
+  protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
   /**
    * Check if the Item can be Inserted into the inventory.
    *
@@ -659,32 +658,6 @@ export abstract class Character
       const [statusRemoved] = this.timed_status.splice(statusIndex, 1);
       removeStatusDescription = statusRemoved.onStatusRemoved(this);
       statusIndex = this.timed_status.findIndex(characterStatus => (status === characterStatus.name));
-    }
-    return removeStatusDescription ;
-  }
-  /**
-   * Removes all instances of status with statusname.
-   * Or remove the status provided.
-   *
-   * @private
-   * @param {(string | Status)} status The status to remove.
-   * @return {*}  {ActionOutput}
-   * @memberof Character
-   */
-  private removeRegularStatus(status: string | Status): ActionOutput
-  {
-    if(status instanceof Status)
-    {
-      if(removeItem(this.status, status))return status.onStatusRemoved(this);
-      return [[],[]]
-    }
-    let removeStatusDescription: ActionOutput = [[],[]]
-    let statusIndex = this.status.findIndex(characterStatus => (status===characterStatus.name));
-    while (statusIndex >= 0)
-    {
-      const [statusRemoved] = this.status.splice(statusIndex, 1);
-      removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = this.status.findIndex(characterStatus => (status===characterStatus.name));
     }
     return removeStatusDescription ;
   }

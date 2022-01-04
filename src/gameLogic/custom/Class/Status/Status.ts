@@ -77,7 +77,7 @@ export abstract class Status implements storeable
    * @return {*}  {boolean}
    * @memberof Status
    */
-  canApply(target: Character):boolean{return target.hasStatus(this.name)===0;}
+  canApply(target: Character):boolean{return true;}
   /**
    * Defines what to do when the status is added to the character.
    *
