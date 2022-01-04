@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
+import { game_state, game_state_priority } from 'src/gameLogic/custom/subservice/game-state.type';
 
 /**
  * Service that has the current game state.
@@ -9,7 +9,7 @@ import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
  */
 export class GameStateService {
   private gameStateSubject = new Subject<game_state>();
-  private _gameStatePriority:game_state[] = ['map','item','excess-item','status','battle','shop','perk-tree','stat-up'];
+  private _gameStatePriority:game_state[] = game_state_priority;
   private _gameState:game_state[] = [];
   private _gameStateIndex:number = 0;
   constructor() {this.gameState = this._gameStatePriority[0]; }
