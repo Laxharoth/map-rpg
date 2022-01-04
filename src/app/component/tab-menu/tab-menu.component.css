@@ -4,11 +4,7 @@
   height: 100%;
 }
 
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+.tab-bar {
   position: relative;
   list-style: none;
   margin: 0;
@@ -23,22 +19,11 @@
   width:var(--fill);
 }
 
-.tab-element {
+.btn-tab {
   padding: 0 0.6rem;
   border: 1px solid black;
-  border-top-left-radius: 0.7em;
   flex-grow: 1;
-  margin-left: -10px;
 }
-
-.tab-element:last-child {
-  margin-left: 0;
-}
-
-.tab-element.active {
-  z-index: 1;
-}
-
 .content {
   flex-grow: 1;
 }

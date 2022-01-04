@@ -82,3 +82,23 @@ div.display-on-hover-description{
 {
   display:unset;
 }
+
+.tab-bar
+{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.btn-tab {
+  padding: 0 0.6rem;
+  border: 1px solid black;
+  flex-grow: 1;
+  filter: brightness(70%);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+.btn-tab.active {
+  filter:unset;
+}
