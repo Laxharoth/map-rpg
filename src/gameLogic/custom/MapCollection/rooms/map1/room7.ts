@@ -27,7 +27,7 @@ export function room(masterService:MasterService):Room
   const equipMelee = new DescriptionOptions(user.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
     if(user.meleeWeapon instanceof MeleeUnharmed)
     {
-      const melee = user.inventory.find(item=>item instanceof MeleeWeapon)
+      const melee = user.inventory.items.find(item=>item instanceof MeleeWeapon)
       user.useItem(melee,[user]).excecute();
       this.text='Unequip'
     }
@@ -37,11 +37,11 @@ export function room(masterService:MasterService):Room
       this.text='Equip Melee'
     }
     console.log(user)
-  },user.inventory.every(item=>!(item instanceof MeleeWeapon)))
+  },user.inventory.items.every(item=>!(item instanceof MeleeWeapon)))
   const equipRanged = new DescriptionOptions(user.rangedWeapon instanceof RangedUnharmed?'Equip ranged':"Unequip",function(){
     if(user.rangedWeapon instanceof RangedUnharmed)
     {
-      const ranged = user.inventory.find(item=>item instanceof RangedWeapon)
+      const ranged = user.inventory.items.find(item=>item instanceof RangedWeapon)
       user.useItem(ranged,[user]).excecute();
       this.text='Unequip'
     }
@@ -51,11 +51,11 @@ export function room(masterService:MasterService):Room
       this.text='Equip ranged'
     }
     console.log(user)
-  },user.inventory.every(item=>!(item instanceof RangedWeapon)))
+  },user.inventory.items.every(item=>!(item instanceof RangedWeapon)))
   const equipShield = new DescriptionOptions(user.shield instanceof ShieldNoShield?'Equip Shield':"Unequip",function(){
     if(user.shield instanceof ShieldNoShield)
     {
-      const shield = user.inventory.find(item=>item instanceof Shield)
+      const shield = user.inventory.items.find(item=>item instanceof Shield)
       user.useItem(shield,[user]).excecute();
       this.text='Unequip'
     }
@@ -65,11 +65,11 @@ export function room(masterService:MasterService):Room
       this.text='Equip Shield'
     }
     console.log(user)
-  },user.inventory.every(item=>!(item instanceof Shield)))
+  },user.inventory.items.every(item=>!(item instanceof Shield)))
   const equipArmor = new DescriptionOptions(user.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip",function(){
     if(user.armor instanceof ArmorNoArmor)
     {
-      const armor = user.inventory.find(item=>item instanceof Armor)
+      const armor = user.inventory.items.find(item=>item instanceof Armor)
       user.useItem(armor,[user]).excecute();
       this.text='Unequip'
     }
@@ -79,7 +79,7 @@ export function room(masterService:MasterService):Room
       this.text='Equip Armor'
     }
     console.log(user)
-  },user.inventory.every(item=>!(item instanceof Armor)))
+  },user.inventory.items.every(item=>!(item instanceof Armor)))
   const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription()});
   const roomOptions =[
     new DescriptionOptions("Shop",makeShop),
@@ -101,7 +101,7 @@ export function room(masterService:MasterService):Room
     new DescriptionOptions("Add Test Item",function(){
       const item = new ItemTest(masterService);
       item.amount = 9;
-      user.addItem(item);
+      user.inventory.addItem(item);
     }),
     drop_item(masterService,user),
     new DescriptionOptions("level up perk",function(){

@@ -75,7 +75,7 @@ export class Shop
     const reduceInventory = {}
     for(const boughtItem of this.sale.items2Shop)
     { reduceInventory[boughtItem.name] = boughtItem.amount; }
-    for(const item of character.inventory)
+    for(const item of character.inventory.items)
     {
       const copy = Object.create(item);
       const amountCanReduceOfItem = reduceInventory[item.name]||0;
@@ -106,19 +106,19 @@ export class Shop
   {
     const copyItemsAmount: { [key: string]: number; } = {};
     for (const item of this.sale.items2Shop) { copyItemsAmount[item.name] = item.amount; }
-    for (const characteritem of character.inventory)
+    for (const characteritem of character.inventory.items)
     {
       if (copyItemsAmount.hasOwnProperty(characteritem.name))
       {
         const reduceAmount = Math.min(characteritem.amount, copyItemsAmount[characteritem.name]);
         characteritem.amount -= reduceAmount;
         copyItemsAmount[characteritem.name] -= reduceAmount;
-        removeItem(character.inventory,characteritem)
-        if(characteritem.amount>0)character.addItem(characteritem);
+        character.inventory.dropItem(characteritem)
+        if(characteritem.amount>0)character.inventory.addItem(characteritem);
       }
     }
     for (const item of this.sale.items2Character)
-    { character.addItem(ItemFactory(this.masterService,fillItemStoreable({type:item.name,amount:item.amount}))); }
+    { character.inventory.addItem(ItemFactory(this.masterService,fillItemStoreable({type:item.name,amount:item.amount}))); }
     character.gold-=this.sale.total;
   }
   private CheckoutSaleUpdateShopInventory() {
@@ -133,7 +133,7 @@ export class Shop
     if(!this.calculatedPlayerOverflow)
     {
       this.calculatedPlayerOverflow = true;
-      this.currectPlayerOverflow =  character.inventorysize
+      this.currectPlayerOverflow =  character.inventory.inventory_size
                                     <
                                     this.mergeCharacterItems(character)
                                       .reduce((acc, item) => acc + Math.ceil(item.amount/item.maxStack),0);

@@ -1,9 +1,8 @@
 import { MasterService } from "src/app/service/master.service";
-import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
 import { fillItemStoreable, GameItem } from "src/gameLogic/custom/Class/Items/Item";
-import { MAXOPTIONSNUMBERPERPAGE } from "src/gameLogic/custom/customTypes/constants";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { Inventory } from "../Character/Inventory/Inventory";
 /**
  * Returns a description to drop items if adding a item to inventory exceeds max inventory.
  *
@@ -17,7 +16,7 @@ export const AddExceedItem = function () {
   let dropping=false;
   const excessItemList: GameItem[] = [];
   const dropable_inventory=[],dropable_item=[];
-  return function (masterService: MasterService, items: GameItem|GameItem[], character: Character): void {
+  return function (masterService: MasterService, items: GameItem|GameItem[], inventory: Inventory): void {
     if(items instanceof GameItem) items = [items];
     //If the item is already in the excessItemList adds to the stack
     for (const item of items){
@@ -32,7 +31,7 @@ export const AddExceedItem = function () {
         excessItemList.push(...create_stacks_with_remaining_items(item, masterService));
     }
     //replace content of dropable lists
-    const [_dropable_inventory,_dropable_item] = map_dropables(character.inventory,excessItemList)
+    const [_dropable_inventory,_dropable_item] = map_dropables(inventory.items,excessItemList)
     dropable_inventory.splice(0,dropable_inventory.length,..._dropable_inventory)
     dropable_item.splice(0,dropable_item.length,..._dropable_item)
     /** @type {*} {Description} Description to replace item in inventory with excee item.*/
@@ -53,14 +52,14 @@ export const AddExceedItem = function () {
     {
       for(const [drop,item] of dropable_inventory)
       {
-        if(drop)character.dropItem(item);
+        if(drop)inventory.dropItem(item);
       }
       excessItemList.splice(0,excessItemList.length)
       dropping = false;
       masterService.descriptionHandler.nextDescription(false);
       for(const [drop,item] of dropable_item)
       {
-        if(!drop)character.addItem(item);
+        if(!drop)inventory.addItem(item);
       }
     }
   }

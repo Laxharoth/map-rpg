@@ -11,6 +11,7 @@ export type tag = 'melee weapon'|
                   'status gained'|
                   'status regained'|
                   'status ended'|
+                  'item-use'|
                   'defend'|
                   'paralized'|
                   'poison'|

@@ -100,6 +100,7 @@ export class GuiComponent implements OnInit {
       user.addPerk(new PerkUpgradeable(this.masterService));
       user.addPerk(new PerkCharm(this.masterService));
       user.addItem(meleeTest1); user.addItem(rangedTest1); user.addItem(shieldTest1); user.addItem(armorTest1);
+      user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
       this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
     }

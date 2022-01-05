@@ -124,7 +124,7 @@ export abstract class GameItem implements BattleUseable, storeable
     const description :ActionOutput = [[],[]]
     if(!(targets instanceof Array))targets = [targets]
     this.amount--;
-    if(this.amount<=0){ removeItem(user.inventory,this) }
+    if(this.amount<=0){ user.inventory.dropItem(this) }
     for(const target of targets)
     {
       pushBattleActionOutput(this._itemEffect(user,target),description);

@@ -22,6 +22,7 @@ import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
 import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
 import { TestCharacterBattleClass } from "../CharacterBattleClass/testCharacterBattleClass";
 import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
+import { Inventory } from "./Inventory/Inventory";
 import { Reaction } from "./Reaction/Reaction";
 
 /**
@@ -53,8 +54,7 @@ export abstract class Character
   get battle_class():CharacterBattleClass { return this.character_battle_class;}
   protected abstract _name:string;
   abstract readonly characterType:characterType;
-  inventorysize = 9;
-  inventory:GameItem[] = [];
+  inventory:Inventory;
 
   private static __meleeUnharmed__:MeleeUnharmed;
   private static __rangedUnharmed__:RangedUnharmed;
@@ -92,6 +92,7 @@ export abstract class Character
   {
     if(!character_battle_class)character_battle_class=new TestCharacterBattleClass()
     this.character_battle_class = character_battle_class;
+    this.inventory = new Inventory(masterService);
     this.masterService = masterService;
     this.energy_stats = {...this.character_battle_class.initial_core_stats};
     this.current_energy_stats = {...this.energy_stats};
@@ -320,53 +321,6 @@ export abstract class Character
     }
     return  action(target);
   }
-  /**
-   * Adds Item to the inventory.
-   *
-   * @param {GameItem} item The item to add.
-   * @return {*}  {void}
-   * @memberof Character
-   */
-  addItem(item:GameItem):void
-  {
-    if(!item){console.warn("Item not found, Is null or undefined."); return;}
-    this.fitItemIntoinventory(item);
-    if(item.amount <= 0) return;
-    if(this.inventory.length < this.inventorysize)
-    {
-      if(item.amount <= item.maxStack)
-      {
-        this.inventory.push(item);
-        return;
-      }
-      for(const itemsFromStack of item.breakIntoStacks())this.addItem(itemsFromStack);
-      return;
-    }
-    AddExceedItem(this.masterService,item,this)
-  }
-  dropItem(item: GameItem)
-  {
-    removeItem(this.inventory,item);
-  }
-  /**
-   * Uses an item from inventory or SpecialAttack.
-   *
-   * @param {(number|GameItem|SpecialAttack)} itemIndexOrItem If number, the index of the array, If object, the actuall Item.
-   * @param {Character[]} targets The targets the item will affect.
-   * @param {('inventory'|'special')} [sourceItem=null] If index is provided the array is required.
-   * @return {*}  {ActionOutput}
-   * @memberof Character
-   */
-  useItem(itemIndexOrItem: number|GameItem|SpecialAttack,targets: Character[],sourceItem:'inventory'|'special'=null):BattleCommand
-  {
-    if(itemIndexOrItem instanceof SpecialAttack)return this._useSpecialAttack(itemIndexOrItem,targets);
-    if(itemIndexOrItem instanceof GameItem)return this._useItem(itemIndexOrItem,targets);
-    if(sourceItem === 'special')return this._useSpecialAttack(itemIndexOrItem,targets);
-    if(sourceItem === 'inventory')return this._useItem(itemIndexOrItem,targets);
-    console.warn('item instance not provided or source not provided')
-    return new EmptyCommand(this,targets)
-  }
-  /**
    * Unequip melee weapon and adds it to the inventory.
    *
    * @memberof Character
@@ -376,7 +330,7 @@ export abstract class Character
     const melee = this._meleeWeapon;
     if(melee)melee.amount++
     this._meleeWeapon = null;
-    this.addItem(melee);
+    this.inventory.addItem(melee);
     melee&&melee.removeModifier(this)
   }
   /**
@@ -389,7 +343,7 @@ export abstract class Character
     const ranged = this._rangedWeapon;
     if(ranged)ranged.amount++;
     this._rangedWeapon = null;
-    this.addItem(ranged);
+    this.inventory.addItem(ranged);
     ranged&&ranged.removeModifier(this)
   }
   /**
@@ -402,7 +356,7 @@ export abstract class Character
     const armor = this._armor;
     if(armor)armor.amount++;
     this._armor = null;
-    this.addItem(armor);
+    this.inventory.addItem(armor);
     armor&&armor.removeModifier(this)
   }
   /**
@@ -415,10 +369,19 @@ export abstract class Character
     const shield = this._shield;
     if(shield)shield.amount++;
     this._shield = null;
-    this.addItem(shield);
+    this.inventory.addItem(shield);
     shield&&shield.removeModifier(this)
   }
-
+  useItem(item: GameItem | SpecialAttack, targets: Character[]): BattleCommand {
+    if (item instanceof SpecialAttack) return this._useSpecialAttack(item, targets);
+    if (item instanceof GameItem)
+    {
+      const description =  this.inventory.useItem(item, this, targets);
+      return new BattleCommand(this,targets,['item-use'],()=>description)
+    }
+    console.warn('item not in inventory')
+    return new EmptyCommand(this, targets)
+  }
   /**
    * Iterator of character equipment.
    *
@@ -587,29 +550,6 @@ export abstract class Character
    */
   protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
   /**
-   * Check if the Item can be Inserted into the inventory.
-   *
-   * @private
-   * @param {GameItem} item
-   * @memberof Character
-   */
-  private fitItemIntoinventory(item: GameItem):void
-  {
-    if(item.amount<=0)return;
-    for (const characteritem of this.inventory)
-    {
-      if (characteritem.constructor === item.constructor)
-      {
-        const characteriteramount = characteritem.amount;
-        const itemamount = item.amount;
-        const newcharacteritemamount = Math.min(characteriteramount + itemamount, item.maxStack);
-        const newitemamount = itemamount - (newcharacteritemamount - characteriteramount);
-        characteritem.amount = newcharacteritemamount;
-        item.amount = newitemamount;
-      }
-    }
-  }
-  /**
    * Removes all instances of battleStatus
    * Or remove the status provided.
    *
@@ -690,26 +630,6 @@ export abstract class Character
     this.timed_status.push(status);
     pushBattleActionOutput(status.onStatusGainded(this),statusDescription);
     return statusDescription;
-  }
-
-  /**
-   * Use an actial item from inventory
-   *
-   * @private
-   * @param {(number|GameItem)} itemIndexOrItem The Index of the item or the item.
-   * @param {Character[]} targets The targets the item will target.
-   * @return {*}  {ActionOutput}
-   * @memberof Character
-   */
-  private _useItem(itemIndexOrItem: number|GameItem,targets: Character[]):BattleCommand
-  {
-    let itemIndex:number;
-    if(itemIndexOrItem instanceof GameItem)itemIndex = this.inventory.indexOf(itemIndexOrItem);
-    else itemIndex = itemIndexOrItem;
-    if(itemIndex < 0) return new EmptyCommand(this,targets)
-    const item = this.inventory[itemIndex];
-    const item_action_output = item.itemEffect(this,targets);
-    return new BattleCommand( this,targets,item.tags,(targets)=>item_action_output )
   }
   /**
    * Use a special attack from the equpments, perks or status.

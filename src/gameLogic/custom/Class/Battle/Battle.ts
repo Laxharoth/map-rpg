@@ -102,7 +102,7 @@ export class Battle {
     this.battleRoundDescription = [];
     const specials = this.player.specialAttacks;
     this.special_option.disabled = specials.length <= 0 || specials.every(item => item.disabled(this.player));
-    this.item_option.disabled = this.player.inventory.length <= 0 || this.player.inventory.every(item => item.disabled(this.player));
+    this.item_option.disabled = this.player.inventory.items.length <= 0 || this.player.inventory.items.every(item => item.disabled(this.player));
 
     for (const character of get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
       const [description, string] = character.startRound();
@@ -159,7 +159,7 @@ export class Battle {
         .tailDescription(this.enemy_formation.onPartyVictory([this.player].concat(this.party)), 'battle')
         .nextDescription(false);
       for (const item of this.enemy_formation.loot()) {
-        this.player.addItem(item);
+        this.player.inventory.addItem(item);
       }
     })
     return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
@@ -192,7 +192,7 @@ export class Battle {
     this.selectItem(this.player.specialAttacks);
   });
   protected item_option = new DescriptionOptions("Item", () => {
-    this.selectItem(this.player.inventory);
+    this.selectItem(this.player.inventory.items);
   });
   protected defend_option = new DescriptionOptions("Defend", () => {
     const playerAction = this.player.Defend([this.player]);

@@ -18,6 +18,7 @@ import { Character } from "./Character";
 import { Description } from '../Descriptions/Description';
 import { tree_node } from '../CharacterBattleClass/ArrayTree';
 import { Upgrade } from '../Upgrade/Upgrade';
+import { InventoryOptions } from './Inventory/Inventory';
 
 
 export abstract class UniqueCharacter extends Character implements storeable {
@@ -69,9 +70,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
       storeables['armor'] = { name: this._armor.name, options: this._armor.toJson() };
     if (this._shield)
       storeables['shield'] = { name: this._shield.name, options: this._shield.toJson() };
-    storeables['inventory'] = [];
-    for (const item of this.inventory)
-      storeables['inventory'].push({ name: item.name, options: item.toJson() });
+    storeables['inventory'] = this.inventory.toJson()
     storeables['perk'] = [];
     for (const perk of this.perks)
       storeables['perk'].push({ name: perk.name, options: perk.toJson() });
@@ -103,7 +102,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
     (options['armor']) && (this._armor = ItemFactory(this.masterService, options['armor'].options) as Armor);
     (options['shield']) && (this._shield = ItemFactory(this.masterService, options['shield'].options) as Shield);
     if (options['inventory'])
-      for (const item of options['inventory']) { this.addItem(ItemFactory(this.masterService, item.options)); };
+      this.inventory.fromJson(options.inventory)
     if (options['perk'])
       for (const perk of options['perk']) { this.addPerk(PerkFactory(this.masterService, perk.options)); };
     this._name = options.name;
@@ -125,7 +124,7 @@ export type CharacterStoreable = {
   ranged?: { name: itemname; options: ItemStoreable; };
   armor?: { name: itemname; options: ItemStoreable; };
   shield?: { name: itemname; options: ItemStoreable; };
-  inventory?: { name: itemname; options: ItemStoreable; }[];
+  inventory?: InventoryOptions;
   perk?: { name: perkname; options: PerkStoreable; }[];
   uuid: string;
   name: string;

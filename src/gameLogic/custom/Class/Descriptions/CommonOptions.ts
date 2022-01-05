@@ -20,6 +20,6 @@ export function nextOption(masterService:MasterService,btnString:string="Next"):
 export function drop_item(masterService:MasterService,character:Character)
 {
   return new DescriptionOptions("Drop Item",function(){
-    AddExceedItem(masterService,[],character)
+    AddExceedItem(masterService,[],character.inventory)
   })
 }
