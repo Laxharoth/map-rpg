@@ -14,7 +14,7 @@ export function attack_order(characters: Character[]): Character[] {
 
 export function AttackCommand(source: Character, targets: Character[]): BattleCommand
 {
-  const weapon = source.meleeWeapon;
+  const weapon = source.character_equipment.meleeWeapon;
   return new BattleCommand(
     source, targets, weapon.tags,
     (targets) => {
@@ -31,7 +31,7 @@ export function AttackCommand(source: Character, targets: Character[]): BattleCo
 }
 export function ShootCommand(source: Character, targets: Character[]): BattleCommand
 {
-  const weapon = source.rangedWeapon;
+  const weapon = source.character_equipment.rangedWeapon;
   return new BattleCommand(
     source, targets, weapon.tags,
     (targets) => {
@@ -48,7 +48,7 @@ export function ShootCommand(source: Character, targets: Character[]): BattleCom
 }
 export function DefendCommand(source: Character, targets: Character[])
 {
-  const shield = source.shield;
+  const shield = source.character_equipment.shield;
   const defend_action = shield.defend(targets)
   return new BattleCommand(
     source, targets, shield.tags,

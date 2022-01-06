@@ -1,9 +1,5 @@
+import { CharacterEquipment } from './Inventory/CharacterEquipment';
 import { MasterService } from "src/app/service/master.service";
-import { Armor, ArmorNoArmor } from "src/gameLogic/custom/Class/Equipment/Armor/Armor";
-import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
-import { Shield, ShieldNoShield } from "src/gameLogic/custom/Class/Equipment/Shield/Shield";
-import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeWeapon";
-import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon";
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { Perk } from "src/gameLogic/custom/Class/Perk/Perk";
@@ -55,33 +51,10 @@ export abstract class Character
   protected abstract _name:string;
   abstract readonly characterType:characterType;
   inventory:Inventory;
-
-  private static __meleeUnharmed__:MeleeUnharmed;
-  private static __rangedUnharmed__:RangedUnharmed;
-  private static __noArmor__:ArmorNoArmor;
-  private static __noShield__:ShieldNoShield;
-
-  /** * The currently equiped melee weapon. */
-  protected _meleeWeapon:MeleeWeapon = null;
-  get meleeWeapon():MeleeWeapon { return this._meleeWeapon || Character.__meleeUnharmed__ }
-  set meleeWeapon(equipment:MeleeWeapon){this._meleeWeapon=equipment}
-  /** * The currently equiped rangedWeapon. */
-  protected _rangedWeapon:RangedWeapon = null;
-  get rangedWeapon():RangedWeapon { return this._rangedWeapon || Character.__rangedUnharmed__ }
-  set rangedWeapon(equipment:RangedWeapon){this._rangedWeapon=equipment}
-  /** * *The currently equiped armor. */
-  protected _armor:Armor = null;
-  get armor():Armor { return this._armor || Character.__noArmor__}
-  set armor(equipment:Armor){this._armor=equipment}
-  /** * The currently equiped shield. */
-  protected _shield:Shield = null;
-  get shield():Shield { return this._shield || Character.__noShield__}
-  set shield(equipment:Shield){this._shield=equipment}
-
+  character_equipment:CharacterEquipment;
   get name(): string{ return this._name};
   protected readonly masterService:MasterService
   private __endbattle__ = false;
-
   /**
    * Creates an instance of Character.
    * @param {characterStats} originalstats The original stats of the character
@@ -93,13 +66,13 @@ export abstract class Character
     if(!character_battle_class)character_battle_class=new TestCharacterBattleClass()
     this.character_battle_class = character_battle_class;
     this.inventory = new Inventory(masterService);
+    this.character_equipment = new CharacterEquipment(masterService);
     this.masterService = masterService;
     this.energy_stats = {...this.character_battle_class.initial_core_stats};
     this.current_energy_stats = {...this.energy_stats};
     this.level_stats = {experience:0, upgrade_point:0, perk_point:0, level:0, upgrade_path:[]}
     this.core_stats = {...this.character_battle_class.initial_physic_stats};
     this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
-    this.initializeUnharmed();
     this.calculateStats();
     this.applyStatus();
   }
@@ -119,7 +92,6 @@ export abstract class Character
    * @memberof Character
    */
   Shoot(targets:Character[]):BattleCommand{return ShootCommand(this,targets)}
-
   /**
    * Uses shield .defend
    *
@@ -128,7 +100,10 @@ export abstract class Character
    * @memberof Character
    */
   Defend(target:Character[]):BattleCommand{return DefendCommand(this,target)}
-
+  unequipMelee(){this.character_equipment.unequipMelee(this)}
+  unequipRanged(){this.character_equipment.unequipRanged(this)}
+  unequipArmor(){this.character_equipment.unequipArmor(this)}
+  unequipShield(){this.character_equipment.unequipShield(this)}
   /**
    * Reset roundStats apply the battle status effects and cooldown the specials.
    *
@@ -181,7 +156,7 @@ export abstract class Character
   get specialAttacks(): ObjectSet<SpecialAttack>
   {
     const specials= new ObjectSet<SpecialAttack>()
-    for(const equipment of this.iterEquipment()) { specials.push(...equipment.specials) }
+    for(const equipment of this.character_equipment) { specials.push(...equipment.specials) }
     for(const perk of this.perks) { specials.push(...perk.specials) }
     for(const status of this.iterStatus()) { specials.push(...status.specials) }
     return specials
@@ -249,9 +224,9 @@ export abstract class Character
   removeStatus(status:Status|statusname):ActionOutput
   {
     let removeStatusDescription:ActionOutput = [[],[]];
-    pushBattleActionOutput(this.removeTimedStatus(status) ,removeStatusDescription);
-    pushBattleActionOutput(this.removeBattleStatus(status),removeStatusDescription);
-    pushBattleActionOutput(this._removeStatus(status),removeStatusDescription);
+    pushBattleActionOutput(this._removeStatus(status,this.battle_status),removeStatusDescription);
+    pushBattleActionOutput(this._removeStatus(status,this.timed_status),removeStatusDescription);
+    pushBattleActionOutput(this._removeStatus(status,this.status),removeStatusDescription);
     this.calculateStats();
     return removeStatusDescription;
   }
@@ -266,58 +241,6 @@ export abstract class Character
     for(const characterStatus of this.iterStatus())if(compareStatusName(status, characterStatus))return characterStatus;
     return null;
   }
-  /**
-   * Unequip melee weapon and adds it to the inventory.
-   *
-   * @memberof Character
-   */
-  unequipMelee()
-  {
-    const melee = this._meleeWeapon;
-    if(melee)melee.amount++
-    this._meleeWeapon = null;
-    this.inventory.addItem(melee);
-    melee&&melee.removeModifier(this)
-  }
-  /**
-   * Unequip ranged weapon and adds it to the inventory.
-   *
-   * @memberof Character
-   */
-  unequipRanged()
-  {
-    const ranged = this._rangedWeapon;
-    if(ranged)ranged.amount++;
-    this._rangedWeapon = null;
-    this.inventory.addItem(ranged);
-    ranged&&ranged.removeModifier(this)
-  }
-  /**
-   * Unequip armor and adds it to the inventory.
-   *
-   * @memberof Character
-   */
-  unequipArmor()
-  {
-    const armor = this._armor;
-    if(armor)armor.amount++;
-    this._armor = null;
-    this.inventory.addItem(armor);
-    armor&&armor.removeModifier(this)
-  }
-  /**
-   * Unequip shield and adds it to the inventory.
-   *
-   * @memberof Character
-   */
-  unequipShield()
-  {
-    const shield = this._shield;
-    if(shield)shield.amount++;
-    this._shield = null;
-    this.inventory.addItem(shield);
-    shield&&shield.removeModifier(this)
-  }
   useItem(item: GameItem | SpecialAttack, targets: Character[]): BattleCommand {
     if (item instanceof SpecialAttack) return this._useSpecialAttack(item, targets);
     if (item instanceof GameItem)
@@ -328,18 +251,6 @@ export abstract class Character
     console.warn('item not in inventory')
     return new EmptyCommand(this, targets)
   }
-  /**
-   * Iterator of character equipment.
-   *
-   * @memberof Character
-   */
-  iterEquipment = function*():Generator<Equipment, void, unknown>
-                  {
-                    yield this.meleeWeapon;
-                    yield this.rangedWeapon;
-                    yield this.armor;
-                    yield this.shield;
-                  }
   /**
    * Iterator of character status.
    *
@@ -414,7 +325,6 @@ export abstract class Character
    * @memberof Character
    */
   get currentStatusString():string { return `${this.name} looks like they are ${this.current_energy_stats.hitpoints} in a scale of 0 to ${this.energy_stats.hitpoints}`}
-
   /**
    * Removes all the Battle Status without trigger reactions.
    *
@@ -439,7 +349,7 @@ export abstract class Character
   protected get reactions(): Reaction[]
   {
     const reactions = new ObjectSet<Reaction>()
-    for(const equipment of this.iterEquipment()) { reactions.push(...equipment.reactions) }
+    for(const equipment of this.character_equipment) { reactions.push(...equipment.reactions) }
     for(const perk of this.perks){reactions.push(...perk.reactions)}
     for(const status of this.iterStatus()){reactions.push(...status.reactions)}
     return reactions;
@@ -455,7 +365,7 @@ export abstract class Character
   protected get tags():tag[]
   {
     const tags:tag[] = [];
-    for(const equipment of this.iterEquipment()) tags.push(...equipment.tags)
+    for(const equipment of this.character_equipment) tags.push(...equipment.tags)
     for(const status of this.iterStatus())tags.push(...status.tags)
     for(const perk of this.perks)tags.push(...perk.tags)
     return tags;
@@ -481,14 +391,12 @@ export abstract class Character
    * @memberof Character
    */
   protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cool() }
-
   calculateStats():void {
     this.calculated_stats = this.character_battle_class.calculate_stats(this.core_stats as FullCoreStats);
     this.calculated_resistance = {...this.original_resistance};
-    for(const equipment of this.iterEquipment()){ equipment.applyModifiers(this); }
+    for(const equipment of this.character_equipment){ equipment.applyModifiers(this); }
     for(const status of this.iterStatus()){ status.applyModifiers(this); }
   }
-
   /**
    * Apply status effects.
    *
@@ -497,60 +405,22 @@ export abstract class Character
    */
   protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
   /**
-   * Removes all instances of Status
-   * Or remove the status provided.
+   *
    *
    * @private
-   * @param {(string | Status)} status The status to remove.
-   * @return {*} {ActionOutput}
-   * @memberof Character
-   */
-   private _removeStatus(status: string | Status):ActionOutput
-   {
-     if(status instanceof Status)
-     {
-       if(removeItem(this.status, status))return status.onStatusRemoved(this);
-       return [[],[]]
-     }
-     return remove_status_from_name(status,this.battle_status);
-   }
-  /**
-   * Removes all instances of battleStatus
-   * Or remove the status provided.
-   *
-   * @private
-   * @param {(string | Status)} status The status to remove.
-   * @return {*} {ActionOutput}
-   * @memberof Character
-   */
-  private removeBattleStatus(status: string | Status):ActionOutput
-  {
-    if(status instanceof StatusBattle)
-    {
-      if(removeItem(this.battle_status, status))return status.onStatusRemoved(this);
-      return [[],[]]
-    }
-    if(status instanceof Status)return [[],[]];
-    return remove_status_from_name(status,this.battle_status);
-  }
-  /**
-   * Removes all instances TimedStatus
-   * Or remove the status provided.
-   *
-   * @private
-   * @param {(string | Status)} status The status to remove.
+   * @param {(string | Status)} status The status to remove
+   * @param {Status[]} status_array The array where the status will be removed.
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  private removeTimedStatus(status: string | Status): ActionOutput
+  private _removeStatus(status: string | Status, status_array:Status[]): ActionOutput
   {
-    if(status instanceof TimedStatus)
+    if(status instanceof Status)
     {
-      if(removeItem(this.timed_status, status)) return status.onStatusRemoved(this);
+      if(removeItem(status_array, status)) return status.onStatusRemoved(this);
       return [[],[]]
     }
-    if(status instanceof Status)return [[],[]];
-    return remove_status_from_name(status,this.timed_status);
+    return remove_status_from_name(status,status_array);
   }
   /**
    * Use a special attack from the equpments, perks or status.
@@ -574,21 +444,6 @@ export abstract class Character
     return new EmptyCommand(this,targets);
   }
   /**
-   * Initializes the unharmed equpments.
-   *
-   * @private
-   * @memberof Character
-   */
-  private initializeUnharmed() {
-    if(!Character.__meleeUnharmed__)
-    {
-      Character.__meleeUnharmed__   = new MeleeUnharmed(this.masterService);
-      Character.__rangedUnharmed__  = new RangedUnharmed(this.masterService);
-      Character.__noArmor__         = new ArmorNoArmor(this.masterService);
-      Character.__noShield__        = new ShieldNoShield(this.masterService);
-    }
-  }
-  /**
    * The automatic action to perform.
    * @memberof Character
    */
@@ -599,7 +454,6 @@ export abstract class Character
     const enemy = this.masterService.partyHandler.enemyFormation.enemies;
     return this._IA_Action(party,enemy)
   }
-
   /**
    * The logic behind the action.
    *
@@ -622,7 +476,6 @@ export abstract class Character
  */
 function compareStatusName(status: string | Status, characterStatus: Status):boolean
 { return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status; }
-
 function remove_status_from_name(status: string,status_array:Status[]) {
   let removeStatusDescription: ActionOutput = [[], []];
   let statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));

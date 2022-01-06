@@ -34,7 +34,7 @@ export abstract class Armor extends Equipment
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipArmor();
-    user.armor = this;
+    user.character_equipment.armor = this;
     return super._itemEffect(user, target);
   }
   get tags(): tag[] { return ['armor']; }

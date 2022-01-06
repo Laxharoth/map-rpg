@@ -46,7 +46,7 @@ export abstract class RangedWeapon extends Weapon
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipRanged();
-    user.rangedWeapon = this;
+    user.character_equipment.rangedWeapon = this;
     return super._itemEffect(user, target);
   }
 }

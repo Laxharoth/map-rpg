@@ -24,8 +24,8 @@ export function room(masterService:MasterService):Room
   let dynamicShop:DynamicShop = null;
   const $flag = (name:flagname) => masterService.flagsHandler.getFlag(name);
   const user = masterService.partyHandler.user;
-  const equipMelee = new DescriptionOptions(user.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
-    if(user.meleeWeapon instanceof MeleeUnharmed)
+  const equipMelee = new DescriptionOptions(user.character_equipment.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
+    if(user.character_equipment.meleeWeapon instanceof MeleeUnharmed)
     {
       const melee = user.inventory.items.find(item=>item instanceof MeleeWeapon)
       user.useItem(melee,[user]).excecute();
@@ -38,8 +38,8 @@ export function room(masterService:MasterService):Room
     }
     console.log(user)
   },user.inventory.items.every(item=>!(item instanceof MeleeWeapon)))
-  const equipRanged = new DescriptionOptions(user.rangedWeapon instanceof RangedUnharmed?'Equip ranged':"Unequip",function(){
-    if(user.rangedWeapon instanceof RangedUnharmed)
+  const equipRanged = new DescriptionOptions(user.character_equipment.rangedWeapon instanceof RangedUnharmed?'Equip ranged':"Unequip",function(){
+    if(user.character_equipment.rangedWeapon instanceof RangedUnharmed)
     {
       const ranged = user.inventory.items.find(item=>item instanceof RangedWeapon)
       user.useItem(ranged,[user]).excecute();
@@ -52,8 +52,8 @@ export function room(masterService:MasterService):Room
     }
     console.log(user)
   },user.inventory.items.every(item=>!(item instanceof RangedWeapon)))
-  const equipShield = new DescriptionOptions(user.shield instanceof ShieldNoShield?'Equip Shield':"Unequip",function(){
-    if(user.shield instanceof ShieldNoShield)
+  const equipShield = new DescriptionOptions(user.character_equipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip",function(){
+    if(user.character_equipment.shield instanceof ShieldNoShield)
     {
       const shield = user.inventory.items.find(item=>item instanceof Shield)
       user.useItem(shield,[user]).excecute();
@@ -66,8 +66,8 @@ export function room(masterService:MasterService):Room
     }
     console.log(user)
   },user.inventory.items.every(item=>!(item instanceof Shield)))
-  const equipArmor = new DescriptionOptions(user.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip",function(){
-    if(user.armor instanceof ArmorNoArmor)
+  const equipArmor = new DescriptionOptions(user.character_equipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip",function(){
+    if(user.character_equipment.armor instanceof ArmorNoArmor)
     {
       const armor = user.inventory.items.find(item=>item instanceof Armor)
       user.useItem(armor,[user]).excecute();

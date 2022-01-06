@@ -35,7 +35,7 @@ export abstract class Shield extends Equipment{
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipShield();
-    user.shield = this;
+    user.character_equipment.shield = this;
     return super._itemEffect(user, target);
   }
   /**

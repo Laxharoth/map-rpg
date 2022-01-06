@@ -37,7 +37,7 @@ export abstract class MeleeWeapon extends Weapon
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipMelee();
-    user.meleeWeapon = this;
+    user.character_equipment.meleeWeapon = this;
     return super._itemEffect(user, target);
   }
   get tags(): tag[] { return ['melee weapon']; }
