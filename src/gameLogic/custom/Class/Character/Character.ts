@@ -10,10 +10,12 @@ import { Perk } from "src/gameLogic/custom/Class/Perk/Perk";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { Status } from "src/gameLogic/custom/Class/Status/Status";
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { ObjectSet } from "../../ClassHelper/ObjectSet";
 import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
 import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
 import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
@@ -44,9 +46,10 @@ export abstract class Character
   calculated_resistance:ResistanceStats;
   gold:number = 0;
 
-  protected perks:Perk[] = [];
-  protected timed_status:TimedStatus[] = [];
-  protected battle_status:StatusBattle[] = [];
+  protected perks:ObjectSet<Perk> = new ObjectSet<Perk>();
+  protected status = new ObjectSet<Status>();
+  protected timed_status = new ObjectSet<TimedStatus>();
+  protected battle_status = new ObjectSet<StatusBattle>();
   protected character_battle_class:CharacterBattleClass;
   get battle_class():CharacterBattleClass { return this.character_battle_class;}
   protected abstract _name:string;
@@ -150,12 +153,11 @@ export abstract class Character
   onDefeated():ActionOutput
   {
     let description:ActionOutput =[[],[]]
-    for(const status of this. battle_status)
+    for(const status of this.battle_status)
     { pushBattleActionOutput(status.onStatusRemoved(this),description) }
-    this.battle_status = [];
+    this.battle_status.clear()
     return description;
   }
-
   /**
    * Gets the number of instances of a specific status in the character
    * @param status The name of the status to check
@@ -169,7 +171,6 @@ export abstract class Character
         timesFound++;
     return timesFound;
   }
-
   /**
    * Gets all the specials from equipments, perks and status.
    *
@@ -177,15 +178,14 @@ export abstract class Character
    * @type {SpecialAttack[]}
    * @memberof Character
    */
-  get specialAttacks(): SpecialAttack[]
+  get specialAttacks(): ObjectSet<SpecialAttack>
   {
-    const specials: SpecialAttack[] = []
-    for(const equipment of this.iterEquipment()) { pushSpecial(specials,equipment.specials) }
-    for(const perk of this.perks){pushSpecial(specials,perk.specials)}
-    for(const status of this.iterStatus()){pushSpecial(specials,status.specials)}
+    const specials= new ObjectSet<SpecialAttack>()
+    for(const equipment of this.iterEquipment()) { specials.push(...equipment.specials) }
+    for(const perk of this.perks) { specials.push(...perk.specials) }
+    for(const status of this.iterStatus()) { specials.push(...status.specials) }
     return specials
   };
-
   /**
    * Checks if the character has a tag.
    *
@@ -209,13 +209,14 @@ export abstract class Character
    * @memberof Character
    */
   addStatus(status: Status): ActionOutput{
-    for(const character_status of this.iterStatus())
-    if(character_status.constructor === status.constructor)
-    return pushBattleActionOutput(this.react(this.tags.concat(['status regained']),this),[[],[`${this.name} is already affected by ${character_status.name}`]])
+    if(!status)return [[],[]]
+    if(this.timed_status.has(status.hash()) || this.battle_status.has(status.hash()))
+      return pushBattleActionOutput(this.react(this.tags.concat(['status regained']),this),[[],[`${this.name} is already affected by ${status.name}`]])
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
-    if(status instanceof StatusBattle)return this.addBattleStatus(status)
-    if(status instanceof TimedStatus)return this.addTimedStatus(status);
-    return [[],[]]
+    if(status instanceof StatusBattle) this.battle_status.push(status);
+    else if(status instanceof TimedStatus) this.timed_status.push(status);
+    else this.status.push(status);
+    return status.onStatusGainded(this)
   }
   /**
    * Adds perk if does not already has it.
@@ -224,11 +225,7 @@ export abstract class Character
    * @return {*}  {void}
    * @memberof Character
    */
-  addPerk(perk:Perk):void
-  {
-    if(this.perks.some(characterperk => characterperk.constructor ===  perk.constructor))return;
-    this.perks.push(perk);
-  }
+  addPerk(perk:Perk):void { this.perks.push(perk); }
   /**
    * Returns a perk if the character has it.
    *
@@ -238,7 +235,7 @@ export abstract class Character
    */
   getPerk(perkOrName:Perk|perkname):Perk
   {
-    if(perkOrName instanceof Perk)return this.perks[this.perks.indexOf(perkOrName)];
+    if(perkOrName instanceof Perk)return this.perks.get(perkOrName.hash());
     for(const perk of this.perks)if(perk.name === perkOrName)return perk;
     return null;
   }
@@ -252,8 +249,9 @@ export abstract class Character
   removeStatus(status:Status|statusname):ActionOutput
   {
     let removeStatusDescription:ActionOutput = [[],[]];
-    pushBattleActionOutput(this.removeTimedStatus  (status),removeStatusDescription);
-    pushBattleActionOutput(this.removeBattleStatus (status),removeStatusDescription);
+    pushBattleActionOutput(this.removeTimedStatus(status) ,removeStatusDescription);
+    pushBattleActionOutput(this.removeBattleStatus(status),removeStatusDescription);
+    pushBattleActionOutput(this._removeStatus(status),removeStatusDescription);
     this.calculateStats();
     return removeStatusDescription;
   }
@@ -349,6 +347,7 @@ export abstract class Character
    */
   iterStatus    = function*():Generator<Status, void,unknown>
                   {
+                    for(const status of this.status) yield status;
                     for(const status of this.timed_status) yield status;
                     for(const status of this.battle_status) yield status;
                   }
@@ -424,7 +423,7 @@ export abstract class Character
   onEndBattle():void
   {
     const removeStatus = this.battle_status
-    this.battle_status = [];
+    this.battle_status.clear();
     this.__endbattle__ = true;
     for(const status of removeStatus)status.onStatusRemoved(this);
     this.__endbattle__ = false;
@@ -439,10 +438,10 @@ export abstract class Character
    */
   protected get reactions(): Reaction[]
   {
-    const reactions: Reaction[] = []
-    for(const equipment of this.iterEquipment()) { pushReactions(reactions,equipment.reactions) }
-    for(const perk of this.perks){pushReactions(reactions,perk.reactions)}
-    for(const status of this.iterStatus()){pushReactions(reactions,status.reactions)}
+    const reactions = new ObjectSet<Reaction>()
+    for(const equipment of this.iterEquipment()) { reactions.push(...equipment.reactions) }
+    for(const perk of this.perks){reactions.push(...perk.reactions)}
+    for(const status of this.iterStatus()){reactions.push(...status.reactions)}
     return reactions;
   };
   /**
@@ -471,7 +470,7 @@ export abstract class Character
   protected startRoundApplyStatus():ActionOutput
   {
     const statusDescription:ActionOutput = [[],[]]
-    for(const status of this.battle_status)
+    for(const status of [...this.battle_status])
     { pushBattleActionOutput(status.applyEffect(this),statusDescription) }
     return statusDescription;
   }
@@ -498,6 +497,24 @@ export abstract class Character
    */
   protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
   /**
+   * Removes all instances of Status
+   * Or remove the status provided.
+   *
+   * @private
+   * @param {(string | Status)} status The status to remove.
+   * @return {*} {ActionOutput}
+   * @memberof Character
+   */
+   private _removeStatus(status: string | Status):ActionOutput
+   {
+     if(status instanceof Status)
+     {
+       if(removeItem(this.status, status))return status.onStatusRemoved(this);
+       return [[],[]]
+     }
+     return remove_status_from_name(status,this.battle_status);
+   }
+  /**
    * Removes all instances of battleStatus
    * Or remove the status provided.
    *
@@ -513,15 +530,8 @@ export abstract class Character
       if(removeItem(this.battle_status, status))return status.onStatusRemoved(this);
       return [[],[]]
     }
-    let removeStatusDescription: ActionOutput = [[],[]];
-    let statusIndex = this.battle_status.findIndex(characterStatus => (status===characterStatus.name));
-    while (statusIndex >= 0)
-    {
-      const [statusRemoved] = this.battle_status.splice(statusIndex, 1);
-      removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = this.battle_status.findIndex(characterStatus => (status===characterStatus.name));
-    }
-    return removeStatusDescription ;
+    if(status instanceof Status)return [[],[]];
+    return remove_status_from_name(status,this.battle_status);
   }
   /**
    * Removes all instances TimedStatus
@@ -539,72 +549,29 @@ export abstract class Character
       if(removeItem(this.timed_status, status)) return status.onStatusRemoved(this);
       return [[],[]]
     }
-    let removeStatusDescription: ActionOutput = [[],[]]
-    let statusIndex = this.timed_status.findIndex(characterStatus => (status === characterStatus.name));
-    while (statusIndex >= 0)
-    {
-      const [statusRemoved] = this.timed_status.splice(statusIndex, 1);
-      removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = this.timed_status.findIndex(characterStatus => (status === characterStatus.name));
-    }
-    return removeStatusDescription ;
-  }
-  /**
-   * Adds  a status to Battle Status Array and calls onStatusGainded
-   *
-   * @private
-   * @param {StatusBattle} status The status to add.
-   * @return {*}  {ActionOutput}
-   * @memberof Character
-   */
-  private addBattleStatus(status: StatusBattle): ActionOutput
-  {
-    const statusDescription:ActionOutput = [[],[]]
-    this.battle_status.push(status);
-    pushBattleActionOutput(status.onStatusGainded(this),statusDescription)
-    return statusDescription;
-  }
-  /**
-   * Adds a Status the TimedStatus Array.
-   *
-   * @private
-   * @param {TimedStatus} status The status to add
-   * @return {*}  {ActionOutput}
-   * @memberof Character
-   */
-  private addTimedStatus(status: TimedStatus): ActionOutput
-  {
-    const statusDescription:ActionOutput = [[],[]];
-    this.timed_status.push(status);
-    pushBattleActionOutput(status.onStatusGainded(this),statusDescription);
-    return statusDescription;
+    if(status instanceof Status)return [[],[]];
+    return remove_status_from_name(status,this.timed_status);
   }
   /**
    * Use a special attack from the equpments, perks or status.
    *
    * @private
-   * @param {(number|SpecialAttack)} itemIndexOrItem The index of the SpecialAttack or the special attack.
+   * @param {(number|SpecialAttack)} item The index of the SpecialAttack or the special attack.
    * @param {Character[]} targets The targets of the SpecialAttack.
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  private _useSpecialAttack(itemIndexOrItem: number|SpecialAttack,targets: Character[]):BattleCommand
+  private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand
   {
-    let itemIndex:number;
-    const characterSpecials = this.specialAttacks;
-    if(itemIndexOrItem instanceof SpecialAttack)itemIndex = characterSpecials.indexOf(itemIndexOrItem);
-    else itemIndex = itemIndexOrItem;
-    if(itemIndex < 0) return new EmptyCommand(this,targets)
-    const item = characterSpecials[itemIndex];
-    return new BattleCommand(this,targets,[],(targets)=>{
-      const descriptions:Description[] = []
-      const strings:string[] = []
-      if(targets.length === 1)
-      { pushBattleActionOutput(this.tryAttack(targets[0],(target: Character)=>item.itemEffect(this,target)),[descriptions,strings]) }
-      else for(const target of targets)
-      { pushBattleActionOutput(item.itemEffect(this,target),[descriptions,strings]) }
-      return [descriptions,strings];
-    })
+    if(this.specialAttacks.has(item.hash()))
+      return new BattleCommand(this,targets,[],(targets)=>{
+        if(item.isSingleTarget)return tryAttack(this,targets[0],(target: Character)=>item.itemEffect(this,target))
+        const descriptions:ActionOutput = [[],[]]
+        for(const target of targets)
+        { pushBattleActionOutput(item.itemEffect(this,target),descriptions) }
+        return descriptions;
+      })
+    return new EmptyCommand(this,targets);
   }
   /**
    * Initializes the unharmed equpments.
@@ -644,45 +611,25 @@ export abstract class Character
    */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
 }
-
 /**
-   * Check if the statusname is the same as the second argument.
-   *
-   * @private
-   * @param {(string | Status)} status The status name to check.
-   * @param {Status} characterStatus The status to check.
-   * @return {*}
-   * @memberof Character
-   */
- function compareStatusName(status: string | Status, characterStatus: Status):boolean{
-  return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status;
+ * Check if the statusname is the same as the second argument.
+ *
+ * @private
+ * @param {(string | Status)} status The status name to check.
+ * @param {Status} characterStatus The status to check.
+ * @return {*}
+ * @memberof Character
+ */
+function compareStatusName(status: string | Status, characterStatus: Status):boolean
+{ return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status; }
+
+function remove_status_from_name(status: string,status_array:Status[]) {
+  let removeStatusDescription: ActionOutput = [[], []];
+  let statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
+  while (statusIndex >= 0) {
+    const [statusRemoved] = status_array.splice(statusIndex, 1);
+    removeStatusDescription = statusRemoved.onStatusRemoved(this);
+    statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
+  }
+  return removeStatusDescription;
 }
-
-/**
-   * Pushes an array of Special Attack to another if not already present.
-   *
-   * @param {SpecialAttack[]} specials The original array
-   * @param {SpecialAttack[]} specials2push The array of specials that will be pushed.
-   */
- function pushSpecial(specials:SpecialAttack[],specials2push:SpecialAttack[])
- {
-   for(const special of specials2push)
-   {
-     if(specials.some(pushed => pushed.constructor === special.constructor))continue;
-     specials.push(special);
-   }
- }
- /**
-  * Pushes an array of reactions to another if not already present.
-  *
-  * @param {Reaction[]} reactions The original array
-  * @param {Reaction[]} reactions2push The array of reactions that will be pushed.
-  */
- function pushReactions(reactions:Reaction[],reactions2push:Reaction[])
- {
-   for(const reaction of reactions2push)
-   {
-     if(reactions.some(pushed => pushed.constructor === reaction.constructor))continue;
-     reactions.push(reaction);
-   }
- }

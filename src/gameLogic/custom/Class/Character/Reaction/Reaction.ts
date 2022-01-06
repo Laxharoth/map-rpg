@@ -1,6 +1,7 @@
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
+import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 /**
@@ -11,7 +12,7 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
  * @class Reaction
  * @constructor Initializes the masterService
  */
-export abstract class Reaction{
+export abstract class Reaction implements hashable{
   /** The list of tags the reaction should be triggered with. */
   protected abstract whatTriggers: tag[][];
   /** The list of tags the reaction should be never trigger. */
@@ -64,6 +65,8 @@ export abstract class Reaction{
       //reaction is not triggered
       return [[],[]]
   }
+  //@ts-ignore
+  hash(): string { return this.constructor }
 }
 
 export abstract class BeforeActionReaction extends Reaction

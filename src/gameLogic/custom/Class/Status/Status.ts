@@ -7,6 +7,7 @@ import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/Sp
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { hashable } from "../../ClassHelper/ObjectSet";
 
 /**
  * Altered status to affect characters.
@@ -17,7 +18,7 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
  * @implements {storeable}
  * @constructor Initializes the masterService
  */
-export abstract class Status implements storeable
+export abstract class Status implements storeable,hashable
 {
   protected masterService:MasterService;
   protected _stats_modifier:CalculatedStats = {};
@@ -124,5 +125,6 @@ export abstract class Status implements storeable
 
   toJson():StatusStoreable{return { Factory:"Status",type:this.name}};
   fromJson(options:StatusStoreable):void{};
+  hash(): string {return this.name}
 }
 export type StatusStoreable = {Factory:"Status",type:statusname,[key:string]:any;}

@@ -1,13 +1,14 @@
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
+import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { ActionOutput } from "../../Character/Character.type";
 import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 import { BattleUseable } from "../BattleUseable";
 
-export abstract class SpecialAttack implements BattleUseable
+export abstract class SpecialAttack implements BattleUseable, hashable
 {
   protected masterService:MasterService;
   /** the cooldown time*/
@@ -43,4 +44,6 @@ export abstract class SpecialAttack implements BattleUseable
       {name:"cooldown",section_items:this.tags.map(tag =>{return {name:'cooldown',value:this.cooldown}})},
     ]
   }
+  cool(){this.cooldown = Math.max(0,this.cooldown-1)}
+  hash(): string { return this.name }
 }
