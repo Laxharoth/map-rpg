@@ -1,7 +1,7 @@
+import { hashable } from 'src/gameLogic/custom/ClassHelper/ObjectSet';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { ActionOutput } from "../../Character/Character.type";
@@ -40,8 +40,9 @@ export abstract class SpecialAttack implements BattleUseable, hashable
   get description(): GameElementDescriptionSection[]
   {
     return [
+      {name:"name",section_items:[{name:'name',value:this.name}]},
       {name:"tags",section_items:this.tags.map(tag =>{return {name:'tag',value:tag}})},
-      {name:"cooldown",section_items:this.tags.map(tag =>{return {name:'cooldown',value:this.cooldown}})},
+      {name:"cooldown",section_items:[{name:'cooldown',value:this.cooldown}]},
     ]
   }
   cool(){this.cooldown = Math.max(0,this.cooldown-1)}

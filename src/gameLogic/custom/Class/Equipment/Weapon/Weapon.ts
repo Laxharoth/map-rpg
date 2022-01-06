@@ -127,7 +127,7 @@ export abstract class Weapon extends Equipment
     return check
   }
 
-  get description():GameElementDescriptionSection[]
+  get added_description_sections():GameElementDescriptionSection[]
   {
     const damage_stats_description:GameElementDescriptionSection={name:'damage',section_items:[]};
     if(Math.max(...Object.values(this.damageTypes)))
@@ -138,7 +138,7 @@ export abstract class Weapon extends Equipment
     }
     return  [
       damage_stats_description,
-      ...super.description
+      ...super.added_description_sections
     ]
   }
 

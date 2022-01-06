@@ -75,7 +75,7 @@ export abstract class Equipment extends GameItem
     { character.calculated_resistance[key] -= this.resistanceStats[key]}
   }
 
-  get description():GameElementDescriptionSection[]
+  get added_description_sections():GameElementDescriptionSection[]
   {
     const equipmentDescripitonStats:GameElementDescriptionSection={name:'stats',section_items:[]};
     const equipmentDescripitonResistance:GameElementDescriptionSection={name:'resistance',section_items:[]};
@@ -94,7 +94,6 @@ export abstract class Equipment extends GameItem
     return  [
       equipmentDescripitonStats,
       equipmentDescripitonResistance,
-      ...super.description,
     ]
   }
 }
