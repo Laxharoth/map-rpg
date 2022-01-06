@@ -29,7 +29,7 @@ export class PartyComponent implements OnInit {
     }
     if(this.partyType==='ENEMY')
     {
-      this._party= this.masterService.enemyHandler.enemyFormation.enemies;
+      this._party= this.masterService.partyHandler.enemyFormation.enemies;
     }
   }
 

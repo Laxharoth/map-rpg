@@ -33,11 +33,11 @@ export class Battle {
     this.player = master_service.partyHandler.user;
     this.party = master_service.partyHandler.party;
     this.enemy_formation = enemy_formation;
-    master_service.enemyHandler.enemyFormation = enemy_formation;
+    master_service.partyHandler.enemyFormation = enemy_formation;
     this.master_service = master_service;
     [this.player].concat(this.party).forEach(character => {
-      character.specialAttacks.forEach(attacker => {
-        attacker.cooldown = 0
+      character.specialAttacks.forEach(special => {
+        special.cooldown = 0
       })
     });
     this.battle_options = this.initialize_battle_options();
@@ -189,7 +189,7 @@ export class Battle {
     this.selectTarget(targets, playerAction)
   });
   protected special_option = new DescriptionOptions("Special", () => {
-    this.selectItem(this.player.specialAttacks);
+    this.selectItem([...this.player.specialAttacks]);
   });
   protected item_option = new DescriptionOptions("Item", () => {
     this.selectItem(this.player.inventory.items);

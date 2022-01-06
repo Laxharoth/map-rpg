@@ -64,7 +64,6 @@ export class GuiComponent implements OnInit {
   private register_master_service_subservice() {
     const gameSaver  = new GameSaver(this.masterService);
     const lockmap      = new LockMapService();
-    const enemyHandler  = new EnemyFormationService();
     const gameStateHandler   = new GameStateService();
     const mapHandler   = new MapHandlerService(this.masterService,gameStateHandler,lockmap);
     const descriptionHandler = new DescriptionHandlerService(lockmap, gameStateHandler);
@@ -77,7 +76,6 @@ export class GuiComponent implements OnInit {
     this.masterService.register("lockmap", lockmap);
     this.masterService.register("flagsHandler", flagsHandler);
     this.masterService.register("partyHandler", partyHandler);
-    this.masterService.register("enemyHandler", enemyHandler);
     this.masterService.register("gameStateHandler", gameStateHandler);
     this.masterService.register("descriptionHandler", descriptionHandler);
     this.masterService.register("mapHandler", mapHandler);
@@ -99,7 +97,6 @@ export class GuiComponent implements OnInit {
       const armorTest1 = new ArmorTest(this.masterService);
       user.addPerk(new PerkUpgradeable(this.masterService));
       user.addPerk(new PerkCharm(this.masterService));
-      user.addItem(meleeTest1); user.addItem(rangedTest1); user.addItem(shieldTest1); user.addItem(armorTest1);
       user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
       this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)

@@ -22,7 +22,6 @@ export class MasterServiceSubServiceMap
   descriptionHandler?:DescriptionHandlerService;
   mapHandler?:MapHandlerService;
   partyHandler?:PartyService;
-  enemyHandler?:EnemyFormationService;
   gameStateHandler?:GameStateService;
   timeHandler?:TimeHandler;
   FactWeb?:FactWeb;

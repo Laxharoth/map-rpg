@@ -1,3 +1,4 @@
+import { EnemyFormation } from 'src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation';
 import { Observable, Subject } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
@@ -17,6 +18,10 @@ export class PartyService implements storeable{
   private partySubject = new Subject < Character > ();
   private partyMemberSubject = new Subject < [number, Character] > ();
   private unique_character_handler:UniqueCharacterHandler;
+  private _enemyFormation:EnemyFormation;
+  get enemyFormation():EnemyFormation { return this._enemyFormation}
+  set enemyFormation(value:EnemyFormation) { this._enemyFormation = value; }
+
 
   constructor(gameSaver: GameSaver,unique_character_handler:UniqueCharacterHandler) {
     this._user = null;
@@ -47,18 +52,11 @@ export class PartyService implements storeable{
     this.updatePartyMember(index);
   }
 
-  updateUser() {
-    this.partySubject.next(this.user);
-  }
-  updatePartyMember(index: number) {
-    this.partyMemberSubject.next([index, this._party[index]]);
-  }
-  onUpdateUser(): Observable < Character > {
-    return this.partySubject.asObservable();
-  }
-  onUpdatePartyMember(): Observable < [number, Character] > {
-    return this.partyMemberSubject.asObservable();
-  }
+  updateUser(){ this.partySubject.next(this.user); }
+  updatePartyMember(index: number){ this.partyMemberSubject.next([index, this._party[index]]); }
+
+  onUpdateUser(): Observable<Character>{ return this.partySubject.asObservable(); }
+  onUpdatePartyMember(): Observable<[number, Character]>{ return this.partyMemberSubject.asObservable(); }
 
   toJson():PartyStoreable
   {

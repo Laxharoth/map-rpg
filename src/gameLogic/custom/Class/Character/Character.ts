@@ -596,7 +596,7 @@ export abstract class Character
   {
     const party = [this.masterService.partyHandler.user]
                   .concat(this.masterService.partyHandler.party)
-    const enemy = this.masterService.enemyHandler.enemyFormation.enemies;
+    const enemy = this.masterService.partyHandler.enemyFormation.enemies;
     return this._IA_Action(party,enemy)
   }
 
