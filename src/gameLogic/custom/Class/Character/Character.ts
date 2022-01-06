@@ -480,7 +480,7 @@ export abstract class Character
    * @protected
    * @memberof Character
    */
-  protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cooldown = Math.max(0,special.cooldown-1) }
+  protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cool() }
 
   calculateStats():void {
     this.calculated_stats = this.character_battle_class.calculate_stats(this.core_stats as FullCoreStats);
