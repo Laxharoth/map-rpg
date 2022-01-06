@@ -23,3 +23,8 @@
 {
     width: 10ch;
 }
+.name p
+{
+  font-weight: bold;
+  font-style: italic;
+}

@@ -13,6 +13,9 @@
   <div class="description" *ngIf="section.name==='description' && section.section_items.length">
     <pre>{{ section.section_items[0].value }}</pre>
   </div>
+  <div class="name" *ngIf="section.name==='name' && section.section_items.length">
+    <p>{{ section.section_items[0].value }}</p>
+  </div>
   <div class="stats" *ngIf="section.name==='stats' && section.section_items.length">
     <p>stats:</p>
     <ul>
