@@ -1,23 +1,20 @@
 import { MasterService } from "src/app/service/master.service";
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { AddExceedItem } from "src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem";
 import { Armor, ArmorNoArmor } from "src/gameLogic/custom/Class/Equipment/Armor/Armor";
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
 import { Shield, ShieldNoShield } from "src/gameLogic/custom/Class/Equipment/Shield/Shield";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon";
-import { Weapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Weapon";
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { Perk } from "src/gameLogic/custom/Class/Perk/Perk";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { Status } from "src/gameLogic/custom/Class/Status/Status";
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
-import { isStatusPreventAttack, StatusBattle, StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
 import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
 import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
 import { TestCharacterBattleClass } from "../CharacterBattleClass/testCharacterBattleClass";
@@ -110,20 +107,7 @@ export abstract class Character
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  Attack(targets:Character[]):BattleCommand
-  {
-    const weapon = this.meleeWeapon;
-    return new BattleCommand(
-      this,targets,weapon.tags,
-      (targets)=>{
-        const attackDescription:ActionOutput = [[],[]];
-        if(this.hasTag('double attack'))
-          this.attackWithWeapon(targets, weapon, attackDescription);
-        this.attackWithWeapon(targets, weapon, attackDescription);
-        return attackDescription;
-      }
-    )
-  }
+  Attack(targets:Character[]):BattleCommand{return AttackCommand(this,targets)}
   /**
    * Uses rangedWeapon to attack the target.
    *
@@ -131,20 +115,8 @@ export abstract class Character
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  Shoot(targets:Character[]):BattleCommand
-  {
-    const weapon = this.rangedWeapon;
-    return new BattleCommand(
-      this,targets, weapon.tags,
-      (targets)=>{
-        const attackDescription:ActionOutput = [[],[]];
-        if(this.hasTag('double shoot'))
-          this.attackWithWeapon(targets, weapon, attackDescription);
-        this.attackWithWeapon(targets, weapon, attackDescription);
-        return attackDescription;
-      }
-    )
-  }
+  Shoot(targets:Character[]):BattleCommand{return ShootCommand(this,targets)}
+
   /**
    * Uses shield .defend
    *
@@ -152,15 +124,8 @@ export abstract class Character
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  Defend(target:Character[]):BattleCommand
-  {
-    const shield = this.shield;
-    const defend_action = shield.defend(target)
-    return new BattleCommand(
-      this,target,shield.tags,
-      (target)=>defend_action
-    )
-  }
+  Defend(target:Character[]):BattleCommand{return DefendCommand(this,target)}
+
   /**
    * Reset roundStats apply the battle status effects and cooldown the specials.
    *
@@ -304,23 +269,6 @@ export abstract class Character
     return null;
   }
   /**
-   * Check if the attack action can be performed on the target character.
-   *
-   * @param {Character} target The target of the attack action.
-   * @param {(target:Character)=>ActionOutput} action The action to be performed.
-   * @return {*}  {ActionOutput}
-   * @memberof Character
-   */
-  tryAttack(target:Character , action:(target:Character)=>ActionOutput):ActionOutput
-  {
-    if(this.hasTag('paralized')) return [[],[`${this.name} is paralized and can't move`]];
-    for(const status of this.iterStatus())
-    {
-      const preventAttackStatus = status as unknown as StatusPreventAttack;
-      if(isStatusPreventAttack(preventAttackStatus) && !preventAttackStatus?.canAttack(target)) return preventAttackStatus.preventAttackDescription(target)
-    }
-    return  action(target);
-  }
    * Unequip melee weapon and adds it to the inventory.
    *
    * @memberof Character
@@ -672,18 +620,6 @@ export abstract class Character
       Character.__noArmor__         = new ArmorNoArmor(this.masterService);
       Character.__noShield__        = new ShieldNoShield(this.masterService);
     }
-  }
-  /**
-   * Attacks with a weapon.
-   *
-   * @private
-   * @param {Character[]} targets The targets to attack.
-   * @param {Weapon} weapon The weapon used to attack the targets.
-   * @param {ActionOutput} attackDescription
-   * @memberof Character
-   */
-  private attackWithWeapon(targets: Character[], weapon: Weapon, attackDescription: ActionOutput) {
-    for (const target of targets) pushBattleActionOutput(this.tryAttack(target, (target: Character) => weapon.attack(this, target)), attackDescription);
   }
   /**
    * The automatic action to perform.
