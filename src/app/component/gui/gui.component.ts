@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
-import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacter/MainCharacter';
 import { charTest } from 'src/gameLogic/custom/Class/Character/NPC/characterTest';
 import { ArmorTest } from 'src/gameLogic/custom/Class/Equipment/Armor/ArmorTest';
@@ -14,7 +13,6 @@ import { MeleeTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/Mel
 import { RangedTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedTest';
 import { PerkUpgradeable } from 'src/gameLogic/custom/Class/Perk/PerkUpgradeable';
 import { DescriptionHandlerService } from 'src/gameLogic/custom/subservice/description-handler';
-import { EnemyFormationService } from 'src/gameLogic/custom/subservice/enemy-formation';
 import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
 import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
 import { LockMapService } from 'src/gameLogic/custom/subservice/lock-map';

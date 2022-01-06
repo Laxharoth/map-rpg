@@ -36,6 +36,7 @@ import { SelectPerkGuiComponent } from './component/gui/select-perk-gui/select-p
 import { StatUpGuiComponent } from './component/gui/stat-up-gui/stat-up-gui.component';
 import { PerkUpItemComponent } from './component/perk-up/perk-up-item/perk-up-item.component';
 import { PerkUpRowComponent } from './component/perk-up/perk-up-row/perk-up-row.component';
+import { InfoPageGuiComponent } from './component/gui/info-page-gui/info-page-gui.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { PerkUpRowComponent } from './component/perk-up/perk-up-row/perk-up-row.
     StatUpGuiComponent,
     PerkUpItemComponent,
     PerkUpRowComponent,
+    InfoPageGuiComponent,
   ],
   imports: [
     BrowserModule,
