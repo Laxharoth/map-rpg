@@ -28,7 +28,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
     this.level_stats.upgrade_path.push(current_level_upgrade_index);
     const upgrade = this.character_battle_class.upgrade_tree(this.masterService).get_node(this.level_stats.upgrade_path).value
     this.level_stats.perk_point--;
-    this.addPerk(upgrade.upgrade);
+    this.addPerk(upgrade.perk);
   }
   upgrade_options(path: number[]):tree_node<Upgrade>[]
   {

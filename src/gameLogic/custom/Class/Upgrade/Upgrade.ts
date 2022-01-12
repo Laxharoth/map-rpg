@@ -4,11 +4,19 @@ import { descriptable, GameElementDescriptionSection } from "../GameElementDescr
 import { Perk } from "../Perk/Perk";
 import { perkname } from "../Perk/Perk.type";
 
+/**
+ * An  upgrades contains a perk to be added to the character.
+ *
+ * @export
+ * @class Upgrade
+ * @implements {descriptable}
+ */
 export class Upgrade implements descriptable
 {
   name:string;
   description_text: string;
-  get upgrade():Perk { return PerkFactory(this.masterService,{Factory:'Perk',type:this.perkname}) }
+  /** The perk this upgrade grants. */
+  get perk():Perk { return PerkFactory(this.masterService,{Factory:'Perk',type:this.perkname}) }
   private masterService:MasterService;
   private perkname:perkname;
   constructor(masterService:MasterService,name:string,description_text:string,perkname:perkname)
