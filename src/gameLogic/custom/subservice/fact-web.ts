@@ -65,11 +65,15 @@ export class FactWeb implements storeable
   }
   register_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness)
   {
+    this.register_directional_character_link(character1,character2,acquaintace)
+    this.register_directional_character_link(character2,character1,acquaintace)
+  }
+  register_directional_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness)
+  {
     if(character1===character2)return;
     if(!this.character_map.get(character1.uuid))this.initialize_character(character1);
     if(!this.character_map.get(character2.uuid))this.initialize_character(character2);
     this.character_map.get(character1.uuid).acquaintacer_map.set(character2.uuid,acquaintace);
-    this.character_map.get(character2.uuid).acquaintacer_map.set(character1.uuid,acquaintace);
   }
   spread_fact(time:Time):void
   {
@@ -151,7 +155,7 @@ export class FactWeb implements storeable
     for(const hashed_relationship of options.acquaintace_graph)
     {
       const [character1_id,character2_id,closeness] = FactWeb.unhash_acquaintance(hashed_relationship)
-      this.register_character_link(
+      this.register_directional_character_link(
         this.unique_character_handler.get_character(character1_id),
         this.unique_character_handler.get_character(character2_id),
         closeness
