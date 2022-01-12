@@ -1,6 +1,6 @@
+import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon";
-import { damageTypes } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
 import { rangedname } from "src/gameLogic/custom/Class/Items/Item.type";
 
 export class RangedTest extends RangedWeapon

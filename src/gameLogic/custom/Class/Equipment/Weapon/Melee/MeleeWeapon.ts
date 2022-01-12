@@ -1,6 +1,7 @@
+import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
-import { damageTypes, Weapon } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
+import { Weapon } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
 import { meleename } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { OnePunch } from 'src/gameLogic/custom/Class/Items/SpecialAttack/OnePunch';
 import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack';
@@ -17,8 +18,8 @@ import { randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functio
  */
 export abstract class MeleeWeapon extends Weapon
 {
-  protected damagestat(user   : Character):number{return user.calculated_stats.physical_attack;}
-  protected defencestat(target: Character):number{return target.calculated_stats.physical_defence;}
+  damagestat(user   : Character):number{return user.calculated_stats.physical_attack;}
+  defencestat(target: Character):number{return target.calculated_stats.physical_defence;}
   abstract get name():meleename;
   protected accuracyTest(user:Character,target:Character)
   {

@@ -16,8 +16,8 @@ import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functio
  */
 export abstract class RangedWeapon extends Weapon
 {
-  protected damagestat(user   : Character):number{return user.calculated_stats.ranged_attack;}
-  protected defencestat(target: Character):number{return target.calculated_stats.ranged_defence;}
+  damagestat(user   : Character):number{return user.calculated_stats.ranged_attack;}
+  defencestat(target: Character):number{return target.calculated_stats.ranged_defence;}
   abstract get name():rangedname;
   attack(user:Character,target:Character):ActionOutput
   {

@@ -1,9 +1,10 @@
+import { calculateDamage, DamageSource, damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
+import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 import { weaponname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
-import { GameElementDescriptionSection } from '../../GameElementDescription/GameElementDescription';
 
 /**
  * Type of equipment that can attack.
@@ -13,7 +14,7 @@ import { GameElementDescriptionSection } from '../../GameElementDescription/Game
  * @class Weapon
  * @extends {Equipment}
  */
-export abstract class Weapon extends Equipment
+export abstract class Weapon extends Equipment implements DamageSource
 {
   /**
    * The damage types associated with this weapon.
@@ -24,7 +25,7 @@ export abstract class Weapon extends Equipment
    */
   protected _damageTypes:damageTypes = {};
   private filledDamageTypes:boolean = false;
-  protected get damageTypes():damageTypes {
+  get damageTypes():damageTypes {
     if(!this.filledDamageTypes)
     {
       this.filledDamageTypes = true;
@@ -33,15 +34,7 @@ export abstract class Weapon extends Equipment
     return this._damageTypes;
   }
   /**
-   * The probability that the weapon will hit the target.
-   *
-   * @protected
-   * @abstract
-   * @type {number}
-   * @memberof Weapon
-   */
-  /**
-   * Can only be a weaponname
+   * Name  of the weapon
    *
    * @readonly
    * @abstract
@@ -77,7 +70,7 @@ export abstract class Weapon extends Equipment
    * @return {*}  {number}
    * @memberof Weapon
    */
-  protected abstract damagestat(user   : Character):number;
+  abstract damagestat(user   : Character):number;
   /**
    * Gets the stat from the character that will be used to calculate the reduction of damage.
    *
@@ -87,7 +80,7 @@ export abstract class Weapon extends Equipment
    * @return {*}  {number}
    * @memberof Weapon
    */
-  protected abstract defencestat(target: Character):number;
+  abstract defencestat(target: Character):number;
   /**
    * Calculated the damage based on the weapon damage types.
    *
@@ -98,18 +91,7 @@ export abstract class Weapon extends Equipment
    * @memberof Weapon
    */
   protected calculateDamage(user:Character,target:Character):number
-  {
-    let finalDamage:number = 0;
-    const damageRelation = this.damagestat(user) / this.defencestat(target);
-    finalDamage += (damageRelation * this.damageTypes.slashdamage||0  / (100 - target.calculated_resistance.slashresistance));
-    finalDamage += (damageRelation * this.damageTypes.bluntdamage||0  / (100 - target.calculated_resistance.bluntresistance));
-    finalDamage += (damageRelation * this.damageTypes.piercedamage||0 / (100 - target.calculated_resistance.pierceresistance));
-    finalDamage += (damageRelation * this.damageTypes.poisondamage||0 / (100 - target.calculated_resistance.poisonresistance));
-    finalDamage += (damageRelation * this.damageTypes.heatdamage||0   / (100 - target.calculated_resistance.heatresistance));
-    finalDamage += (damageRelation * this.damageTypes.energydamage||0 / (100 - target.calculated_resistance.energyresistance));
-    finalDamage += (damageRelation * this.damageTypes.frostdamage||0  / (100 - target.calculated_resistance.frostresistance));
-    return Math.round(finalDamage)||0;
-  }
+  { return calculateDamage(this,user,target); }
   /**
    * Check if the attack is successful.
    *
@@ -152,4 +134,3 @@ const aliasDamageType={
   "piercedamage" : "pierce",
   "poisondamage" : "poison",
 }
-export interface damageTypes {heatdamage?: number; energydamage?:number; frostdamage?:number; slashdamage?: number; bluntdamage?:number; piercedamage?: number; poisondamage? : number;}
