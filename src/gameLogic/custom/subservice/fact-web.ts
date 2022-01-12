@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { floor_to, randomCheck } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { floor_to, randomCheck, set_equality } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { Time } from './../ClassHelper/Time';
 import { acquaintaceness, factName, fact_importance, CharacterDataWebData } from './fact-web.type';
 import { TimeHandler } from './time-handler';
@@ -73,17 +73,17 @@ export class FactWeb implements storeable
   }
   spread_fact(time:Time):void
   {
+    let surrounding_characters_know_the_same_things = true;
     if(this.last_spread_time < time.getMinutes() - FactWeb.TIME_INTERVAL_2_SPREAD)return;
     this.last_spread_time=floor_to(time.getMinutes(),FactWeb.TIME_INTERVAL_2_SPREAD);
-    const MAX_FACTS_KNOWN = this.known_facts.size;
-    //the number of facts known by the character who knows the least number of facts.
-    let min_facts_known = MAX_FACTS_KNOWN
     const mark_for_spread:(()=>void)[]=[]
     for(const [,{known_facts:facts,acquaintacer_map:acquaintaces}] of this.character_map)
     for(const [acquaintace,closeness] of acquaintaces)
     {
       const acquaintace_facts = this.character_map.get(acquaintace).known_facts;
-      min_facts_known = Math.min(min_facts_known,acquaintace_facts.size)
+      surrounding_characters_know_the_same_things &&= set_equality(facts,acquaintace_facts);
+      //no need to spread if both know the same facts
+      if(surrounding_characters_know_the_same_things)continue;
       for(const fact_name of facts )
       {
         if(acquaintace_facts.has(fact_name))continue;
@@ -94,8 +94,7 @@ export class FactWeb implements storeable
       }
     }
     for(const spread_function of mark_for_spread)spread_function();
-    //if MAX_FACTS_KNOWN === min_facts_known everyone knows everything, there is no need to spread anymore.
-    if(MAX_FACTS_KNOWN === min_facts_known) this.remove_subscriptions();
+    if(surrounding_characters_know_the_same_things) this.remove_subscriptions();
   }
   private remove_subscriptions(): void {
     if(this.spread_subscriptions)this.spread_subscriptions.unsubscribe();
