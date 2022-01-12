@@ -15,10 +15,8 @@ export class SpecialGrab extends SpecialAttack
   get isEnemyUsable(): boolean { return true }
   get isSelfUsable(): boolean { return false }
   get isSingleTarget(): boolean { return true }
-  get description(): GameElementDescriptionSection[]{ return [
-    {name: "description",section_items:[{name: "description",value:'grab'}]},
-    ...super.description
-  ]}
+  get added_description_sections(): GameElementDescriptionSection[]
+  { return [ {name: "description",section_items:[{name: "description",value:'grab'}]}, ]}
 
   protected _itemEffect(user:Character,target: Character): ActionOutput {
       const description:ActionOutput = [[],[]];

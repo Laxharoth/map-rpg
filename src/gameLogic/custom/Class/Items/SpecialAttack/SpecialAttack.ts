@@ -41,10 +41,12 @@ export abstract class SpecialAttack implements BattleUseable, hashable
   {
     return [
       {name:"name",section_items:[{name:'name',value:this.name}]},
+      ...this.added_description_sections,
       {name:"tags",section_items:this.tags.map(tag =>{return {name:'tag',value:tag}})},
       {name:"cooldown",section_items:[{name:'cooldown',value:this.cooldown}]},
     ]
   }
+  get added_description_sections():GameElementDescriptionSection[] { return [] }
   cool(){this.cooldown = Math.max(0,this.cooldown-1)}
   reset_initial_cooldown(){this.cooldown = 0;}
   hash(): string { return this.name }

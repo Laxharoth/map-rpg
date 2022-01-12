@@ -18,10 +18,8 @@ export class OnePunch extends SpecialAttack
       const specialDescription:ActionOutput = [[this.specialDescription(user,target)],[]]
       return specialDescription;
   }
-  get description(): GameElementDescriptionSection[]{ return [
-    {name: "description",section_items:[{name: "description",value:'One-shots the target'}]},
-    ...super.description
-  ]}
+  get added_description_sections(): GameElementDescriptionSection[]
+  { return [ {name: "description",section_items:[{name: "description",value:'One-shots the target'}]}, ]}
   ////////////////////
   /// SPECIAL DESCRIPTION
   ////////////////////
