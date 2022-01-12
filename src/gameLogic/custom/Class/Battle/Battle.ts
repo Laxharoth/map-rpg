@@ -101,7 +101,7 @@ export class Battle {
     this.startRoundDescription = [];
     this.battleRoundDescription = [];
     const specials = this.player.specialAttacks;
-    this.special_option.disabled = specials.length <= 0 || specials.every(item => item.disabled(this.player));
+    this.special_option.disabled = specials.length <= 0;
     this.item_option.disabled = this.player.inventory.items.length <= 0 || this.player.inventory.items.every(item => item.disabled(this.player));
 
     for (const character of get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
