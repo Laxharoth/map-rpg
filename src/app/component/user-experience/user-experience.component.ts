@@ -1,5 +1,7 @@
 import { MasterService } from 'src/app/service/master.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 
 @Component({
   selector: 'app-user-experience',
@@ -7,23 +9,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-experience.component.css']
 })
 export class UserExperienceComponent implements OnInit {
+  @Input() current_exp:number;
+  @Input() target_exp:number;
+  constructor(){}
 
-  current_exp:number;
-  target_exp:number;
-  constructor(private masterService:MasterService){
-    this.masterService.partyHandler.onUpdateUser().subscribe( player => {
-      this.current_exp = player.level_stats.experience;
-      this.target_exp = 200;
-    } );
-    this.current_exp = this.masterService.partyHandler.user.level_stats.experience;
-    this.target_exp = 200;
-  }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
+  ngOnDestroy(): void { }
   fill()
   {
-    return `10%`;
+    return `${Math.min(this.current_exp/this.target_exp*100,100)}%`;
   }
 }

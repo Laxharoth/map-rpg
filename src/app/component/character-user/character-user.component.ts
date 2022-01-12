@@ -30,4 +30,6 @@ export class CharacterUserComponent implements OnInit {
     for(const characterStatus of this.character.iterStatus())status.push(characterStatus)
     return status;
   }
+  get current_exp(){return this.character.battle_class.current_level_experience(this.character.level_stats);}
+  get target_exp(){return this.character.battle_class.total_experience_to_next_level(this.character.level_stats.level);}
 }

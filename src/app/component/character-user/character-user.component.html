@@ -12,7 +12,7 @@
     <app-character-stat [statName]="'evasion'" [statValue]="character.core_stats.intelligence"></app-character-stat>
   </div>
   <div class="experience">
-    <app-user-experience></app-user-experience>
+    <app-user-experience [current_exp]="current_exp" [target_exp]="target_exp"></app-user-experience>
   </div>
   <div class="status border">
     <app-status-icon *ngFor="let status of getCharacterStatus()" [status]="status"></app-status-icon>
