@@ -1,7 +1,6 @@
+import random from 'random';
+import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
-import { damageTypes } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
-import random from 'random'
-import * as jQuery from 'jquery'
 
 /**
  * In descriptions that use input elements get the value of the input and select.
@@ -116,8 +115,9 @@ export const set_theme = (()=>{
   return (theme_name:theme_name=null)=>{
     if(!theme_name)theme_name=localStorage.getItem('theme') as theme_name;
     if(!theme_name)theme_name='default';
-    jQuery("#theme").attr("href",theme_name)
-    localStorage.setItem('theme',themes[theme_name]);
+    //@ts-ignore
+    document.getElementById("theme")?.href=themes[theme_name];
+    localStorage.setItem('theme',theme_name);
   }
 })();
 
@@ -128,28 +128,24 @@ export function compare_array<T>(array1:T[],array2:T[]): boolean
     if(array1[i] !== array2[i])return false;
   return true;
 }
-
 export function set_union<T>(set: Set<T>, iterable: Iterable<T>):Set<T>
 {
   const union_set = new Set<T>(set);
   for(const item of iterable)union_set.add(item);
   return union_set
 }
-
 export function set_intersection<T>(set: Set<T>, iterable: Iterable<T>):Set<T>
 {
   const intersection_set = new Set<T>();
   for(const item of iterable) if(set.has(item))intersection_set.add(item);
   return intersection_set
 }
-
 export function set_complement<T>(target: Set<T>, all_elements: Iterable<T>)
 {
   const complement_set = new Set<T>();
   for(const item of all_elements) if(!target.has(item))complement_set.add(item)
   return complement_set
 }
-
 export function set_equality<T>(set1: Set<T>, set2: Set<T>):boolean {
   if(set1.size !== set2.size)return false;
   for(const item of set2)if(!set1.has(item))return false;
