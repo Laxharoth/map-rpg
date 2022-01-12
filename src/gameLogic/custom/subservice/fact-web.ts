@@ -3,7 +3,7 @@ import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueChar
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
 import { floor_to, randomCheck, set_equality } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { Time } from './../ClassHelper/Time';
-import { acquaintaceness, factName, fact_importance, CharacterDataWebData } from './fact-web.type';
+import { acquaintaceness, factName, CharacterDataWebData, hashed_acquanitance, fact_importance } from './fact-web.type';
 import { TimeHandler } from './time-handler';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
@@ -15,7 +15,6 @@ export class FactWeb implements storeable
 {
   static readonly TIME_INTERVAL_2_SPREAD = 1440;
   private static readonly SPREAD_COEFFICIENT = 20;
-  private static readonly HASH_SEPARATOR = "<!¡>"
   private last_spread_time = 0;
   private unique_character_handler:UniqueCharacterHandler;
   private known_facts:Map<factName,Fact> = new Map();
@@ -104,16 +103,6 @@ export class FactWeb implements storeable
     if(this.spread_subscriptions)this.spread_subscriptions.unsubscribe();
     this.spread_subscriptions=null;
   }
-  static hash_acquanintace(character1_id:string,character2_id:string,closeness:number):string
-  {
-    const sorded_ids:any[] = [character1_id,character2_id].sort((id1,id2)=>id1<id2?-1:1)
-    return sorded_ids.concat([closeness]).join(FactWeb.HASH_SEPARATOR)
-  }
-  static unhash_acquaintance(hash: string):[character1_id:string, character2_id:string,closeness:number] {
-    const unhash:[string,string,number] = hash.split(FactWeb.HASH_SEPARATOR) as any;
-    unhash[2] = Number.parseInt(unhash[2].toString())
-    return unhash;
-  }
   toJson(): DataWebStoreable {
     const known_facts:[name:factName,fact:FactStoreable][] = []
     const acquaintace_graph:Set<string> = new Set();
@@ -125,7 +114,7 @@ export class FactWeb implements storeable
       //Store relationships
       for(const [acquaintace,closeness] of acquaintaces)
       {
-        acquaintace_graph.add(FactWeb.hash_acquanintace(character,acquaintace,closeness));
+        acquaintace_graph.add(hash_acquanintace(character,acquaintace,closeness));
       }
       //Store fact known per character
       known_facts_per_character.push([character,Array.from(facts)])
@@ -154,7 +143,7 @@ export class FactWeb implements storeable
     //Load relationships
     for(const hashed_relationship of options.acquaintace_graph)
     {
-      const [character1_id,character2_id,closeness] = FactWeb.unhash_acquaintance(hashed_relationship)
+      const [character1_id,character2_id,closeness] = unhash_acquaintance(hashed_relationship)
       this.register_directional_character_link(
         this.unique_character_handler.get_character(character1_id),
         this.unique_character_handler.get_character(character2_id),
@@ -210,4 +199,14 @@ type FactStoreable = {
   dependency_gamesave_object_key?: gamesavenames[],
   state:any,
   importance:fact_importance
+}
+
+const HASH_SEPARATOR = "<!¡>"
+function hash_acquanintace(character1_id:string,character2_id:string,closeness:number):string
+{ return [character1_id,character2_id,closeness].join(HASH_SEPARATOR) }
+function unhash_acquaintance(hash: string):hashed_acquanitance
+{
+  const unhash:[string,string,number] = hash.split(HASH_SEPARATOR) as any;
+  unhash[2] = Number.parseInt(unhash[2].toString())
+  return unhash;
 }
