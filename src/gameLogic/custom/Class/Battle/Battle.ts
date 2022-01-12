@@ -37,7 +37,7 @@ export class Battle {
     this.master_service = master_service;
     [this.player].concat(this.party).forEach(character => {
       character.specialAttacks.forEach(special => {
-        special.cooldown = 0
+        special.reset_initial_cooldown();
       })
     });
     this.battle_options = this.initialize_battle_options();

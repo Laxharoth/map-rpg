@@ -46,5 +46,6 @@ export abstract class SpecialAttack implements BattleUseable, hashable
     ]
   }
   cool(){this.cooldown = Math.max(0,this.cooldown-1)}
+  reset_initial_cooldown(){this.cooldown = 0;}
   hash(): string { return this.name }
 }
