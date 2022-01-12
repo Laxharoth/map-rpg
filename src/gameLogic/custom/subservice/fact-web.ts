@@ -8,7 +8,7 @@ import { TimeHandler } from './time-handler';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { MasterService } from 'src/app/service/master.service';
-import { gamesavenames, GameSaverMap } from 'src/gameLogic/configurable/subservice/game-saver.type';
+import { gamesavenames } from 'src/gameLogic/configurable/subservice/game-saver.type';
 import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class FactWeb implements storeable
@@ -124,6 +124,7 @@ export class FactWeb implements storeable
       type: "FactWeb",
       dependency_gamesave_object_key: [ "MainCharacter","PersistentCharacter"],
       known_facts:known_facts,
+      last_spread_time:this.last_spread_time,
       acquaintace_graph:Array.from(acquaintace_graph),
       known_facts_per_character:known_facts_per_character
     }
@@ -150,6 +151,7 @@ export class FactWeb implements storeable
         closeness
       )
     }
+    this.last_spread_time=options.last_spread_time;
     //Load fact known per character
     for(const [character_id,facts] of options.known_facts_per_character)
     {
@@ -167,6 +169,7 @@ type DataWebStoreable = {
   dependency_gamesave_object_key?: [ "MainCharacter","PersistentCharacter"],
   known_facts:[name:factName,fact:FactStoreable][],
   acquaintace_graph:string[],
+  last_spread_time:number,
   known_facts_per_character:[character_id:string,facts:factName[]][]
 }
 

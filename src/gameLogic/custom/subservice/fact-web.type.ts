@@ -12,3 +12,5 @@ export type CharacterDataWebData = {
   acquaintacer_map:Map<string,acquaintaceness>;
   known_facts:Set<factName>;
 }
+
+export type hashed_acquanitance = [character1_id:string, character2_id:string,closeness:number]
