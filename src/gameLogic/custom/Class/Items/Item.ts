@@ -55,11 +55,10 @@ export abstract class GameItem implements BattleUseable, storeable
    * If the Item can be used during a battle.
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
-  abstract get isBattleUsable(): boolean;
+  get isBattleUsable(): boolean {return true; }
   /**
    * If the Item can be used only during a battle
    *
@@ -67,34 +66,31 @@ export abstract class GameItem implements BattleUseable, storeable
    * @type {boolean}
    * @memberof Item
    */
-  get isMapUsable(): boolean {return true;}
+  get isMapUsable(): boolean {return true; }
   /**
    * If the Item can be used on the player's party
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
-  abstract get isPartyUsable(): boolean;
+  get isPartyUsable(): boolean { return true; }
   /**
    * If the Item can be used on the enemy's party'
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
-  abstract get isEnemyUsable(): boolean;
+  get isEnemyUsable(): boolean { return false; }
   /**
    * If the item can be used on the player
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
-  abstract get isSelfUsable(): boolean;
+  get isSelfUsable():   boolean { return true; }
   /**
    * When the item is disabled.
    *
@@ -107,11 +103,10 @@ export abstract class GameItem implements BattleUseable, storeable
    * If the item is single target.
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
-  abstract get isSingleTarget():boolean;
+  get isSingleTarget(): boolean { return true; }
   /**
    * The action the item perform.
    *
