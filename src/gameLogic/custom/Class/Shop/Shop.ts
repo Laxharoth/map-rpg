@@ -1,7 +1,6 @@
-import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { fillItemStoreable, GameItem, ItemStoreable } from "src/gameLogic/custom/Class/Items/Item";
+import { fillItemStoreable, GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Sale } from 'src/gameLogic/custom/Class/Shop/Sale';
 import { ItemFactory } from "src/gameLogic/custom/Factory/ItemFactory";
