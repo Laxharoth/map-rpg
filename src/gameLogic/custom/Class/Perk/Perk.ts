@@ -18,7 +18,7 @@ import { hashable } from "../../ClassHelper/ObjectSet";
 export abstract class Perk implements storeable, hashable
 {
   /**
-   * Can only use pername
+   * Can only use perkname
    *
    * @readonly
    * @abstract
@@ -29,7 +29,6 @@ export abstract class Perk implements storeable, hashable
   protected readonly masterService:MasterService;
   constructor(masterService:MasterService)
   { this.masterService = masterService; }
-
   /**
    * The tags associated with the perk.
    *
