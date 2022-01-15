@@ -7,6 +7,7 @@ import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFor
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { QuestFactory } from 'src/gameLogic/custom/Class/Quest/QuestFactory';
 
 export function room(roomName: string): roomFunction {
   return function (masterService: MasterService): Room {
@@ -78,7 +79,14 @@ export function room(roomName: string): roomFunction {
       new DescriptionOptions("add  20 exp",function () {
         masterService.partyHandler.user.gain_experience(20);
       }),
-      null,
+      new DescriptionOptions("debug quest", function () {
+        const quest = QuestFactory(masterService,{
+          Factory: 'Quest',
+          type: "DefeatEnemyQuest",
+          enemies_defeated: 0
+        })
+        console.log(quest.description)
+      }),
       null,
       null,
       null,
