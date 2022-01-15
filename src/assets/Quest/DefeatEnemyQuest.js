@@ -37,7 +37,8 @@ class DefeatEnemyQuest {
       ];
   }
 }
-function register(quest_switcher) {
+function register(quest_switcher,quest_descriptable_prototype) {
+  DefeatEnemyQuest.prototype.__proto__ = quest_descriptable_prototype
   quest_switcher["DefeatEnemyQuest"] = DefeatEnemyQuest;
 }
 module.exports = {register}
