@@ -23,6 +23,7 @@ import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
 import { TestMainCharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/testMainCharacterBattleClass';
 import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
 import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { load_files } from 'src/gameLogic/custom/functions/load_files';
 
 @Component({
   selector   : 'app-gui',
@@ -38,15 +39,16 @@ export class GuiComponent implements OnInit {
     set_theme()
     this.currentGameState = "prepare";
     this.register_master_service_subservice();
-    //debug to get savedata
-    this.masterService.gameSaver.load("save1");
+    load_files({}).then(() => {
+      //debug to get savedata
+      this.masterService.gameSaver.load("save1");
 
-    this.FirstTimeUserInitialize();
-    //debug to test having a team member
-    this.InitializeSubscriptions();
+      this.FirstTimeUserInitialize();
+      this.InitializeSubscriptions();
 
-    this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
-    this.masterService.timeHandler.addTime(0);
+      this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
+      this.masterService.timeHandler.addTime(0);
+    })
   }
 
   ngOnInit(): void { }
