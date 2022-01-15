@@ -152,6 +152,7 @@ export class Battle {
       .setDescription(false);
   }
   private endBattlePlayerWins() {
+    this.master_service.partyHandler.battle_ended('victory')
     pushBattleActionOutput(this.enemy_formation.give_experience([this.player].concat(this.party)),[this.battleRoundDescription, this.battleRoundString])
     const nextOption = new DescriptionOptions('next', () => {
       this.player.healHitPoints(10);
@@ -165,6 +166,7 @@ export class Battle {
     return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
   }
   private endBattleEnemyWins() {
+    this.master_service.partyHandler.battle_ended('lost')
     const nextOption = new DescriptionOptions('next', () => {
       this.player.healHitPoints(this.player.energy_stats.hitpoints);
       this.master_service.descriptionHandler
@@ -204,6 +206,7 @@ export class Battle {
   protected escape_option = new DescriptionOptions("Escape", () => {
     const [descriptionText, successfulEscaping] = this.enemy_formation.attemptEscape([this.player].concat(this.party))
     if (successfulEscaping) {
+      this.master_service.partyHandler.battle_ended('escape')
       this.master_service.descriptionHandler
         .flush(0)
         .tailDescription(new Description(descriptionText, [nextOption(this.master_service)]), 'battle')
@@ -234,7 +237,7 @@ export class Battle {
     ]
   }
   /**
-   * //TODO document method
+   * TODO document method
    *
    * @param {GameItem[]} items
    * @return {*}  {Description}

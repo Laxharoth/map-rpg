@@ -141,6 +141,8 @@ export abstract class EnemyFormation
       this.masterService.descriptionHandler.flush(0).nextDescription(false);
     })
   }
+
+  *[Symbol.iterator](){ for(const enemy of this._enemies)yield enemy; }
 }
 
 function calculate_experience(enemy:Enemy,character: Character):number

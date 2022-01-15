@@ -17,6 +17,7 @@ export class PartyService implements storeable{
 
   private partySubject = new Subject < Character > ();
   private partyMemberSubject = new Subject < [number, Character] > ();
+  private battle_end = new Subject< [status:battle_end_status,enemy:EnemyFormation] > ();
   private unique_character_handler:UniqueCharacterHandler;
   private _enemyFormation:EnemyFormation;
   get enemyFormation():EnemyFormation { return this._enemyFormation}
@@ -54,9 +55,11 @@ export class PartyService implements storeable{
 
   updateUser(){ this.partySubject.next(this.user); }
   updatePartyMember(index: number){ this.partyMemberSubject.next([index, this._party[index]]); }
+  battle_ended(status:battle_end_status){ this.battle_end.next([status,this.enemyFormation]) }
 
   onUpdateUser(): Observable<Character>{ return this.partySubject.asObservable(); }
   onUpdatePartyMember(): Observable<[number, Character]>{ return this.partyMemberSubject.asObservable(); }
+  onBattleEnded(): Observable<[status:battle_end_status,enemy:EnemyFormation]>{ return this.battle_end.asObservable(); }
 
   toJson():PartyStoreable
   {
@@ -84,3 +87,5 @@ export type PartyStoreable = {
 export const SetCurrentParty: FactoryFunction = (masterService: MasterService, options: PartyStoreable) => {
   masterService.partyHandler.fromJson(options)
 }
+
+type battle_end_status = 'victory'|'lost'|'escape'

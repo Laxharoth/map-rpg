@@ -10,6 +10,7 @@ import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functio
 export class enemyTest extends Character implements Enemy
 {
   _name="enemyTest";
+  enemy_type: string = "enemyTest";
   characterType:characterType = 'test enemy';
   constructor(masterService:MasterService)
   { super(masterService)
