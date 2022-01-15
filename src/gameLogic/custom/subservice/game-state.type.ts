@@ -6,10 +6,12 @@ export type game_state = 'map'|
                     'perk-tree'|
                     'stat-up'|
                     'info'|
-                    'status'
+                    'status'|
+                    'prepare'
                     ;
 
 export const game_state_priority: game_state[] = [
+  'prepare',
   'map',
   'item',
   'excess-item',

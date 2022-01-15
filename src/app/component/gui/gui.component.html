@@ -1,5 +1,6 @@
 <div class="app-gui color-1">
   <div class="app-gui-up">
+    <div *ngIf="currentGameState === 'prepare'" class="color-2"></div>
     <div *ngIf="currentGameState === 'map'" class="color-2">
       <app-map-gui></app-map-gui>
     </div>
@@ -28,7 +29,7 @@
       <app-info-page-gui></app-info-page-gui>
     </div>
   </div>
-  <div class="app-gui-down color-3">
+  <div class="app-gui-down color-3" *ngIf="currentGameState !== 'prepare'">
     <app-description-options></app-description-options>
   </div>
 </div>

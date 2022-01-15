@@ -36,13 +36,13 @@ export class GuiComponent implements OnInit {
 
   constructor(private masterService:MasterService) {
     set_theme()
+    this.currentGameState = "prepare";
     this.register_master_service_subservice();
     //debug to get savedata
     this.masterService.gameSaver.load("save1");
 
     this.FirstTimeUserInitialize();
     //debug to test having a team member
-    this.currentGameState = this.masterService.gameStateHandler.gameState;
     this.InitializeSubscriptions();
 
     this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
