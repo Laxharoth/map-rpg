@@ -22,5 +22,6 @@ enum section_names_enum {
   resistance="resistance",
   damage="damage",
   name="name",
+  condition="condition",
 }
 export type section_names = `${section_names_enum}`
