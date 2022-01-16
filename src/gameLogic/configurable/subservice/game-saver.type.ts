@@ -11,6 +11,7 @@ enum GameSaveNames {
   Flags2='Flags2',
   FactWeb='FactWeb',
   TimeHandler='TimeHandler',
+  QuestHolder='QuestHolder',
 }
 export type gamesavenames = keyof typeof GameSaveNames;
 

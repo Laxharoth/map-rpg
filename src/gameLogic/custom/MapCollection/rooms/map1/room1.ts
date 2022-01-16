@@ -85,7 +85,9 @@ export function room(roomName: string): roomFunction {
           type: "DefeatEnemyQuest",
           enemies_defeated: 0
         })
-        console.log(quest.description)
+        console.log("before:",masterService.QuestHolder)
+        masterService.QuestHolder.add(quest)
+        console.log("after:",masterService.QuestHolder)
       }),
       null,
       null,

@@ -24,6 +24,7 @@ import { TestMainCharacterBattleClass } from 'src/gameLogic/custom/Class/Charact
 import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
 import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { load_files } from 'src/gameLogic/custom/functions/load_files';
+import { QuestHolder } from 'src/gameLogic/custom/subservice/quest-holder';
 
 @Component({
   selector   : 'app-gui',
@@ -73,6 +74,7 @@ export class GuiComponent implements OnInit {
     const partyHandler = new PartyService(gameSaver,unique_characters_handler);
     const data_web = new FactWeb(timeHandler, gameSaver,unique_characters_handler);
     const info_page_toggler = new InfoPageToggler(descriptionHandler);
+    const quest_holder = new QuestHolder(gameSaver,this.masterService);
     this.masterService.register("lockmap", lockmap);
     this.masterService.register("flagsHandler", flagsHandler);
     this.masterService.register("partyHandler", partyHandler);
@@ -84,6 +86,7 @@ export class GuiComponent implements OnInit {
     this.masterService.register("FactWeb",data_web);
     this.masterService.register("UniqueCharacterHandler",unique_characters_handler);
     this.masterService.register("InfoPageToggler",info_page_toggler);
+    this.masterService.register("QuestHolder",quest_holder);
   }
   private FirstTimeUserInitialize() {
     if(this.masterService.gameSaver?.MainCharacter?.[0]) {
