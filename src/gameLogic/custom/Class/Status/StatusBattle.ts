@@ -41,20 +41,6 @@ export abstract class StatusBattle extends Status
    * @memberof StatusBattle
    */
   set extraDuration(extra:number){this.DURATION+=extra;}
-  /**
-   * StatusBattle cant be saved or loaded.
-   *
-   * @return {*}  {{[key: string]:any}}
-   * @memberof StatusBattle
-   */
-  toJson():StatusStoreable{throw new Error("StatusBattle cant be saved or loaded");};
-  /**
-   * StatusBattle cant be saved or loaded.
-   *
-   * @return {*}  {{[key: string]:any}}
-   * @memberof StatusBattle
-   */
-  fromJson(options:StatusStoreable):void{throw new Error("StatusBattle cant be saved or loaded");};
 }
 
 /**
