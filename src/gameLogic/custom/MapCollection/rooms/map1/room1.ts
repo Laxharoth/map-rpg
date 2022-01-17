@@ -90,17 +90,6 @@ export function room(roomName: string): roomFunction {
         console.log("after:",masterService.QuestHolder)
       }),
       null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
       new DescriptionOptions("add 1 month", function () {
         masterService.timeHandler.addTime("1M")
       }),
