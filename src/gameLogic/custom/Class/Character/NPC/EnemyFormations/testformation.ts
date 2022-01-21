@@ -4,11 +4,11 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
 import { enemyTest } from "src/gameLogic/custom/Class/Character/NPC/enemyTest";
 import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { MeleeTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeTest';
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemTest } from 'src/gameLogic/custom/Class/Items/ItemTest';
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { Enemy } from '../../Enemy/Enemy';
+import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 
 export class testformation extends EnemyFormation
 {
@@ -45,7 +45,7 @@ export class testformation extends EnemyFormation
   {
     const Item = new ItemTest(this.masterService);
     Item.amount = randomBetween(1,4);
-    const weapon = new MeleeTest(this.masterService);
+    const weapon = ItemFactory(this.masterService,{ Factory:'Item',type:'Melee test'})
     return [Item,weapon];
   }
   //////////////////////////
