@@ -15,26 +15,23 @@ export function attack_order(characters: Character[]): Character[] {
 export function AttackCommand(source: Character, targets: Character[]): BattleCommand
 {
   const weapon = source.character_equipment.meleeWeapon;
-  return new BattleCommand(
-    source, targets, weapon.tags,
-    (targets) => {
-      const attackDescription: ActionOutput = [
-        [],
-        []
-      ];
+  return {
+    source, target:targets, tags:weapon.tags,
+    excecute:() => {
+      const attackDescription: ActionOutput = [[],[]];
       if (source.hasTag('double attack'))
         attackWithWeapon(source, targets, weapon, attackDescription);
       attackWithWeapon(source, targets, weapon, attackDescription);
       return attackDescription;
     }
-  )
+  }
 }
 export function ShootCommand(source: Character, targets: Character[]): BattleCommand
 {
   const weapon = source.character_equipment.rangedWeapon;
-  return new BattleCommand(
-    source, targets, weapon.tags,
-    (targets) => {
+  return {
+    source, target:targets, tags:weapon.tags,
+    excecute:() => {
       const attackDescription: ActionOutput = [
         [],
         []
@@ -44,16 +41,16 @@ export function ShootCommand(source: Character, targets: Character[]): BattleCom
       attackWithWeapon(source, targets, weapon, attackDescription);
       return attackDescription;
     }
-  )
+  }
 }
-export function DefendCommand(source: Character, targets: Character[])
+export function DefendCommand(source: Character, targets: Character[]):BattleCommand
 {
   const shield = source.character_equipment.shield;
   const defend_action = shield.defend(targets)
-  return new BattleCommand(
-    source, targets, shield.tags,
-    (target) => defend_action
-  )
+  return {
+    source, target:targets, tags:shield.tags,
+    excecute:() => defend_action
+    }
 }
 /**
  * Attacks with a weapon.
