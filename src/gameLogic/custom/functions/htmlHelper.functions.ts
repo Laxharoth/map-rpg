@@ -1,7 +1,9 @@
+import { Chance } from 'chance';
 import random from 'random';
 import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 
+const rng = new Chance()
 /**
  * In descriptions that use input elements get the value of the input and select.
  *
@@ -52,10 +54,10 @@ export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):
  * @export
  * @param {number} min The minimum value that can be returned
  * @param {number} max The maximum value that can be returned
- * @return {*}  {number}
+ * @return {number}
  */
 export function randomBetween(min:number, max:number):number{
-  return random.integer(min, max);
+  return rng.integer({ min,max });
 }
 
 /**
@@ -67,7 +69,7 @@ export function randomBetween(min:number, max:number):number{
  */
 export function randomCheck(percent:number):boolean
 {
-  return percent >= random.float(0,100);
+  return rng.bool({likelihood:percent})
 }
 
 /**
