@@ -155,7 +155,7 @@ export class FactWeb implements storeable
     //Load fact known per character
     for(const [character_id,facts] of options.known_facts_per_character)
     {
-      this.character_map.get( character_id ).known_facts=new Set(facts)
+      this.character_map.get( character_id )&&(this.character_map.get( character_id ).known_facts=new Set(facts))
     }
   }
 }
