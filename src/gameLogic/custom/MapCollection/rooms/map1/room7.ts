@@ -5,10 +5,8 @@ import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFor
 import { DescriptionSelectItemFromMap, drop_item } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
-import { Armor, ArmorNoArmor } from "src/gameLogic/custom/Class/Equipment/Armor/Armor";
-import { Shield, ShieldNoShield } from "src/gameLogic/custom/Class/Equipment/Shield/Shield";
-import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeWeapon";
-import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon";
+import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
+import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
 import { ItemTest } from "src/gameLogic/custom/Class/Items/ItemTest";
 import { Room } from "src/gameLogic/custom/Class/maps/room";
 import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable";
@@ -17,6 +15,8 @@ import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { Battle } from 'src/gameLogic/custom/Class/Battle/Battle';
 import { AddExceedItem } from 'src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem';
+import { Shield, ShieldNoShield } from 'src/gameLogic/custom/Class/Equipment/Shield';
+import { ArmorNoArmor, Armor } from 'src/gameLogic/custom/Class/Equipment/Armor';
 
 export function room(masterService:MasterService):Room
 {

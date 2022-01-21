@@ -1,7 +1,7 @@
-import { Shield, ShieldNoShield } from 'src/gameLogic/custom/Class/Equipment/Shield/Shield';
-import { Armor, ArmorNoArmor } from 'src/gameLogic/custom/Class/Equipment/Armor/Armor';
-import { RangedWeapon, RangedUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedWeapon';
-import { MeleeWeapon, MeleeUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeWeapon';
+import { Shield, ShieldNoShield } from 'src/gameLogic/custom/Class/Equipment/Shield';
+import { Armor, ArmorNoArmor } from 'src/gameLogic/custom/Class/Equipment/Armor';
+import { RangedWeapon, RangedUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon';
+import { MeleeWeapon, MeleeUnharmed } from 'src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon';
 import { MasterService } from 'src/app/service/master.service';
 import { Character } from '../Character';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
