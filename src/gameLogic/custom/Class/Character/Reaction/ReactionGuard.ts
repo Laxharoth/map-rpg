@@ -5,6 +5,7 @@ import { ActionOutput } from '../Character.type';
 
 export class ReactionGuard extends BeforeActionReaction
 {
+  protected name: string = "ReactionGuard";
   protected whatTriggers: tag[][]=[[]];
   //@ts-ignore
   protected prevent_reaction: tag[][] = [['paralized'],['benefic']]

@@ -7,8 +7,9 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
 import { ActionOutput } from "../../Character/Character.type";
 import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 import { BattleUseable } from "../BattleUseable";
+import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
 
-export abstract class SpecialAttack implements BattleUseable, hashable
+export abstract class SpecialAttack implements BattleUseable, hashable, storeable
 {
   protected masterService:MasterService;
   /** the cooldown time*/
@@ -50,4 +51,16 @@ export abstract class SpecialAttack implements BattleUseable, hashable
   cool(){this.cooldown = Math.max(0,this.cooldown-1)}
   reset_initial_cooldown(){this.cooldown = 0;}
   hash(): string { return this.name }
+  toJson(): SpecialAttackOptions {
+      return {
+        Factory: "SpecialAttack",
+        type:this.name
+      }
+  }
+  fromJson(options:SpecialAttackOptions){}
+}
+export type SpecialAttackOptions = {
+  Factory: "SpecialAttack",
+  type:string,
+  [key:string]:any
 }

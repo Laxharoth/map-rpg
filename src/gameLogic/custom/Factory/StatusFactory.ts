@@ -1,10 +1,7 @@
-import { StatusPoison } from './../Class/Status/StatusTemporal/StatusPoison';
 import { MasterService } from "src/app/service/master.service";
 import { Status, StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statusEnum, statusname, statusTimeEnum } from "src/gameLogic/custom/Class/Status/Status.type";
 import { TimedStatusTest } from "src/gameLogic/custom/Class/Status/TimedStatusTest";
 
-export type status_factory = (masterService:MasterService,options:StatusStoreable)=>Status
 /**
  * Creates a Status given a status name.
  *
@@ -16,13 +13,13 @@ export type status_factory = (masterService:MasterService,options:StatusStoreabl
  */
 export function StatusFactory(masterService:MasterService,options:StatusStoreable):Status
 {
-  const status = new statusSwitcher[options.type](masterService);
+  const status = new status_switcher[options.type](masterService);
   status.fromJson(options);
   return status;
 }
-
-const statusSwitcher={
-  'status':()=>null,
+//@ts-ignore
+export const status_switcher:{[key in statusEnum | statusTimeEnum | statusBattlesEnum]:StatusConstructor}={
   'TimedStatusTest'   :TimedStatusTest,
-  'Poison'   :StatusPoison,
 }
+export interface StatusConstructor { new(MasterService: MasterService): Status; }
+export type StatusFactoryFuctioin = typeof StatusFactory;

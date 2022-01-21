@@ -4,7 +4,7 @@ import { gamesavenames } from "src/gameLogic/configurable/subservice/game-saver.
 import { storeable, StoreableType} from "src/gameLogic/core/Factory/Factory";
 import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
 import { Quest } from "../Class/Quest/Quest";
-import { QuestFactory } from "../Class/Quest/QuestFactory";
+import { QuestFactory } from "../Factory/QuestFactory";
 import { ObjectSet } from "../ClassHelper/ObjectSet";
 
 export class QuestHolder implements storeable

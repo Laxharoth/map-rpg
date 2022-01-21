@@ -1,11 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { Perk, PerkStoreable } from "src/gameLogic/custom/Class/Perk/Perk";
-import { perkname, perknameEnum } from "src/gameLogic/custom/Class/Perk/Perk.type";
-import { PerkCharm } from "src/gameLogic/custom/Class/Perk/PerkCharm";
-import { PerkFright } from "src/gameLogic/custom/Class/Perk/PerkFright";
-import { PerkGrappler } from "src/gameLogic/custom/Class/Perk/PerkGrappler";
-import { PerkPoisonRush } from "src/gameLogic/custom/Class/Perk/PerkPoisonRush";
-import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable";
+import { perknameEnum } from "src/gameLogic/custom/Class/Perk/Perk.type";
 
 /**
  * Creates an Perk with the given perkname
@@ -17,16 +12,10 @@ import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable
  * @return {Perk} An Perk with the loaded options
  */
 export function PerkFactory(masterService:MasterService,options:PerkStoreable):Perk {
-  const perk = new PerkSwitcher[options.type](masterService);
+  const perk = new perk_switcher[options.type](masterService);
   perk.fromJson(options);
   return perk;
 }
-
-/** @type {[key: string]:Perk.constructor} */
-const PerkSwitcher:{[key in perknameEnum]:any} = {
-'Charmer':PerkCharm,
-'Frighter':PerkFright,
-'Grappler':PerkGrappler,
-'Posion Rush':PerkPoisonRush,
-'Perk Upgrade':PerkUpgradeable
-}
+//@ts-ignore
+export const perk_switcher:{[key in perknameEnum]:PerkConstructor} = {}
+export interface PerkConstructor{ new (masterService:MasterService):Perk }

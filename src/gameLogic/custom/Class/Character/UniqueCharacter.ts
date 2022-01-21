@@ -1,19 +1,15 @@
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { PerkStoreable } from "src/gameLogic/custom/Class/Perk/Perk";
-import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { EnergyStats, CoreStats, ResistanceStats, LevelStats } from "./Character.type";
-import { Character } from "./Character";
+import { Character, CharacterStoreable } from "./Character";
 import { Description } from '../Descriptions/Description';
 import { tree_node } from '../CharacterBattleClass/ArrayTree';
 import { Upgrade } from '../Upgrade/Upgrade';
 import { CharacterEquipmentOptions } from './Inventory/CharacterEquipment';
 import { InventoryOptions } from './Inventory/Inventory';
-
 
 export abstract class UniqueCharacter extends Character implements storeable {
   uuid: string;
@@ -41,35 +37,30 @@ export abstract class UniqueCharacter extends Character implements storeable {
   current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }
   /**
    * Stores character type, originalstats, status, equipment,items and perks
-   *
-   * @return {*}  {{[key: string]:any}}
-   * @memberof Character
    */
-  toJson(): CharacterStoreable {
-    const storeables: CharacterStoreable = { Factory: "Character", type: this.characterType, uuid: this.uuid, name: this.name };
-    storeables['originalCore'] = this.energy_stats;
-    storeables['originalStats'] = this.core_stats;
-    storeables['originalResistance'] = this.original_resistance;
-    storeables['currentCore'] = this.current_energy_stats;
-    storeables['levelStats'] = this.level_stats;
-    storeables['gold'] = this.gold;
-    storeables['status'] = [];
-    for (const status of this.iterStatus())
-      storeables['status'].push({ name: status.name, options: status.toJson() });
-    storeables['equipment'] = this.character_equipment.toJson();
-    storeables['inventory'] = this.inventory.toJson()
-    storeables['perk'] = [];
-    for (const perk of this.perks)
-      storeables['perk'].push({ name: perk.name, options: perk.toJson() });
+  toJson(): UniqueCharacterStoreable {
+    const storeables: UniqueCharacterStoreable = {
+    ...super.toJson(),
+    uuid: this.uuid,
+    name: this.name,
+    originalCore:this.energy_stats,
+    originalStats:this.core_stats,
+    originalResistance:this.original_resistance,
+    currentCore:this.current_energy_stats,
+    levelStats:this.level_stats,
+    gold:this.gold,
+    status:[...this.iterStatus()].map(status=>status.toJson()),
+    equipment:this.character_equipment.toJson(),
+    inventory:this.inventory.toJson(),
+    perk:this.perks.map(perk=>perk.toJson()),
+  };
     return storeables;
   }
   /**
    * loads originalstats, status, equipment,items and perks
-   *
-   * @param {{[key: string]: any}} options
-   * @memberof Character
    */
-  fromJson(options: CharacterStoreable): void {
+  fromJson(options: UniqueCharacterStoreable): void {
+    super.fromJson(options)
     if (options['originalCore'])
       this.energy_stats = options['originalCore'];
     if (options['originalStats'])
@@ -83,30 +74,28 @@ export abstract class UniqueCharacter extends Character implements storeable {
     if (options['gold'])
       this.gold = options['gold'];
     if (options['status'])
-      for (const status of options['status']) { this.addStatus(StatusFactory(this.masterService, status.options)); }
+      for (const status of options['status']) { this.addStatus(StatusFactory(this.masterService, status)); }
     (options['equipment']) && (this.character_equipment.fromJson(options['equipment']))
     if (options['inventory'])
       this.inventory.fromJson(options.inventory)
     if (options['perk'])
-      for (const perk of options['perk']) { this.addPerk(PerkFactory(this.masterService, perk.options)); };
+      for (const perk of options['perk']) { this.addPerk(PerkFactory(this.masterService, perk)); };
     this._name = options.name;
     this.calculateStats();
     this.applyStatus();
   }
 }
-export type CharacterStoreable = {
-  Factory: "Character";
-  type: characterType;
+export interface UniqueCharacterStoreable extends CharacterStoreable{
   originalCore?: EnergyStats;
   originalStats?: CoreStats;
   levelStats?: LevelStats;
   originalResistance?: ResistanceStats;
   currentCore?: EnergyStats;
   gold?: number;
-  status?: { name: statusname; options: StatusStoreable; }[];
+  status?: StatusStoreable[];
   equipment?: CharacterEquipmentOptions;
   inventory?: InventoryOptions;
-  perk?: { name: perkname; options: PerkStoreable; }[];
+  perk?:PerkStoreable[];
   uuid: string;
   name: string;
   [key: string]: any;

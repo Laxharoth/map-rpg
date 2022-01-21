@@ -7,7 +7,7 @@ import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFor
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
-import { QuestFactory } from 'src/gameLogic/custom/Class/Quest/QuestFactory';
+import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
 
 export function room(roomName: string): roomFunction {
   return function (masterService: MasterService): Room {

@@ -1,12 +1,8 @@
 import { EmptyCommand } from './../../Battle/BattleCommand';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { PersistentCharacter } from "src/gameLogic/custom/Class/Character/NPC/PersistentCharacter";
-import { PerkCharm } from "src/gameLogic/custom/Class/Perk/PerkCharm";
-import { PerkFright } from "src/gameLogic/custom/Class/Perk/PerkFright";
-import { PerkGrappler } from "src/gameLogic/custom/Class/Perk/PerkGrappler";
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { BattleCommand } from "../../Battle/BattleCommand";
 
@@ -23,9 +19,6 @@ export class charTest extends PersistentCharacter
     this.uuid = this._name;
     //@ts-ignore
     this.masterService.gameSaver.register("PersistentCharacter",this)
-    this.addPerk(new PerkCharm(masterService))
-    this.addPerk(new PerkGrappler(masterService))
-    this.addPerk(new PerkFright(masterService))
   }
 
   get name(): string { return this._name; }

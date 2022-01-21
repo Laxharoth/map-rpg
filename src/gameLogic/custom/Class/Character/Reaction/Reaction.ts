@@ -1,4 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
+import { storeable, StoreableType } from "src/gameLogic/core/Factory/Factory";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
@@ -12,11 +13,13 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
  * @class Reaction
  * @constructor Initializes the masterService
  */
-export abstract class Reaction implements hashable{
+export abstract class Reaction implements hashable, storeable{
   /** The list of tags the reaction should be triggered with. */
   protected abstract whatTriggers: tag[][];
   /** The list of tags the reaction should be never trigger. */
   protected prevent_reaction:tag[][] = [['paralized'],['before-action']];
+  /** TODO doc */
+  protected abstract name:string;
   /**
    * What the reaction does when it is triggered
    *
@@ -67,9 +70,22 @@ export abstract class Reaction implements hashable{
   }
   //@ts-ignore
   hash(): string { return this.constructor }
+  fromJson(options: ReactionOptions): void { }
+  toJson():ReactionOptions
+  {
+    return {
+      Factory:"Reaction",
+      type:this.name
+    };
+  }
 }
-
 export abstract class BeforeActionReaction extends Reaction
 {
   protected prevent_reaction: tag[][]= [['paralized']]
+}
+
+export type ReactionOptions={
+  Factory:"Reaction";
+  type:string;
+  [key: string]:any;
 }

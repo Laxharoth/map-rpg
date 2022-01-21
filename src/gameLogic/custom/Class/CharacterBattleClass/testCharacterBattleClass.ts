@@ -1,4 +1,3 @@
-import { MasterService } from 'src/app/service/master.service';
 import { EnergyStats, FullCalculatedStats, FullCoreStats } from '../Character/Character.type';
 import { Upgrade } from '../Upgrade/Upgrade';
 import { UpgradeOptions } from '../Upgrade/Upgrade.type';
@@ -6,6 +5,7 @@ import { ArrayTree, tree_node } from './ArrayTree';
 import { CharacterBattleClass, experience_cap } from './CharacterBattleClass';
 
 export class TestCharacterBattleClass extends CharacterBattleClass {
+  name: string="TestCharacterBattleClass";
   protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = []
   initial_core_stats: EnergyStats = {
     hitpoints: 100,

@@ -4,8 +4,8 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Enemy } from 'src/gameLogic/custom/Class/Character/Enemy/Enemy';
 import { ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { itemname } from 'src/gameLogic/custom/Class/Items/Item.type';
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
-import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
+import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
+import { randomBetween, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
 export class enemyTest extends Character implements Enemy
 {
@@ -13,16 +13,7 @@ export class enemyTest extends Character implements Enemy
   enemy_type: string = "enemyTest";
   characterType:characterType = 'test enemy';
   constructor(masterService:MasterService)
-  { super(masterService)
-      // this.addStatus(new StatusPoison(masterService))
-      // this.addStatus(new StatusBlind(masterService));
-      // this.addStatus(new StatusInvisible(masterService));
-      // this.addStatus(new StatusPetrified(masterService));
-      // this.addStatus(new StatusProne(masterService));
-      // this.addStatus(new StatusRestrained(masterService));
-      // this.addStatus(new StatusSleep(masterService));
-      // this.addPerk(  new PerkPoisonRush(masterService));
-  }
+  { super(masterService) }
   get name(): string {
       return 'test enemy';
   }
@@ -52,8 +43,7 @@ export class enemyTest extends Character implements Enemy
 
   private select_loot():itemname
   {
-    const selector = randomBetween(0,100);
-    if(selector<10)return 'Guard Shield'
+    if(randomCheck(10))return 'Guard Shield'
     return 'item-test'
   }
 }

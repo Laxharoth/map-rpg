@@ -1,9 +1,8 @@
 import { BattleCommand } from './../../Battle/BattleCommand';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { PersistentCharacter } from "src/gameLogic/custom/Class/Character/NPC/PersistentCharacter";
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 
 export class JohnSmith extends PersistentCharacter
 {

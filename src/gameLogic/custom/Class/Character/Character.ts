@@ -9,16 +9,18 @@ import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { ObjectSet } from "../../ClassHelper/ObjectSet";
 import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
 import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
-import { CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
+import { BattleClassOptions, CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
 import { TestCharacterBattleClass } from "../CharacterBattleClass/testCharacterBattleClass";
 import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
 import { Inventory } from "./Inventory/Inventory";
 import { Reaction } from "./Reaction/Reaction";
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { CharacterBattleClassFactory } from '../../Factory/CharacterBattleClassFactory';
 
 /**
  * A model of a character.
@@ -29,7 +31,7 @@ import { Reaction } from "./Reaction/Reaction";
  * @implements {storeable}
  * @constructor Initializes the masterService Should be overridden to set originalStats
  */
-export abstract class Character
+export abstract class Character implements storeable
 {
   energy_stats:EnergyStats;
   level_stats:LevelStats;
@@ -170,7 +172,7 @@ export abstract class Character
    */
   hasTag(tag:tag):boolean { return this.tags.includes(tag); }
   /**
-   *TODO add description
+   * TODO add description
    *
    * @return {*}  {boolean}
    * @memberof Character
@@ -246,7 +248,7 @@ export abstract class Character
     if (item instanceof GameItem)
     {
       const description =  this.inventory.useItem(item, this, targets);
-      return new BattleCommand(this,targets,['item-use'],()=>description)
+      return {source:this,target:targets,tags:['item-use'],excecute:()=>description}
     }
     console.warn('item not in inventory')
     return new EmptyCommand(this, targets)
@@ -434,13 +436,13 @@ export abstract class Character
   private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand
   {
     if(this.specialAttacks.has(item.hash()))
-      return new BattleCommand(this,targets,[],(targets)=>{
+      return {source:this,target:targets,tags:[],excecute:()=>{
         if(item.isSingleTarget)return tryAttack(this,targets[0],(target: Character)=>item.itemEffect(this,target))
         const descriptions:ActionOutput = [[],[]]
         for(const target of targets)
         { pushBattleActionOutput(item.itemEffect(this,target),descriptions) }
         return descriptions;
-      })
+      }}
     return new EmptyCommand(this,targets);
   }
   /**
@@ -460,19 +462,18 @@ export abstract class Character
    * @abstract
    * @param {Character[]} ally The player party.
    * @param {Character[]} enemy The enemy party.
-   * @return {*}  {ActionOutput}
+   * @return {BattleCommand}
    * @memberof Character
    */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
+  toJson(): CharacterStoreable { return { Factory:"Character",type:this.characterType,battle_class:this.battle_class.toJson()} }
+  fromJson(options: CharacterStoreable): void {
+    options.battle_class&&(this.character_battle_class=CharacterBattleClassFactory(this.masterService,options.battle_class))
+  }
 }
+export type CharacterStoreable = { Factory: "Character"; type: characterType; battle_class:BattleClassOptions,[key: string]:any; }
 /**
  * Check if the statusname is the same as the second argument.
- *
- * @private
- * @param {(string | Status)} status The status name to check.
- * @param {Status} characterStatus The status to check.
- * @return {*}
- * @memberof Character
  */
 function compareStatusName(status: string | Status, characterStatus: Status):boolean
 { return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status; }

@@ -1,5 +1,4 @@
 import { InfoPageToggler } from 'src/gameLogic/custom/subservice/info-page-toggler';
-import { PerkCharm } from './../../../gameLogic/custom/Class/Perk/PerkCharm';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
@@ -7,11 +6,6 @@ import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacter/MainCharacter';
 import { charTest } from 'src/gameLogic/custom/Class/Character/NPC/characterTest';
-import { ArmorTest } from 'src/gameLogic/custom/Class/Equipment/Armor/ArmorTest';
-import { ShieldTest } from 'src/gameLogic/custom/Class/Equipment/Shield/ShieldTest';
-import { MeleeTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Melee/MeleeTest';
-import { RangedTest } from 'src/gameLogic/custom/Class/Equipment/Weapon/Ranged/RangedTest';
-import { PerkUpgradeable } from 'src/gameLogic/custom/Class/Perk/PerkUpgradeable';
 import { DescriptionHandlerService } from 'src/gameLogic/custom/subservice/description-handler';
 import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
 import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
@@ -25,6 +19,7 @@ import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-c
 import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { load_files } from 'src/gameLogic/custom/functions/load_files';
 import { QuestHolder } from 'src/gameLogic/custom/subservice/quest-holder';
+import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 
 @Component({
   selector   : 'app-gui',
@@ -94,12 +89,10 @@ export class GuiComponent implements OnInit {
     }
     if (!this.masterService.partyHandler.user) {
       const user = new MainCharacter(this.masterService, 'player',new TestMainCharacterBattleClass());
-      const meleeTest1 = new MeleeTest(this.masterService);
-      const rangedTest1 = new RangedTest(this.masterService);
-      const shieldTest1 = new ShieldTest(this.masterService);
-      const armorTest1 = new ArmorTest(this.masterService);
-      user.addPerk(new PerkUpgradeable(this.masterService));
-      user.addPerk(new PerkCharm(this.masterService));
+      const meleeTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Melee test"})
+      const rangedTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Ranged Test"})
+      const shieldTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Shield test"})
+      const armorTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Armor Test"})
       user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
       this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)

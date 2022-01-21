@@ -9,12 +9,11 @@ import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
 import { ItemTest } from "src/gameLogic/custom/Class/Items/ItemTest";
 import { Room } from "src/gameLogic/custom/Class/maps/room";
-import { PerkUpgradeable } from "src/gameLogic/custom/Class/Perk/PerkUpgradeable";
 import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { Battle } from 'src/gameLogic/custom/Class/Battle/Battle';
-import { AddExceedItem } from 'src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem';
+import { Factory } from 'src/gameLogic/core/Factory/Factory';
 import { Shield, ShieldNoShield } from 'src/gameLogic/custom/Class/Equipment/Shield';
 import { ArmorNoArmor, Armor } from 'src/gameLogic/custom/Class/Equipment/Armor';
 
@@ -105,9 +104,11 @@ export function room(masterService:MasterService):Room
     }),
     drop_item(masterService,user),
     new DescriptionOptions("level up perk",function(){
-      const perk = (user.getPerk('Perk Upgrade') as PerkUpgradeable);
-      if(!perk) user.addPerk(new PerkUpgradeable(this.masterService));
-      else perk.level++;
+      const perk = (user.getPerk('Perk Upgrade'));
+      if(!perk) user.addPerk(Factory(masterService,{Factory:"Perk",type:"PerkUpgradeable"}));
+      else
+        //@ts-ignore
+        perk.level++;
     }),
     DescriptionSelectItemFromMap(masterService),
     new DescriptionOptions("option3",function(){})

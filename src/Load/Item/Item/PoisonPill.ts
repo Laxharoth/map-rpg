@@ -2,7 +2,7 @@ import { register_function } from "src/gameLogic/core/Factory/Register_Module/Re
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory.type";
+import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
 
 
 const register: register_function = ({game_item}, {game_item:{GameItem}}, Factory) => {

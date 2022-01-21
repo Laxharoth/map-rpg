@@ -60,7 +60,7 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
     }
   }
   reaction["ReactionGuard"]=ReactionGuard
-  game_item["Guard Shield"]=StatusGuard
+  game_item["Guard Shield"]=ShieldGuard
   status["StatusGuard"]=StatusGuard
 }
 const module_name="StatusGuard";

@@ -1,11 +1,13 @@
 import { MasterService } from "src/app/service/master.service";
+import { storeable, StoreableType } from "src/gameLogic/core/Factory/Factory";
 import {  CoreStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, LevelStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Upgrade } from "../Upgrade/Upgrade";
 import { UpgradeOptions } from "../Upgrade/Upgrade.type";
 import { UpgradeFactory } from "../Upgrade/UpgradeFactory";
 import { ArrayTree, tree_node } from "./ArrayTree";
 
-export abstract class CharacterBattleClass {
+export abstract class CharacterBattleClass implements storeable{
+  abstract name: string;
   abstract initial_core_stats: EnergyStats;
   abstract initial_physic_stats: FullCoreStats;
   protected abstract _upgrade_tree:ArrayTree<Upgrade>|tree_node<UpgradeOptions>[];
@@ -67,6 +69,24 @@ export abstract class CharacterBattleClass {
     }
     return fill_root(this._upgrade_tree);
   }
+  toJson(): BattleClassOptions {
+    return {
+      Factory:"CharacterBattleClass",
+      type:this.name
+    }
+  }
+  fromJson(options: BattleClassOptions): void {}
 }
-
+export class CharacterBattleClassEmpty extends CharacterBattleClass {
+  name: string="CharacterBattleClassEmpty";
+  initial_core_stats: EnergyStats={hitpoints:1,energypoints:1};
+  initial_physic_stats: FullCoreStats={aim:1,intelligence:1,speed:1,stamina:1,strenght:1};
+  protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[]=[];
+  experience_cap: experience_cap=[1,1,1,1,1];
+}
+export type BattleClassOptions={
+  Factory:"CharacterBattleClass",
+  type:string,
+  [key:string]:any
+}
 export type experience_cap = [number, number, number, number, number];

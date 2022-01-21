@@ -1,13 +1,12 @@
-import { MasterService } from 'src/app/service/master.service';
 import { EnergyStats, FullCalculatedStats, FullCoreStats, ResistanceStats } from '../Character/Character.type';
 import { Upgrade } from '../Upgrade/Upgrade';
 import { UpgradeOptions } from '../Upgrade/Upgrade.type';
-import { UpgradeFactory } from '../Upgrade/UpgradeFactory';
 import { ArrayTree, tree_node } from './ArrayTree';
 import { CharacterBattleClass, experience_cap } from './CharacterBattleClass';
 
 export class TestMainCharacterBattleClass extends CharacterBattleClass
 {
+  name: string="TestMainCharacterBattleClass";
   initial_core_stats: EnergyStats = {
     hitpoints:150,
     energypoints:150,

@@ -7,7 +7,7 @@ import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 import { PersistentCharacter } from 'src/gameLogic/custom/Class/Character/NPC/PersistentCharacter';
-import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory.type";
+import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class PartyService implements storeable{

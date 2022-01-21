@@ -1,10 +1,46 @@
-import { register_quest } from "../Class/Quest/QuestFactory";
-import { register_item } from "../Factory/ItemFactory";
+import { add_module, register_all_modules } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 
 export async function load_files({})
 {
   //@ts-ignore
-  await import("../../../assets/Load/Quest/DefeatEnemyQuest.js").then(module=>register_quest(module))
+  await import("../../../Load/Quest/DefeatEnemyQuest.ts").then(module=>add_module(module))
   //@ts-ignore
-  await import("../../../assets/Load/Item/Item/PoisonPill.js").then(module=>register_item(module))
+  await import("../../../Load/Item/Item/PoisonPill.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusBlind.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusCharm.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusInvisible.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusPetrified.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusProne.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusRestrained.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusSleep.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusPoison.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusGrappled.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/StatusFright.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Status/PoisonRush.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Item/Equipment/ShieldGuard.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Item/Equipment/ArmorTest.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Item/Equipment/ItemTest.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Item/Equipment/ShieldTest.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Item/Equipment/MeleeTest.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Item/Equipment/RangedTest.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Perk/PerkUpgradeable.ts").then(module=>add_module(module))
+  register_all_modules()
 }
