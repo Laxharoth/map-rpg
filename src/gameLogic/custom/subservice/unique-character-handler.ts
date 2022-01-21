@@ -7,8 +7,9 @@ export class UniqueCharacterHandler
 
   constructor(game_saver: GameSaver){
     game_saver.on_change_persistent_instance().subscribe(([instance_name,action,character])=>{
-      if(!(instance_name==="MainCharacter" || instance_name==="PersistentCharacter") || action==="unregister")return;
       const unique_character = character as UniqueCharacter;
+      if(!(instance_name==="MainCharacter" || instance_name==="PersistentCharacter"))return;
+      if(action==="unregister"){delete this._characters[unique_character.uuid];return;}
       this._characters[unique_character.uuid] = unique_character
     })
   }
