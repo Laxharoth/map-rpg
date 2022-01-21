@@ -1,10 +1,12 @@
+import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { register_item_function } from "src/gameLogic/custom/Factory/ItemFactory";
-import { status_factory } from "src/gameLogic/custom/Factory/StatusFactory";
-const register: register_item_function = (ItemSwitcher, {GameItem}, Factory) => {
-  const StatusFactory = Factory as status_factory;
+import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory.type";
+
+
+const register: register_function = ({game_item}, {game_item:{GameItem}}, Factory) => {
+  const StatusFactory = Factory as StatusFactoryFuctioin;
   class PoisonPill extends GameItem {
     get name(): itemname { return 'Poison Pill' }
     get isMapUsable(): boolean { return false; }
@@ -17,9 +19,9 @@ const register: register_item_function = (ItemSwitcher, {GameItem}, Factory) => 
       return target.addStatus(poison);
     }
   }
-  ItemSwitcher['Poison Pill'] = PoisonPill
+  game_item['Poison Pill'] = PoisonPill
 }
 
 const module_name = 'Poison Pill'
 const module_dependency = ['Poison']
-module.exports = { register, module_name, module_dependency};
+export { register, module_name, module_dependency};
