@@ -89,7 +89,7 @@ export class Battle {
 
   roundMessage(roundStrings: string[]): Description {
     const nextOption = {text:"next", action:() => this.startRound(),disabled:false}
-    return new Description(() => `${roundStrings.join("\n\n")}`, [nextOption])
+    return {descriptionData: () => `${roundStrings.join("\n\n")}`, options:[nextOption],fixed_options:[null,null,null,null,null]}
   }
 
   /**
@@ -109,7 +109,11 @@ export class Battle {
       this.startRoundDescription.push(...description);
       this.startRoundString.push(string.join('\n'));
     }
-    this.startRoundDescription.push(new Description(() => `${this.startRoundString.join("\n\n")}`, this.player.hasTag('paralized') ? [this.playerParalizedOption] : this.battle_options));
+    this.startRoundDescription.push({
+      descriptionData: () => `${this.startRoundString.join("\n\n")}`,
+      options: this.player.hasTag('paralized') ? [this.playerParalizedOption] : this.battle_options,
+      fixed_options: [null, null, null, null, null]
+    });
     this.master_service.descriptionHandler
       .tailDescription(this.startRoundDescription, 'battle')
     if (this.fistRound)
@@ -151,7 +155,7 @@ export class Battle {
       .headDescription(this.use_Item_on_battle(items), 'battle')
       .setDescription(false);
   }
-  private endBattlePlayerWins() {
+  private endBattlePlayerWins():Description {
     this.master_service.partyHandler.battle_ended('victory')
     pushBattleActionOutput(this.enemy_formation.give_experience([this.player].concat(this.party)),[this.battleRoundDescription, this.battleRoundString])
     const nextOption = {
@@ -166,9 +170,9 @@ export class Battle {
       }
     }
     ,disabled:false}
-    return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
+    return { descriptionData: () => `${this.battleRoundString.join("\n\n")}`,options: [nextOption],fixed_options:[null,null,null,null,null]};
   }
-  private endBattleEnemyWins() {
+  private endBattleEnemyWins():Description {
     this.master_service.partyHandler.battle_ended('lost')
     const nextOption = {text:'next', action:() => {
       this.player.healHitPoints(this.player.energy_stats.hitpoints);
@@ -176,7 +180,7 @@ export class Battle {
         .tailDescription(this.enemy_formation.onEnemyVictory([this.player].concat(this.party)), 'battle')
         .nextDescription(false);
     },disabled:false}
-    return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
+    return {descriptionData: () => `${this.battleRoundString.join("\n\n")}`, options: [nextOption],fixed_options:[null,null,null,null,null]};
   }
   protected playerParalizedOption = {text:"Paralized", action:() => { this.round(new EmptyCommand(this.player,[])) },disabled:false}
   protected attack_option ={text: "Attack",action: () => {
@@ -210,13 +214,13 @@ export class Battle {
       this.master_service.partyHandler.battle_ended('escape')
       this.master_service.descriptionHandler
         .flush(0)
-        .tailDescription(new Description(descriptionText, [nextOption(this.master_service)]), 'battle')
+        .tailDescription({descriptionData: descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]}, 'battle')
         .nextDescription(false);
       return;
     }
     //player will do nothing
     const playerAction= new EmptyCommand(this.player,[])
-    this.startRoundDescription.push(new Description(descriptionText, [nextOption(this.master_service)]))
+    this.startRoundDescription.push({descriptionData:descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]})
     this.round(playerAction)
   },disabled:false};
   protected initialize_battle_options(): DescriptionOptions[] {

@@ -14,7 +14,7 @@ export class InfoPageToggler{
     if(this.toggled)
     {
       if(!this.info_description){
-        this.info_description = new Description(()=>null,[]);
+        this.info_description={descriptionData:()=>null,options:[],fixed_options:[null,null,null,null,null]};
         /** debug */ this.info_description.fixed_options[0]={
           text: "return",
           action:()=>this.toggle(),

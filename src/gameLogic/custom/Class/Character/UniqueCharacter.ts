@@ -30,8 +30,8 @@ export abstract class UniqueCharacter extends Character implements storeable {
   {
     return this.character_battle_class.upgrade_tree(this.masterService).get_children(path);
   }
-  emit_stat_up():void { this.masterService.descriptionHandler.headDescription(new Description(()=>this,[]),'stat-up') }
-  emit_perk_up():void { this.masterService.descriptionHandler.headDescription(new Description(()=>this,[]),'perk-tree');}
+  emit_stat_up():void { this.masterService.descriptionHandler.headDescription({descriptionData:()=>this,options:[],fixed_options:[null,null,null,null,null]},'stat-up') }
+  emit_perk_up():void { this.masterService.descriptionHandler.headDescription({descriptionData:()=>this,options:[],fixed_options:[null,null,null,null,null]},'perk-tree');}
   emit_level_up():void{ this.emit_perk_up();this.emit_stat_up(); }
   total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
   current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }

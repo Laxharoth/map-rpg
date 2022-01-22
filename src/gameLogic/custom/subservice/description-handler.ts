@@ -65,7 +65,7 @@ export class DescriptionHandlerService {
    */
   headDescription(description:Description|Description[],gameState:game_state):DescriptionHandlerService{
     this.gameStateHandler.gameState = gameState;
-    if(description instanceof Description)description = [description]
+    if(!(description instanceof Array))description = [description]
     this.addDescriptionListWithGameState(gameState);
     this._descriptionList[gameState].insertHead(...description);
     return this
@@ -80,7 +80,7 @@ export class DescriptionHandlerService {
    */
   afterHeadDescription(description:Description|Description[],gameState:game_state):DescriptionHandlerService{
     this.gameStateHandler.gameState = gameState;
-    if(description instanceof Description)description = [description]
+    if(!(description instanceof Array))description = [description]
     this.addDescriptionListWithGameState(gameState);
     this._descriptionList[gameState].insertBefore(1,...description);
     return this
@@ -95,7 +95,7 @@ export class DescriptionHandlerService {
    */
   tailDescription(description:Description|Description[],gameState:game_state):DescriptionHandlerService{
     this.gameStateHandler.gameState = gameState;
-    if(description instanceof Description)description = [description]
+    if(!(description instanceof Array))description = [description]
     this.addDescriptionListWithGameState(gameState);
     this._descriptionList[gameState].insertTail(...description);
     return this

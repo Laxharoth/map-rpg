@@ -30,15 +30,12 @@ export function room(roomName: string): roomFunction {
       disabled:false
     };
     //with input and select
-    const furtherDescription = new Description(function () {
+    const furtherDescription:Description = {
+      descriptionData: function () {
       return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing` +
-        //without input with select
-        //const furtherDescription = new Description(function(){return `There is to do. Except to select \\select["cat","dog"]\\ but does nothing`+
-        //with input without select
-        //const furtherDescription = new Description(function(){return `There is \\input{"placeholder":"nothing"}\\ to do. Except to select but does nothing\n\n`+
         `${($flag('pet'))?`\n\nOMG there is a ${$flag('pet')}`:``}` +
         `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
-    }, [nextOptionInputs])
+    },options: [nextOptionInputs],fixed_options:[null,null,null,null,null]}
     const roomOptions = [
       {
         text:'option1',
@@ -132,23 +129,37 @@ export function room(roomName: string): roomFunction {
       )
     }
     if (roomName === 'room20') {
-      const flyDescription1 = new Description(function () {
-        return `AAAAAAAAh`
-      }, [nextoption])
-      const flyDescription2 = new Description(function () {
-        return `I can see the place where I started`
-      }, [nextoption])
-      const flyDescription3 = new Description(function () {
-        return `That was something`
-      }, [nextoption])
-      const cannonDescription = new Description(function () {
+      const flyDescription1: Description = {
+        descriptionData: function () {
+          return `AAAAAAAAh`
+        },
+        options: [nextoption],
+        fixed_options: [null, null, null, null, null]
+      }
+      const flyDescription2: Description = {
+        descriptionData: function () {
+          return `I can see the place where I started`
+        },
+        options: [nextoption],
+        fixed_options: [null, null, null, null, null]
+      }
+      const flyDescription3: Description = {
+        descriptionData: function () {
+          return `That was something`
+        },
+        options: [nextoption],
+        fixed_options: [null, null, null, null, null]
+      }
+      const cannonDescription:Description = {
+        descriptionData: function () {
         return `Dafuk there is a cannon here.\n enter the cannon?`;
-      }, [yesOption(() => {
-        masterService.descriptionHandler.nextDescription();
-        masterService.descriptionHandler.tailDescription([flyDescription1, flyDescription2, flyDescription3], 'map');
-        masterService.mapHandler.loadRoom('room1');
-        masterService.timeHandler.addTime('30m');
-      }), noOption])
+        }, options: [yesOption(() => {
+          masterService.descriptionHandler.nextDescription();
+          masterService.descriptionHandler.tailDescription([flyDescription1, flyDescription2, flyDescription3], 'map');
+          masterService.mapHandler.loadRoom('room1');
+          masterService.timeHandler.addTime('30m');
+        }), noOption], fixed_options: [null, null, null, null, null]
+        }
       roomOptions.splice(2, 0, {
         text:'Cannon',
         action:()=>{
@@ -158,25 +169,26 @@ export function room(roomName: string): roomFunction {
         disabled:false
       })
     }
-    const fistEnter = new Description(function () {
+    const fistEnter:Description = {descriptionData: function () {
       return `It's the first time`
-    }, [nextoption]);
-    const roomDescription = new Description(function () {
+    }, options:[nextoption],fixed_options: [null, null, null, null, null]};
+    const roomDescription:Description = {
+      descriptionData: function () {
       return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
-    }, roomOptions)
+    }, options:roomOptions,fixed_options:[null,null,null,null,null]}
     roomDescription.fixed_options[0] = DescriptionSelectItemFromMap(masterService)
     roomDescription.fixed_options[1] = {
       text:'info',
       action:()=>{masterService.InfoPageToggler.toggle()},
       disabled:false
     }
-    const firstExit = new Description(function () {
+    const firstExit:Description = {descriptionData:function () {
       return `It was the first time`
-    }, [nextoption]);
-    const kickCanDescription = new Description(function () {
+    }, options:[nextoption],fixed_options:[null,null,null,null,null]};
+    const kickCanDescription:Description = {descriptionData:function () {
       return `You kick the can, it's fun.
-  The can flew away`
-    }, [nextoption])
+  The can flew awa}`
+    }, options:[nextoption],fixed_options:[null,null,null,null,null]};
 
     const room = new Room({
       onEnter: () => {

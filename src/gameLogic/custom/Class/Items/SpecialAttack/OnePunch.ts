@@ -24,5 +24,11 @@ export class OnePunch extends SpecialAttack
   /// SPECIAL DESCRIPTION
   ////////////////////
   private specialDescriptionOptions = { text:'NEXT!!',action:()=>{this.masterService.descriptionHandler.nextDescription(false)},disabled: false }
-  private specialDescription =(user:Character,target:Character)=> new Description(()=>`${user.name.toUpperCase()} OHKO ${target.name}!`,[this.specialDescriptionOptions])
+  private specialDescription(user: Character, target: Character):Description{
+    return {
+      descriptionData: () => `${user.name.toUpperCase()} OHKO ${target.name}!`,
+      options: [this.specialDescriptionOptions],
+      fixed_options: [null, null, null, null, null]
+    }
+  }
 }

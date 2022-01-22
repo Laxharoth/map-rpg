@@ -29,5 +29,7 @@ import { Description, DescriptionOptions } from "./Description";
      while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3) targetsOptions.push(null);
      targetsOptions.push(returnOption)
    }
-   return new Description(()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,targetsOptions)
+   return {
+     descriptionData:()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
+     options:targetsOptions,fixed_options:[null,null,null,null,null]}
  }

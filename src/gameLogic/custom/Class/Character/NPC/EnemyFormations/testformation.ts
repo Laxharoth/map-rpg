@@ -5,10 +5,10 @@ import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFo
 import { enemyTest } from "src/gameLogic/custom/Class/Character/NPC/enemyTest";
 import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
-import { ItemTest } from 'src/gameLogic/custom/Class/Items/ItemTest';
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { Enemy } from '../../Enemy/Enemy';
-import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { ItemFactory, item_factory_function } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { Factory } from 'src/gameLogic/core/Factory/Factory';
 
 export class testformation extends EnemyFormation
 {
@@ -54,7 +54,7 @@ export class testformation extends EnemyFormation
   private enemyVictory(party: Character[]): Description {
     party.forEach(char=>{char.healHitPoints(Infinity)})
       const options = [this.exitOption('next')]
-      return new Description(()=>`Enemy won`, options)
+      return {descriptionData:()=>`Enemy won`, options,fixed_options:[null,null,null,null,null]}
   }
   //////////////////////////
   // Party Victory
@@ -62,6 +62,6 @@ export class testformation extends EnemyFormation
   private partyVictory(party: Character[]): Description {
     party.forEach(char=>{char.healHitPoints(10)})
       const options = [this.exitOption('next')]
-      return new Description(()=>`Party won`, options)
+      return {descriptionData:()=>`Party won`, options,fixed_options:[null,null,null,null,null]}
   }
 }

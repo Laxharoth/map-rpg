@@ -6,7 +6,7 @@ import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
 export function SetShopDescription(masterService:MasterService,shop:Shop):void
 {
   const options:DescriptionOptions[] = getShopOptions();
-  const description = new Description(()=>shop,options);
+  const description:Description = {descriptionData:()=>shop,options,fixed_options:[null,null,null,null,null]};
 
   masterService.descriptionHandler
     .headDescription(description,'shop')

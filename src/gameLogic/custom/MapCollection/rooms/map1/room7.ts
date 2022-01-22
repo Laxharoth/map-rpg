@@ -3,11 +3,10 @@ import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
 import { DescriptionSelectItemFromMap, drop_item, nextOption } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
-import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
-import { ItemTest } from "src/gameLogic/custom/Class/Items/ItemTest";
 import { Room } from "src/gameLogic/custom/Class/maps/room";
 import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
@@ -16,6 +15,7 @@ import { Battle } from 'src/gameLogic/custom/Class/Battle/Battle';
 import { Factory } from 'src/gameLogic/core/Factory/Factory';
 import { Shield, ShieldNoShield } from 'src/gameLogic/custom/Class/Equipment/Shield';
 import { ArmorNoArmor, Armor } from 'src/gameLogic/custom/Class/Equipment/Armor';
+import { item_factory_function } from 'src/gameLogic/custom/Factory/ItemFactory';
 
 export function room(masterService:MasterService):Room
 {
@@ -130,11 +130,14 @@ export function room(masterService:MasterService):Room
     DescriptionSelectItemFromMap(masterService),
     {text:"option3",action:()=>{},disabled:false}
   ]
-  const roomDescription  = new Description(function(){return `This actually looks the same`},roomOptions)
-  const cantGoThere      = new Description(function(){return `I didn't wanted to go there anyway`},[my_nextOption]);
-  const cantGoThereYet   = new Description(function(){return `I didn't wanted to go there yet anyway`},[my_nextOption]);
-  const goBackThere      = new Description(function(){return `Guess I will go back`},[my_nextOption]);
-  const goBackThere2     = new Description(function(){return `little choices i have`},[my_nextOption]);
+  const fixed_options:[null, null, null, null, null] = [null, null,null,null,null]
+  const [roomDescription, cantGoThere, cantGoThereYet, goBackThere, goBackThere2]:Description[]=[
+    {descriptionData:function(){return `This actually looks the same`},options:roomOptions,fixed_options},
+    {descriptionData:function(){return `I didn't wanted to go there anyway`},options:[my_nextOption],fixed_options},
+    {descriptionData:function(){return `I didn't wanted to go there yet anyway`},options:[my_nextOption],fixed_options},
+    {descriptionData:function(){return `Guess I will go back`},options:[my_nextOption],fixed_options},
+    {descriptionData:function(){return `little choices i have`},options:[my_nextOption],fixed_options},
+  ]
   const room = new Room({
     onEnter  : () => {
       masterService.descriptionHandler.tailDescription(roomDescription,'map')

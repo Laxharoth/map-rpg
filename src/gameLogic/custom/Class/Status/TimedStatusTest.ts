@@ -5,6 +5,7 @@ import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Desc
 import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { nextOption } from '../Descriptions/CommonOptions';
 
 export class TimedStatusTest extends TimedStatus
 {
@@ -23,10 +24,12 @@ export class TimedStatusTest extends TimedStatus
   /////////////////////////////////
   //// TEST DESCRIPTION
   /////////////////////////////////
-  private nextButton:DescriptionOptions =  {
-    text: "next",
-    action:()=>{ this.masterService.descriptionHandler.nextDescription()},
-    disabled:false,
+  private nextButton:DescriptionOptions =  nextOption(this.masterService)
+  private nextDescription(target: Character): Description {
+    return {
+      descriptionData: () => `Remove Test Description from  ${target.name}`,
+      options: [this.nextButton],
+      fixed_options: [null, null, null, null, null]
+    }
   }
-  private nextDescription = (target: Character)=> new Description(()=>`Remove Test Description from  ${target.name}`,[this.nextButton])
 }

@@ -4,20 +4,15 @@ import { descriptable } from "../GameElementDescription/GameElementDescription";
  * A Representation of what the game will displayed (text and options)
  *
  * @export
- * @class Description
+ * @interface Description
  * @constructor Initializes the text function and options.
  */
 type fixed_option = DescriptionOptions|null
-export class Description
+export interface Description
 {
   descriptionData:() => any;
   options: DescriptionOptions[];
-  fixed_options: [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option] = [null, null, null, null, null];
-  constructor(descriptionData:()=>any,options:DescriptionOptions[])
-  {
-    this.descriptionData = descriptionData;
-    this.options = options;
-  }
+  fixed_options: [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
 }
 export type descriptionData=() => any;
 export type descriptionString=() => string;

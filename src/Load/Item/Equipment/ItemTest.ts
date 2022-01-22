@@ -2,6 +2,7 @@ import { register_function } from "src/gameLogic/core/Factory/Register_Module/Re
 import { damageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { armorname, itemname, meleename, rangedname, shieldname } from "src/gameLogic/custom/Class/Items/Item.type";
 
 const register:register_function = ({game_item}, {game_item:{MeleeWeapon,RangedWeapon,Shield,Armor,GameItem} },Factory)=>{
@@ -27,9 +28,15 @@ const register:register_function = ({game_item}, {game_item:{MeleeWeapon,RangedW
     }
 
     //Description
-    private itemEffectDescription(target:Character, healHitPoints:number)
+    private itemEffectDescription(target:Character, healHitPoints:number):Description
     {
-      return new Factory.Description(function(){return `Heal ${target.name} ${healHitPoints}`},[Factory.options.nextOption(this.masterService)])
+      return {
+        descriptionData: function () {
+          return `Heal ${target.name} ${healHitPoints}`
+        },
+        options: [Factory.options.nextOption(this.masterService)],
+        fixed_options: [null, null, null, null, null]
+      }
     }
   }
   class MeleeTest extends MeleeWeapon

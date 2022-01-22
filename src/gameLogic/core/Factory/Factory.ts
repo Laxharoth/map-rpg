@@ -10,7 +10,6 @@ export function Factory(masterService:MasterService,options:StoreableType)
 { return factoryMap[options.Factory](masterService,options) }
 Factory.randomCheck=randomCheck;
 Factory.pushBattleActionOutput=pushBattleActionOutput;
-Factory.Description = Description;
 enum options_names_enum {
   nextOption="nextOption",
 }
@@ -25,6 +24,5 @@ export interface storeable {
 interface global_functions{
   randomCheck:typeof randomCheck;
   pushBattleActionOutput:typeof pushBattleActionOutput;
-  Description:typeof Description;
   options:{[key in options_names_enum]:(masterService:MasterService,...args:any[])=>DescriptionOptions};
 }

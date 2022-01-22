@@ -41,9 +41,12 @@ export const AddExceedItem = function () {
       dropping = true;
       //Option to drop the marked item
       const ExceedItemOptions: DescriptionOptions[] = [{text:"next",action:()=>drop_exess_items(),disabled:false}];
-      const ExceedItemDescription: Description = new Description(
-        () => [dropable_inventory,dropable_item], ExceedItemOptions
-      )
+      const ExceedItemDescription: Description = {
+        descriptionData:() => [dropable_inventory,dropable_item],
+        options:ExceedItemOptions,
+        fixed_options:[null,null,null,null,null]
+      };
+
       masterService.descriptionHandler.tailDescription(ExceedItemDescription,'excess-item');
     }
     masterService.descriptionHandler.setDescription(false)

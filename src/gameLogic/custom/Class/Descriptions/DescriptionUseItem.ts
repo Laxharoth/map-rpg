@@ -40,7 +40,9 @@ export function selectItem(
       descriptable: item
     })
   }
-  const use_item_description = new Description(()=>`${items.map(item=>item.name).join('\n')}`,options);
+  const use_item_description:Description = {
+    descriptionData:()=>`${items.map(item=>item.name).join('\n')}`,
+    options,fixed_options:[null,null,null,null,null]};
   use_item_description.fixed_options[4] = returnOption;
   return use_item_description
 }
