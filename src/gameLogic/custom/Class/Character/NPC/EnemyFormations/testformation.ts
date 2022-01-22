@@ -43,7 +43,7 @@ export class testformation extends EnemyFormation
   }
   loot():GameItem[]
   {
-    const Item = new ItemTest(this.masterService);
+    const Item = (Factory as item_factory_function)(this.masterService,{Factory:"Item",type:"item-test"})
     Item.amount = randomBetween(1,4);
     const weapon = ItemFactory(this.masterService,{ Factory:'Item',type:'Melee test'})
     return [Item,weapon];

@@ -108,7 +108,7 @@ export function room(masterService:MasterService):Room
     {
       text:"Add Test Item",
       action:function(){
-        const item = new ItemTest(masterService);
+        const item = (Factory as item_factory_function)(masterService,{Factory:"Item",type:"item-test"})
         item.amount = 9;
         user.inventory.addItem(item);
       },
