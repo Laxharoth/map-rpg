@@ -23,9 +23,17 @@ export class StatusParalisis extends StatusBattle {
       case 7: this.DURATION=3; break;
     }
     if(this.DURATION)
-      return pushBattleActionOutput(super.onStatusGainded(target),[[new Description(()=>`${target.name} has been paralized.`,[nextOption(this.masterService)])],[]]);
-    else
-      return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} resisted the paralisis.`]]);
+    {
+      return pushBattleActionOutput(super.onStatusGainded(target), [
+            [{
+              descriptionData: () => `${target.name} has been paralized.`,
+              options: [nextOption(this.masterService)],
+              fixed_options: [null, null, null, null, null]
+            }],
+            []
+          ])
+    }
+    return pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} resisted the paralisis.`]]);
   }
   onStatusRemoved(target: Character): ActionOutput
   { return pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger paralized.`]]); }
