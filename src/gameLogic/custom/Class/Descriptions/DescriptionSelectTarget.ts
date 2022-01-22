@@ -17,7 +17,7 @@ import { Description, DescriptionOptions } from "./Description";
    const returnOption = nextOption(masterService,'return');
    for(const target of targets)
    {
-     targetsOptions.push(new DescriptionOptions(target.name,()=>{ playerAction([target]) }))
+     targetsOptions.push({text:target.name,action:()=>{ playerAction([target]) },disabled:false})
    }
    if(targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE)
    {

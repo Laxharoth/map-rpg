@@ -50,16 +50,21 @@ export class SelectPerkGuiComponent implements OnInit {
   private _option_select:DescriptionOptions;
   get option_select():DescriptionOptions
   {
-    if(!this._option_select)this._option_select = new DescriptionOptions('select',()=>{
-      const new_selected = this.selected_path.slice(this.fixed_path.length,-1)
-      for(const selected of new_selected)
-      {
-        this.character.upgrade(selected)
-        if(this.character.level_stats.perk_point===0)break;
+    if (!this._option_select)
+      this._option_select = {
+        text: 'select',
+        action: () => {
+          const new_selected = this.selected_path.slice(this.fixed_path.length, -1)
+          for (const selected of new_selected) {
+            this.character.upgrade(selected)
+            if (this.character.level_stats.perk_point === 0) break;
+          }
+          this.masterService.descriptionHandler.nextDescription(false);
+        },
+        get disabled() {
+          return !compare_array(this.fixed_path, this.selected_path.slice(0, this.fixed_path.length))
+        }
       }
-      this.masterService.descriptionHandler.nextDescription(false);
-    },
-    ()=>!compare_array(this.fixed_path,this.selected_path.slice(0,this.fixed_path.length)))
     return this._option_select;
   }
   private _option_skip:DescriptionOptions;
@@ -71,9 +76,13 @@ export class SelectPerkGuiComponent implements OnInit {
   private _option_reset:DescriptionOptions
   get option_reset():DescriptionOptions
   {
-    if(!this._option_reset)this._option_reset = new DescriptionOptions('reset',()=>{
-      this.selected_path = [...this.fixed_path]
-    })
+    if (!this._option_reset) this._option_reset = {
+      text: 'reset',
+      action: () => {
+        this.selected_path = [...this.fixed_path]
+      },
+      disabled: false
+    }
     return this._option_reset;
   }
   private initialize_description(description:Description)

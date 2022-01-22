@@ -17,24 +17,28 @@ export function selectItem(
   is_valid_target:valid_target_function,
   is_item_disabled:is_item_disabled_function):Description
 {
-  const options:DescriptionOptions[]=[]
+  const options:(DescriptionOptions|DescriptableDescriptionOptions)[]=[]
   const returnOption = nextOption(masterService,'return')
   for(const item of items)
   {
     const option_targets = discriminate_targets(item,targets,is_valid_target)
     const option_action = (target: Character[])=>{ action(item,target); }
-    options.push(new DescriptableDescriptionOptions(item.name,item,()=>
-    {
-      if(item.isSingleTarget && option_targets.length>1)
+    options.push({
+      text:item.name,
+      action:()=>
       {
-        masterService.descriptionHandler
-          .headDescription(selectTarget(masterService,option_targets,option_action),game_state)
-          .setDescription(false)
-        return;
-      }
-      option_action(option_targets);
-    },is_item_disabled(action_source,item))
-    )
+        if(item.isSingleTarget && option_targets.length>1)
+        {
+          masterService.descriptionHandler
+            .headDescription(selectTarget(masterService,option_targets,option_action),game_state)
+            .setDescription(false)
+          return;
+        }
+        option_action(option_targets);
+      },
+      get disabled(){return is_item_disabled(action_source,item)},
+      descriptable: item
+    })
   }
   const use_item_description = new Description(()=>`${items.map(item=>item.name).join('\n')}`,options);
   use_item_description.fixed_options[4] = returnOption;

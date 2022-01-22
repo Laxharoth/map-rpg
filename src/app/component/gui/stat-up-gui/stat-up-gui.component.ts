@@ -34,13 +34,16 @@ export class StatUpGuiComponent implements OnInit {
   private _option_select:DescriptionOptions;
   get option_select():DescriptionOptions
   {
-    if(!this._option_select)this._option_select = new DescriptionOptions('select',()=>{
-      this.character.core_stats = {...this.core_stats}
-      this.character.level_stats.upgrade_point  = this.upgrade_points;
-      this.character.calculateStats();
-      this.masterService.descriptionHandler.nextDescription(false);
-    },
-    ()=>false)
+    if(!this._option_select)this._option_select = {
+      text:'select',
+      action(){
+        this.character.core_stats = {...this.core_stats}
+        this.character.level_stats.upgrade_point  = this.upgrade_points;
+        this.character.calculateStats();
+        this.masterService.descriptionHandler.nextDescription(false);
+      },
+      get disabled(){return false}
+    }
     return this._option_select;
   }
   private _option_skip:DescriptionOptions;
@@ -52,10 +55,10 @@ export class StatUpGuiComponent implements OnInit {
   private _option_reset:DescriptionOptions
   get option_reset():DescriptionOptions
   {
-    if(!this._option_reset)this._option_reset = new DescriptionOptions('reset',()=>{
+    if(!this._option_reset)this._option_reset = {text:'reset',action:()=>{
       this.core_stats = {...this.character.core_stats}
       this.upgrade_points  = this.character.level_stats.upgrade_point;
-    })
+    },disabled:false}
     return this._option_reset;
   }
   private initialize_description(description:Description)

@@ -23,6 +23,10 @@ export class TimedStatusTest extends TimedStatus
   /////////////////////////////////
   //// TEST DESCRIPTION
   /////////////////////////////////
-  private nextButton:DescriptionOptions =  new DescriptionOptions( "next",()=>{ this.masterService.descriptionHandler.nextDescription(); });
+  private nextButton:DescriptionOptions =  {
+    text: "next",
+    action:()=>{ this.masterService.descriptionHandler.nextDescription()},
+    disabled:false,
+  }
   private nextDescription = (target: Character)=> new Description(()=>`Remove Test Description from  ${target.name}`,[this.nextButton])
 }

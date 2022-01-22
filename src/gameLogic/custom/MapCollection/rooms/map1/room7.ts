@@ -2,7 +2,7 @@ import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
-import { DescriptionSelectItemFromMap, drop_item } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
+import { DescriptionSelectItemFromMap, drop_item, nextOption } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
@@ -23,101 +23,118 @@ export function room(masterService:MasterService):Room
   let dynamicShop:DynamicShop = null;
   const $flag = (name:flagname) => masterService.flagsHandler.getFlag(name);
   const user = masterService.partyHandler.user;
-  const equipMelee = new DescriptionOptions(user.character_equipment.meleeWeapon instanceof MeleeUnharmed?'Equip Melee':"Unequip",function(){
-    if(user.character_equipment.meleeWeapon instanceof MeleeUnharmed)
-    {
-      const melee = user.inventory.items.find(item=>item instanceof MeleeWeapon)
-      user.useItem(melee,[user]).excecute();
-      this.text='Unequip'
-    }
-    else
-    {
-      user.unequipMelee();
-      this.text='Equip Melee'
-    }
-    console.log(user)
-  },user.inventory.items.every(item=>!(item instanceof MeleeWeapon)))
-  const equipRanged = new DescriptionOptions(user.character_equipment.rangedWeapon instanceof RangedUnharmed?'Equip ranged':"Unequip",function(){
-    if(user.character_equipment.rangedWeapon instanceof RangedUnharmed)
-    {
-      const ranged = user.inventory.items.find(item=>item instanceof RangedWeapon)
-      user.useItem(ranged,[user]).excecute();
-      this.text='Unequip'
-    }
-    else
-    {
-      user.unequipRanged();
-      this.text='Equip ranged'
-    }
-    console.log(user)
-  },user.inventory.items.every(item=>!(item instanceof RangedWeapon)))
-  const equipShield = new DescriptionOptions(user.character_equipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip",function(){
-    if(user.character_equipment.shield instanceof ShieldNoShield)
-    {
-      const shield = user.inventory.items.find(item=>item instanceof Shield)
-      user.useItem(shield,[user]).excecute();
-      this.text='Unequip'
-    }
-    else
-    {
-      user.unequipShield();
-      this.text='Equip Shield'
-    }
-    console.log(user)
-  },user.inventory.items.every(item=>!(item instanceof Shield)))
-  const equipArmor = new DescriptionOptions(user.character_equipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip",function(){
-    if(user.character_equipment.armor instanceof ArmorNoArmor)
-    {
-      const armor = user.inventory.items.find(item=>item instanceof Armor)
-      user.useItem(armor,[user]).excecute();
-      this.text='Unequip'
-    }
-    else
-    {
-      user.unequipArmor();
-      this.text='Equip Armor'
-    }
-    console.log(user)
-  },user.inventory.items.every(item=>!(item instanceof Armor)))
-  const nextOption      = new DescriptionOptions("next",function(){masterService.descriptionHandler.nextDescription()});
+  const equipMelee = {
+    get text(){return user.character_equipment.shield instanceof MeleeUnharmed?'Equip Shield':"Unequip"},
+    action:function(){
+      if(user.character_equipment.armor instanceof MeleeUnharmed)
+      {
+        const armor = user.inventory.items.find(item=>item instanceof MeleeWeapon)
+        user.useItem(armor,[user]).excecute();
+      }
+      else
+      {
+        user.unequipShield();
+      }
+      console.log(user)
+    },
+    get disabled(){return !( user.character_equipment.armor instanceof MeleeUnharmed || user.inventory.items.some(item=>!(item instanceof MeleeWeapon)))}
+  }
+  const equipRanged = {
+    get text(){return user.character_equipment.shield instanceof RangedUnharmed?'Equip Shield':"Unequip"},
+    action:function(){
+      if(user.character_equipment.armor instanceof RangedUnharmed)
+      {
+        const armor = user.inventory.items.find(item=>item instanceof RangedWeapon)
+        user.useItem(armor,[user]).excecute();
+      }
+      else
+      {
+        user.unequipShield();
+      }
+      console.log(user)
+    },
+    get disabled(){return !( user.character_equipment.armor instanceof RangedUnharmed || user.inventory.items.some(item=>!(item instanceof RangedWeapon)))}
+  }
+  const equipShield = {
+    get text(){return user.character_equipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip"},
+    action:function(){
+      if(user.character_equipment.armor instanceof ShieldNoShield)
+      {
+        const armor = user.inventory.items.find(item=>item instanceof Shield)
+        user.useItem(armor,[user]).excecute();
+      }
+      else
+      {
+        user.unequipShield();
+      }
+      console.log(user)
+    },
+    get disabled(){return !( user.character_equipment.armor instanceof ShieldNoShield || user.inventory.items.some(item=>!(item instanceof Shield)))}
+  }
+  const equipArmor = {
+    get text(){return user.character_equipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip"},
+    action:function(){
+      if(user.character_equipment.armor instanceof ArmorNoArmor)
+      {
+        const armor = user.inventory.items.find(item=>item instanceof Armor)
+        user.useItem(armor,[user]).excecute();
+      }
+      else
+      {
+        user.unequipArmor();
+      }
+      console.log(user)
+    },
+    get disabled(){return !( user.character_equipment.armor instanceof ArmorNoArmor || user.inventory.items.some(item=>!(item instanceof Armor)))}
+  }
+  const my_nextOption      = nextOption(masterService)
   const roomOptions =[
-    new DescriptionOptions("Shop",makeShop),
-    new DescriptionOptions("Dynamic Shop",makeDynamicShop),
-    new DescriptionOptions("test battle",()=>new Battle(masterService, new testformation(masterService)).startRound()),
-    new DescriptionOptions("Add perk point",()=>{
+    {text:"Shop",action:makeShop,disabled:false},
+    {text:"Shop",action:makeDynamicShop,disabled:false},
+    {text:"test battle",action:()=>new Battle(masterService, new testformation(masterService)).startRound(),disabled:false},
+    {text:"Add perk point",action:()=>{
       user.level_stats.perk_point=4;
       user.emit_perk_up();
-    }),
-    new DescriptionOptions("Add stats point",()=>{
+    },disabled:false},
+    {text:"Add stats point",action:()=>{
       user.level_stats.level=4;
       user.level_stats.upgrade_point=4;
       user.emit_stat_up();
-    }),
+    },disabled:false},
     equipMelee,
     equipRanged,
     equipShield,
     equipArmor,
-    new DescriptionOptions("Add Test Item",function(){
-      const item = new ItemTest(masterService);
-      item.amount = 9;
-      user.inventory.addItem(item);
-    }),
+    {
+      text:"Add Test Item",
+      action:function(){
+        const item = new ItemTest(masterService);
+        item.amount = 9;
+        user.inventory.addItem(item);
+      },
+      disabled:false
+    }
+    ,
     drop_item(masterService,user),
-    new DescriptionOptions("level up perk",function(){
-      const perk = (user.getPerk('Perk Upgrade'));
-      if(!perk) user.addPerk(Factory(masterService,{Factory:"Perk",type:"PerkUpgradeable"}));
-      else
-        //@ts-ignore
-        perk.level++;
-    }),
+    {
+      text:"level up perk",
+      action:function(){
+        const perk = (user.getPerk('Perk Upgrade'));
+        if(!perk) user.addPerk(Factory(masterService,{Factory:"Perk",type:"PerkUpgradeable"}));
+        else
+          //@ts-ignore
+          perk.level++;
+      },
+      disabled:false
+    },
     DescriptionSelectItemFromMap(masterService),
-    new DescriptionOptions("option3",function(){})
+    {text:"option3",action:()=>{},disabled:false}
   ]
   const roomDescription  = new Description(function(){return `This actually looks the same`},roomOptions)
-  const cantGoThere      = new Description(function(){return `I didn't wanted to go there anyway`},[nextOption]);
-  const cantGoThereYet   = new Description(function(){return `I didn't wanted to go there yet anyway`},[nextOption]);
-  const goBackThere      = new Description(function(){return `Guess I will go back`},[nextOption]);
-  const goBackThere2     = new Description(function(){return `little choices i have`},[nextOption]);
+  const cantGoThere      = new Description(function(){return `I didn't wanted to go there anyway`},[my_nextOption]);
+  const cantGoThereYet   = new Description(function(){return `I didn't wanted to go there yet anyway`},[my_nextOption]);
+  const goBackThere      = new Description(function(){return `Guess I will go back`},[my_nextOption]);
+  const goBackThere2     = new Description(function(){return `little choices i have`},[my_nextOption]);
   const room = new Room({
     onEnter  : () => {
       masterService.descriptionHandler.tailDescription(roomDescription,'map')

@@ -40,7 +40,7 @@ export const AddExceedItem = function () {
     {
       dropping = true;
       //Option to drop the marked item
-      const ExceedItemOptions: DescriptionOptions[] = [new DescriptionOptions("next",()=>drop_exess_items())];
+      const ExceedItemOptions: DescriptionOptions[] = [{text:"next",action:()=>drop_exess_items(),disabled:false}];
       const ExceedItemDescription: Description = new Description(
         () => [dropable_inventory,dropable_item], ExceedItemOptions
       )

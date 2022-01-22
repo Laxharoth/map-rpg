@@ -26,65 +26,30 @@ export type descriptionString=() => string;
  * A representation of the options (buttons) for a description.
  *
  * @export
- * @class DescriptionOptions
- * @constructor Initialized the text shown, the action to perform and if is disabled.
+ * @interface DescriptionOptions
  */
-export class DescriptionOptions
+export interface DescriptionOptions
 {
   /**
    * The text to display
    *
    * @type {string}
-   * @memberof DescriptionOptions
    */
   text  : string;
   /**
    * The action to perform.
    *
-   * @memberof DescriptionOptions
    */
   action: () => void;
   /**
    * If the button is disabled.
    *
-   * @private
-   * @memberof DescriptionOptions
    */
-  private _disabled: () => boolean;
-  constructor(text  : string,
-              action: () => void,
-              disabled: boolean|(() => boolean) = false)
-  {
-    this.text = text;
-    this.action = action;
-    this.disabled = disabled;
-  }
 
-  set disabled(val: boolean|(() => boolean))
-  {
-    if(typeof val === 'boolean')
-    {
-      this._disabled = () =>val;
-      return;
-    }
-    this._disabled = val;
-  }
-
-  get disabled():boolean
-  {
-    return this._disabled();
-  }
+  disabled: boolean
 }
 
-export class DescriptableDescriptionOptions extends DescriptionOptions
+export interface DescriptableDescriptionOptions extends DescriptionOptions
 {
   descriptable:descriptable;
-  constructor(text  : string,
-    descriptable:descriptable,
-    action: () => void,
-    disabled: boolean|(() => boolean) = false)
-  {
-    super(text, action, disabled)
-    this.descriptable = descriptable;
-  }
 }

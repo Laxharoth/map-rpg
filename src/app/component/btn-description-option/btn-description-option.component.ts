@@ -14,7 +14,7 @@ export class BtnDescriptionOptionComponent implements OnInit {
   }
 
   get is_descriptable(): boolean {
-    return this.option instanceof DescriptableDescriptionOptions;
+    return this.option&&(this.option as DescriptableDescriptionOptions).descriptable !== undefined;
   }
   get has_description(): boolean {
     if(this.is_descriptable) return this.descriptable.description.some(section => section.section_items.length)

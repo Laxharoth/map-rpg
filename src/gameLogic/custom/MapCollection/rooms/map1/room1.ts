@@ -16,26 +16,19 @@ export function room(roomName: string): roomFunction {
       return masterService.flagsHandler.getFlag(name)
     };
     const nextoption = nextOption(masterService)
-    const yesOption = (action: () => void) => new DescriptionOptions("Yes", function () {
-      action()
-    });
-    const noOption = new DescriptionOptions("No", function () {
-      masterService.descriptionHandler.nextDescription()
-    });
-    const nextOptionInputs = new DescriptionOptions("next", function () {
-      const {
-        input,
-        select
-      } = getInputs();
-      $flag('petshout', input);
-      if (input === '') {
-        $flag('petshout', null);
-      }
-      if (select) {
-        $flag('pet', select);
-      }
-      masterService.descriptionHandler.nextDescription(false)
-    });
+    const yesOption = (action: ()=>void)=>{return {text:"Yes",action:function(){ action()},disabled: false }}
+    const noOption = nextOption(masterService,"No")
+    const nextOptionInputs = {
+      text:"next",
+      action:function () {
+        const { input, select } = getInputs();
+        $flag('petshout', input);
+        if (input === '') { $flag('petshout', null); }
+        if (select) { $flag('pet', select); }
+        masterService.descriptionHandler.nextDescription(false)
+      },
+      disabled:false
+    };
     //with input and select
     const furtherDescription = new Description(function () {
       return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing` +
@@ -47,63 +40,96 @@ export function room(roomName: string): roomFunction {
         `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
     }, [nextOptionInputs])
     const roomOptions = [
-      new DescriptionOptions("option1", function () {
-        masterService.descriptionHandler.headDescription(furtherDescription, 'map');
-        masterService.descriptionHandler.setDescription(false);
-      }),
-      new DescriptionOptions("save", function () {
-        masterService.gameSaver.save("save1");
-      }),
-      new DescriptionOptions("option3", function () {}, true),
-      new DescriptionOptions("unlock 3", function () {
-        let index = 0;
-        let option = roomOptions[index];
-        while (option.text !== "option3" && index < roomOptions.length)
-          option = roomOptions[++index];
-        if (index < roomOptions.length) {
-          if (option.disabled) {
-            option.disabled = false;
-            this.text = "lock 3";
-            return;
+      {
+        text:'option1',
+        action:function () {
+          masterService.descriptionHandler.headDescription(furtherDescription, 'map');
+          masterService.descriptionHandler.setDescription(false);
+        },
+        disabled:false
+      },
+      {
+        text:'save',
+        action:()=>{masterService.gameSaver.save("save1");},
+        disabled:false
+      },
+      {
+        text:'option3',
+        action:()=>{},
+        disabled:true
+      },
+      {
+        text:'unlock 3',
+        action:()=>{
+          let index = 0;
+          let option = roomOptions[index];
+          while (option.text !== "option3" && index < roomOptions.length)
+            option = roomOptions[++index];
+          if (index < roomOptions.length) {
+            if (option.disabled) {
+              option.disabled = false;
+              this.text = "lock 3";
+              return;
+            }
+            option.disabled = true;
+            this.text = "unlock 3";
           }
-          option.disabled = true;
-          this.text = "unlock 3";
-        }
-      }),
-      new DescriptionOptions("add 1 hour", function () {
-        masterService.timeHandler.addTime("1h")
-      }),
-      (roomName === 'room24') ? new DescriptionOptions("Map2", function () {
-        masterService.mapHandler.loadRoom("room25")
-      }) : null,
-      new DescriptionOptions("add  20 exp",function () {
-        masterService.partyHandler.user.gain_experience(20);
-      }),
-      new DescriptionOptions("debug quest", function () {
-        const quest = QuestFactory(masterService,{
-          Factory: 'Quest',
-          type: "DefeatEnemyQuest",
-          enemies_defeated: 0
-        })
-        console.log("before:",masterService.QuestHolder)
-        masterService.QuestHolder.add(quest)
-        console.log("after:",masterService.QuestHolder)
-      }),
+        },
+        disabled:false
+      },
+      {
+        text:'add 1 hour',
+        action:()=>{masterService.timeHandler.addTime("1h")},
+        disabled:false
+      },
+      (roomName === 'room24') ?{
+        text:'Map2',
+        action:()=>{masterService.mapHandler.loadRoom("room25")},
+        disabled:false
+      }:null,
+      {
+        text:'add  20 exp',
+        action:()=>{masterService.partyHandler.user.gain_experience(20);},
+        disabled:false
+      },
+      {
+        text:'debug quest',
+        action:()=>{
+          const quest = QuestFactory(masterService,{
+            Factory: 'Quest',
+            type: "DefeatEnemyQuest",
+            enemies_defeated: 0
+          })
+          console.log("before:",masterService.QuestHolder)
+          masterService.QuestHolder.add(quest)
+          console.log("after:",masterService.QuestHolder)
+        },
+        disabled:false
+      },
       null,
-      new DescriptionOptions("add 1 month", function () {
-        masterService.timeHandler.addTime("1M")
-      }),
-      new DescriptionOptions("add 100 gold", function () {
-        masterService.partyHandler.user.gold += 100
-      }),
+      {
+        text:'add 1 month',
+        action:()=>{masterService.timeHandler.addTime("1M")},
+        disabled:false
+      },
+      {
+        text:'add 100 gold',
+        action:()=>{masterService.partyHandler.user.gold += 100},
+        disabled:false
+      },
     ]
     if ($flag("caninroom1")) {
-      roomOptions.splice(2, 0, new DescriptionOptions("kick can", function () {
-        masterService.descriptionHandler.headDescription(kickCanDescription, 'map');
-        masterService.descriptionHandler.setDescription();
-        $flag("caninroom1", false);
-        roomOptions.splice(2, 1);
-      }))
+      roomOptions.splice(2, 0, {
+          text:'kick can',
+          action:()=>{
+            masterService.descriptionHandler.headDescription(kickCanDescription, 'map');
+          masterService.descriptionHandler.setDescription();
+          $flag("caninroom1", false);
+          roomOptions.splice(2, 1);
+          },
+          disabled:false
+        }
+      )
     }
     if (roomName === 'room20') {
       const flyDescription1 = new Description(function () {
@@ -123,10 +149,14 @@ export function room(roomName: string): roomFunction {
         masterService.mapHandler.loadRoom('room1');
         masterService.timeHandler.addTime('30m');
       }), noOption])
-      roomOptions.splice(2, 0, new DescriptionOptions("Cannon", function () {
-        masterService.descriptionHandler.headDescription(cannonDescription, 'map');
-        masterService.descriptionHandler.setDescription();
-      }))
+      roomOptions.splice(2, 0, {
+        text:'Cannon',
+        action:()=>{
+          masterService.descriptionHandler.headDescription(cannonDescription, 'map');
+          masterService.descriptionHandler.setDescription();
+        },
+        disabled:false
+      })
     }
     const fistEnter = new Description(function () {
       return `It's the first time`
@@ -135,7 +165,11 @@ export function room(roomName: string): roomFunction {
       return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
     }, roomOptions)
     roomDescription.fixed_options[0] = DescriptionSelectItemFromMap(masterService)
-    roomDescription.fixed_options[1] = new DescriptionOptions('info',()=>masterService.InfoPageToggler.toggle());
+    roomDescription.fixed_options[1] = {
+      text:'info',
+      action:()=>{masterService.InfoPageToggler.toggle()},
+      disabled:false
+    }
     const firstExit = new Description(function () {
       return `It was the first time`
     }, [nextoption]);

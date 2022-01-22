@@ -6,7 +6,7 @@ export function room25(roomname: string)
 {
   return function(masterService:MasterService): Room
   {
-    const returnToMap1=new DescriptionOptions("Map1",function(){masterService.mapHandler.loadRoom("room24")})
+    const returnToMap1={text:"Map1",action:()=>{masterService.mapHandler.loadRoom("room24")},disabled:false}
     const roomDescription  = new Description(function () {return `Sign with ${roomname} written`},(roomname==='room25')?[returnToMap1]:[])
     return new Room({
       onEnter: function(){masterService.descriptionHandler.tailDescription(roomDescription,'map').nextDescription()},

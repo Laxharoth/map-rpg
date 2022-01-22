@@ -88,7 +88,7 @@ export class Battle {
   }
 
   roundMessage(roundStrings: string[]): Description {
-    const nextOption = new DescriptionOptions("next", () => this.startRound())
+    const nextOption = {text:"next", action:() => this.startRound(),disabled:false}
     return new Description(() => `${roundStrings.join("\n\n")}`, [nextOption])
   }
 
@@ -154,7 +154,9 @@ export class Battle {
   private endBattlePlayerWins() {
     this.master_service.partyHandler.battle_ended('victory')
     pushBattleActionOutput(this.enemy_formation.give_experience([this.player].concat(this.party)),[this.battleRoundDescription, this.battleRoundString])
-    const nextOption = new DescriptionOptions('next', () => {
+    const nextOption = {
+      text:'next',
+      action:() => {
       this.player.healHitPoints(10);
       this.master_service.descriptionHandler
         .tailDescription(this.enemy_formation.onPartyVictory([this.player].concat(this.party)), 'battle')
@@ -162,48 +164,47 @@ export class Battle {
       for (const item of this.enemy_formation.loot()) {
         this.player.inventory.addItem(item);
       }
-    })
+    }
+    ,disabled:false}
     return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
   }
   private endBattleEnemyWins() {
     this.master_service.partyHandler.battle_ended('lost')
-    const nextOption = new DescriptionOptions('next', () => {
+    const nextOption = {text:'next', action:() => {
       this.player.healHitPoints(this.player.energy_stats.hitpoints);
       this.master_service.descriptionHandler
         .tailDescription(this.enemy_formation.onEnemyVictory([this.player].concat(this.party)), 'battle')
         .nextDescription(false);
-    })
+    },disabled:false}
     return new Description(() => `${this.battleRoundString.join("\n\n")}`, [nextOption]);
   }
-  protected playerParalizedOption = new DescriptionOptions("Paralized", () => {
-    this.round(new EmptyCommand(this.player,[]))
-  })
-  protected attack_option = new DescriptionOptions("Attack", () => {
+  protected playerParalizedOption = {text:"Paralized", action:() => { this.round(new EmptyCommand(this.player,[])) },disabled:false}
+  protected attack_option ={text: "Attack",action: () => {
     const targets = get_undefeated_target(this.enemy_formation.enemies);
     const playerAction = this.player.Attack(targets);
     if (targets.length === 1) return this.round(playerAction);
     this.selectTarget(targets, playerAction);
-  });
-  protected shoot_option = new DescriptionOptions("Shoot ", () => {
+  },disabled:false};
+  protected shoot_option ={text: "Shoot ", action:() => {
     const targets = get_undefeated_target(this.enemy_formation.enemies);
     const playerAction = this.player.Shoot(targets);
     if (targets.length === 1)return this.round(playerAction);
     this.selectTarget(targets, playerAction)
-  });
-  protected special_option = new DescriptionOptions("Special", () => {
+  },disabled:false};
+  protected special_option={text:"Special", action:() => {
     this.selectItem([...this.player.specialAttacks]);
-  });
-  protected item_option = new DescriptionOptions("Item", () => {
+  },disabled:false};
+  protected item_option = {text:"Item", action:() => {
     this.selectItem(this.player.inventory.items);
-  });
-  protected defend_option = new DescriptionOptions("Defend", () => {
+  },disabled:false};
+  protected defend_option = {text:"Defend", action:() => {
     const playerAction = this.player.Defend([this.player]);
     this.round(playerAction);
-  });
-  protected auto_option = new DescriptionOptions("Auto", () => {
+  },disabled:false}
+  protected auto_option ={text:"Auto", action:() => {
     this.round(this.player.IA_Action());
-  });
-  protected escape_option = new DescriptionOptions("Escape", () => {
+  },disabled:false};
+  protected escape_option = {text:"Escape", action:() => {
     const [descriptionText, successfulEscaping] = this.enemy_formation.attemptEscape([this.player].concat(this.party))
     if (successfulEscaping) {
       this.master_service.partyHandler.battle_ended('escape')
@@ -217,7 +218,7 @@ export class Battle {
     const playerAction= new EmptyCommand(this.player,[])
     this.startRoundDescription.push(new Description(descriptionText, [nextOption(this.master_service)]))
     this.round(playerAction)
-  });
+  },disabled:false};
   protected initialize_battle_options(): DescriptionOptions[] {
     return [
       this.attack_option,

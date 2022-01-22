@@ -15,7 +15,11 @@ export class InfoPageToggler{
     {
       if(!this.info_description){
         this.info_description = new Description(()=>null,[]);
-        /** debug */ this.info_description.fixed_options[0]=new DescriptionOptions('return',()=>this.toggle())
+        /** debug */ this.info_description.fixed_options[0]={
+          text: "return",
+          action:()=>this.toggle(),
+          disabled:false,
+        }
       }
       this.description_handler.headDescription(this.info_description,'info').setDescription(false)
       return;

@@ -65,14 +65,24 @@ export class DescriptionOptionsComponent implements OnInit {
     aux_currentOptions.push(...MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-aux_currentOptions.length,null))
     this.currentOptions = aux_currentOptions;
   }
-  prevOptions = new DescriptionOptions("<<<",()=>{
-    if(this.isFirst())return;
-    this.offset-=MAXOPTIONSNUMBERPERPAGE;
-    this.setCurrentOptions();
-  }, ()=>this.isFirst())
-  nextOptions = new DescriptionOptions(">>>",()=>{
-    if(this.isLast())return;
+  prevOptions = {
+    text: "<<<",
+    action: () => {
+      if (this.isFirst()) return;
+      this.offset -= MAXOPTIONSNUMBERPERPAGE;
+      this.setCurrentOptions();
+    },
+    _disabled: () => this.isFirst(),
+    get disabled(){return this._disabled()}
+  }
+  nextOptions = {
+    text: ">>>",
+    action: () => {
+      if(this.isLast())return;
     this.offset+=MAXOPTIONSNUMBERPERPAGE;
     this.setCurrentOptions();
-  },()=>this.isLast())
+    },
+    _disabled: () => this.isLast(),
+    get disabled(){return this._disabled()}
+  }
 }

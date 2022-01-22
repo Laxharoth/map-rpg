@@ -22,9 +22,13 @@ export function SetShopDescription(masterService:MasterService,shop:Shop):void
   function checkoutButton():DescriptionOptions
   {
     const player = masterService.partyHandler.user;
-    return new DescriptionOptions('Checkout',()=>{
-      shop.CheckoutSale(player);
-      masterService.descriptionHandler.nextDescription(false);
-    },()=> shop.sale.total>player.gold || !shop.sale.saleActionHasBeenMade )
+    return {
+      text:'Checkout',
+      action:()=>{
+        shop.CheckoutSale(player);
+        masterService.descriptionHandler.nextDescription(false);
+      },
+      get disabled(){return shop.sale.total>player.gold || !shop.sale.saleActionHasBeenMade}
+    }
   }
 }

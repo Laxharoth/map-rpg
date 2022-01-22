@@ -6,20 +6,21 @@ import { selectItemOverworld } from "./DescriptionUseItem";
 
 export function DescriptionSelectItemFromMap(masterService:MasterService):DescriptionOptions
 {
-  return new DescriptionOptions("Item",function(){
+  return {
+    text:"Item",action:function(){
     masterService.descriptionHandler.headDescription(selectItemOverworld(masterService),'item')
       .setDescription(false);
-  })
+    },
+    disabled:false
+  }
 }
 
 export function nextOption(masterService:MasterService,btnString:string="Next"):DescriptionOptions
 {
-  return new DescriptionOptions(btnString,()=>{masterService.descriptionHandler.nextDescription()})
+  return {text:btnString,action:()=>{masterService.descriptionHandler.nextDescription()},disabled:false}
 }
 
 export function drop_item(masterService:MasterService,character:Character)
 {
-  return new DescriptionOptions("Drop Item",function(){
-    AddExceedItem(masterService,[],character.inventory)
-  })
+  return {text:"Drop Item",action:function(){ AddExceedItem(masterService,[],character.inventory) },disabled:false}
 }
