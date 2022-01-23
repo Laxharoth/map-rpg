@@ -178,7 +178,7 @@ export function room(masterService:MasterService):Room
       ,['item-test','ShieldTest','ArmorTest','ShieldGuard','PoisonPill']
       ,()=>'this is a static stock shop'
       ,masterService
-      ,{'item-test':10,'Shield test':15,'Armor test':20}
+      ,{'item-test':10,'Shieldtest':15,'Armortest':20}
     );
     SetShopDescription(masterService,shop);
   }

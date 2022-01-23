@@ -191,11 +191,11 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
       ]},
     ]
   }
-  game_item["Shield test"]=ShieldTest
-  game_item["Ranged Test"]=RangedTest
-  game_item["Melee test"]=MeleeTest
+  game_item["ShieldTest"]=ShieldTest
+  game_item["RangedTest"]=RangedTest
+  game_item["MeleeTest"]=MeleeTest
   game_item["item-test"]=ItemTest
-  game_item["Armor Test"] = ArmorTest
+  game_item["ArmorTest"] = ArmorTest
   character_battle_class["TestCharacterBattleClass"]=TestCharacterBattleClass
   character_battle_class["TestMainCharacterBattleClass"]=TestMainCharacterBattleClass
 }
