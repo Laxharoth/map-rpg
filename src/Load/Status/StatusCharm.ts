@@ -7,7 +7,7 @@ import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
@@ -15,6 +15,7 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
   class StatusCharm extends StatusBattle implements StatusPreventAttack
   {
     discriminator:"StatusPreventAttack"="StatusPreventAttack";
+    readonly type:"Charm"="Charm";
     protected DURATION: number = 3;
     private _charmer:Character;
     private _charmed:Character;
@@ -24,7 +25,7 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
         this._charmer = charmer;
         this._charmed = charmed;
     }
-    get name(): statusname { return 'Charm'; }
+    get name(): string { return 'Charm'; }
     get description(): string {
       return "Can't hurt charmer";
     }
@@ -43,6 +44,7 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
   class SpecialCharm extends SpecialAttack
   {
     protected COOLDOWN: number=6;
+    readonly type:"Charm"="Charm";
     get name(): specialsname { return 'Charm'; }
     get isPartyUsable(): boolean { return false; }
     get isEnemyUsable(): boolean { return true; }
@@ -55,13 +57,14 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
     }
   }
   class PerkCharm extends Perk {
+    readonly type:"PerkCharm"="PerkCharm";
     readonly charmSpecial = new SpecialCharm(this.masterService)
-    get name():perkname { return 'Charmer';}
+    get name():string { return 'Charmer';}
     get specials(): SpecialAttack[] {return [this.charmSpecial] }
   }
   status["Charm"]=StatusCharm
   special_attack["Charm"]=SpecialCharm
-  perk["Charmer"]=PerkCharm
+  perk["PerkCharm"]=PerkCharm
 }
 const module_name = "Charm";
 const module_dependency = [];

@@ -14,15 +14,8 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
  */
 export abstract class Armor extends Equipment
 {
-  /**
-   * Can only use armorname
-   *
-   * @readonly
-   * @abstract
-   * @type {armorname}
-   * @memberof Armor
-   */
-  abstract get name():armorname;
+  readonly abstract type:armorname
+  abstract get name():string;
   /**
    * Equips into character armor.
    *
@@ -42,7 +35,8 @@ export abstract class Armor extends Equipment
 
 export class ArmorNoArmor extends Armor
 {
-  get name(): armorname { return 'No Armor'; }
+  readonly type:"ArmorNoArmor"="ArmorNoArmor"
+  get name(): string { return 'No Armor'; }
   canEquip(character: Character): boolean { return false; }
   get tags(): tag[] { return ['unequiped','no armor']; }
   get isSingleTarget(): boolean { return true; }

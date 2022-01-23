@@ -1,13 +1,14 @@
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
   class StatusBlind extends StatusBattle
   {
     protected DURATION: number = 4;
-    get name(): statusname { return 'Blind' }
+    get name(): string { return 'Blind' }
+    readonly type:'Blind'='Blind'
     get description(): string {
         return 'Reduces accuracy and evasion';
     }

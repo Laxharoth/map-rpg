@@ -11,18 +11,19 @@ import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
 
 export abstract class SpecialAttack implements BattleUseable, hashable, storeable
 {
+  abstract type:specialsname;
+  abstract readonly name:string;
   protected masterService:MasterService;
   /** the cooldown time*/
   protected abstract readonly COOLDOWN:number;
   /** The remaining turns to finish cooldown */
   cooldown: number = 0;
-  abstract get isPartyUsable(): boolean;
-  abstract get isEnemyUsable(): boolean;
-  abstract get isSelfUsable(): boolean;
-  abstract get isSingleTarget(): boolean;
+  abstract isPartyUsable: boolean;
+  abstract isEnemyUsable: boolean;
+  abstract isSelfUsable : boolean;
+  abstract isSingleTarget: boolean;
   get isBattleUsable(): boolean { return true; }
   get isMapUsable(): boolean { return true; }
-  abstract get name():specialsname;
   get tags():tag[]{ return []}
   itemEffect(user: Character, targets: Character | Character[]): ActionOutput {
     const description :ActionOutput = [[],[]]

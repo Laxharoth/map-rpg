@@ -6,14 +6,14 @@ import { roomcolection } from "src/gameLogic/custom/MapCollection/rooms/roomcole
  * A model that represents a map
  *
  * @export
- * @class Map
+ * @class GameMap
  */
 export class GameMap{
   /**
    * The matrix of the map that contains the names
    *
    * @type {string[][]}
-   * @memberof Map
+   * @memberof GameMap
    */
   roomsNames:string[][];
   /**
@@ -21,7 +21,7 @@ export class GameMap{
    *
    * @private
    * @type {roomFunction[][]}
-   * @memberof Map
+   * @memberof GameMap
    */
   private rooms:roomFunction[][];
 
@@ -32,7 +32,7 @@ export class GameMap{
    * Loads in the roomNames the matrix of the current map.
    *
    * @param {string} mapname The name of the map to load.
-   * @memberof Map
+   * @memberof GameMap
    */
   loadMap(mapname:string):void{
     this.roomsNames = this.mapcolection[mapname];

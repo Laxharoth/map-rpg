@@ -4,6 +4,6 @@ export class UpgradePoisonRush extends Upgrade
 {
   constructor(masterService:MasterService)
   {
-    super(masterService,'Poison Rush','get poison rush', 'Posion Rush');
+    super(masterService,'Poison Rush','get poison rush', 'PerkPoisonRush');
   }
 }

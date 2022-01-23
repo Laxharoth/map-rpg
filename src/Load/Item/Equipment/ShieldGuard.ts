@@ -4,12 +4,13 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { shieldname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({reaction,game_item,status}, {status:{StatusBattle},game_item:{Shield},reaction:{BeforeActionReaction}}, Factory)=>{
   class ReactionGuard extends BeforeActionReaction
   {
+    readonly type:"ReactionGuard"="ReactionGuard"
     protected name: string = "ReactionGuard";
     protected whatTriggers: tag[][]=[[]];
     //@ts-ignore
@@ -26,9 +27,8 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
   }
   class ShieldGuard extends Shield
   {
-    get name(): shieldname {
-      return "Guard Shield"
-    }
+    readonly type:"ShieldGuard"="ShieldGuard";
+    get name(): string { return "Guard Shield" }
     canEquip(character: Character): boolean {
       return true
     }
@@ -49,9 +49,8 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
       super(masterService)
       if(!StatusGuard.REACTION_GUARD)StatusGuard.REACTION_GUARD=new ReactionGuard(masterService);
     }
-    get name(): statusname {
-      return "StatusGuard"
-    }
+    readonly type:"StatusGuard"="StatusGuard"
+    get name(): string { return "StatusGuard" }
     get description(): string {
       return "redirects actions from other party members"
     }
@@ -60,7 +59,7 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
     }
   }
   reaction["ReactionGuard"]=ReactionGuard
-  game_item["Guard Shield"]=ShieldGuard
+  game_item["ShieldGuard"]=ShieldGuard
   status["StatusGuard"]=StatusGuard
 }
 const module_name="StatusGuard";

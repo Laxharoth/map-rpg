@@ -20,7 +20,8 @@ export abstract class MeleeWeapon extends Weapon
 {
   damagestat(user   : Character):number{return user.calculated_stats.physical_attack;}
   defencestat(target: Character):number{return target.calculated_stats.physical_defence;}
-  abstract get name():meleename;
+  readonly abstract type:meleename
+  abstract get name():string;
   protected accuracyTest(user:Character,target:Character)
   {
     let accuracyFix = 0;
@@ -50,7 +51,8 @@ export class MeleeUnharmed extends MeleeWeapon
   maxStack = 0;
   protected _stats_modifier: CalculatedStats = {accuracy:30};
   protected _damageTypes:damageTypes = {bluntdamage:10};
-  get name(): meleename { return 'hand'; }
+  readonly type:"MeleeUnharmed"="MeleeUnharmed";
+  get name(): string { return 'hand'; }
   canEquip(character: Character): boolean { return true; }
   get tags(): tag[] { return ['unequiped','melee unharmed']; }
   get isSingleTarget(): boolean { return true;}

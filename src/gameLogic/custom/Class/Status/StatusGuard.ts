@@ -1,7 +1,7 @@
 import { MasterService } from 'src/app/service/master.service';
 import { Reaction } from '../Character/Reaction/Reaction';
 import { ReactionGuard } from "../Character/Reaction/ReactionGuard";
-import { statusname } from "./Status.type";
+import { statustype } from "./Status.type";
 import { StatusBattle } from "./StatusBattle";
 
 export class StatusGuard extends StatusBattle
@@ -13,9 +13,8 @@ export class StatusGuard extends StatusBattle
     super(masterService)
     if(!StatusGuard.REACTION_GUARD)StatusGuard.REACTION_GUARD=new ReactionGuard(masterService);
   }
-  get name(): statusname {
-    return "status"
-  }
+  readonly type: "StatusGuard"="StatusGuard"
+  get name(): string { return "status" }
   get description(): string {
     return "redirects actions from other party members"
   }

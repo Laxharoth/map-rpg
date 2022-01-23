@@ -5,7 +5,7 @@ import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/Sp
 import { Perk } from "src/gameLogic/custom/Class/Perk/Perk";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { Status } from "src/gameLogic/custom/Class/Status/Status";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
@@ -15,7 +15,6 @@ import { ObjectSet } from "../../ClassHelper/ObjectSet";
 import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
 import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
 import { BattleClassOptions, CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
-import { TestCharacterBattleClass } from "../CharacterBattleClass/testCharacterBattleClass";
 import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
 import { Inventory } from "./Inventory/Inventory";
 import { Reaction } from "./Reaction/Reaction";
@@ -51,7 +50,7 @@ export abstract class Character implements storeable
   protected character_battle_class:CharacterBattleClass;
   get battle_class():CharacterBattleClass { return this.character_battle_class;}
   protected abstract _name:string;
-  abstract readonly characterType:characterType;
+  abstract readonly type:characterType;
   inventory:Inventory;
   character_equipment:CharacterEquipment;
   get name(): string{ return this._name};
@@ -65,7 +64,7 @@ export abstract class Character implements storeable
    */
   constructor(masterService:MasterService, character_battle_class=null)
   {
-    if(!character_battle_class)character_battle_class=new TestCharacterBattleClass()
+    if(!character_battle_class)character_battle_class=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:'CharacterBattleClassEmpty'})
     this.character_battle_class = character_battle_class;
     this.inventory = new Inventory(masterService);
     this.character_equipment = new CharacterEquipment(masterService);
@@ -140,7 +139,7 @@ export abstract class Character implements storeable
    * @param status The name of the status to check
    * @returns The number of instance of the status applied
    */
-  hasStatus(status:Status|statusname):number
+  hasStatus(status:Status|statustype):number
   {
     let timesFound = 0;
     for(const characterStatus of this.iterStatus())
@@ -219,11 +218,11 @@ export abstract class Character implements storeable
   /**
    * Removes all instances of the given statusname or Status.
    *
-   * @param {(Status|statusname)} status
+   * @param {(Status|statustype)} status
    * @return {*}  {ActionOutput}
    * @memberof Character
    */
-  removeStatus(status:Status|statusname):ActionOutput
+  removeStatus(status:Status|statustype):ActionOutput
   {
     let removeStatusDescription:ActionOutput = [[],[]];
     pushBattleActionOutput(this._removeStatus(status,this.battle_status),removeStatusDescription);
@@ -235,11 +234,11 @@ export abstract class Character implements storeable
   /**
    * Gets the first instance of Status that matches the statusname or type of Status
    *
-   * @param {statusname} status
+   * @param {statustype} status
    * @return {*}  {(Status|null)}
    * @memberof Character
    */
-  getStatus(status: statusname):Status|null{
+  getStatus(status: statustype):Status|null{
     for(const characterStatus of this.iterStatus())if(compareStatusName(status, characterStatus))return characterStatus;
     return null;
   }
@@ -466,7 +465,7 @@ export abstract class Character implements storeable
    * @memberof Character
    */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
-  toJson(): CharacterStoreable { return { Factory:"Character",type:this.characterType,battle_class:this.battle_class.toJson()} }
+  toJson(): CharacterStoreable { return { Factory:"Character",type:this.type,battle_class:this.battle_class.toJson()} }
   fromJson(options: CharacterStoreable): void {
     options.battle_class&&(this.character_battle_class=CharacterBattleClassFactory(this.masterService,options.battle_class))
   }
@@ -476,7 +475,7 @@ export type CharacterStoreable = { Factory: "Character"; type: characterType; ba
  * Check if the statusname is the same as the second argument.
  */
 function compareStatusName(status: string | Status, characterStatus: Status):boolean
-{ return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.name === status; }
+{ return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.type === status; }
 function remove_status_from_name(status: string,status_array:Status[]) {
   let removeStatusDescription: ActionOutput = [[], []];
   let statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));

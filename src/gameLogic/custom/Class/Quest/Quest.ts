@@ -4,6 +4,7 @@ import { hashable } from '../../ClassHelper/ObjectSet';
 
 export abstract class Quest implements storeable, descriptable,hashable
 {
+  abstract type: string;
   abstract name: string;
   abstract description_text: string;
   abstract toJson(): QuestOptions;

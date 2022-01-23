@@ -1,6 +1,6 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
@@ -8,7 +8,8 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
 export class StatusDefend extends StatusBattle
 {
   protected DURATION: number = 1;
-  get name(): statusname { return 'Defend'; }
+  readonly type:"StatusDefend"="StatusDefend";
+  get name(): string { return 'Defend'; }
   get description(): string { return 'Increases defence and evasion.'; }
   protected effect(target: Character): ActionOutput { return [[],[`${target.name} raises it's defence.`]]; }
   applyModifiers(character: Character): void {

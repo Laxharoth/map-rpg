@@ -7,6 +7,7 @@ import { QuestOptions } from "src/gameLogic/custom/Class/Quest/Quest";
 const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
   class DefeatEnemyQuest extends Quest
   {
+    readonly type:"DefeatEnemyQuest"="DefeatEnemyQuest"
     name: string = "Defeated Enemy";
     description_text: string = "Defeat 10 enemies";
     private enemies_defeated = 0;

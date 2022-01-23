@@ -4,6 +4,6 @@ export class UpgradeFright extends Upgrade
 {
   constructor(masterService:MasterService)
   {
-    super(masterService,'Fright','get Fright', 'Frighter');
+    super(masterService,'Fright','get Fright', 'PerkFright');
   }
 }

@@ -5,10 +5,10 @@ export enum statusTimeEnum{
   'TimedStatusTest' ='TimedStatusTest',
 }
 export enum statusBattlesEnum{
-  'Defend'  ='Defend' ,
+  'StatusDefend'  ='StatusDefend' ,
   'Paralisis'   ='Paralisis' ,
   'Poison'  ='Poison' ,
-  'Ranged Attack' ='Ranged Attack' ,
+  'StatusRangedAttack' = 'StatusRangedAttack' ,
   'Blind'   ='Blind' ,
   'Charm'   ='Charm' ,
   'Fright'  ='Fright' ,
@@ -19,8 +19,8 @@ export enum statusBattlesEnum{
   'Prone' ='Prone',
   'Restrained'  ='Restrained',
   'Sleep' ='Sleep',
-  'Poison Rush'='Poison Rush',
+  'PoisonRush'='PoisonRush',
   'StatusGuard'='StatusGuard',
 }
 
-export type statusname =`${statusEnum}`| `${statusTimeEnum}`| `${statusBattlesEnum}`
+export type statustype =`${statusEnum}`| `${statusTimeEnum}`| `${statusBattlesEnum}`

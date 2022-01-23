@@ -10,16 +10,14 @@ export interface BattleUseable extends descriptable
    * The name of the Item.
    *
    * @readonly
-   * @abstract
    * @type {itemname}
    * @memberof Item
    */
-  get name(): itemname;
+  readonly name: string;
   /**
    * If the Item can be used during a battle.
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
@@ -36,7 +34,6 @@ export interface BattleUseable extends descriptable
    * If the Item can be used on the player's party
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
@@ -45,7 +42,6 @@ export interface BattleUseable extends descriptable
    * If the Item can be used on the enemy's party'
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
@@ -54,7 +50,6 @@ export interface BattleUseable extends descriptable
    * If the item can be used on the player
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */
@@ -71,7 +66,6 @@ export interface BattleUseable extends descriptable
    * If the item is single target.
    *
    * @readonly
-   * @abstract
    * @type {boolean}
    * @memberof Item
    */

@@ -7,8 +7,8 @@ import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 export class JohnSmith extends PersistentCharacter
 {
   protected _name: string = "John Smith";
-  characterType: characterType= 'john';
-  uuid=this.characterType;
+  type: characterType= 'john';
+  uuid=this.type;
   constructor(masterService:MasterService)
   {
     super(masterService);

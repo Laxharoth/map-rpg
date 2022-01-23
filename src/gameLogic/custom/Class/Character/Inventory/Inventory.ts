@@ -8,6 +8,7 @@ import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions'
 import { ActionOutput } from '../Character.type';
 import { Character } from '../Character';
 export class Inventory implements storeable {
+  readonly type:string="Inventory"
   inventory_size = 9;
   items: GameItem[] = [];
   master_service: MasterService;

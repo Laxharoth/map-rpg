@@ -11,7 +11,8 @@ const register: register_function = ({perk}, {perk:{Perk}}, Factory) => {
       super(masterService);
       this.level=0;
     }
-    get name(): perkname {
+    readonly type: "PerkUpgradeable"="PerkUpgradeable";
+    get name(): string {
       return "Perk Upgrade";
     }
     toJson():PerkStoreable {
@@ -24,7 +25,7 @@ const register: register_function = ({perk}, {perk:{Perk}}, Factory) => {
       json.level&&(this.level=json.level);
     }
   }
-  perk["Perk Upgrade"]=PerkUpgradeable
+  perk["PerkUpgradeable"]=PerkUpgradeable
 }
 const module_name = "PerkUpgradeable"
 const module_dependency = []

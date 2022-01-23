@@ -1,7 +1,7 @@
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({status,special_attack},{status:{Status,StatusBattle},special_attack:{SpecialAttack}},Factory)=>{
@@ -16,9 +16,8 @@ class StatusRestrained extends StatusBattle
   applyModifiers(character: Character): void {
       character.calculated_stats.initiative = 0;
   }
-  get name(): statusname {
-      return 'Restrained';
-  }
+  readonly type: "Restrained"="Restrained"
+  get name(): string { return 'Restrained'; }
   onStatusRemoved(target: Character): ActionOutput
   { return Factory.pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger being grappled`]])}
 

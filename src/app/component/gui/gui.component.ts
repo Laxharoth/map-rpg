@@ -14,12 +14,12 @@ import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';
 import { PartyService } from 'src/gameLogic/custom/subservice/party';
 import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
-import { TestMainCharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/testMainCharacterBattleClass';
 import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
 import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { load_files } from 'src/gameLogic/custom/functions/load_files';
 import { QuestHolder } from 'src/gameLogic/custom/subservice/quest-holder';
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { CharacterBattleClassFactory } from 'src/gameLogic/custom/Factory/CharacterBattleClassFactory';
 
 @Component({
   selector   : 'app-gui',
@@ -88,11 +88,11 @@ export class GuiComponent implements OnInit {
       this.masterService.partyHandler.user = this.masterService.gameSaver.MainCharacter[0];
     }
     if (!this.masterService.partyHandler.user) {
-      const user = new MainCharacter(this.masterService, 'player',new TestMainCharacterBattleClass());
-      const meleeTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Melee test"})
-      const rangedTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Ranged Test"})
-      const shieldTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Shield test"})
-      const armorTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"Armor Test"})
+      const user = new MainCharacter(this.masterService, 'player',CharacterBattleClassFactory(this.masterService,{Factory:"CharacterBattleClass",type:"TestMainCharacterBattleClass"}));
+      const meleeTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"MeleeTest"})
+      const rangedTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"RangedTest"})
+      const shieldTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"ShieldTest"})
+      const armorTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"ArmorTest"})
       user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
       this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)

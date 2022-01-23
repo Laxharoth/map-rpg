@@ -42,6 +42,7 @@ export abstract class GameItem implements BattleUseable, storeable
    * @memberof Item
    */
   constructor(masterService:MasterService){this.masterService=masterService;}
+  readonly abstract type:itemname;
   /**
    * The name of the Item.
    *
@@ -50,7 +51,7 @@ export abstract class GameItem implements BattleUseable, storeable
    * @type {itemname}
    * @memberof Item
    */
-  abstract get name(): itemname;
+  abstract get name(): string;
   /**
    * If the Item can be used during a battle.
    *
@@ -158,7 +159,7 @@ export abstract class GameItem implements BattleUseable, storeable
    */
   toJson():ItemStoreable
   {
-    return {Factory:"Item",type:this.name,amount:this.amount}
+    return {Factory:"Item",type:this.type,amount:this.amount}
   }
   /**
    * Loads the amount of items in the stack.

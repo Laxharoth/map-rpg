@@ -20,8 +20,9 @@ export abstract class Equipment extends GameItem
 {
   private equipmentStats: CalculatedStats={};
   maxStack = 1;
+  readonly abstract type:equipmentname
   /** * The name of the equipment */
-  abstract get name():equipmentname;
+  abstract get name():string;
   /** * Check if can be equiped to the character. */
   abstract canEquip(character:Character ):boolean;
   /** * The tags associated with the equipment. */

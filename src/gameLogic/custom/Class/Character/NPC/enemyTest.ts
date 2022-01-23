@@ -11,7 +11,7 @@ export class enemyTest extends Character implements Enemy
 {
   _name="enemyTest";
   enemy_type: string = "enemyTest";
-  characterType:characterType = 'test enemy';
+  type:characterType = 'test enemy';
   constructor(masterService:MasterService)
   { super(masterService) }
   get name(): string {
@@ -43,7 +43,7 @@ export class enemyTest extends Character implements Enemy
 
   private select_loot():itemname
   {
-    if(randomCheck(10))return 'Guard Shield'
+    if(randomCheck(10))return 'ShieldGuard'
     return 'item-test'
   }
 }

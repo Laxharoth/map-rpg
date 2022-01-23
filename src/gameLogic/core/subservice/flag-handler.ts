@@ -13,7 +13,7 @@ import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
  * @implements {storeable}
  */
 export class FlagHandlerService implements storeable{
-
+  readonly type:"FlagHandlerService"="FlagHandlerService";
   /** The game flags */
   private gameFlags: { [key: string]: any; } = default_flags;
   /** Subject to check flags changes. */

@@ -9,6 +9,7 @@ import { ObjectSet } from "../ClassHelper/ObjectSet";
 
 export class QuestHolder implements storeable
 {
+  type:"QuestHolder"="QuestHolder";
   private active_quest=new ObjectSet<Quest>();
   private readonly master_service: MasterService;
   constructor(game_saver:GameSaver,master_service:MasterService)

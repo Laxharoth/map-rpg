@@ -18,6 +18,7 @@ export abstract class Reaction implements hashable, storeable{
   protected abstract whatTriggers: tag[][];
   /** The list of tags the reaction should be never trigger. */
   protected prevent_reaction:tag[][] = [['paralized'],['before-action']];
+  readonly type:string;
   /** TODO doc */
   protected abstract name:string;
   /**
@@ -75,7 +76,7 @@ export abstract class Reaction implements hashable, storeable{
   {
     return {
       Factory:"Reaction",
-      type:this.name
+      type:this.type
     };
   }
 }

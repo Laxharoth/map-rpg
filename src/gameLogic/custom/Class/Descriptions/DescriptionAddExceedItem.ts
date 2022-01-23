@@ -94,7 +94,7 @@ function create_stacks_with_remaining_items(item: GameItem, masterService: Maste
   while (item.amount > 0) {
     const itemAmount = Math.min(item.amount, item.maxStack);
     itemStacks.push(ItemFactory(masterService, fillItemStoreable({
-      type: item.name,
+      type: item.type,
       amount: itemAmount
     })));
     item.amount -= itemAmount;

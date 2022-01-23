@@ -9,7 +9,7 @@ import { BattleCommand } from "../../Battle/BattleCommand";
 export class charTest extends PersistentCharacter
 {
   protected _name!: string;
-  characterType:characterType = "test character";
+  type:characterType = "test character";
   constructor(masterService:MasterService ,name:string='')
   {
     super(masterService);

@@ -18,7 +18,8 @@ export abstract class RangedWeapon extends Weapon
 {
   damagestat(user   : Character):number{return user.calculated_stats.ranged_attack;}
   defencestat(target: Character):number{return target.calculated_stats.ranged_defence;}
-  abstract get name():rangedname;
+  readonly abstract type:rangedname;
+  abstract get name():string;
   attack(user:Character,target:Character):ActionOutput
   {
     const [descriptions,strings]=user.addStatus(new StatusRangedAttack(this.masterService));
@@ -54,7 +55,8 @@ export abstract class RangedWeapon extends Weapon
 export class RangedUnharmed extends RangedWeapon
 {
   maxStack = 0;
-  get name(): rangedname { return 'a rock'; }
+  readonly type:"RangedUnharmed"="RangedUnharmed"
+  get name(): string { return 'a rock'; }
   canEquip(character: Character): boolean { return true; }
   get tags(): tag[] { return ['unequiped','ranged unharmed']; }
   calculateDamage(user:Character,target:Character):number { return 10; }

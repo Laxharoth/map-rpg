@@ -6,13 +6,15 @@ import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameEl
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({status,special_attack,perk},{status:{Status,StatusBattle},special_attack:{SpecialAttack},perk:{Perk}},Factory)=>{
   class StatusFright extends StatusBattle implements StatusPreventAttack
   {
+    type:"Fright"="Fright";
+    get name(): string { return 'Fright'; }
     protected DURATION: number = 3;
     private frighted:Character;
     private frighter:Character;
@@ -23,9 +25,6 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
         this.frighted = frighted;
     }
     discriminator: "StatusPreventAttack"="StatusPreventAttack";
-    get name(): statusname {
-    return 'Fright';
-    }
     get description(): string {
     return "Can't hurt fear source.";
     }
@@ -50,7 +49,8 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
   class SpecialFright extends SpecialAttack
   {
     protected COOLDOWN: number = 4;
-    get name(): specialsname { return 'Fright' }
+    type:"Fright"="Fright";
+    get name(): string { return 'Fright' }
     get isPartyUsable(): boolean { return false }
     get isEnemyUsable(): boolean { return true }
     get isSelfUsable(): boolean { return false }
@@ -64,7 +64,8 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
   }
   class PerkFright extends Perk {
     readonly specialFright = new SpecialFright(this.masterService)
-    get name(): perkname { return 'Frighter' }
+    readonly type:"PerkFright"="PerkFright";
+    get name(): string { return 'Frighter' }
 
     get specials(){return [this.specialFright]}
   }

@@ -1,14 +1,14 @@
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
+import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 
 export class OnePunch extends SpecialAttack
 {
   protected COOLDOWN: number = Infinity;
-  get name(): specialsname { return "One Punch"; }
+  readonly type:"OnePunch"="OnePunch"
+  get name(): string { return "One Punch"; }
   get isPartyUsable(): boolean { return false; }
   get isEnemyUsable(): boolean { return true; }
   get isSelfUsable(): boolean { return false; }

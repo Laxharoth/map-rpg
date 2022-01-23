@@ -7,7 +7,7 @@ import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 
 export class DynamicShop extends Shop implements storeable{
-
+  type:"DynamicShop"="DynamicShop";
   private shopPrices:{[key:string]:number};
   constructor(name:string,description:()=>string,masterService: MasterService,shopPrices:{[key:string]:number}={})
   {
@@ -26,7 +26,7 @@ export class DynamicShop extends Shop implements storeable{
     const findItem =  (itemname:itemname)=>shopSavedata.Items[shopSavedata.Items.findIndex((item:ItemStoreable)=>item.type === itemname )]
     for(const item of this.shopItems)
     {
-      const itemoptions = findItem(item.name)
+      const itemoptions = findItem(item.type)
       if(itemoptions){ itemoptions.amount += item.amount;continue;}
       shopSavedata.Items.push(item.toJson())
     }

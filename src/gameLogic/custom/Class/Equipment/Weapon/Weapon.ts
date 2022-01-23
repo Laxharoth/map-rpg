@@ -33,15 +33,8 @@ export abstract class Weapon extends Equipment implements DamageSource
     }
     return this._damageTypes;
   }
-  /**
-   * Name  of the weapon
-   *
-   * @readonly
-   * @abstract
-   * @type {weaponname}
-   * @memberof Weapon
-   */
-  abstract get name():weaponname;
+  readonly abstract type: weaponname;
+  abstract get name():string;
   /**
    * Applies damage to a target.
    *

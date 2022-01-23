@@ -11,6 +11,7 @@ import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class PartyService implements storeable{
+  type:"PartyService"="PartyService"
   private _user: UniqueCharacter;
   private _party: [PersistentCharacter,PersistentCharacter] = [null, null];
   persistents: { [key: string]: PersistentCharacter } = {};

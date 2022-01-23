@@ -1,29 +1,29 @@
 export enum meleenameEnum {
-  "hand"="hand",
-  "Melee test"="Melee test",
+  "MeleeUnharmed"="MeleeUnharmed",
+  "MeleeTest"="MeleeTest",
 };
 export enum rangednameEnum{
-  "a rock"="a rock",
-  "Ranged Test"="Ranged Test",
+  "RangedUnharmed"="RangedUnharmed",
+  "RangedTest"="RangedTest",
 }
 export enum shieldnameEnum{
-  "No shield"="No shield",
-  "Shield test"="Shield test",
-  "Guard Shield"="Guard Shield",
+  "ShieldNoShield"="ShieldNoShield",
+  "ShieldTest"="ShieldTest",
+  "ShieldGuard"="ShieldGuard",
 }
 export enum armornameEnum{
-  "No Armor"="No Armor",
-  "Armor Test"="Armor Test",
+  "ArmorNoArmor"="ArmorNoArmor",
+  "ArmorTest"="ArmorTest",
 }
 export enum specialsnameEnum{
-  'One Punch'='One Punch',
+  'OnePunch'='OnePunch',
   'Charm'='Charm',
   'Fright'='Fright',
   'Grab'='Grab',
 }
 export enum itemsEnum{
   'item-test'='item-test',
-  'Poison Pill'='Poison Pill',
+  'PoisonPill'='PoisonPill',
 }
 export type meleename = `${meleenameEnum}`;
 export type rangedname =`${rangednameEnum}`;

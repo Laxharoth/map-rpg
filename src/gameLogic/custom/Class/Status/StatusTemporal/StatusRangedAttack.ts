@@ -1,6 +1,6 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { StatusBattle } from "../StatusBattle";
@@ -8,9 +8,8 @@ import { StatusBattle } from "../StatusBattle";
 export class StatusRangedAttack extends StatusBattle
 {
   protected DURATION: number = 1;
-  get name(): statusname {
-    return 'Ranged Attack';
-  }
+  readonly type:"StatusRangedAttack" = "StatusRangedAttack"
+  get name(): string { return 'Ranged Attack'; }
   get description(): string {
     return 'Using a ranged attack puts space between you and the enemy.\nIncreased evasion by 10%.';
   }

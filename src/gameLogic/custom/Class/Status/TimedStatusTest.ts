@@ -2,7 +2,6 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { nextOption } from '../Descriptions/CommonOptions';
@@ -11,7 +10,8 @@ export class TimedStatusTest extends TimedStatus
 {
   protected duration: number = 20;
 
-  get name(): statusname { return "TimedStatusTest"; }
+  readonly type:"TimedStatusTest"="TimedStatusTest";
+  get name(): string { return "Timed Status Test"; }
   get description(): string { return 'testing only'}
   protected effect(target: Character): ActionOutput { return [[],[]] }
 

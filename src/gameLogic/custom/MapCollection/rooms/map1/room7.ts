@@ -119,7 +119,7 @@ export function room(masterService:MasterService):Room
     {
       text:"level up perk",
       action:function(){
-        const perk = (user.getPerk('Perk Upgrade'));
+        const perk = (user.getPerk('PerkUpgradeable'));
         if(!perk) user.addPerk(Factory(masterService,{Factory:"Perk",type:"PerkUpgradeable"}));
         else
           //@ts-ignore
@@ -175,7 +175,7 @@ export function room(masterService:MasterService):Room
   function makeShop():void
   {
     const shop = new StaticShop('test-shop'
-      ,['item-test','Shield test','Armor Test','Guard Shield','Poison Pill']
+      ,['item-test','ShieldTest','ArmorTest','ShieldGuard','PoisonPill']
       ,()=>'this is a static stock shop'
       ,masterService
       ,{'item-test':10,'Shield test':15,'Armor test':20}
@@ -192,8 +192,8 @@ export function room(masterService:MasterService):Room
         type:"this.name",
         Items:[
           fillItemStoreable({type:'item-test',amount:5}),
-          fillItemStoreable({type:'Shield test',amount:5}),
-          fillItemStoreable({type:'Armor Test',amount:5}),
+          fillItemStoreable({type:'ShieldTest',amount:5}),
+          fillItemStoreable({type:'ArmorTest',amount:5}),
         ]
       }
       dynamicShop.fromJson(items)

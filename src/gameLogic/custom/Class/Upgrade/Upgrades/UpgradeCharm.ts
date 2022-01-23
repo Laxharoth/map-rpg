@@ -4,6 +4,6 @@ export class UpgradeCharm extends Upgrade
 {
   constructor(masterService:MasterService)
   {
-    super(masterService,'Charm','get charm', 'Charmer');
+    super(masterService,'Charm','get charm', 'PerkCharm');
   }
 }

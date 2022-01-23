@@ -7,9 +7,9 @@ import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { MasterService } from "src/app/service/master.service";
 export class TimeHandler implements storeable{
   /** The ingame time. */
+  type:'TimeHandler'='TimeHandler';
   private time: Time = new Time(0);
   private timeSubject = new Subject<Time>();
-
   constructor(game_saver:GameSaver) {
     game_saver.register("TimeHandler",this);
   }

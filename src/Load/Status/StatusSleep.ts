@@ -1,13 +1,14 @@
 import { register_function } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({status,special_attack},{status:{Status,StatusBattle},special_attack:{SpecialAttack}},Factory)=>{
 class StatusSleep extends StatusBattle {
   protected DURATION: number = 4;
-  get name(): statusname { return 'Sleep'; }
+  readonly type:"Sleep"="Sleep"
+  get name(): string { return 'Sleep'; }
   get description(): string {
     return "The target can't move.";
   }

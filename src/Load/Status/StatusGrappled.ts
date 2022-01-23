@@ -7,7 +7,7 @@ import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
@@ -15,6 +15,8 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
 class StatusGrappled extends StatusBattle  implements StatusPreventAttack
 {
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
+  readonly type:"Grappled"="Grappled";
+  get name(): string { return 'Grappled'; }
   protected DURATION: number = Infinity;
   private _source:Character;
   private _target:Character;
@@ -35,7 +37,6 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack
     this._target = target;
     return super.onStatusGainded(target);
   }
-  get name(): statusname { return 'Grappled'; }
   canAttack(target: Character): boolean {return this._source === target;}
   preventAttackDescription(target: Character): ActionOutput {
     return [[],[`${this._target.name} can attack only the grappling one.`]];
@@ -54,6 +55,8 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack
 class StatusGrappling extends StatusBattle implements StatusPreventAttack
 {
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
+  readonly type: "Grappling"="Grappling";
+  get name(): statustype { return 'Grappling'; }
   protected DURATION: number = 4;
   private _source:Character;
   private _target:Character;
@@ -68,24 +71,21 @@ class StatusGrappling extends StatusBattle implements StatusPreventAttack
   return 'Being grabbed by something impedes movements.';
   }
   protected effect(target: Character): ActionOutput { return [[],[`${target.name} is grabbing ${this._target.name}`]]; }
-    get name(): statusname {
-      return 'Grappling';
-    }
-    onStatusGainded(target: Character):ActionOutput
-    {
-      this._source = target;
-      const description:ActionOutput = [[],[`${target.name} is grabbing ${this._target.name}`]];
-      return Factory.pushBattleActionOutput(super.onStatusGainded(target),description);
-    }
-    onStatusRemoved(target: Character): ActionOutput
-    {
-      const effectEndedDescription = this._target.removeStatus('Grappled');
-      return Factory.pushBattleActionOutput(super.onStatusRemoved(target), effectEndedDescription);
-    }
-    canAttack(target: Character): boolean {return this._target === target;}
-    preventAttackDescription(target: Character): ActionOutput {
-      return [[],[`${this._source.name} can attack only the grapped one.`]];
-    }
+  onStatusGainded(target: Character):ActionOutput
+  {
+    this._source = target;
+    const description:ActionOutput = [[],[`${target.name} is grabbing ${this._target.name}`]];
+    return Factory.pushBattleActionOutput(super.onStatusGainded(target),description);
+  }
+  onStatusRemoved(target: Character): ActionOutput
+  {
+    const effectEndedDescription = this._target.removeStatus('Grappled');
+    return Factory.pushBattleActionOutput(super.onStatusRemoved(target), effectEndedDescription);
+  }
+  canAttack(target: Character): boolean {return this._target === target;}
+  preventAttackDescription(target: Character): ActionOutput {
+    return [[],[`${this._source.name} can attack only the grapped one.`]];
+  }
   get target(): Character { return this._target;}
   get tags(): tag[] { return super.tags.concat(['grappling']);}
   fromJson(options: StatusStoreable): void {
@@ -97,6 +97,7 @@ class StatusGrappling extends StatusBattle implements StatusPreventAttack
 class SpecialGrab extends SpecialAttack
 {
   protected COOLDOWN = 6;
+  readonly type: "Grab"="Grab";
   get name(): specialsname { return 'Grab' }
   get isPartyUsable(): boolean { return false }
   get isEnemyUsable(): boolean { return true }
@@ -114,7 +115,8 @@ class SpecialGrab extends SpecialAttack
 }
 class PerkGrappler extends Perk {
   readonly specialGrab = new SpecialGrab(this.masterService)
-  get name():perkname { return 'Grappler'; }
+  readonly type: "Grappler"="Grappler";
+  get name():string { return 'Grappler'; }
 
   get specials() :SpecialAttack[]{return [this.specialGrab]}
 }

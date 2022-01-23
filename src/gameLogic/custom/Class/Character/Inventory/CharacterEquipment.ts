@@ -10,6 +10,7 @@ import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 
 export class CharacterEquipment implements storeable
 {
+  readonly type:string="CharacterEquipment"
   private readonly masterService: MasterService;
   private static __meleeUnharmed__:MeleeUnharmed;
   private static __rangedUnharmed__:RangedUnharmed;

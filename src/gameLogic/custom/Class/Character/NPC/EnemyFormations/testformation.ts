@@ -45,7 +45,7 @@ export class testformation extends EnemyFormation
   {
     const Item = (Factory as item_factory_function)(this.masterService,{Factory:"Item",type:"item-test"})
     Item.amount = randomBetween(1,4);
-    const weapon = ItemFactory(this.masterService,{ Factory:'Item',type:'Melee test'})
+    const weapon = ItemFactory(this.masterService,{ Factory:'Item',type:'MeleeTest'})
     return [Item,weapon];
   }
   //////////////////////////

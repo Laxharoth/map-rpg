@@ -7,6 +7,7 @@ import { UpgradeFactory } from "../Upgrade/UpgradeFactory";
 import { ArrayTree, tree_node } from "./ArrayTree";
 
 export abstract class CharacterBattleClass implements storeable{
+  abstract readonly type: string;
   abstract name: string;
   abstract initial_core_stats: EnergyStats;
   abstract initial_physic_stats: FullCoreStats;
@@ -59,16 +60,18 @@ export abstract class CharacterBattleClass implements storeable{
   private initialize_upgrades(masterService: MasterService):tree_node<Upgrade>[]
   {
     if(this._upgrade_tree instanceof ArrayTree)return [this._upgrade_tree.root];
-    const fill_root = (root:tree_node<UpgradeOptions>[])=>{
-      const upgrade_tree_nodes:tree_node<Upgrade>[] = []
-      for(const upgrade_option_node of root)
-      {
-        upgrade_tree_nodes.push({value:UpgradeFactory(masterService,upgrade_option_node.value),children:fill_root(upgrade_option_node.children)})
+    return fill_root(this._upgrade_tree);
+    function fill_root(root: tree_node < UpgradeOptions > []) {
+      const upgrade_tree_nodes: tree_node < Upgrade > [] = []
+      for (const upgrade_option_node of root) {
+        upgrade_tree_nodes.push({
+          value: UpgradeFactory(masterService, upgrade_option_node.value),
+          children: fill_root(upgrade_option_node.children)
+        })
       }
       return upgrade_tree_nodes;
     }
-    return fill_root(this._upgrade_tree);
-  }
+    }
   toJson(): BattleClassOptions {
     return {
       Factory:"CharacterBattleClass",
@@ -78,6 +81,7 @@ export abstract class CharacterBattleClass implements storeable{
   fromJson(options: BattleClassOptions): void {}
 }
 export class CharacterBattleClassEmpty extends CharacterBattleClass {
+  type:"CharacterBattleClassEmpty"="CharacterBattleClassEmpty"
   name: string="CharacterBattleClassEmpty";
   initial_core_stats: EnergyStats={hitpoints:1,energypoints:1};
   initial_physic_stats: FullCoreStats={aim:1,intelligence:1,speed:1,stamina:1,strenght:1};

@@ -1,9 +1,9 @@
 export enum perknameEnum {
-  'Charmer'='Charmer',
-  'Frighter'='Frighter',
+  'PerkCharm'='PerkCharm',
+  'PerkFright'='PerkFright',
   'Grappler'='Grappler',
-  'Posion Rush'='Posion Rush',
-  'Perk Upgrade'='Perk Upgrade',
+  'PerkPoisonRush'='PerkPoisonRush',
+  'PerkUpgradeable'='PerkUpgradeable',
 }
 
 export type perkname =`${perknameEnum}`;

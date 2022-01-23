@@ -22,6 +22,8 @@ import { TimedStatus } from '../../../custom/Class/Status/TimedStatus';
 import { SpecialAttack } from '../../../custom/Class/Items/SpecialAttack/SpecialAttack';
 import { Perk } from '../../../custom/Class/Perk/Perk';
 import { reaction_switcher } from 'src/gameLogic/custom/Factory/ReactionFactory';
+import { CharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass';
+import { character_battle_class_switcher } from 'src/gameLogic/custom/Factory/CharacterBattleClassFactory';
 
 export const constructor = {
   game_item:{
@@ -36,7 +38,8 @@ export const constructor = {
   special_attack:{SpecialAttack},
   quest:{Quest},
   perk:{Perk},
-  reaction:{Reaction,BeforeActionReaction}
+  reaction:{Reaction,BeforeActionReaction},
+  character_battle_class:{CharacterBattleClass},
 }
 export type constructor_mapping = typeof constructor;
 export const switcher = {
@@ -47,5 +50,6 @@ export const switcher = {
   quest:      quest_switcher ,
   perk:       perk_switcher ,
   reaction:   reaction_switcher,
+  character_battle_class:character_battle_class_switcher,
 }
 export type switcher_mapping = typeof switcher

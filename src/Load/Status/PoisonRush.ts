@@ -3,13 +3,14 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
+import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register: register_function = ({perk,status,reaction}, {perk:{Perk},reaction:{Reaction},status:{StatusBattle}}, Factory) => {
   class PoisonRushReaction extends Reaction
   {
     protected name: string = "PoisonRushReaction";
+    type: string ="PoisonRushReaction"
     protected whatTriggers: tag[][] = [['status ended' , 'poison']];
     protected action(react_character: Character,source:Character,target: Character[]): ActionOutput {
       return react_character.addStatus(new PoisonRush(this.masterService))
@@ -17,14 +18,16 @@ const register: register_function = ({perk,status,reaction}, {perk:{Perk},reacti
   }
   class PerkPoisonRush extends Perk {
     readonly poisonRush = new PoisonRushReaction(this.masterService);
-    get name():perkname{ return 'Posion Rush';}
+    readonly type:"PerkPoisonRush"="PerkPoisonRush"
+    get name():string{ return 'Posion Rush';}
     get tags(): tag[] { return [] }
 
     get reactions(): Reaction[] {return [this.poisonRush]}
   }
   class PoisonRush extends StatusBattle
   {
-    get name(): statusname { return "Poison Rush"; }
+    readonly type:"PoisonRush"="PoisonRush";
+    get name(): string { return "Poison Rush"; }
     get description(): string { return 'increase physicall attack after poison status is lost' }
     protected DURATION: number = 1;
     applyModifiers(character: Character): void {
@@ -35,8 +38,8 @@ const register: register_function = ({perk,status,reaction}, {perk:{Perk},reacti
       return Factory.pushBattleActionOutput([[],['Overcoming poison grants extra attack']],super.onStatusGainded(target))
     }
   }
-  perk["Posion Rush"]=PerkPoisonRush
-  status["Posion Rush"]=PoisonRush
+  perk["PerkPoisonRush"]=PerkPoisonRush
+  status["PoisonRush"]=PoisonRush
   reaction["PoisonRushReaction"]=PoisonRushReaction
 }
 const module_name = "PoisonRush"

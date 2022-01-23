@@ -13,6 +13,7 @@ import { UniqueCharacterHandler } from './unique-character-handler';
 
 export class FactWeb implements storeable
 {
+  type:"FactWeb"="FactWeb";
   static readonly TIME_INTERVAL_2_SPREAD = 1440;
   private static readonly SPREAD_COEFFICIENT = 20;
   private last_spread_time = 0;
@@ -175,6 +176,7 @@ type DataWebStoreable = {
 
 class Fact implements storeable
 {
+  type:"Fact"="Fact";
   state:any;
   private _importance:fact_importance;
   constructor(fact_state:any, fact_importance:fact_importance){

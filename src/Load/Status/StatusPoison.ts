@@ -1,14 +1,14 @@
 import { register_function } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statusname } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 const register:register_function = ({status},{status:status_constructor},Factory)=>{
   const { StatusBattle } = status_constructor
   class StatusPoison extends StatusBattle
   {
     protected DURATION: number = 6;
-    get name(): statusname { return 'Poison'; }
+    readonly type: "Poison"="Poison"
+    get name(): string { return 'Poison'; }
     get description(): string { return `Causes the target to lose hp gradually\n${this.DURATION} turns left.`; }
     protected effect(target: Character): ActionOutput
     {

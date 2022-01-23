@@ -24,9 +24,9 @@ export function ItemFactory(masterService:MasterService,options:ItemStoreable):G
 }
 //@ts-ignore
 export const item_switcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armornameEnum| itemsEnum]:ItemConstructor} = {
-  'hand':MeleeUnharmed,
-  'a rock':RangedUnharmed,
-  'No shield':ShieldNoShield,
-  'No Armor':ArmorNoArmor,
+  'MeleeUnharmed':MeleeUnharmed,
+  'RangedUnharmed':RangedUnharmed,
+  'ShieldNoShield':ShieldNoShield,
+  'ArmorNoArmor':ArmorNoArmor,
 }
 export interface ItemConstructor { new (masterService:MasterService):GameItem }

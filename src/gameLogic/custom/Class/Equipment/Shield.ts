@@ -15,15 +15,8 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
  * @extends {Equipment}
  */
 export abstract class Shield extends Equipment{
-  /**
-   * Can only use shieldname
-   *
-   * @readonly
-   * @abstract
-   * @type {shieldname}
-   * @memberof Shield
-   */
-  abstract get name(): shieldname;
+  readonly abstract type:shieldname
+  abstract get name(): string;
   /**
    * Equips into user shield
    *
@@ -62,7 +55,8 @@ export abstract class Shield extends Equipment{
 
 export class ShieldNoShield extends Shield
 {
-  get name(): shieldname { return 'No shield'; }
+  readonly type:"ShieldNoShield"="ShieldNoShield"
+  get name(): string { return 'No shield'; }
   canEquip(character: Character): boolean { return false; }
   get tags(): tag[] { return ['unequiped','no shield']; }
   get isSingleTarget(): boolean { return true; }
