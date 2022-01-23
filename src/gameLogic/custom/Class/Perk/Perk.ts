@@ -17,15 +17,8 @@ import { hashable } from "../../ClassHelper/ObjectSet";
  */
 export abstract class Perk implements storeable, hashable
 {
-  /**
-   * Can only use perkname
-   *
-   * @readonly
-   * @abstract
-   * @type {perkname}
-   * @memberof Perk
-   */
-  abstract get name():perkname;
+  abstract get name():string;
+  abstract type:perkname;
   protected readonly masterService:MasterService;
   constructor(masterService:MasterService)
   { this.masterService = masterService; }
@@ -54,7 +47,7 @@ export abstract class Perk implements storeable, hashable
    */
   get specials():SpecialAttack[] { return []}
   hash(): string { return this.name }
-  toJson():PerkStoreable { return {Factory:"Perk",type:this.name}; }
+  toJson():PerkStoreable { return {Factory:"Perk",type:this.type}; }
   fromJson(options:PerkStoreable):void { }
 }
 
