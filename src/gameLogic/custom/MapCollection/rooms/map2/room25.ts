@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { Room } from "src/gameLogic/custom/Class/maps/room";
+import { fill_room, Room } from "src/gameLogic/custom/Class/maps/room";
 
 export function room25(roomname: string)
 {
@@ -14,7 +14,7 @@ export function room25(roomname: string)
       options: (roomname === 'room25') ? [returnToMap1] : [],
       fixed_options: [null, null, null, null, null]
     }
-    return new Room({
+    return fill_room({
       onEnter: function(){masterService.descriptionHandler.tailDescription(roomDescription,'map').nextDescription()},
       onExit: function(){},
       beforeMoveTo: function(roomname: string){return true},

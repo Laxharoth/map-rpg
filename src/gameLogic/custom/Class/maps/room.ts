@@ -6,15 +6,8 @@ import { MasterService } from "src/app/service/master.service";
  * @export
  * @class Room
  */
-export class Room{
-  constructor({onEnter,onExit,beforeMoveTo=(roomName:string) => true,afterMoveTo=(roomName:string)=>{},icon}) {
-    this.onEnter       = onEnter;
-    this.onExit        = onExit;
-    this.beforeMoveTo  = beforeMoveTo;
-    this.afterMoveTo   = afterMoveTo;
-    this.icon          = icon;
-  }
-    /**
+export interface Room{
+  /**
    * The action to be performed when the room is entered.
    * * Room functions order:
    *  * onEnter
@@ -48,7 +41,7 @@ export class Room{
       * @returns true if can move to the specified room.
       * @memberof Room
       */
-     beforeMoveTo: (roomName:string) => boolean;
+     beforeMoveTo ?: (roomName:string) => boolean;
      /**
       * Perform an action after moving to a room.
       * * Room functions order:
@@ -60,8 +53,16 @@ export class Room{
       * @param {string} roomName The name of the room to be moved.
       * @memberof Room
       */
-     afterMoveTo: (roomName:string) => void;
-     icon        : string;
+     afterMoveTo ?: (roomName:string) => void;
+     icon        ?: string;
 }
 
 export type roomFunction = (masterService:MasterService) => Room;
+export function fill_room(room:Room):Room
+{
+  const {beforeMoveTo=null,afterMoveTo=null,icon=null} = room;
+  !beforeMoveTo && (room.beforeMoveTo = (roomName:string)=>true);
+  !afterMoveTo && (room.afterMoveTo = (roomName:string)=>{});
+  !icon && (room.icon = '');
+  return room;
+}

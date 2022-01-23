@@ -5,7 +5,7 @@ import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
 import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { fill_room, Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
 
@@ -190,7 +190,7 @@ export function room(roomName: string): roomFunction {
   The can flew awa}`
     }, options:[nextoption],fixed_options:[null,null,null,null,null]};
 
-    const room = new Room({
+    const room = fill_room({
       onEnter: () => {
         if ($flag("map1room1firstenter")) {
           masterService.descriptionHandler.tailDescription(fistEnter, 'map');

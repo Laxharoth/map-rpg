@@ -3,7 +3,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { GameStateService } from './game-state';
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
-import { Room, roomFunction } from 'src/gameLogic/custom/Class/maps/room';
+import { fill_room, Room, roomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { LockMapService } from './lock-map';
 
 /**
@@ -24,7 +24,7 @@ export class MapHandlerService {
   private readonly masterService: MasterService;
   private gameStateSubscription: Subscription;
 
-  private currentRoom:Room = new Room({onEnter:()=>{},onExit:()=>{},icon:''});
+  private currentRoom:Room = fill_room({onEnter:()=>{},onExit:()=>{},icon:''});
   currentMap:GameMap;
 
   constructor(masterService:MasterService,gameStateHandler:GameStateService, private lockmap:LockMapService)

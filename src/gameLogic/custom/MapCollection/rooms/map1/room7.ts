@@ -7,7 +7,7 @@ import { Description } from "src/gameLogic/custom/Class/Descriptions/Description
 import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
-import { Room } from "src/gameLogic/custom/Class/maps/room";
+import { fill_room, Room } from "src/gameLogic/custom/Class/maps/room";
 import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
@@ -138,7 +138,7 @@ export function room(masterService:MasterService):Room
     {descriptionData:function(){return `Guess I will go back`},options:[my_nextOption],fixed_options},
     {descriptionData:function(){return `little choices i have`},options:[my_nextOption],fixed_options},
   ]
-  const room = new Room({
+  const room = fill_room({
     onEnter  : () => {
       masterService.descriptionHandler.tailDescription(roomDescription,'map')
       masterService.descriptionHandler.nextDescription();
