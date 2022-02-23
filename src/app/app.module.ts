@@ -4,8 +4,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CharacterStatComponent } from './component/character-stat/character-stat.component';
 import { CharacterUserComponent } from './component/character-user/character-user.component';
-import { DescriptionOptionsComponent } from './component/description-options/description-options.component';
-import { DescriptionComponent } from './component/description/description.component';
+import { SceneOptionsComponent } from './component/Scene/scene-options/scene-options.component';
+import { SceneComponent } from './component/Scene/scene/scene.component';
 import { DropableItemComponent } from './component/dropable-item/dropable-item.component';
 import { EquipedEquipmentComponent } from './component/equiped-equipment/equiped-equipment.component';
 import { EquipmentOnCharacterComponent } from './component/equipment-on-character/equipment-on-character.component';
@@ -31,7 +31,7 @@ import { UserExperienceComponent } from './component/user-experience/user-experi
 import { OverrideCssVarDirective } from './directive/override-css-var.directive';
 import { DescriptableDescriptionComponent } from './component/descriptable/descriptable-description/descriptable-description.component';
 import { DescriptionSwitchComponent } from './component/descriptable/description-switch/description-switch.component';
-import { BtnDescriptionOptionComponent } from './component/btn-description-option/btn-description-option.component';
+import { BtnSceneOptionComponent } from './component/Scene/btn-description-option/btn-scene-option.component';
 import { SelectPerkGuiComponent } from './component/gui/select-perk-gui/select-perk-gui.component';
 import { StatUpGuiComponent } from './component/gui/stat-up-gui/stat-up-gui.component';
 import { PerkUpItemComponent } from './component/perk-up/perk-up-item/perk-up-item.component';
@@ -43,8 +43,8 @@ import { InfoPageGuiComponent } from './component/gui/info-page-gui/info-page-gu
     AppComponent,
     MapComponent,
     GuiComponent,
-    DescriptionComponent,
-    DescriptionOptionsComponent,
+    SceneComponent,
+    SceneOptionsComponent,
     PartyComponent,
     PartyMemberComponent,
     CharacterUserComponent,
@@ -70,7 +70,7 @@ import { InfoPageGuiComponent } from './component/gui/info-page-gui/info-page-gu
     EquipmentOnCharacterComponent,
     DescriptableDescriptionComponent,
     DescriptionSwitchComponent,
-    BtnDescriptionOptionComponent,
+    BtnSceneOptionComponent,
     SelectPerkGuiComponent,
     StatUpGuiComponent,
     PerkUpItemComponent,

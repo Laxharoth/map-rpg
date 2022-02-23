@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
-import { game_item_dropable } from 'src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem';
-import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
+import { game_item_dropable } from 'src/gameLogic/custom/Class/Scene/SceneAddExceedItem';
 
 @Component({
   selector: 'app-excess-item-gui',
@@ -16,16 +15,16 @@ export class ExcessItemGuiComponent implements OnInit {
 
   private excess_item_list_update_subscription:Subscription;
   constructor(private masterService:MasterService) {
-    this.excess_item_list_update_subscription = masterService.descriptionHandler.onSetDescription().subscribe(description=>
+    this.excess_item_list_update_subscription = masterService.sceneHandler.onSetScene().subscribe(scene=>
       {
         if(masterService.gameStateHandler.gameState==="excess-item")
         ( [this.character_inventory,this.excess_item_list]
           =
-          description.descriptionData())
+          scene.sceneData())
       });
       ( [this.character_inventory,this.excess_item_list]
         =
-        masterService.descriptionHandler.currentDescription.descriptionData());
+        masterService.sceneHandler.currentScene.sceneData());
   }
   ngOnInit(): void {
   }

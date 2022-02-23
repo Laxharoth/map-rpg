@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MasterService } from 'src/app/service/master.service';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { CoreStats } from 'src/gameLogic/custom/Class/Character/Character.type';
-import { nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
-import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+import { nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
+import { Scene, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 
 @Component({
   selector: 'app-stat-up-gui',
@@ -19,11 +19,11 @@ export class StatUpGuiComponent implements OnInit {
   private get_character_subsciption:Subscription;
 
   constructor(private masterService:MasterService) {
-    this.get_character_subsciption = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
-      this.initialize_description(description)
+    this.get_character_subsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
+      this.initialize_description(scene)
     })
-    this.initialize_description(masterService.descriptionHandler.currentDescription)
-    masterService.descriptionHandler.setDescription(false);
+    this.initialize_description(masterService.sceneHandler.currentScene)
+    masterService.sceneHandler.setScene(false);
   }
 
   ngOnInit(): void {
@@ -31,8 +31,8 @@ export class StatUpGuiComponent implements OnInit {
   ngOnDestroy(): void {
     this.get_character_subsciption && this.get_character_subsciption.unsubscribe();
   }
-  private _option_select:DescriptionOptions;
-  get option_select():DescriptionOptions
+  private _option_select:SceneOptions;
+  get option_select():SceneOptions
   {
     if(!this._option_select)this._option_select = {
       text:'select',
@@ -46,14 +46,14 @@ export class StatUpGuiComponent implements OnInit {
     }
     return this._option_select;
   }
-  private _option_skip:DescriptionOptions;
-  get option_skip():DescriptionOptions
+  private _option_skip:SceneOptions;
+  get option_skip():SceneOptions
   {
     if(!this._option_skip)this._option_skip = nextOption(this.masterService,'skip');
     return this._option_skip;
   }
-  private _option_reset:DescriptionOptions
-  get option_reset():DescriptionOptions
+  private _option_reset:SceneOptions
+  get option_reset():SceneOptions
   {
     if(!this._option_reset)this._option_reset = {text:'reset',action:()=>{
       this.core_stats = {...this.character.core_stats}
@@ -61,11 +61,11 @@ export class StatUpGuiComponent implements OnInit {
     },disabled:false}
     return this._option_reset;
   }
-  private initialize_description(description:Description)
+  private initialize_description(description:Scene)
   {
-    const character = description.descriptionData();
+    const character = description.sceneData();
     if(!(character instanceof Character))return;
-    if(character.level_stats.upgrade_point===0) { this.masterService.descriptionHandler.nextDescription(false); return; }
+    if(character.level_stats.upgrade_point===0) { this.masterService.sceneHandler.nextScene(false); return; }
     this.character = character;
     this.core_stats = {...character.core_stats}
     this.max_core_stats = character.battle_class.max_core_at_level(character.level_stats.level);

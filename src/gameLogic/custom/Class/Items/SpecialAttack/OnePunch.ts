@@ -1,6 +1,6 @@
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 
@@ -15,7 +15,7 @@ export class OnePunch extends SpecialAttack
   get isSingleTarget(): boolean { return true; }
   protected _itemEffect(user:Character ,target: Character): ActionOutput {
       target.takeDamage(Infinity);
-      const specialDescription:ActionOutput = [[this.specialDescription(user,target)],[]]
+      const specialDescription:ActionOutput = [[this.specialScene(user,target)],[]]
       return specialDescription;
   }
   get added_description_sections(): GameElementDescriptionSection[]
@@ -23,10 +23,10 @@ export class OnePunch extends SpecialAttack
   ////////////////////
   /// SPECIAL DESCRIPTION
   ////////////////////
-  private specialDescriptionOptions = { text:'NEXT!!',action:()=>{this.masterService.descriptionHandler.nextDescription(false)},disabled: false }
-  private specialDescription(user: Character, target: Character):Description{
+  private specialDescriptionOptions = { text:'NEXT!!',action:()=>{this.masterService.sceneHandler.nextScene(false)},disabled: false }
+  private specialScene(user: Character, target: Character):Scene{
     return {
-      descriptionData: () => `${user.name.toUpperCase()} OHKO ${target.name}!`,
+      sceneData: () => `${user.name.toUpperCase()} OHKO ${target.name}!`,
       options: [this.specialDescriptionOptions],
       fixed_options: [null, null, null, null, null]
     }

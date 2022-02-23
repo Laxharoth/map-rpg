@@ -5,7 +5,7 @@ import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { EnergyStats, CoreStats, ResistanceStats, LevelStats } from "./Character.type";
 import { Character, CharacterStoreable } from "./Character";
-import { Description } from '../Descriptions/Description';
+import { Scene } from '../Scene/Scene';
 import { tree_node } from '../CharacterBattleClass/ArrayTree';
 import { Upgrade } from '../Upgrade/Upgrade';
 import { CharacterEquipmentOptions } from './Inventory/CharacterEquipment';
@@ -30,8 +30,8 @@ export abstract class UniqueCharacter extends Character implements storeable {
   {
     return this.character_battle_class.upgrade_tree(this.masterService).get_children(path);
   }
-  emit_stat_up():void { this.masterService.descriptionHandler.headDescription({descriptionData:()=>this,options:[],fixed_options:[null,null,null,null,null]},'stat-up') }
-  emit_perk_up():void { this.masterService.descriptionHandler.headDescription({descriptionData:()=>this,options:[],fixed_options:[null,null,null,null,null]},'perk-tree');}
+  emit_stat_up():void { this.masterService.sceneHandler.headScene({sceneData:()=>this,options:[],fixed_options:[null,null,null,null,null]},'stat-up') }
+  emit_perk_up():void { this.masterService.sceneHandler.headScene({sceneData:()=>this,options:[],fixed_options:[null,null,null,null,null]},'perk-tree');}
   emit_level_up():void{ this.emit_perk_up();this.emit_stat_up(); }
   total_experience_to_next_level() { return this.character_battle_class.total_experience_to_next_level(this.level_stats.level) }
   current_level_experience() { return this.character_battle_class.current_level_experience(this.level_stats) }

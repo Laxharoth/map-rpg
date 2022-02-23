@@ -2,9 +2,9 @@ import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
-import { DescriptionSelectItemFromMap, drop_item, nextOption } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
-import { SetShopDescription } from "src/gameLogic/custom/Class/Descriptions/ShopDescription";
+import { SceneSelectItemFromMap, drop_item, nextOption } from "src/gameLogic/custom/Class/Scene/CommonOptions";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
+import { SetShopScene } from "src/gameLogic/custom/Class/Scene/ShopScene";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
 import { fill_room, Room } from "src/gameLogic/custom/Class/maps/room";
@@ -127,35 +127,35 @@ export function room(masterService:MasterService):Room
       },
       disabled:false
     },
-    DescriptionSelectItemFromMap(masterService),
+    SceneSelectItemFromMap(masterService),
     {text:"option3",action:()=>{},disabled:false}
   ]
   const fixed_options:[null, null, null, null, null] = [null, null,null,null,null]
-  const [roomDescription, cantGoThere, cantGoThereYet, goBackThere, goBackThere2]:Description[]=[
-    {descriptionData:function(){return `This actually looks the same`},options:roomOptions,fixed_options},
-    {descriptionData:function(){return `I didn't wanted to go there anyway`},options:[my_nextOption],fixed_options},
-    {descriptionData:function(){return `I didn't wanted to go there yet anyway`},options:[my_nextOption],fixed_options},
-    {descriptionData:function(){return `Guess I will go back`},options:[my_nextOption],fixed_options},
-    {descriptionData:function(){return `little choices i have`},options:[my_nextOption],fixed_options},
+  const [roomScene, cantGoThere, cantGoThereYet, goBackThere, goBackThere2]:Scene[]=[
+    {sceneData:function(){return `This actually looks the same`},options:roomOptions,fixed_options},
+    {sceneData:function(){return `I didn't wanted to go there anyway`},options:[my_nextOption],fixed_options},
+    {sceneData:function(){return `I didn't wanted to go there yet anyway`},options:[my_nextOption],fixed_options},
+    {sceneData:function(){return `Guess I will go back`},options:[my_nextOption],fixed_options},
+    {sceneData:function(){return `little choices i have`},options:[my_nextOption],fixed_options},
   ]
   const room = fill_room({
     onEnter  : () => {
-      masterService.descriptionHandler.tailDescription(roomDescription,'map')
-      masterService.descriptionHandler.nextDescription();
+      masterService.sceneHandler.tailScene(roomScene,'map')
+      masterService.sceneHandler.nextScene();
     },
     onExit   : () => {},
     beforeMoveTo(roomName){
       //if(["room6","room8"].includes(roomName))
       if(["room6"].includes(roomName))
       {
-        masterService.descriptionHandler.headDescription(cantGoThere,'map');
-        masterService.descriptionHandler.setDescription();
+        masterService.sceneHandler.headScene(cantGoThere,'map');
+        masterService.sceneHandler.setScene();
         return false;
       }
       if(["room8"].includes(roomName) && $flag("firstreturn2room1"))
       {
-        masterService.descriptionHandler.headDescription(cantGoThereYet,'map');
-        masterService.descriptionHandler.setDescription();
+        masterService.sceneHandler.headScene(cantGoThereYet,'map');
+        masterService.sceneHandler.setScene();
         return false;
       }
       if(roomName === "room1")
@@ -163,7 +163,7 @@ export function room(masterService:MasterService):Room
         if($flag("firstreturn2room1"))
         {
           masterService.flagsHandler.setFlag("firstreturn2room1",false);
-          masterService.descriptionHandler.tailDescription([goBackThere,goBackThere2],'map');
+          masterService.sceneHandler.tailScene([goBackThere,goBackThere2],'map');
         }
       }
       return true;
@@ -180,7 +180,7 @@ export function room(masterService:MasterService):Room
       ,masterService
       ,{'item-test':10,'Shieldtest':15,'Armortest':20}
     );
-    SetShopDescription(masterService,shop);
+    SetShopScene(masterService,shop);
   }
   function makeDynamicShop():void
   {
@@ -198,7 +198,7 @@ export function room(masterService:MasterService):Room
       }
       dynamicShop.fromJson(items)
     }
-    SetShopDescription(masterService,dynamicShop);
+    SetShopScene(masterService,dynamicShop);
   }
 }
 

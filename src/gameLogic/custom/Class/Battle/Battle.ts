@@ -1,27 +1,26 @@
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
-import { Description } from 'src/gameLogic/custom/Class/Descriptions/Description';
-import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+import { Scene, SceneOptions} from 'src/gameLogic/custom/Class/Scene/Scene';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
 import { attack_order, get_undefeated_target } from './Battle.functions';
-import { nextOption } from '../Descriptions/CommonOptions';
+import { nextOption } from '../Scene/CommonOptions';
 import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
-import { is_item_disabled_function, selectItem, valid_target_function } from '../Descriptions/DescriptionUseItem';
-import { selectTarget } from '../Descriptions/DescriptionSelectTarget';
+import { is_item_disabled_function, selectItem, valid_target_function } from '../Scene/SceneUseItem';
+import { selectTarget } from '../Scene/SceneSelectTarget';
 import { BattleUseable } from '../Items/BattleUseable';
 export class Battle {
   player: Character;
   party: Character[];
   enemy_formation: EnemyFormation;
   private master_service: MasterService;
-  protected battle_options: DescriptionOptions[];
+  protected battle_options: SceneOptions[];
   fistRound = true;
   protected battleRoundString: string[] = [];
   protected startRoundString: string[] = [];
-  protected battleRoundDescription: Description[] = [];
-  protected startRoundDescription: Description[] = [];
+  protected battleRoundScene: Scene[] = [];
+  protected startRoundScene: Scene[] = [];
 
   /**
    *
@@ -29,7 +28,7 @@ export class Battle {
    * @param enemy_formation The EnemyFormation
    * @param initialize_battle_options Sets up the battle options (should not be an arrow function)
    */
-  constructor(master_service: MasterService, enemy_formation: EnemyFormation, post_initialize_battle_options: (battle_options:DescriptionOptions[])=>void=null) {
+  constructor(master_service: MasterService, enemy_formation: EnemyFormation, post_initialize_battle_options: (battle_options:SceneOptions[])=>void=null) {
     this.player = master_service.partyHandler.user;
     this.party = master_service.partyHandler.party;
     this.enemy_formation = enemy_formation;
@@ -59,69 +58,69 @@ export class Battle {
     }
     for(let battle_command of battle_commands) {
       if(battle_command.source.is_defeated())battle_command=new DefeatedCommand(battle_command.source, battle_command.target);
-      turn_characters.forEach(character=>pushBattleActionOutput(character.battle_command_react(battle_command),[this.battleRoundDescription, this.battleRoundString]))
-      pushBattleActionOutput(battle_command.excecute(),[this.battleRoundDescription, this.battleRoundString])
+      turn_characters.forEach(character=>pushBattleActionOutput(character.battle_command_react(battle_command),[this.battleRoundScene, this.battleRoundString]))
+      pushBattleActionOutput(battle_command.excecute(),[this.battleRoundScene, this.battleRoundString])
       if (this.enemy_formation.IsDefeated) {
         for (const enem of this.enemy_formation.enemies)
-          pushBattleActionOutput(enem.onDefeated(), [this.battleRoundDescription, this.battleRoundString]);
+          pushBattleActionOutput(enem.onDefeated(), [this.battleRoundScene, this.battleRoundString]);
         break;
       }
       if (partyIsDefeated()) {
         for (const ally of [this.player].concat(this.party))
-          pushBattleActionOutput(ally.onDefeated(), [this.battleRoundDescription, this.battleRoundString]);
+          pushBattleActionOutput(ally.onDefeated(), [this.battleRoundScene, this.battleRoundString]);
         break;
       }
     }
     if (this.enemy_formation.IsDefeated) {
       for(const character of [this.player].concat(this.party).concat(this.enemy_formation.enemies))character.onEndBattle();
-      this.battleRoundDescription.push(this.endBattlePlayerWins())
+      this.battleRoundScene.push(this.endBattlePlayerWins())
     } else if (partyIsDefeated()) {
       for(const character of [this.player].concat(this.party).concat(this.enemy_formation.enemies))character.onEndBattle();
-      this.battleRoundDescription.push(this.endBattleEnemyWins())
+      this.battleRoundScene.push(this.endBattleEnemyWins())
     } else {
-      this.battleRoundDescription.push(this.roundMessage(this.battleRoundString))
+      this.battleRoundScene.push(this.roundMessage(this.battleRoundString))
     }
-    this.master_service.descriptionHandler
+    this.master_service.sceneHandler
       .flush(0)
-      .tailDescription(this.battleRoundDescription, 'battle')
-      .nextDescription(false);
+      .tailScene(this.battleRoundScene, 'battle')
+      .nextScene(false);
   }
 
-  roundMessage(roundStrings: string[]): Description {
+  roundMessage(roundStrings: string[]): Scene {
     const nextOption = {text:"next", action:() => this.startRound(),disabled:false}
-    return {descriptionData: () => `${roundStrings.join("\n\n")}`, options:[nextOption],fixed_options:[null,null,null,null,null]}
+    return {sceneData: () => `${roundStrings.join("\n\n")}`, options:[nextOption],fixed_options:[null,null,null,null,null]}
   }
 
   /**
-   * Reset the round strings and description lists.
+   * Reset the round strings and scenes lists.
    */
   startRound(): void {
     this.startRoundString = [];
     this.battleRoundString = [];
-    this.startRoundDescription = [];
-    this.battleRoundDescription = [];
+    this.startRoundScene = [];
+    this.battleRoundScene = [];
     const specials = this.player.specialAttacks;
     this.special_option.disabled = specials.length <= 0;
     this.item_option.disabled = this.player.inventory.items.length <= 0 || this.player.inventory.items.every(item => item.disabled(this.player));
 
     for (const character of get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
-      const [description, string] = character.startRound();
-      this.startRoundDescription.push(...description);
+      const [scene, string] = character.startRound();
+      this.startRoundScene.push(...scene);
       this.startRoundString.push(string.join('\n'));
     }
-    this.startRoundDescription.push({
-      descriptionData: () => `${this.startRoundString.join("\n\n")}`,
+    this.startRoundScene.push({
+      sceneData: () => `${this.startRoundString.join("\n\n")}`,
       options: this.player.hasTag('paralized') ? [this.playerParalizedOption] : this.battle_options,
       fixed_options: [null, null, null, null, null]
     });
-    this.master_service.descriptionHandler
-      .tailDescription(this.startRoundDescription, 'battle')
+    this.master_service.sceneHandler
+      .tailScene(this.startRoundScene, 'battle')
     if (this.fistRound)
-      this.master_service.descriptionHandler
-      .setDescription(false);
+      this.master_service.sceneHandler
+      .setScene(false);
     else
-      this.master_service.descriptionHandler
-      .nextDescription(false);
+      this.master_service.sceneHandler
+      .nextScene(false);
     this.fistRound = false;
   }
 
@@ -130,57 +129,57 @@ export class Battle {
    *
    * @param {Character[]} targets
    * @param {(target:Character[])=>ActionOutput} playerAction
-   * @return {*}  {Description}
+   * @return {*}  {Scene}
    */
   private selectTarget(targets: Character[], playerAction:BattleCommand): void {
     const select_target_action = (target:Character[]) => {
       playerAction.target = target;
       this.round(playerAction)
     }
-    this.master_service.descriptionHandler
-      .headDescription(
+    this.master_service.sceneHandler
+      .headScene(
         selectTarget(this.master_service,targets,select_target_action),
         'battle'
       )
-      .setDescription(false);
+      .setScene(false);
   }
   /**
    * Returns options to select an item
    *
    * @param {GameItem[]} items
-   * @return {*}  {Description}
+   * @return {*}  {Scene}
    */
   selectItem(items: BattleUseable[]): void {
-    this.master_service.descriptionHandler
-      .headDescription(this.use_Item_on_battle(items), 'battle')
-      .setDescription(false);
+    this.master_service.sceneHandler
+      .headScene(this.use_Item_on_battle(items), 'battle')
+      .setScene(false);
   }
-  private endBattlePlayerWins():Description {
+  private endBattlePlayerWins():Scene {
     this.master_service.partyHandler.battle_ended('victory')
-    pushBattleActionOutput(this.enemy_formation.give_experience([this.player].concat(this.party)),[this.battleRoundDescription, this.battleRoundString])
+    pushBattleActionOutput(this.enemy_formation.give_experience([this.player].concat(this.party)),[this.battleRoundScene, this.battleRoundString])
     const nextOption = {
       text:'next',
       action:() => {
       this.player.healHitPoints(10);
-      this.master_service.descriptionHandler
-        .tailDescription(this.enemy_formation.onPartyVictory([this.player].concat(this.party)), 'battle')
-        .nextDescription(false);
+      this.master_service.sceneHandler
+        .tailScene(this.enemy_formation.onPartyVictory([this.player].concat(this.party)), 'battle')
+        .nextScene(false);
       for (const item of this.enemy_formation.loot()) {
         this.player.inventory.addItem(item);
       }
     }
     ,disabled:false}
-    return { descriptionData: () => `${this.battleRoundString.join("\n\n")}`,options: [nextOption],fixed_options:[null,null,null,null,null]};
+    return { sceneData: () => `${this.battleRoundString.join("\n\n")}`,options: [nextOption],fixed_options:[null,null,null,null,null]};
   }
-  private endBattleEnemyWins():Description {
+  private endBattleEnemyWins():Scene {
     this.master_service.partyHandler.battle_ended('lost')
     const nextOption = {text:'next', action:() => {
       this.player.healHitPoints(this.player.energy_stats.hitpoints);
-      this.master_service.descriptionHandler
-        .tailDescription(this.enemy_formation.onEnemyVictory([this.player].concat(this.party)), 'battle')
-        .nextDescription(false);
+      this.master_service.sceneHandler
+        .tailScene(this.enemy_formation.onEnemyVictory([this.player].concat(this.party)), 'battle')
+        .nextScene(false);
     },disabled:false}
-    return {descriptionData: () => `${this.battleRoundString.join("\n\n")}`, options: [nextOption],fixed_options:[null,null,null,null,null]};
+    return {sceneData: () => `${this.battleRoundString.join("\n\n")}`, options: [nextOption],fixed_options:[null,null,null,null,null]};
   }
   protected playerParalizedOption = {text:"Paralized", action:() => { this.round(new EmptyCommand(this.player,[])) },disabled:false}
   protected attack_option ={text: "Attack",action: () => {
@@ -212,18 +211,18 @@ export class Battle {
     const [descriptionText, successfulEscaping] = this.enemy_formation.attemptEscape([this.player].concat(this.party))
     if (successfulEscaping) {
       this.master_service.partyHandler.battle_ended('escape')
-      this.master_service.descriptionHandler
+      this.master_service.sceneHandler
         .flush(0)
-        .tailDescription({descriptionData: descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]}, 'battle')
-        .nextDescription(false);
+        .tailScene({sceneData: descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]}, 'battle')
+        .nextScene(false);
       return;
     }
     //player will do nothing
     const playerAction= new EmptyCommand(this.player,[])
-    this.startRoundDescription.push({descriptionData:descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]})
+    this.startRoundScene.push({sceneData:descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]})
     this.round(playerAction)
   },disabled:false};
-  protected initialize_battle_options(): DescriptionOptions[] {
+  protected initialize_battle_options(): SceneOptions[] {
     return [
       this.attack_option,
       this.shoot_option,
@@ -245,10 +244,10 @@ export class Battle {
    * TODO document method
    *
    * @param {GameItem[]} items
-   * @return {*}  {Description}
+   * @return {Scene}
    * @memberof Battle
    */
-  private use_Item_on_battle(items:BattleUseable[]):Description
+  private use_Item_on_battle(items:BattleUseable[]):Scene
   {
     const use_item_on_battle = (item:GameItem,target:Character[])=>{
       const battle_action =  this.player.useItem(item,target);

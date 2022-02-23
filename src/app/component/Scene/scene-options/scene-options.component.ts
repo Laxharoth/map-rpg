@@ -1,20 +1,20 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
-import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+import { SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { MAXOPTIONSNUMBERPERPAGE } from 'src/gameLogic/custom/customTypes/constants';
 import { MakeFilledArray } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
 @Component({
-  selector: 'app-description-options',
-  templateUrl: './description-options.component.html',
-  styleUrls: ['./description-options.component.css']
+  selector: 'app-scene-options',
+  templateUrl: './scene-options.component.html',
+  styleUrls: ['./scene-options.component.css']
 })
-export class DescriptionOptionsComponent implements OnInit {
+export class SceneOptionsComponent implements OnInit {
 
-  currentOptions:DescriptionOptions[];
-  fixed_options:DescriptionOptions[];
-  private descriptionOptions:DescriptionOptions[];
+  currentOptions:SceneOptions[];
+  fixed_options:SceneOptions[];
+  private descriptionOptions:SceneOptions[];
 
   private getDescriptionOptionsSubscription : Subscription;
 
@@ -48,14 +48,14 @@ export class DescriptionOptionsComponent implements OnInit {
   private isFirst():boolean{ return this.currentOptions?.[0] === this.descriptionOptions?.[0]; }
   private isLast():boolean{ return this.offset+MAXOPTIONSNUMBERPERPAGE >= this.descriptionOptions.length; }
   private InitializeSubscriptions() {
-    this.getDescriptionOptionsSubscription = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
+    this.getDescriptionOptionsSubscription = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
       this.offset = 0;
-      this.descriptionOptions = description.options;
-      this.fixed_options = description.fixed_options;
+      this.descriptionOptions = scene.options;
+      this.fixed_options = scene.fixed_options;
       this.setCurrentOptions();
     });
-    this.descriptionOptions = this.masterService.descriptionHandler.currentDescription.options;
-    this.fixed_options = this.masterService.descriptionHandler.currentDescription.fixed_options;
+    this.descriptionOptions = this.masterService.sceneHandler.currentScene.options;
+    this.fixed_options = this.masterService.sceneHandler.currentScene.fixed_options;
     this.setCurrentOptions();
   }
 

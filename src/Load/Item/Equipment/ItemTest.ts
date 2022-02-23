@@ -4,7 +4,7 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats, EnergyStats, FullCalculatedStats, FullCoreStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { ArrayTree, tree_node } from "src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree";
 import { experience_cap } from "src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass";
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { armorname, itemname, meleename, rangedname, shieldname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Upgrade } from "src/gameLogic/custom/Class/Upgrade/Upgrade";
 import { UpgradeOptions } from "src/gameLogic/custom/Class/Upgrade/Upgrade.type";
@@ -30,14 +30,14 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
     protected _itemEffect(user:Character,target: Character): ActionOutput
     {
     const healHitPoints = target.healHitPoints(10);
-    return [[this.itemEffectDescription(target, healHitPoints)],[]];
+    return [[this.itemEffectScene(target, healHitPoints)],[]];
     }
 
-    //Description
-    private itemEffectDescription(target:Character, healHitPoints:number):Description
+    //Scene
+    private itemEffectScene(target:Character, healHitPoints:number):Scene
     {
       return {
-        descriptionData: function () {
+        sceneData: function () {
           return `Heal ${target.name} ${healHitPoints}`
         },
         options: [Factory.options.nextOption(this.masterService)],

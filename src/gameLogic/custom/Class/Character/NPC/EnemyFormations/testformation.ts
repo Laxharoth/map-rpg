@@ -1,9 +1,9 @@
-import { descriptionString } from './../../../Descriptions/Description';
+import { descriptionString } from '../../../Scene/Scene';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
 import { enemyTest } from "src/gameLogic/custom/Class/Character/NPC/enemyTest";
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { Enemy } from '../../Enemy/Enemy';
@@ -35,10 +35,10 @@ export class testformation extends EnemyFormation
 
 
   protected _enemies: (Character&Enemy)[];
-  onEnemyVictory(party: Character[]): Description {
+  onEnemyVictory(party: Character[]): Scene {
       return this.enemyVictory(party)
   }
-  onPartyVictory(party: Character[]): Description {
+  onPartyVictory(party: Character[]): Scene {
       return this.partyVictory(party)
   }
   loot():GameItem[]
@@ -51,17 +51,17 @@ export class testformation extends EnemyFormation
   //////////////////////////
   // Enemy Victory
   //////////////////////////
-  private enemyVictory(party: Character[]): Description {
+  private enemyVictory(party: Character[]): Scene {
     party.forEach(char=>{char.healHitPoints(Infinity)})
       const options = [this.exitOption('next')]
-      return {descriptionData:()=>`Enemy won`, options,fixed_options:[null,null,null,null,null]}
+      return {sceneData:()=>`Enemy won`, options,fixed_options:[null,null,null,null,null]}
   }
   //////////////////////////
   // Party Victory
   //////////////////////////
-  private partyVictory(party: Character[]): Description {
+  private partyVictory(party: Character[]): Scene {
     party.forEach(char=>{char.healHitPoints(10)})
       const options = [this.exitOption('next')]
-      return {descriptionData:()=>`Party won`, options,fixed_options:[null,null,null,null,null]}
+      return {sceneData:()=>`Party won`, options,fixed_options:[null,null,null,null,null]}
   }
 }

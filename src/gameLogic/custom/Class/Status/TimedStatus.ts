@@ -69,7 +69,7 @@ export abstract class TimedStatus extends Status{
     return super.onStatusGainded(target)
   }
   /**
-   * Removes the status and inserts the description to the list if the duration reaches zero.
+   * Removes the status and inserts the scene to the list if the duration reaches zero.
    *
    * @private
    * @param {Time} time The current time.
@@ -81,7 +81,7 @@ export abstract class TimedStatus extends Status{
     this.currentTime = time.getMinutes();
     if (this.remainingTime <= 0) {
       const [message] = target.removeStatus(this);
-      this.masterService.descriptionHandler.headDescription(message,'status').setDescription(false);
+      this.masterService.sceneHandler.headScene(message,'status').setScene(false);
     }
   }
   /**

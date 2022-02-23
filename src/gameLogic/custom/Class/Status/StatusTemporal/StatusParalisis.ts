@@ -1,7 +1,7 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { nextOption } from "src/gameLogic/custom/Class/Descriptions/CommonOptions";
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { nextOption } from "src/gameLogic/custom/Class/Scene/CommonOptions";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
@@ -27,7 +27,7 @@ export class StatusParalisis extends StatusBattle {
     {
       return pushBattleActionOutput(super.onStatusGainded(target), [
             [{
-              descriptionData: () => `${target.name} has been paralized.`,
+              sceneData: () => `${target.name} has been paralized.`,
               options: [nextOption(this.masterService)],
               fixed_options: [null, null, null, null, null]
             }],

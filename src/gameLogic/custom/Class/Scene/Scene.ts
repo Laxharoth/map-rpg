@@ -4,26 +4,26 @@ import { descriptable } from "../GameElementDescription/GameElementDescription";
  * A Representation of what the game will displayed (text and options)
  *
  * @export
- * @interface Description
+ * @interface Scene
  * @constructor Initializes the text function and options.
  */
-type fixed_option = DescriptionOptions|null
-export interface Description
+type fixed_option = SceneOptions|null
+export interface Scene
 {
-  descriptionData:() => any;
-  options: DescriptionOptions[];
+  sceneData:() => any;
+  options: SceneOptions[];
   fixed_options: [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
 }
-export type descriptionData=() => any;
+export type sceneData=() => any;
 export type descriptionString=() => string;
 
 /**
  * A representation of the options (buttons) for a description.
  *
  * @export
- * @interface DescriptionOptions
+ * @interface SceneOptions
  */
-export interface DescriptionOptions
+export interface SceneOptions
 {
   /**
    * The text to display
@@ -44,7 +44,7 @@ export interface DescriptionOptions
   disabled: boolean
 }
 
-export interface DescriptableDescriptionOptions extends DescriptionOptions
+export interface DescriptableSceneOptions extends SceneOptions
 {
   descriptable:descriptable;
 }

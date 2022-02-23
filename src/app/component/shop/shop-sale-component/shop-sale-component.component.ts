@@ -15,7 +15,7 @@ export class ShopSaleComponentComponent implements OnInit {
   constructor(private masterService:MasterService)
   {
     this.player = this.masterService.partyHandler.user;
-    this.shop = this.masterService.descriptionHandler.currentDescription.descriptionData();
+    this.shop = this.masterService.sceneHandler.currentScene.sceneData();
     if(!(this.shop instanceof Shop))this.shop = ErrorShop(this.masterService);
   }
 

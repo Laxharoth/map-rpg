@@ -1,7 +1,7 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { MasterService } from "src/app/service/master.service";
 import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
-import { Description, DescriptionOptions, descriptionString } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene, SceneOptions, descriptionString } from "src/gameLogic/custom/Class/Scene/Scene";
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { ActionOutput } from '../../Character.type';
@@ -48,19 +48,19 @@ export abstract class EnemyFormation
    *
    * @abstract
    * @param {Character[]} party The party of the player.
-   * @return {Description}
+   * @return {Scene}
    * @memberof EnemyFormation
    */
-  abstract onEnemyVictory(party: Character[]):Description;
+  abstract onEnemyVictory(party: Character[]):Scene;
   /**
    * Defines the description if the enemy party lose.
    *
    * @abstract
    * @param {Character[]} party The party of the player.
-   * @return {Description}
+   * @return {Scene}
    * @memberof EnemyFormation
    */
-  abstract onPartyVictory(party: Character[]):Description;
+  abstract onPartyVictory(party: Character[]):Scene;
   /**
    * Defines the loot the enemyformation will drop when defeated
    *
@@ -135,11 +135,11 @@ export abstract class EnemyFormation
    * @return {*}  {DescriptionOptions}
    * @memberof EnemyFormation
    */
-  protected exitOption(exitString:string):DescriptionOptions
+  protected exitOption(exitString:string):SceneOptions
   {
     return {
       text:exitString,
-      action:()=>{ this.masterService.descriptionHandler.flush(0).nextDescription(false); },
+      action:()=>{ this.masterService.sceneHandler.flush(0).nextScene(false); },
       disabled:false
     }
   }

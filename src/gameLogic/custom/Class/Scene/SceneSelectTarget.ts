@@ -2,7 +2,7 @@ import { MasterService } from "src/app/service/master.service";
 import { MAXOPTIONSNUMBERPERPAGE } from "../../customTypes/constants";
 import { Character } from "../Character/Character";
 import { nextOption } from "./CommonOptions";
-import { Description, DescriptionOptions } from "./Description";
+import { Scene, SceneOptions } from "./Scene";
 
 /**
  * Returns options to select target.
@@ -11,9 +11,9 @@ import { Description, DescriptionOptions } from "./Description";
  * @param {(target:Character[])=>ActionOutput} playerAction
  * @return {*}  {Description}
  */
- export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Description
+ export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene
  {
-   const targetsOptions:DescriptionOptions[] = [];
+   const targetsOptions:SceneOptions[] = [];
    const returnOption = nextOption(masterService,'return');
    for(const target of targets)
    {
@@ -30,6 +30,6 @@ import { Description, DescriptionOptions } from "./Description";
      targetsOptions.push(returnOption)
    }
    return {
-     descriptionData:()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
+     sceneData:()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
      options:targetsOptions,fixed_options:[null,null,null,null,null]}
  }

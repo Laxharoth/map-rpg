@@ -23,7 +23,7 @@ export class ShopInterfaceComponent implements OnInit {
   constructor(private masterService:MasterService,private shopCurrentItemService:ShopCurrentItemService)
   {
     this.player = this.masterService.partyHandler.user;
-    this.shop = this.masterService.descriptionHandler.currentDescription.descriptionData();
+    this.shop = this.masterService.sceneHandler.currentScene.sceneData();
     this.reloadShopArrays();
   }
 

@@ -2,8 +2,8 @@ import { randomCheck, pushBattleActionOutput, randomBetween } from 'src/gameLogi
 import { MasterService } from "src/app/service/master.service";
 import { FactoryFunction, factoryMap, factoryname } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { gamesavenames } from "src/gameLogic/configurable/subservice/game-saver.type";
-import { DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
-import { nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
+import { SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { primitive } from '../types';
 
 /** @type {FactoryFunction&global_functions} */
@@ -28,5 +28,5 @@ interface global_functions{
   randomCheck:typeof randomCheck;
   randomBetween:typeof randomBetween;
   pushBattleActionOutput:typeof pushBattleActionOutput;
-  options:{[key in options_names_enum]:(masterService:MasterService,...args:any[])=>DescriptionOptions};
+  options:{[key in options_names_enum]:(masterService:MasterService,...args:any[])=>SceneOptions};
 }

@@ -1,10 +1,10 @@
 
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
-import { nextOption } from '../Descriptions/CommonOptions';
+import { nextOption } from '../Scene/CommonOptions';
 
 export class TimedStatusTest extends TimedStatus
 {
@@ -17,17 +17,17 @@ export class TimedStatusTest extends TimedStatus
 
   onStatusRemoved(target: Character)
   {
-    const messages:ActionOutput = [[this.nextDescription(target)],[]];
+    const messages:ActionOutput = [[this.nextScene(target)],[]];
     return pushBattleActionOutput(super.onStatusRemoved(target),messages);
   }
 
   /////////////////////////////////
   //// TEST DESCRIPTION
   /////////////////////////////////
-  private nextButton:DescriptionOptions =  nextOption(this.masterService)
-  private nextDescription(target: Character): Description {
+  private nextButton:SceneOptions =  nextOption(this.masterService)
+  private nextScene(target: Character): Scene {
     return {
-      descriptionData: () => `Remove Test Description from  ${target.name}`,
+      sceneData: () => `Remove Test Description from  ${target.name}`,
       options: [this.nextButton],
       fixed_options: [null, null, null, null, null]
     }

@@ -1,7 +1,7 @@
 import { GameSaverMap } from 'src/gameLogic/configurable/subservice/game-saver.type';
 import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
-import { DescriptionHandlerService } from 'src/gameLogic/custom/subservice/description-handler';
+import { SceneHandlerService } from 'src/gameLogic/custom/subservice/scene-handler';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
 import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
 import { InfoPageToggler } from 'src/gameLogic/custom/subservice/info-page-toggler';
@@ -18,7 +18,7 @@ export class MasterServiceSubServiceMap
   gameSaver?:GameSaver&GameSaverMap;
   flagsHandler?:FlagHandlerService;
   lockmap?:LockMapService;
-  descriptionHandler?:DescriptionHandlerService;
+  sceneHandler?:SceneHandlerService;
   mapHandler?:MapHandlerService;
   partyHandler?:PartyService;
   gameStateHandler?:GameStateService;

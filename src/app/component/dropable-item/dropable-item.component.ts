@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { game_item_dropable } from 'src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem';
+import { game_item_dropable } from 'src/gameLogic/custom/Class/Scene/SceneAddExceedItem';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 
 @Component({

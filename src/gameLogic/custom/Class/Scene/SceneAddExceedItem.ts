@@ -1,16 +1,17 @@
 import { MasterService } from "src/app/service/master.service";
-import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+
 import { fillItemStoreable, GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { Inventory } from "../Character/Inventory/Inventory";
+import { Scene, SceneOptions } from "./Scene";
 /**
- * Returns a description to drop items if adding a item to inventory exceeds max inventory.
+ * Returns a scene to drop items if adding a item to inventory exceeds max inventory.
  *
  * @export
  * @param {MasterService} masterService The master service.
  * @param {GameItem} item The item tring to add.
  * @param {Character} character The character to add the inventory.
- * @return {*}  {Description}
+ * @return { Scene }
  */
 export const AddExceedItem = function () {
   let dropping=false;
@@ -34,22 +35,22 @@ export const AddExceedItem = function () {
     const [_dropable_inventory,_dropable_item] = map_dropables(inventory.items,excessItemList)
     dropable_inventory.splice(0,dropable_inventory.length,..._dropable_inventory)
     dropable_item.splice(0,dropable_item.length,..._dropable_item)
-    /** @type {*} {Description} Description to replace item in inventory with excee item.*/
-    //only create description if not already in the description
+    /** @type { Scene } Scene to replace item in inventory with excee item.*/
+    //only create scene if not already in the scene
     if(!dropping)
     {
       dropping = true;
       //Option to drop the marked item
-      const ExceedItemOptions: DescriptionOptions[] = [{text:"next",action:()=>drop_exess_items(),disabled:false}];
-      const ExceedItemDescription: Description = {
-        descriptionData:() => [dropable_inventory,dropable_item],
+      const ExceedItemOptions: SceneOptions[] = [{text:"next",action:()=>drop_exess_items(),disabled:false}];
+      const ExceedItemScene: Scene = {
+        sceneData:() => [dropable_inventory,dropable_item],
         options:ExceedItemOptions,
         fixed_options:[null,null,null,null,null]
       };
 
-      masterService.descriptionHandler.tailDescription(ExceedItemDescription,'excess-item');
+      masterService.sceneHandler.tailScene(ExceedItemScene,'excess-item');
     }
-    masterService.descriptionHandler.setDescription(false)
+    masterService.sceneHandler.setScene(false)
 
     function drop_exess_items()
     {
@@ -59,7 +60,7 @@ export const AddExceedItem = function () {
       }
       excessItemList.splice(0,excessItemList.length)
       dropping = false;
-      masterService.descriptionHandler.nextDescription(false);
+      masterService.sceneHandler.nextScene(false);
       for(const [drop,item] of dropable_item)
       {
         if(!drop)inventory.addItem(item);

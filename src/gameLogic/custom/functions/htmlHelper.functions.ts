@@ -5,7 +5,7 @@ import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.typ
 
 const rng = new Chance()
 /**
- * In descriptions that use input elements get the value of the input and select.
+ * In scenes that use input elements get the value of the input and select.
  *
  * @export
  * @return {*}  {{input:string,select:string}}
@@ -34,11 +34,11 @@ export function removeItem<T>(array:T[],item:T):boolean
 }
 
 /**
- * Pushes the descriptions in the fisrt array to the descriptions of the second
+ * Pushes the scenes in the fisrt array to the scenes of the second
  * Pushes the strings in the first array to the strings of the second array
  * @export
- * @param {ActionOutput} source The descriptions and strings to be pushed.
- * @param {ActionOutput} target The original array of descriptions and strings.
+ * @param {ActionOutput} source The scenes and strings to be pushed.
+ * @param {ActionOutput} target The original array of scenes and strings.
  * @return {*}  {ActionOutput}
  */
 export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):ActionOutput

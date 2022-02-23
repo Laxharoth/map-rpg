@@ -1,0 +1,17 @@
+<div class="app-gui-option-wrapper">
+  <!-- options -->
+  <div class="option" *ngFor="let option of currentOptions;">
+    <app-btn-scene-option [option]="option"></app-btn-scene-option>
+  </div>
+  <!-- fixed options -->
+  <div class="option" *ngFor="let option of fixed_options;">
+    <app-btn-scene-option [option]="option"></app-btn-scene-option>
+  </div>
+  <!-- next, before options -->
+  <div class="option">
+    <app-btn-scene-option [option]="prevOptions"></app-btn-scene-option>
+  </div>
+  <div class="option">
+    <app-btn-scene-option [option]="nextOptions"></app-btn-scene-option>
+  </div>
+</div>

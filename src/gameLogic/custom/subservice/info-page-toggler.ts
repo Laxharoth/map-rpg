@@ -1,29 +1,29 @@
-import { Description, DescriptionOptions } from "../Class/Descriptions/Description";
-import { DescriptionHandlerService } from "./description-handler";
+import { Scene, SceneOptions } from "../Class/Scene/Scene";
+import { SceneHandlerService } from "./scene-handler";
 
 export class InfoPageToggler{
-  private description_handler:DescriptionHandlerService;
+  private scene_handler:SceneHandlerService;
   private toggled=false;
-  private info_description:Description;
-  constructor(description_handler:DescriptionHandlerService)
-  { this.description_handler = description_handler; }
+  private info_scene:Scene;
+  constructor(scene_handler:SceneHandlerService)
+  { this.scene_handler = scene_handler; }
 
   toggle()
   {
     this.toggled = !this.toggled;
     if(this.toggled)
     {
-      if(!this.info_description){
-        this.info_description={descriptionData:()=>null,options:[],fixed_options:[null,null,null,null,null]};
-        /** debug */ this.info_description.fixed_options[0]={
+      if(!this.info_scene){
+        this.info_scene={sceneData:()=>null,options:[],fixed_options:[null,null,null,null,null]};
+        /** debug */ this.info_scene.fixed_options[0]={
           text: "return",
           action:()=>this.toggle(),
           disabled:false,
         }
       }
-      this.description_handler.headDescription(this.info_description,'info').setDescription(false)
+      this.scene_handler.headScene(this.info_scene,'info').setScene(false)
       return;
     }
-    this.description_handler.nextDescription(false)
+    this.scene_handler.nextScene(false)
   }
 }

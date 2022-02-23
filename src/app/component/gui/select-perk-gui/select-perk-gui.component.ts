@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
 import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/UniqueCharacter';
 import { tree_node } from 'src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree';
-import { nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
-import { Description, DescriptionOptions } from 'src/gameLogic/custom/Class/Descriptions/Description';
+import { nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
+import { Scene, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { Upgrade } from 'src/gameLogic/custom/Class/Upgrade/Upgrade';
 import { compare_array } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
@@ -20,11 +20,11 @@ export class SelectPerkGuiComponent implements OnInit {
   private character: UniqueCharacter;
   private get_character_subsciption:Subscription;
   constructor(private masterService:MasterService) {
-    this.get_character_subsciption = this.masterService.descriptionHandler.onSetDescription().subscribe((description) => {
-      this.initialize_description(description)
+    this.get_character_subsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
+      this.initialize_scene(scene)
     })
-    this.initialize_description(masterService.descriptionHandler.currentDescription)
-    masterService.descriptionHandler.setDescription(false);
+    this.initialize_scene(masterService.sceneHandler.currentScene)
+    masterService.sceneHandler.setScene(false);
   }
 
   ngOnInit(): void {
@@ -47,8 +47,8 @@ export class SelectPerkGuiComponent implements OnInit {
     this.selected_path = new_selected_path;
   }
 
-  private _option_select:DescriptionOptions;
-  get option_select():DescriptionOptions
+  private _option_select:SceneOptions;
+  get option_select():SceneOptions
   {
     if (!this._option_select)
       this._option_select = {
@@ -59,7 +59,7 @@ export class SelectPerkGuiComponent implements OnInit {
             this.character.upgrade(selected)
             if (this.character.level_stats.perk_point === 0) break;
           }
-          this.masterService.descriptionHandler.nextDescription(false);
+          this.masterService.sceneHandler.nextScene(false);
         },
         get disabled() {
           return !compare_array(this.fixed_path, this.selected_path.slice(0, this.fixed_path.length))
@@ -67,14 +67,14 @@ export class SelectPerkGuiComponent implements OnInit {
       }
     return this._option_select;
   }
-  private _option_skip:DescriptionOptions;
-  get option_skip():DescriptionOptions
+  private _option_skip:SceneOptions;
+  get option_skip():SceneOptions
   {
     if(!this._option_skip)this._option_skip = nextOption(this.masterService,'skip');
     return this._option_skip;
   }
-  private _option_reset:DescriptionOptions
-  get option_reset():DescriptionOptions
+  private _option_reset:SceneOptions
+  get option_reset():SceneOptions
   {
     if (!this._option_reset) this._option_reset = {
       text: 'reset',
@@ -85,11 +85,11 @@ export class SelectPerkGuiComponent implements OnInit {
     }
     return this._option_reset;
   }
-  private initialize_description(description:Description)
+  private initialize_scene(description:Scene)
   {
-    const character = description.descriptionData();
+    const character = description.sceneData();
     if(!(character instanceof UniqueCharacter))return;
-    if(character.level_stats.perk_point===0) { this.masterService.descriptionHandler.nextDescription(false); return; }
+    if(character.level_stats.perk_point===0) { this.masterService.sceneHandler.nextScene(false); return; }
     this.character = character;
     this.selected_path = [...this.character.level_stats.upgrade_path,null]
     const fixed_options = description.fixed_options;

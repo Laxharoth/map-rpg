@@ -1,4 +1,4 @@
-import { Description } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 
 
 export interface EnergyStats {
@@ -64,4 +64,4 @@ export interface FullResistanceStats {
   poisonresistance ? : number;
 }
 
-export type ActionOutput = [Description[], string[]];
+export type ActionOutput = [Scene[], string[]];

@@ -1,10 +1,10 @@
 import { battle_options } from './../../../Class/Battle/Battle.type';
 import { Battle } from './../../../Class/Battle/Battle';
-import { DescriptionSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Descriptions/CommonOptions';
+import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
-import { Description, DescriptionOptions } from "src/gameLogic/custom/Class/Descriptions/Description";
+import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { fill_room, Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
@@ -25,13 +25,13 @@ export function room(roomName: string): roomFunction {
         $flag('petshout', input);
         if (input === '') { $flag('petshout', null); }
         if (select) { $flag('pet', select); }
-        masterService.descriptionHandler.nextDescription(false)
+        masterService.sceneHandler.nextScene(false)
       },
       disabled:false
     };
     //with input and select
-    const furtherDescription:Description = {
-      descriptionData: function () {
+    const furtherDescription:Scene = {
+      sceneData: function () {
       return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing` +
         `${($flag('pet'))?`\n\nOMG there is a ${$flag('pet')}`:``}` +
         `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
@@ -40,8 +40,8 @@ export function room(roomName: string): roomFunction {
       {
         text:'option1',
         action:function () {
-          masterService.descriptionHandler.headDescription(furtherDescription, 'map');
-          masterService.descriptionHandler.setDescription(false);
+          masterService.sceneHandler.headScene(furtherDescription, 'map');
+          masterService.sceneHandler.setScene(false);
         },
         disabled:false
       },
@@ -119,8 +119,8 @@ export function room(roomName: string): roomFunction {
       roomOptions.splice(2, 0, {
           text:'kick can',
           action:()=>{
-            masterService.descriptionHandler.headDescription(kickCanDescription, 'map');
-          masterService.descriptionHandler.setDescription();
+            masterService.sceneHandler.headScene(kickCanDescription, 'map');
+          masterService.sceneHandler.setScene();
           $flag("caninroom1", false);
           roomOptions.splice(2, 1);
           },
@@ -129,33 +129,33 @@ export function room(roomName: string): roomFunction {
       )
     }
     if (roomName === 'room20') {
-      const flyDescription1: Description = {
-        descriptionData: function () {
+      const flyDescription1: Scene = {
+        sceneData: function () {
           return `AAAAAAAAh`
         },
         options: [nextoption],
         fixed_options: [null, null, null, null, null]
       }
-      const flyDescription2: Description = {
-        descriptionData: function () {
+      const flyDescription2: Scene = {
+        sceneData: function () {
           return `I can see the place where I started`
         },
         options: [nextoption],
         fixed_options: [null, null, null, null, null]
       }
-      const flyDescription3: Description = {
-        descriptionData: function () {
+      const flyDescription3: Scene = {
+        sceneData: function () {
           return `That was something`
         },
         options: [nextoption],
         fixed_options: [null, null, null, null, null]
       }
-      const cannonDescription:Description = {
-        descriptionData: function () {
+      const cannonDescription:Scene = {
+        sceneData: function () {
         return `Dafuk there is a cannon here.\n enter the cannon?`;
         }, options: [yesOption(() => {
-          masterService.descriptionHandler.nextDescription();
-          masterService.descriptionHandler.tailDescription([flyDescription1, flyDescription2, flyDescription3], 'map');
+          masterService.sceneHandler.nextScene();
+          masterService.sceneHandler.tailScene([flyDescription1, flyDescription2, flyDescription3], 'map');
           masterService.mapHandler.loadRoom('room1');
           masterService.timeHandler.addTime('30m');
         }), noOption], fixed_options: [null, null, null, null, null]
@@ -163,29 +163,29 @@ export function room(roomName: string): roomFunction {
       roomOptions.splice(2, 0, {
         text:'Cannon',
         action:()=>{
-          masterService.descriptionHandler.headDescription(cannonDescription, 'map');
-          masterService.descriptionHandler.setDescription();
+          masterService.sceneHandler.headScene(cannonDescription, 'map');
+          masterService.sceneHandler.setScene();
         },
         disabled:false
       })
     }
-    const fistEnter:Description = {descriptionData: function () {
+    const fistEnter:Scene = {sceneData: function () {
       return `It's the first time`
     }, options:[nextoption],fixed_options: [null, null, null, null, null]};
-    const roomDescription:Description = {
-      descriptionData: function () {
+    const roomScene:Scene = {
+      sceneData: function () {
       return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
     }, options:roomOptions,fixed_options:[null,null,null,null,null]}
-    roomDescription.fixed_options[0] = DescriptionSelectItemFromMap(masterService)
-    roomDescription.fixed_options[1] = {
+    roomScene.fixed_options[0] = SceneSelectItemFromMap(masterService)
+    roomScene.fixed_options[1] = {
       text:'info',
       action:()=>{masterService.InfoPageToggler.toggle()},
       disabled:false
     }
-    const firstExit:Description = {descriptionData:function () {
+    const firstExit:Scene = {sceneData:function () {
       return `It was the first time`
     }, options:[nextoption],fixed_options:[null,null,null,null,null]};
-    const kickCanDescription:Description = {descriptionData:function () {
+    const kickCanDescription:Scene = {sceneData:function () {
       return `You kick the can, it's fun.
   The can flew awa}`
     }, options:[nextoption],fixed_options:[null,null,null,null,null]};
@@ -193,10 +193,10 @@ export function room(roomName: string): roomFunction {
     const room = fill_room({
       onEnter: () => {
         if ($flag("map1room1firstenter")) {
-          masterService.descriptionHandler.tailDescription(fistEnter, 'map');
+          masterService.sceneHandler.tailScene(fistEnter, 'map');
         }
-        masterService.descriptionHandler.tailDescription(roomDescription, 'map')
-        masterService.descriptionHandler.nextDescription();
+        masterService.sceneHandler.tailScene(roomScene, 'map')
+        masterService.sceneHandler.nextScene();
         if (randomCheck(10)) {
           new Battle(masterService, new testformation(masterService),
           function (battle_options:battle_options)
@@ -216,7 +216,7 @@ export function room(roomName: string): roomFunction {
         if ($flag("map1room1firstexit")) {
           $flag("map1room1firstenter", false)
           $flag("map1room1firstexit", false);
-          masterService.descriptionHandler.tailDescription(firstExit, 'map');
+          masterService.sceneHandler.tailScene(firstExit, 'map');
         }
       },
       beforeMoveTo(roomName) {

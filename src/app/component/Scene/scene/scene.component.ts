@@ -3,18 +3,18 @@ import { Subscription } from 'rxjs';
 import { MasterService } from 'src/app/service/master.service';
 
 @Component({
-  selector: 'app-description',
-  templateUrl: './description.component.html',
-  styleUrls: ['./description.component.css']
+  selector: 'app-scene',
+  templateUrl: './scene.component.html',
+  styleUrls: ['./scene.component.css']
 })
-export class DescriptionComponent implements OnInit {
+export class SceneComponent implements OnInit {
 
   //strings for befor and after Input and select
   /**
    * Text to be displayed before the input element
    *
    * @type {string}
-   * @memberof DescriptionComponent
+   * @memberof SceneComponent
    */
   beforeInput:string;
   //strings for befor and after Input and select
@@ -22,7 +22,7 @@ export class DescriptionComponent implements OnInit {
    * Text to be displayed after the input element
    *
    * @type {string}
-   * @memberof DescriptionComponent
+   * @memberof SceneComponent
    */
   afterInput:string;
   //strings for befor and after Input and select
@@ -30,7 +30,7 @@ export class DescriptionComponent implements OnInit {
    * Text to be displayed before the select element
    *
    * @type {string}
-   * @memberof DescriptionComponent
+   * @memberof SceneComponent
    */
   beforeSelect:string;
   //strings for befor and after Input and select
@@ -38,7 +38,7 @@ export class DescriptionComponent implements OnInit {
    * Text to be displayed after the select element
    *
    * @type {string}
-   * @memberof DescriptionComponent
+   * @memberof SceneComponent
    */
   afterSelect:string;
 
@@ -57,9 +57,9 @@ export class DescriptionComponent implements OnInit {
   constructor(private masterService:MasterService)
   {
     //get original description
-    this.updateDescription(this.masterService.descriptionHandler.currentDescription?.descriptionData());
-    this.descriptionSubscription = this.masterService.descriptionHandler.onSetTextDescription().subscribe((description)=>{
-      this.updateDescription(description)
+    this.updateDescription(this.masterService.sceneHandler.currentScene?.sceneData());
+    this.descriptionSubscription = this.masterService.sceneHandler.onSetTextScene().subscribe((scene)=>{
+      this.updateDescription(scene)
     });
   }
 

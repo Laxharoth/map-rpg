@@ -22,11 +22,11 @@ export abstract class RangedWeapon extends Weapon
   abstract get name():string;
   attack(user:Character,target:Character):ActionOutput
   {
-    const [descriptions,strings]=user.addStatus(new StatusRangedAttack(this.masterService));
-    const [attackdescription,attackstring] =super.attack(user,target);
-    descriptions.push(...attackdescription);
+    const [scenes,strings]=user.addStatus(new StatusRangedAttack(this.masterService));
+    const [attack_scene,attackstring] =super.attack(user,target);
+    scenes.push(...attack_scene);
     strings.push(...attackstring);
-    return [descriptions,strings];
+    return [scenes,strings];
   }
   get tags(): tag[] { return ['ranged weapon']; }
 

@@ -1,4 +1,4 @@
-import { AddExceedItem } from 'src/gameLogic/custom/Class/Descriptions/DescriptionAddExceedItem';
+import { AddExceedItem } from 'src/gameLogic/custom/Class/Scene/SceneAddExceedItem';
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
