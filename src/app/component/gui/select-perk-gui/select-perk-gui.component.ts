@@ -50,19 +50,23 @@ export class SelectPerkGuiComponent implements OnInit {
   private _option_select:SceneOptions;
   get option_select():SceneOptions
   {
+    const masterService = this.masterService;
+    const selected_path = this.selected_path;
+    const fixed_path = this.fixed_path;
+    const character = this.character;
     if (!this._option_select)
       this._option_select = {
         text: 'select',
-        action: () => {
-          const new_selected = this.selected_path.slice(this.fixed_path.length, -1)
+        action(){
+          const new_selected = selected_path.slice(fixed_path.length, -1)
           for (const selected of new_selected) {
-            this.character.upgrade(selected)
-            if (this.character.level_stats.perk_point === 0) break;
+            character.upgrade(selected)
+            if (character.level_stats.perk_point === 0) break;
           }
-          this.masterService.sceneHandler.nextScene(false);
+          masterService.sceneHandler.nextScene(false);
         },
         get disabled() {
-          return !compare_array(this.fixed_path, this.selected_path.slice(0, this.fixed_path.length))
+          return !compare_array(fixed_path, selected_path.slice(0, fixed_path.length))
         }
       }
     return this._option_select;
