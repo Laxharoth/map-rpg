@@ -13,9 +13,9 @@ export class MainCharacter extends UniqueCharacter
   uuid = this.type;
   protected character_battle_class:CharacterBattleClass;
 
-  constructor(masterService:MasterService,name:string='', character_battle_class=null)
+  constructor(masterService:MasterService,name:string='', character_battle_type:string=null)
   {
-    super(masterService,character_battle_class);
+    super(masterService,character_battle_type);
     masterService.gameSaver.register("MainCharacter",this)
     this._name = name;
   }

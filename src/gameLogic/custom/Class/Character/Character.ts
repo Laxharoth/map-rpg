@@ -62,10 +62,9 @@ export abstract class Character implements storeable
    * @param {MasterService} masterService The master service.
    * @memberof Character
    */
-  constructor(masterService:MasterService, character_battle_class=null)
+  constructor(masterService:MasterService, character_battle_class:string=null)
   {
-    if(!character_battle_class)character_battle_class=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:'CharacterBattleClassEmpty'})
-    this.character_battle_class = character_battle_class;
+    this.character_battle_class=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:character_battle_class||'CharacterBattleClassEmpty'})
     this.inventory = new Inventory(masterService);
     this.character_equipment = new CharacterEquipment(masterService);
     this.masterService = masterService;

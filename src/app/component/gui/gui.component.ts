@@ -88,7 +88,7 @@ export class GuiComponent implements OnInit {
       this.masterService.partyHandler.user = this.masterService.gameSaver.MainCharacter[0];
     }
     if (!this.masterService.partyHandler.user) {
-      const user = new MainCharacter(this.masterService, 'player',CharacterBattleClassFactory(this.masterService,{Factory:"CharacterBattleClass",type:"TestMainCharacterBattleClass"}));
+      const user = new MainCharacter(this.masterService, 'player',"TestMainCharacterBattleClass");
       const meleeTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"MeleeTest"})
       const rangedTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"RangedTest"})
       const shieldTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"ShieldTest"})

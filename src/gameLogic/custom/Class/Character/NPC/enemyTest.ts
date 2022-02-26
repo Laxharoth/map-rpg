@@ -13,7 +13,7 @@ export class enemyTest extends Character implements Enemy
   enemy_type: string = "enemyTest";
   type:characterType = 'test enemy';
   constructor(masterService:MasterService)
-  { super(masterService) }
+  { super(masterService,'TestCharacterBattleClass') }
   get name(): string {
       return 'test enemy';
   }
