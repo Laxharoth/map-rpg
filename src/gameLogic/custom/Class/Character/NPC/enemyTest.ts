@@ -4,6 +4,7 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Enemy } from 'src/gameLogic/custom/Class/Character/Enemy/Enemy';
 import { ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { itemname } from 'src/gameLogic/custom/Class/Items/Item.type';
+import { CharacterBattleClassFactory } from "src/gameLogic/custom/Factory/CharacterBattleClassFactory";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { randomBetween, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
