@@ -34,7 +34,7 @@ export enum FactoryName{
   "CharacterBattleClass"="CharacterBattleClass",
 }
 export type factoryname= `${FactoryName}`;
-export type FactoryFunction<T=any> = (masterService:MasterService,options:StoreableType)=>T;
+export type FactoryFunction<T=any,U=StoreableType> = (masterService:MasterService,options:U)=>T;
 
 export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   Item: ItemFactory,

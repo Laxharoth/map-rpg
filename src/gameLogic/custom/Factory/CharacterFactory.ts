@@ -4,17 +4,10 @@ import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacte
 import { charTest } from "src/gameLogic/custom/Class/Character/NPC/characterTest";
 import { JohnSmith } from "src/gameLogic/custom/Class/Character/NPC/JohnSmit";
 import { Character } from "../Class/Character/Character";
+import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 
-/**
- * Creates a character with the given characterType
- *
- * @export
- * @param {MasterService} masterService The master service
- * @param {UniqueCharacterStoreable} options The options from the character created with the  storeable.toJson
- * @return {Character} A character with the loaded options.
- */
-export function CharacterFactory(masterService:MasterService,options:UniqueCharacterStoreable):Character
-{
+/** Creates a character */
+export const CharacterFactory:FactoryFunction<Character,UniqueCharacterStoreable> = (masterService,options)=>{
   const character = new character_switcher[options.type](masterService)
   character.fromJson(options);
   return character;
