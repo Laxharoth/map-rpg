@@ -54,7 +54,7 @@ export abstract class Character implements storeable
   character_equipment:CharacterEquipment;
   get name(): string{ return this._name};
   protected readonly masterService:MasterService
-  private __endbattle__ = false;
+  private __bypass_scene__ = false;
   /**
    * Creates an instance of Character.
    * @param {characterStats} originalstats The original stats of the character
@@ -272,7 +272,7 @@ export abstract class Character implements storeable
   react(whatTriggers:tag[],source: Character):ActionOutput
   {
     const reactDescription:ActionOutput = [[],[]]
-    if( this.current_energy_stats.hitpoints<=0  || this.__endbattle__ )return reactDescription;
+    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return reactDescription;
     for(const reaction of this.reactions)
     { pushBattleActionOutput(reaction.reaction(whatTriggers,this,source,[this]),reactDescription);}
     return reactDescription
@@ -280,7 +280,7 @@ export abstract class Character implements storeable
   battle_command_react(battle_command:BattleCommand)
   {
     const reactDescription:ActionOutput = [[],[]]
-    if( this.current_energy_stats.hitpoints<=0  || this.__endbattle__ )return reactDescription;
+    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return reactDescription;
     for(const reaction of this.reactions)
     { pushBattleActionOutput(reaction.reaction(battle_command.tags,this,battle_command.source,battle_command.target),reactDescription);}
     return reactDescription
@@ -332,9 +332,9 @@ export abstract class Character implements storeable
   {
     const removeStatus = this.battle_status
     this.battle_status.clear();
-    this.__endbattle__ = true;
+    this.__bypass_scene__ = true;
     for(const status of removeStatus)status.onStatusRemoved(this);
-    this.__endbattle__ = false;
+    this.__bypass_scene__ = false;
   }
   /**
    * Gets all the reactions from equipment, perks and status.
