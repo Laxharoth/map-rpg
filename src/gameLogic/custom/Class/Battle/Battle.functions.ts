@@ -69,7 +69,7 @@ function attackWithWeapon(source: Character, targets: Character[], weapon: Weapo
  *
  * @param {Character} target The target of the attack action.
  * @param {(target:Character)=>ActionOutput} action The action to be performed.
- * @return {*}  {ActionOutput}
+ * @return { ActionOutput }
  * @memberof Character
  */
 export function tryAttack(source: Character, target: Character, action: (target: Character) => ActionOutput): ActionOutput

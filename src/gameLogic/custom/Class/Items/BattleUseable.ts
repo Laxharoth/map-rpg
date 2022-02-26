@@ -58,7 +58,7 @@ export interface BattleUseable extends descriptable
    * When the item is disabled.
    *
    * @param {Character} user
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof Item
    */
   disabled(user: Character): boolean;
@@ -75,7 +75,7 @@ export interface BattleUseable extends descriptable
    *
    * @param {Character} user The Character that uses the item.
    * @param {Character} targets The target of the item.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Item
    */
   itemEffect(user:Character,targets: Character|Character[]):ActionOutput;

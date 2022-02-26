@@ -96,7 +96,7 @@ export abstract class GameItem implements BattleUseable, storeable
    * When the item is disabled.
    *
    * @param {Character} user
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof Item
    */
   disabled(user: Character): boolean { return false;}
@@ -113,7 +113,7 @@ export abstract class GameItem implements BattleUseable, storeable
    *
    * @param {Character} user The Character that uses the item.
    * @param {Character} targets The target of the item.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Item
    */
   itemEffect(user:Character,targets: Character|Character[]):ActionOutput {
@@ -154,7 +154,7 @@ export abstract class GameItem implements BattleUseable, storeable
   /**
    * Stores the amount of items in the stack.
    *
-   * @return {*}  {{[key: string]:any}}
+   * @return { ItemStoreable }
    * @memberof Item
    */
   toJson():ItemStoreable

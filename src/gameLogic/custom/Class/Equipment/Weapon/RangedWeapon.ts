@@ -41,7 +41,7 @@ export abstract class RangedWeapon extends Weapon
    *
    * @param {Character} user
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof RangedWeapon
    */
   protected _itemEffect(user:Character,target: Character): ActionOutput

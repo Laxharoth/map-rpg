@@ -129,7 +129,7 @@ export class Battle {
    *
    * @param {Character[]} targets
    * @param {(target:Character[])=>ActionOutput} playerAction
-   * @return {*}  {Scene}
+   * @return { Scene }
    */
   private selectTarget(targets: Character[], playerAction:BattleCommand): void {
     const select_target_action = (target:Character[]) => {
@@ -147,7 +147,7 @@ export class Battle {
    * Returns options to select an item
    *
    * @param {GameItem[]} items
-   * @return {*}  {Scene}
+   * @return { Scene }
    */
   selectItem(items: BattleUseable[]): void {
     this.master_service.sceneHandler

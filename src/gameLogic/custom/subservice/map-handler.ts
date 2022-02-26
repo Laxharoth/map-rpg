@@ -41,7 +41,7 @@ export class MapHandlerService {
    * Loads the map functions
    *
    * @param {string} mapName
-   * @return {*}  {void}
+   * @return { void }
    * @memberof MapHandlerService
    */
   loadMap(mapName: string):void {
@@ -120,7 +120,7 @@ export class MapHandlerService {
   /**
    * Returns an observable for when the room changes.
    *
-   * @return {*}  {Observable<number[]>}
+   * @return { Observable<number[]> }
    * @memberof MapHandlerService
    */
   onCoordinatesChanged():Observable<number[]>
@@ -133,7 +133,7 @@ export class MapHandlerService {
    *
    * @private
    * @param {(string|number[])} roomnameORcoordinates The room name or coordinates.
-   * @return {*}  {boolean} if the room changes.
+   * @return { boolean } if the room changes.
    * @memberof MapHandlerService
    */
   private loadRoomHelper(roomnameORcoordinates: string):boolean

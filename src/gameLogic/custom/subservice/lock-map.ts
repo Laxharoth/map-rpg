@@ -46,7 +46,7 @@ export class LockMapService {
   /**
    * Checks if the map has any lock.
    *
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof LockMapService
    */
   isMapLocked():boolean

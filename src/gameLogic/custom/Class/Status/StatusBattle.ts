@@ -26,7 +26,7 @@ export abstract class StatusBattle extends Status
    * If the duration reach zero, removes itself from the character.
    *
    * @param {Character} target The character the status should be applied to.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof StatusBattle
    */
   applyEffect(target: Character):ActionOutput
@@ -62,7 +62,7 @@ export interface StatusPreventAttack
    * Determinate if the character affected by the status can attack the target.
    *
    * @param {Character} target The target of the attack.
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof StatusPreventAttack
    */
   canAttack(target:Character):boolean;
@@ -70,7 +70,7 @@ export interface StatusPreventAttack
    * Gets a description if the character can not attack the target.
    *
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof StatusPreventAttack
    */
   preventAttackDescription(target:Character):ActionOutput;
@@ -81,6 +81,6 @@ export interface StatusPreventAttack
  *
  * @export
  * @param {*} object The status object.
- * @return {*}
+ * @return { boolean }
  */
 export function isStatusPreventAttack(object:any):boolean { return object.discriminator === 'StatusPreventAttack'; }

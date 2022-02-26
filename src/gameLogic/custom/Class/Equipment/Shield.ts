@@ -22,7 +22,7 @@ export abstract class Shield extends Equipment{
    *
    * @param {Character} user The character that uses the shield.
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Shield
    */
   protected _itemEffect(user:Character,target: Character): ActionOutput
@@ -35,7 +35,7 @@ export abstract class Shield extends Equipment{
    * Adds the StatusDefend to the character with the shield.
    *
    * @param {Character} targets
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Shield
    */
   defend(targets:Character[]):ActionOutput

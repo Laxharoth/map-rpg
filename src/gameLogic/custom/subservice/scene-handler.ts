@@ -115,7 +115,7 @@ export class SceneHandlerService {
   /**
    * Returns an observable to observe the current scene.
    *
-   * @return {*}  {Observable<Scene>}
+   * @return { Observable<Scene> }
    * @memberof SceneHandlerService
    */
   onSetScene():Observable<Scene>
@@ -125,7 +125,7 @@ export class SceneHandlerService {
   /**
    *Returns an observable to observe the current scene text.
    *
-   * @return {*}  {Observable<string>}
+   * @return { Observable<string> }
    * @memberof SceneHandlerService
    */
   onSetTextScene():Observable<string>

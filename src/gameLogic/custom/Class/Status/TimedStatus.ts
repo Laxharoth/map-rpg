@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { Time } from 'src/gameLogic/custom/ClassHelper/Time';
+import { ActionOutput } from '../Character/Character.type';
 import { Status } from "./Status";
 
 /**
@@ -58,7 +59,7 @@ export abstract class TimedStatus extends Status{
    * Initializes a subscription to check if should remove itself when the ingame time changes.
    *
    * @param {Character} target The character with the status.
-   * @return {*}
+   * @return { ActionOutput }
    * @memberof TimedStatus
    */
   onStatusGainded(target: Character)
@@ -88,10 +89,10 @@ export abstract class TimedStatus extends Status{
    * Unsubscribe from the flag Service .onTimeChanged()
    *
    * @param {Character} target The character with the status.
-   * @return {*}
+   * @return { ActionOutput }
    * @memberof TimedStatus
    */
-  onStatusRemoved(target: Character)
+  onStatusRemoved(target: Character):ActionOutput
   {
     this.timerSubscription.unsubscribe()
     return super.onStatusRemoved(target)
@@ -99,7 +100,7 @@ export abstract class TimedStatus extends Status{
   /**
    * Saves the initialTime
    *
-   * @return {*}  {{[key: string]:any}}
+   * @return { StatusStoreable }
    * @memberof TimedStatus
    */
   toJson()

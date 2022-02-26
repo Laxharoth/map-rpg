@@ -57,7 +57,7 @@ export class GameStateService {
   /**
    * Returns a observable for when the game state changes.
    *
-   * @return {*}  {Observable<game_state>}
+   * @return { Observable<game_state> }
    * @memberof GameStateService
    */
   onSetGameState():Observable<game_state> {

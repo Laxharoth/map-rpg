@@ -52,7 +52,7 @@ export class FlagHandlerService implements storeable{
    * Gets the value of the flag.
    *
    * @param {string} key The name of the flag.
-   * @return {*}  {*} The value of the flag.
+   * @return {*} The value of the flag.
    * @memberof FlagHandlerService
    */
   getFlag(key:flagname):any

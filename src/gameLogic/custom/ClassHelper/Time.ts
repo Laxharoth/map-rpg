@@ -53,7 +53,7 @@ export class Time
   /**
    * Divides the minutes in the max posible integer value it can represent for each time unit.
    *
-   * @return {*}  {TimeValues}
+   * @return { TimeValues }
    * @memberof Time
    */
   getTimeValues():TimeValues
@@ -82,7 +82,7 @@ export class Time
    *
    * @private
    * @param {(number|string)} value The time representation
-   * @return {*}  {number} if number is provided return the number, otherwise the time representation of the string.
+   * @return { number } if number is provided return the number, otherwise the time representation of the string.
    * @memberof Time
    */
   private convert2Time(value: number|string):number

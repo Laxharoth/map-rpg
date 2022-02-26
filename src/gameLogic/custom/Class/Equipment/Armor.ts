@@ -21,7 +21,7 @@ export abstract class Armor extends Equipment
    *
    * @param {Character} user
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Armor
    */
   protected _itemEffect(user:Character,target: Character): ActionOutput

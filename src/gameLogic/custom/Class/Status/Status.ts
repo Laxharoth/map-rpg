@@ -49,7 +49,7 @@ export abstract class Status implements storeable,hashable
    * @protected
    * @abstract
    * @param {Character} target The character the status should be applied to.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Status
    */
   protected effect(target: Character):ActionOutput { return [[],[]] }
@@ -58,7 +58,7 @@ export abstract class Status implements storeable,hashable
    * Also check if the character can react to the effect of the status.
    *
    * @param {Character} target The character the status should be applied to.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Status
    */
   applyEffect(target: Character):ActionOutput{
@@ -76,7 +76,7 @@ export abstract class Status implements storeable,hashable
    * Check if the status can be added to the character.
    *
    * @param {Character} target The character to attach the status to.
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof Status
    */
   canApply(target: Character):boolean{return true;}
@@ -84,7 +84,7 @@ export abstract class Status implements storeable,hashable
    * Defines what to do when the status is added to the character.
    *
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Status
    */
   onStatusGainded(target: Character):ActionOutput{
@@ -95,7 +95,7 @@ export abstract class Status implements storeable,hashable
    * Defines what to do when the status is removed from the character.
    *
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Status
    */
   onStatusRemoved(target: Character)  :ActionOutput{ return target.react(this.tags.concat(['status ended']),target) };

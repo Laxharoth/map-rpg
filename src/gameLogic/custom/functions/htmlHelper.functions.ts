@@ -8,7 +8,7 @@ const rng = new Chance()
  * In scenes that use input elements get the value of the input and select.
  *
  * @export
- * @return {*}  {{input:string,select:string}}
+ * @return { {input:string,select:string} }
  */
 export function getInputs():{input:string,select:string}
 {
@@ -25,7 +25,7 @@ export function getInputs():{input:string,select:string}
  * @template T
  * @param {T[]} array The Array.
  * @param {T} item The element to remove.
- * @return {*}  {boolean} If the element was removed.
+ * @return { boolean } If the element was removed.
  */
 export function removeItem<T>(array:T[],item:T):boolean
 {
@@ -39,7 +39,7 @@ export function removeItem<T>(array:T[],item:T):boolean
  * @export
  * @param {ActionOutput} source The scenes and strings to be pushed.
  * @param {ActionOutput} target The original array of scenes and strings.
- * @return {*}  {ActionOutput}
+ * @return { ActionOutput }
  */
 export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):ActionOutput
 {
@@ -65,7 +65,7 @@ export function randomBetween(min:number, max:number):number{
  *
  * @export
  * @param {number} percent The probability the function should return true.
- * @return {*}  {boolean}
+ * @return { boolean }
  */
 export function randomCheck(percent:number):boolean
 {
@@ -75,8 +75,8 @@ export function randomCheck(percent:number):boolean
 /**
  *  Fills missing weapon damageTypes
  *
- * @param {*} {damageTypes} weaponDamages The original weapon damage stats (can have attributes missing)
- * @return {*} {damageTypes} The stats with all the possible attributes.
+ * @param { damageTypes } weaponDamages The original weapon damage stats (can have attributes missing)
+ * @return { damageTypes } The stats with all the possible attributes.
  */
 export const fillMissingWeaponDamage = (function() {
   const _defaultStats:damageTypes = {

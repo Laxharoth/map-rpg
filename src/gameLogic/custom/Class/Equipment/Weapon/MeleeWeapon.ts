@@ -33,7 +33,7 @@ export abstract class MeleeWeapon extends Weapon
    *
    * @param {Character} user
    * @param {Character} target
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof MeleeWeapon
    */
   protected _itemEffect(user:Character,target: Character): ActionOutput

@@ -78,7 +78,7 @@ export abstract class Character implements storeable
    * Uses the meleeWeapon to attack the target.
    *
    * @param {Character[]} targets The characters to attack.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   Attack(targets:Character[]):BattleCommand{return AttackCommand(this,targets)}
@@ -86,7 +86,7 @@ export abstract class Character implements storeable
    * Uses rangedWeapon to attack the target.
    *
    * @param {Character[]} targets The targets to attack.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   Shoot(targets:Character[]):BattleCommand{return ShootCommand(this,targets)}
@@ -94,7 +94,7 @@ export abstract class Character implements storeable
    * Uses shield .defend
    *
    * @param {Character[]} target Defends with the equiped shield.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   Defend(target:Character[]):BattleCommand{return DefendCommand(this,target)}
@@ -105,7 +105,7 @@ export abstract class Character implements storeable
   /**
    * Reset roundStats apply the battle status effects and cooldown the specials.
    *
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   startRound():ActionOutput
@@ -120,7 +120,7 @@ export abstract class Character implements storeable
   /**
    * Removes the battle status.
    *
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   onDefeated():ActionOutput
@@ -163,14 +163,14 @@ export abstract class Character implements storeable
    * Checks if the character has a tag.
    *
    * @param {tag} tag The tag to check.
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof Character
    */
   hasTag(tag:tag):boolean { return this.tags.includes(tag); }
   /**
    * TODO add description
    *
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof Character
    */
   is_defeated():boolean{return this.current_energy_stats.hitpoints<=0}
@@ -178,7 +178,7 @@ export abstract class Character implements storeable
    * Adds status to the character. to the correct Array if able.
    *
    * @param {Status} status The status to add to the character.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   addStatus(status: Status): ActionOutput{
@@ -195,7 +195,6 @@ export abstract class Character implements storeable
    * Adds perk if does not already has it.
    *
    * @param {Perk} perk The perk to add.
-   * @return {*}  {void}
    * @memberof Character
    */
   addPerk(perk:Perk):void { this.perks.push(perk); }
@@ -203,7 +202,7 @@ export abstract class Character implements storeable
    * Returns a perk if the character has it.
    *
    * @param {(Perk|perkname)} perkOrName The perk or perkname.
-   * @return {*}  {Perk}
+   * @return { Perk }
    * @memberof Character
    */
   getPerk(perkOrName:Perk|perkname):Perk
@@ -216,7 +215,7 @@ export abstract class Character implements storeable
    * Removes all instances of the given statusname or Status.
    *
    * @param {(Status|statustype)} status
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   removeStatus(status:Status|statustype):ActionOutput
@@ -232,7 +231,7 @@ export abstract class Character implements storeable
    * Gets the first instance of Status that matches the statusname or type of Status
    *
    * @param {statustype} status
-   * @return {*}  {(Status|null)}
+   * @return { (Status|null) }
    * @memberof Character
    */
   getStatus(status: statustype):Status|null{
@@ -266,7 +265,7 @@ export abstract class Character implements storeable
    *
    * @param {tag[]} whatTriggers The tags to match the reaction.
    * @param {Character} source The character whose action triggered the reactions.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   react(whatTriggers:tag[],source: Character):ActionOutput
@@ -372,7 +371,7 @@ export abstract class Character implements storeable
    * Apply the Battle Status effects.
    *
    * @protected
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   protected startRoundApplyStatus():ActionOutput
@@ -408,7 +407,7 @@ export abstract class Character implements storeable
    * @private
    * @param {(string | Status)} status The status to remove
    * @param {Status[]} status_array The array where the status will be removed.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   private _removeStatus(status: string | Status, status_array:Status[]): ActionOutput
@@ -426,7 +425,7 @@ export abstract class Character implements storeable
    * @private
    * @param {(number|SpecialAttack)} item The index of the SpecialAttack or the special attack.
    * @param {Character[]} targets The targets of the SpecialAttack.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand

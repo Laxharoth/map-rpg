@@ -26,7 +26,7 @@ export class TimeHandler implements storeable{
   /**
    * Returns an observable to observe when the time changes.
    *
-   * @return {*}  {Observable<Time>}
+   * @return { Observable<Time> }
    * @memberof FlagHandlerService
    */
   onTimeChanged(): Observable < Time > {

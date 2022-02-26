@@ -19,7 +19,7 @@ export class Inventory implements storeable {
    * Adds Item to the inventory.
    *
    * @param {GameItem} item The item to add.
-   * @return {*}  {void}
+   * @return { void }
    * @memberof Character
    */
   addItem(item: GameItem): void {
@@ -65,7 +65,7 @@ export class Inventory implements storeable {
    *
    * @param {(number|GameItem)} itemIndexOrItem The Index of the item or the item.
    * @param {Character[]} targets The targets the item will target.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Character
    */
   useItem(itemIndexOrItem: GameItem, source:Character, targets: Character[]): ActionOutput {

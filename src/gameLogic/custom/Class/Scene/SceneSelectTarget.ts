@@ -9,7 +9,7 @@ import { Scene, SceneOptions } from "./Scene";
  *
  * @param {Character[]} targets
  * @param {(target:Character[])=>ActionOutput} playerAction
- * @return {*}  {Description}
+ * @return { Scene }
  */
  export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene
  {

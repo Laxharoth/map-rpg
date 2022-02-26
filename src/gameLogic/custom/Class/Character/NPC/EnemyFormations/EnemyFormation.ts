@@ -66,7 +66,7 @@ export abstract class EnemyFormation
    * Defines the loot the enemyformation will drop when defeated
    *
    * @abstract
-   * @return {*}  {Item[]}
+   * @return { GameItem[] }
    * @memberof EnemyFormation
    */
   loot():GameItem[]
@@ -89,7 +89,7 @@ export abstract class EnemyFormation
    * Returns a description of whether escaped or not.
    *
    * @param {Character[]} party The player party
-   * @return {*}  {[()=>string,boolean]} the description text and if the escape wass successfull
+   * @return { [ ()=>string , boolean ] } the description text and if the escape wass successfull
    * @memberof EnemyFormation
    */
   attemptEscape(party: Character[]):[descriptionString,boolean]
@@ -105,7 +105,7 @@ export abstract class EnemyFormation
    *
    * @protected
    * @abstract
-   * @return {*}  {Description}
+   * @return { Scene }
    * @memberof EnemyFormation
    */
   protected abstract escapeSuccess():descriptionString;
@@ -114,7 +114,7 @@ export abstract class EnemyFormation
    *
    * @protected
    * @abstract
-   * @return {*}  {Description}
+   * @return { Scene }
    * @memberof EnemyFormation
    */
   protected abstract escapeFail():descriptionString;
@@ -124,7 +124,7 @@ export abstract class EnemyFormation
    * @protected
    * @abstract
    * @param {Character[]} party The party of the player.
-   * @return {*}  {boolean}
+   * @return { boolean }
    * @memberof EnemyFormation
    */
   protected abstract escapeCheck(party: Character[]):boolean;
@@ -133,7 +133,7 @@ export abstract class EnemyFormation
    *
    * @protected
    * @param {string} exitString The string displayed on the button.
-   * @return {*}  {DescriptionOptions}
+   * @return { DescriptionOptions }
    * @memberof EnemyFormation
    */
   protected exitOption(exitString:string):SceneOptions

@@ -40,7 +40,7 @@ export abstract class Weapon extends Equipment implements DamageSource
    *
    * @param {Character} user The character that uses the weapon.
    * @param {Character} target The target that will be attacked.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Weapon
    */
   attack(user:Character,target:Character):ActionOutput
@@ -60,7 +60,7 @@ export abstract class Weapon extends Equipment implements DamageSource
    * @protected
    * @abstract
    * @param {Character} user The character with the equiped weapon.
-   * @return {*}  {number}
+   * @return { number }
    * @memberof Weapon
    */
   abstract damagestat(user   : Character):number;
@@ -70,7 +70,7 @@ export abstract class Weapon extends Equipment implements DamageSource
    * @protected
    * @abstract
    * @param {Character} target The character target of the attack.
-   * @return {*}  {number}
+   * @return { number }
    * @memberof Weapon
    */
   abstract defencestat(target: Character):number;
@@ -80,7 +80,7 @@ export abstract class Weapon extends Equipment implements DamageSource
    * @protected
    * @param {Character} user The character that performed the attack.
    * @param {Character} target The character that received the attack.
-   * @return {*}  {number}
+   * @return { number }
    * @memberof Weapon
    */
   protected calculateDamage(user:Character,target:Character):number
@@ -91,7 +91,7 @@ export abstract class Weapon extends Equipment implements DamageSource
    * @protected
    * @param {Character} user The character that performed the attack.
    * @param {Character} target The character that received the attack.
-   * @return {*}  {number}
+   * @return { number }
    * @memberof Weapon
    */
   protected accuracyTest(user:Character,target:Character): number {

@@ -29,7 +29,7 @@ export abstract class Reaction implements hashable, storeable{
    * @param {Character} react_character The character who reacts
    * @param {Character} source The character whose action triggered the reaction.
    * @param {Character} target The character that does the reaction.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Reaction
    */
   protected abstract action(react_character: Character,source:Character,target: Character[]):ActionOutput;
@@ -51,7 +51,7 @@ export abstract class Reaction implements hashable, storeable{
    * @param {Character} react_character The character who reacts
    * @param {Character} source The character whose action should trigger the reaction.
    * @param {Character} targets The character who is going to be affected by the action.
-   * @return {*}  {ActionOutput}
+   * @return { ActionOutput }
    * @memberof Reaction
    */
   reaction(actionTags: tag[],react_character:Character,source:Character,targets:Character[]): ActionOutput
