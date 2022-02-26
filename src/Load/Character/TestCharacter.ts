@@ -98,7 +98,7 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
       return 'item-test'
     }
   }
-  class JohnSmith extends PersistentCharacter
+  class JohnSmith extends UniqueCharacter
   {
     protected _name: string = "John Smith";
     type: characterType= 'john';
