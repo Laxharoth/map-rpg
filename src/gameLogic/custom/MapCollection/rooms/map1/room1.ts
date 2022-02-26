@@ -3,11 +3,11 @@ import { Battle } from './../../../Class/Battle/Battle';
 import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
-import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
 import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { fill_room, Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
+import { Factory } from 'src/gameLogic/core/Factory/Factory';
 
 export function room(roomName: string): roomFunction {
   return function (masterService: MasterService): Room {
@@ -198,7 +198,7 @@ export function room(roomName: string): roomFunction {
         masterService.sceneHandler.tailScene(roomScene, 'map')
         masterService.sceneHandler.nextScene();
         if (randomCheck(10)) {
-          new Battle(masterService, new testformation(masterService),
+          new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" }),
           function (battle_options:battle_options)
           {
             const options=[

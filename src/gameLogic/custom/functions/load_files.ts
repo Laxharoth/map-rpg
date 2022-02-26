@@ -34,5 +34,7 @@ export async function load_files({})
   await import("../../../Load/Item/Equipment/ItemTest.ts").then(module=>add_module(module))
   //@ts-ignore
   await import("../../../Load/Perk/PerkUpgradeable.ts").then(module=>add_module(module))
+  //@ts-ignore
+  await import("../../../Load/Character/TestCharacter").then(module=>add_module(module));
   register_all_modules()
 }

@@ -15,6 +15,7 @@ import { StoreableType } from "src/gameLogic/core/Factory/Factory";
 import { SpecialAttackFactory } from "src/gameLogic/custom/Factory/SpecialAttackFactory";
 import { ReactionFactory } from "src/gameLogic/custom/Factory/ReactionFactory";
 import { CharacterBattleClassFactory } from "src/gameLogic/custom/Factory/CharacterBattleClassFactory";
+import { EnemyFormationFactory } from "src/gameLogic/custom/Factory/EnemyFormationFactory";
 
 export enum FactoryName{
   'Item'='Item',
@@ -32,6 +33,7 @@ export enum FactoryName{
   "SpecialAttack"="SpecialAttack",
   "Reaction"="Reaction",
   "CharacterBattleClass"="CharacterBattleClass",
+  "EnemyFormation"="EnemyFormation",
 }
 export type factoryname= `${FactoryName}`;
 export type FactoryFunction<T=any,U=StoreableType> = (masterService:MasterService,options:U)=>T;
@@ -52,4 +54,5 @@ export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   SpecialAttack:SpecialAttackFactory,
   Reaction:ReactionFactory,
   CharacterBattleClass:CharacterBattleClassFactory,
+  EnemyFormation:EnemyFormationFactory,
 }

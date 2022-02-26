@@ -5,7 +5,6 @@ import { MasterService } from "src/app/service/master.service";
 import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacter/MainCharacter';
-import { charTest } from 'src/gameLogic/custom/Class/Character/NPC/characterTest';
 import { SceneHandlerService } from 'src/gameLogic/custom/subservice/scene-handler';
 import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
 import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
@@ -19,7 +18,7 @@ import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { load_files } from 'src/gameLogic/custom/functions/load_files';
 import { QuestHolder } from 'src/gameLogic/custom/subservice/quest-holder';
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
-import { CharacterBattleClassFactory } from 'src/gameLogic/custom/Factory/CharacterBattleClassFactory';
+import { Factory } from 'src/gameLogic/core/Factory/Factory';
 
 @Component({
   selector   : 'app-gui',
@@ -95,7 +94,11 @@ export class GuiComponent implements OnInit {
       const armorTest1 = ItemFactory(this.masterService,{ Factory:"Item",type:"ArmorTest"})
       user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
       this.masterService.partyHandler.user = user;
-      this.masterService.partyHandler.setPartyMember(new charTest(this.masterService,'ally 1'),0)
+      this.masterService.partyHandler.setPartyMember(Factory(this.masterService,{
+        Factory:"Character",
+        type:"test character",
+        name:"ally 1",
+      }),0);
     }
   }
 }

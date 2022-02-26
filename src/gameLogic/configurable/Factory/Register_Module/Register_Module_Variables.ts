@@ -24,6 +24,8 @@ import { Perk } from '../../../custom/Class/Perk/Perk';
 import { reaction_switcher } from 'src/gameLogic/custom/Factory/ReactionFactory';
 import { CharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass';
 import { character_battle_class_switcher } from 'src/gameLogic/custom/Factory/CharacterBattleClassFactory';
+import { EnemyFormation } from 'src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation';
+import { enemy_formation_switcher } from 'src/gameLogic/custom/Factory/EnemyFormationFactory';
 
 export const constructor = {
   game_item:{
@@ -34,6 +36,7 @@ export const constructor = {
     Armor
   },
   character:{ Character,UniqueCharacter,PersistentCharacter },
+  enemy_formation:{EnemyFormation},
   status:{ Status,TimedStatus,StatusBattle },
   special_attack:{SpecialAttack},
   quest:{Quest},
@@ -45,6 +48,7 @@ export type constructor_mapping = typeof constructor;
 export const switcher = {
   game_item:  item_switcher ,
   character:  character_switcher ,
+  enemy_formation: enemy_formation_switcher ,
   status:     status_switcher ,
   special_attack: special_attack_switcher,
   quest:      quest_switcher ,

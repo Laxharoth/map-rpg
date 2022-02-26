@@ -1,9 +1,8 @@
 import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
-import { testformation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/testformation";
 import { SceneSelectItemFromMap, drop_item, nextOption } from "src/gameLogic/custom/Class/Scene/CommonOptions";
-import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
+import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { SetShopScene } from "src/gameLogic/custom/Class/Scene/ShopScene";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
@@ -88,10 +87,10 @@ export function room(masterService:MasterService):Room
     get disabled(){return !( user.character_equipment.armor instanceof ArmorNoArmor || user.inventory.items.some(item=>!(item instanceof Armor)))}
   }
   const my_nextOption      = nextOption(masterService)
-  const roomOptions =[
+  const roomOptions:SceneOptions[] =[
     {text:"Shop",action:makeShop,disabled:false},
     {text:"Shop",action:makeDynamicShop,disabled:false},
-    {text:"test battle",action:()=>new Battle(masterService, new testformation(masterService)).startRound(),disabled:false},
+    {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })),disabled:false},
     {text:"Add perk point",action:()=>{
       user.level_stats.perk_point=4;
       user.emit_perk_up();

@@ -5,6 +5,7 @@ import { Scene, SceneOptions, descriptionString } from "src/gameLogic/custom/Cla
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { ActionOutput } from '../../Character.type';
+import { factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
 
 /**
  * An array of characters, with the functions for battle descriptions.
@@ -145,6 +146,11 @@ export abstract class EnemyFormation
   }
 
   *[Symbol.iterator](){ for(const enemy of this._enemies)yield enemy; }
+}
+
+export type EnemyFormationOptions = {
+  Factory:factoryname;
+  type: string;
 }
 
 function calculate_experience(enemy:Enemy,character: Character):number
