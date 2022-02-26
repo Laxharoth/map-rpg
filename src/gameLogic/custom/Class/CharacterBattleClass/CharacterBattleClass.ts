@@ -9,7 +9,6 @@ import { ArrayTree, tree_node } from "./ArrayTree";
 export abstract class CharacterBattleClass implements storeable{
   abstract readonly type: string;
   abstract name: string;
-  abstract initial_core_stats: EnergyStats;
   abstract initial_physic_stats: FullCoreStats;
   protected abstract _upgrade_tree:ArrayTree<Upgrade>|tree_node<UpgradeOptions>[];
   abstract experience_cap:experience_cap;
@@ -48,6 +47,8 @@ export abstract class CharacterBattleClass implements storeable{
     intelligence,
   }: FullCoreStats): FullCalculatedStats {
     return {
+      hitpoints:1,
+      energypoints:1,
       physical_attack: 0,
       ranged_attack: 0,
       physical_defence: 0,
@@ -83,7 +84,6 @@ export abstract class CharacterBattleClass implements storeable{
 export class CharacterBattleClassEmpty extends CharacterBattleClass {
   type:"CharacterBattleClassEmpty"="CharacterBattleClassEmpty"
   name: string="CharacterBattleClassEmpty";
-  initial_core_stats: EnergyStats={hitpoints:1,energypoints:1};
   initial_physic_stats: FullCoreStats={aim:1,intelligence:1,speed:1,stamina:1,strenght:1};
   protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[]=[];
   experience_cap: experience_cap=[1,1,1,1,1];

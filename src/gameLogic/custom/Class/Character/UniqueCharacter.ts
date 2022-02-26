@@ -43,7 +43,6 @@ export abstract class UniqueCharacter extends Character implements storeable {
     ...super.toJson(),
     uuid: this.uuid,
     name: this.name,
-    originalCore:this.energy_stats,
     originalStats:this.core_stats,
     originalResistance:this.original_resistance,
     currentCore:this.current_energy_stats,
@@ -61,8 +60,6 @@ export abstract class UniqueCharacter extends Character implements storeable {
    */
   fromJson(options: UniqueCharacterStoreable): void {
     super.fromJson(options)
-    if (options['originalCore'])
-      this.energy_stats = options['originalCore'];
     if (options['originalStats'])
       this.core_stats = options['originalStats'];
     if (options['levelStats'])

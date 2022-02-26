@@ -1,7 +1,7 @@
 <div class="double-border user">
   <div>{{ partyMember.name }}</div>
-  <app-character-stat [statName]="'hp'" [statValue]="partyMember.current_energy_stats.hitpoints" [maxValue]="partyMember.energy_stats.hitpoints" [barColor]="'cyan'"></app-character-stat>
-  <app-character-stat [statName]="'energy'" [statValue]="partyMember.current_energy_stats.energypoints" [maxValue]="partyMember.energy_stats.energypoints"></app-character-stat>
+  <app-character-stat [statName]="'hp'" [statValue]="partyMember.current_energy_stats.hitpoints" [maxValue]="partyMember.calculated_stats.hitpoints" [barColor]="'cyan'"></app-character-stat>
+  <app-character-stat [statName]="'energy'" [statValue]="partyMember.current_energy_stats.energypoints" [maxValue]="partyMember.calculated_stats.energypoints"></app-character-stat>
   <div class="status-wrapper double-border">
     <app-status-icon *ngFor="let status of getCharacterStatus()"
       [status]="status"></app-status-icon>

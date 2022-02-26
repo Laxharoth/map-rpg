@@ -86,6 +86,8 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
     experience_cap:experience_cap = [ 100,1000,2000,5000,10000 ]
     calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): FullCalculatedStats {
       return {
+        hitpoints : 100 + Math.round(stamina),
+        energypoints : 100 + Math.round(stamina),
         physical_attack: Math.round(strenght + stamina / 2) || 0,
         ranged_attack: Math.round(aim / 2 + strenght / 8 + stamina / 8) || 0,
         physical_defence: Math.round(stamina) || 0,
@@ -123,6 +125,8 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
     experience_cap:experience_cap = [ 100,1000,2000,5000,10000 ]
     calculate_stats({strenght, stamina, aim, speed, intelligence,}:FullCoreStats):FullCalculatedStats {
       return {
+        hitpoints : 100 + Math.round(stamina),
+        energypoints : 100 + Math.round(stamina),
         physical_attack:Math.round(strenght+stamina/2)+10||0,
         ranged_attack:Math.round(aim/2+strenght/8+stamina/8)+10||0,
         physical_defence:Math.round(stamina)+10||0,

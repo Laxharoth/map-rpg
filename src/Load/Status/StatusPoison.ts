@@ -25,7 +25,7 @@ const register:register_function = ({status},{status:status_constructor},Factory
 
     private calculatePoisonDamage(target: Character):number
     {
-      const basedamage = target.energy_stats.hitpoints*1/8;
+      const basedamage = target.calculated_stats.hitpoints*1/8;
       const turnModifier = (5-this.DURATION)**2 / 100;
       const resistanceModifier = Math.max(0,100-target.calculated_resistance.poisonresistance)/100;
       const turndamage = basedamage*(1+turnModifier)*resistanceModifier;

@@ -174,7 +174,7 @@ export class Battle {
   private endBattleEnemyWins():Scene {
     this.master_service.partyHandler.battle_ended('lost')
     const nextOption = {text:'next', action:() => {
-      this.player.healHitPoints(this.player.energy_stats.hitpoints);
+      this.player.healHitPoints(this.player.calculated_stats.hitpoints);
       this.master_service.sceneHandler
         .tailScene(this.enemy_formation.onEnemyVictory([this.player].concat(this.party)), 'battle')
         .nextScene(false);

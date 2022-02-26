@@ -28,6 +28,8 @@ export interface FullCoreStats extends CoreStats
   intelligence:number;
 }
 export interface CalculatedStats {
+  hitpoints ?: number;
+  energypoints ?: number;
   physical_attack?:number;
   ranged_attack?:number;
   physical_defence?:number;
@@ -37,6 +39,8 @@ export interface CalculatedStats {
   initiative?:number;
 }
 export interface FullCalculatedStats extends CalculatedStats {
+  hitpoints : number;
+  energypoints : number;
   physical_attack:number;
   ranged_attack:number;
   physical_defence:number;

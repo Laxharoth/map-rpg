@@ -32,7 +32,6 @@ import { CharacterBattleClassFactory } from '../../Factory/CharacterBattleClassF
  */
 export abstract class Character implements storeable
 {
-  energy_stats:EnergyStats;
   level_stats:LevelStats;
   current_energy_stats:EnergyStats;
   /* The original stats of the character. */
@@ -68,12 +67,11 @@ export abstract class Character implements storeable
     this.inventory = new Inventory(masterService);
     this.character_equipment = new CharacterEquipment(masterService);
     this.masterService = masterService;
-    this.energy_stats = {...this.character_battle_class.initial_core_stats};
-    this.current_energy_stats = {...this.energy_stats};
     this.level_stats = {experience:0, upgrade_point:0, perk_point:0, level:0, upgrade_path:[]}
     this.core_stats = {...this.character_battle_class.initial_physic_stats};
     this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
     this.calculateStats();
+    this.current_energy_stats = { hitpoints: this.calculated_stats.hitpoints, energypoints:this.calculated_stats.energypoints};
     this.applyStatus();
   }
   /**
@@ -310,7 +308,7 @@ export abstract class Character implements storeable
   healHitPoints(hitpointsgain:number):number
   {
     const hitpointsBeforeHeal = this.current_energy_stats.hitpoints;
-    this.current_energy_stats.hitpoints=Math.min(this.energy_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain);
+    this.current_energy_stats.hitpoints=Math.min(this.calculated_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain);
     return this.current_energy_stats.hitpoints-hitpointsBeforeHeal;
   }
   gain_experience(experience:number):number {
@@ -324,7 +322,7 @@ export abstract class Character implements storeable
    * @type {string}
    * @memberof Character
    */
-  get currentStatusString():string { return `${this.name} looks like they are ${this.current_energy_stats.hitpoints} in a scale of 0 to ${this.energy_stats.hitpoints}`}
+  get currentStatusString():string { return `${this.name} looks like they are ${this.current_energy_stats.hitpoints} in a scale of 0 to ${this.calculated_stats.hitpoints}`}
   /**
    * Removes all the Battle Status without trigger reactions.
    *
