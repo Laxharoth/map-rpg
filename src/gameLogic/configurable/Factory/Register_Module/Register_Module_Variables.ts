@@ -1,3 +1,4 @@
+import { mapcollection } from 'src/gameLogic/custom/MapCollection/maps/mapcollection';
 import { Reaction, BeforeActionReaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction';
 import { perk_switcher } from '../../../custom/Factory/PerkFactory';
 import { quest_switcher } from '../../../custom/Factory/QuestFactory';
@@ -26,6 +27,7 @@ import { CharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattle
 import { character_battle_class_switcher } from 'src/gameLogic/custom/Factory/CharacterBattleClassFactory';
 import { EnemyFormation } from 'src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation';
 import { enemy_formation_switcher } from 'src/gameLogic/custom/Factory/EnemyFormationFactory';
+import { roomcollection } from 'src/gameLogic/custom/MapCollection/rooms/roomcollection';
 
 export const constructor = {
   game_item:{
@@ -55,5 +57,7 @@ export const switcher = {
   perk:       perk_switcher ,
   reaction:   reaction_switcher,
   character_battle_class:character_battle_class_switcher,
+  maps:mapcollection,
+  rooms:roomcollection
 }
 export type switcher_mapping = typeof switcher
