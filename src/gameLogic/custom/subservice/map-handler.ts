@@ -146,7 +146,7 @@ export class MapHandlerService {
     roomName = roomnameORcoordinates;
     this.masterService.flagsHandler.setFlag('currentroom',roomName);
     ({room,coordinates} = this.currentMap.findRoomByName(roomName))
-    foundRoom = room?.(this.masterService);
+    foundRoom = fill_room(room?.(this.masterService));
     if(foundRoom && this.currentRoom !== foundRoom)
       shouldChangeRoom = true;
     if(shouldChangeRoom)

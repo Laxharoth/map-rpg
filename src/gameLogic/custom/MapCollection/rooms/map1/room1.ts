@@ -3,8 +3,8 @@ import { Battle } from './../../../Class/Battle/Battle';
 import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
-import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
-import { fill_room, Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
+import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
 import { Factory } from 'src/gameLogic/core/Factory/Factory';
@@ -190,7 +190,7 @@ export function room(roomName: string): roomFunction {
   The can flew awa}`
     }, options:[nextoption],fixed_options:[null,null,null,null,null]};
 
-    const room = fill_room({
+    const room = {
       onEnter: () => {
         if ($flag("map1room1firstenter")) {
           masterService.sceneHandler.tailScene(fistEnter, 'map');
@@ -228,7 +228,7 @@ export function room(roomName: string): roomFunction {
         }
       },
       icon: ""
-    })
+    }
     return room;
   }
 }
