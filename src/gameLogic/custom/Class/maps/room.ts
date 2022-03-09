@@ -1,4 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
+import { Scene } from "../Scene/Scene";
 
 /**
  * A model of a specific room
@@ -55,6 +56,7 @@ export interface Room{
       */
      afterMoveTo ?: (roomName:string) => void;
      icon        ?: string;
+     updateable_scene?:{[key: string]:Scene};
 }
 
 export type roomFunction = (masterService:MasterService) => Room;
