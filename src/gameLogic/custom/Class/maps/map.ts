@@ -1,6 +1,6 @@
 import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
-import { mapcolection } from "src/gameLogic/custom/MapCollection/maps/mapcolection";
-import { roomcolection } from "src/gameLogic/custom/MapCollection/rooms/roomcolection";
+import { mapcollection } from "src/gameLogic/custom/MapCollection/maps/mapcollection";
+import { roomcollection } from "src/gameLogic/custom/MapCollection/rooms/roomcollection";
 
 /**
  * A model that represents a map
@@ -25,8 +25,8 @@ export class GameMap{
    */
   private rooms:roomFunction[][];
 
-  mapcolection  = mapcolection;
-  roomcolection = roomcolection;
+  mapcolection  = mapcollection;
+  roomcolection = roomcollection;
 
   /**
    * Loads in the roomNames the matrix of the current map.

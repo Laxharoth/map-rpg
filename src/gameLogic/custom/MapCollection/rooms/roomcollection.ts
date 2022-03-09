@@ -3,7 +3,7 @@ import { room as room1 } from "src/gameLogic/custom/MapCollection/rooms/map1/roo
 import { room as room7 } from "src/gameLogic/custom/MapCollection/rooms/map1/room7"
 import { room25 } from "./map2/room25"
 
-export const roomcolection:{[key: string]: {map:string,room:roomFunction}} = {
+export const roomcollection:{[key: string]: {map:string,room:roomFunction}} = {
   //map1
   room1:{map:"map1",room:room1('room1')},
   room2:{map:"map1",room:room1('room2')},
