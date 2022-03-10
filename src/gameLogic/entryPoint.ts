@@ -1,6 +1,8 @@
 import { MasterService } from "src/app/service/master.service";
+import { default_flags } from "./configurable/subservice/flag-handler.type";
 import { Factory } from "./core/Factory/Factory";
 import { MainCharacter } from "./custom/Class/Character/MainCharacter/MainCharacter";
+import { SceneOptions } from "./custom/Class/Scene/Scene";
 import { ItemFactory } from "./custom/Factory/ItemFactory";
 import { FactWeb } from "./custom/subservice/fact-web";
 import { InfoPageToggler } from "./custom/subservice/info-page-toggler";
@@ -33,33 +35,31 @@ export function entryPoint(masterService:MasterService){
   masterService.register("UniqueCharacterHandler",unique_characters_handler);
   masterService.register("InfoPageToggler",info_page_toggler);
   masterService.register("QuestHolder",quest_holder);
-  FirstTimeUserInitialize(masterService);
-  //debug to get savedata
-  masterService.gameSaver.load("save1");
-  masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
-  masterService.timeHandler.addTime(0);
-}
 
-function FirstTimeUserInitialize(masterService:MasterService) {
-  if(masterService.gameSaver?.MainCharacter?.[0]) {
-    masterService.partyHandler.user = masterService.gameSaver.MainCharacter[0];
-  }
-  if (!masterService.partyHandler.user) {
-    const user = new MainCharacter(masterService, 'player',"TestMainCharacterBattleClass");
-    const meleeTest1 = ItemFactory(masterService,{ Factory:"Item",type:"MeleeTest"})
-    const rangedTest1 = ItemFactory(masterService,{ Factory:"Item",type:"RangedTest"})
-    const shieldTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ShieldTest"})
-    const armorTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ArmorTest"})
-    user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
-    masterService.partyHandler.user = user;
-    masterService.partyHandler.setPartyMember(Factory(masterService,{
-      Factory:"Character",
-      type:"test character",
-      name:"ally 1",
-    }),0);
-  }
+  masterService.sceneHandler.headScene({ options:[],sceneData:()=>null },'front-page');
 }
 
 export function newGame(masterService:MasterService){
+  const user = new MainCharacter(masterService, 'player',"TestMainCharacterBattleClass");
+  const meleeTest1 = ItemFactory(masterService,{ Factory:"Item",type:"MeleeTest"})
+  const rangedTest1 = ItemFactory(masterService,{ Factory:"Item",type:"RangedTest"})
+  const shieldTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ShieldTest"})
+  const armorTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ArmorTest"})
+  user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
+  masterService.partyHandler.user = user;
+  masterService.partyHandler.setPartyMember(Factory(masterService,{
+    Factory:"Character",
+    type:"test character",
+    name:"ally 1",
+  }),0);
+  masterService.flagsHandler.setFlags(default_flags)
+  masterService.mapHandler.loadRoom(default_flags.currentroom);
+}
 
+export function continueGame(masterService:MasterService){
+  // debug to get savedata
+  masterService.gameSaver.load("save1");
+  masterService.partyHandler.user = masterService.gameSaver.MainCharacter[0];
+  masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
+  masterService.timeHandler.addTime(0);
 }
