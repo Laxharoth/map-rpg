@@ -13,7 +13,7 @@ import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { ObjectSet } from "../../ClassHelper/ObjectSet";
 import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
-import { BattleCommand, EmptyCommand } from "../Battle/BattleCommand";
+import { BattleCommand, EmptyCommand, ITEM_PRIORITY } from "../Battle/BattleCommand";
 import { BattleClassOptions, CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
 import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
 import { Inventory } from "./Inventory/Inventory";
@@ -242,8 +242,13 @@ export abstract class Character implements storeable
     if (item instanceof SpecialAttack) return this._useSpecialAttack(item, targets);
     if (item instanceof GameItem)
     {
-      const description =  this.inventory.useItem(item, this, targets);
-      return {source:this,target:targets,tags:['item-use'],excecute:()=>description}
+      return {
+        source: this,
+        target: targets,
+        tags: ['item-use'],
+        excecute: () => this.inventory.useItem(item, this, targets),
+        priority:ITEM_PRIORITY
+      }
     }
     console.warn('item not in inventory')
     return new EmptyCommand(this, targets)

@@ -7,6 +7,7 @@ export interface BattleCommand
   source:Character;
   target:Character[];
   tags:tag[];
+  priority?:number;
   excecute:() => ActionOutput;
 }
 export class EmptyCommand implements BattleCommand
@@ -33,3 +34,5 @@ export class DefeatedCommand implements BattleCommand
     this.excecute = ()=>this.source.onDefeated();
   }
 }
+export const ITEM_PRIORITY = 5;
+export const DEFEND_PRIORITY = 5;

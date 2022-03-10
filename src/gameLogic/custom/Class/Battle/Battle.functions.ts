@@ -1,15 +1,11 @@
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
-import { BattleCommand } from 'src/gameLogic/custom/Class/Battle/BattleCommand';
+import { BattleCommand, DEFEND_PRIORITY } from 'src/gameLogic/custom/Class/Battle/BattleCommand';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { Weapon } from '../Equipment/Weapon/Weapon';
 import { isStatusPreventAttack, StatusPreventAttack } from '../Status/StatusBattle';
 export function get_undefeated_target(group: Character[]): Character[] {
   return group.filter(character => !character.is_defeated());
-}
-
-export function attack_order(characters: Character[]): Character[] {
-  return characters.sort((character, other) => other.calculated_stats.initiative - character.calculated_stats.initiative)
 }
 
 export function AttackCommand(source: Character, targets: Character[]): BattleCommand
@@ -46,11 +42,11 @@ export function ShootCommand(source: Character, targets: Character[]): BattleCom
 export function DefendCommand(source: Character, targets: Character[]):BattleCommand
 {
   const shield = source.character_equipment.shield;
-  const defend_action = shield.defend(targets)
   return {
     source, target:targets, tags:shield.tags,
-    excecute:() => defend_action
-    }
+    excecute:() => shield.defend(targets),
+    priority:DEFEND_PRIORITY
+    };
 }
 /**
  * Attacks with a weapon.

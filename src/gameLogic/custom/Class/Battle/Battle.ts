@@ -4,7 +4,7 @@ import { Scene, SceneOptions} from 'src/gameLogic/custom/Class/Scene/Scene';
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
-import { attack_order, get_undefeated_target } from './Battle.functions';
+import { get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Scene/CommonOptions';
 import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
 import { is_item_disabled_function, selectItem, valid_target_function } from '../Scene/SceneUseItem';
@@ -50,13 +50,13 @@ export class Battle {
    */
   round(playerAction: BattleCommand): void {
     const partyIsDefeated = () => { return get_undefeated_target([this.player].concat(this.party)).length === 0 }
-    const turn_characters = attack_order(get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies)))
+    const turn_characters =get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))
     const battle_commands:BattleCommand[] = []
     for (const character of turn_characters) {
       if (character === this.player) { battle_commands.push(playerAction); continue; }
       battle_commands.push(character.IA_Action())
     }
-    for(let battle_command of battle_commands) {
+    for(let battle_command of sortBattleCommands(battle_commands)) {
       if(battle_command.source.is_defeated())battle_command=new DefeatedCommand(battle_command.source, battle_command.target);
       turn_characters.forEach(character=>pushBattleActionOutput(character.battle_command_react(battle_command),[this.battleRoundScene, this.battleRoundString]))
       pushBattleActionOutput(battle_command.excecute(),[this.battleRoundScene, this.battleRoundString])
@@ -267,4 +267,11 @@ export class Battle {
       is_valid_target,
       is_item_disabled)
   }
+}
+
+function sortBattleCommands(commands:BattleCommand[]){
+  return commands.sort( (command_1, command_2) => (command_1.priority || 0) > (command_2.priority || 0)  ||
+    command_1.source.calculated_stats.initiative > command_2.source.calculated_stats.initiative
+    ?1:-1
+  )
 }
