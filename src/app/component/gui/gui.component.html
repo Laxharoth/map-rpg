@@ -1,35 +1,53 @@
 <div class="app-gui color-1">
-  <div class="app-gui-up">
+  <div class="full-page"
+    *ngIf="
+          currentGameState === 'prepare' ||
+          currentGameState === 'front-page'
+      "
+  >
     <div *ngIf="currentGameState === 'prepare'" class="color-2"></div>
-    <div *ngIf="currentGameState === 'map'" class="color-2">
-      <app-map-gui></app-map-gui>
+    <div *ngIf="currentGameState === 'front-page'" class="color-2">
+      <app-front-page-gui></app-front-page-gui>
     </div>
-    <div *ngIf="currentGameState === 'battle'" class="color-2">
-      <app-battle-gui></app-battle-gui>
-    </div>
-    <div *ngIf="currentGameState === 'item'" class="color-2">
-      <app-item-gui></app-item-gui>
-    </div>
-    <div *ngIf="currentGameState === 'excess-item'" class="color-2">
-      <app-excess-item-gui></app-excess-item-gui>
-    </div>
-    <div *ngIf="currentGameState === 'shop'" class="color-2">
-      <app-shop-gui></app-shop-gui>
-    </div>
-    <div *ngIf="currentGameState === 'status'" class="color-2">
-      <app-status-gui></app-status-gui>
-    </div>
-    <div *ngIf="currentGameState === 'perk-tree'" class="color-2">
-      <app-select-perk-gui></app-select-perk-gui>
-    </div>
-    <div *ngIf="currentGameState === 'stat-up'" class="color-2">
-      <app-stat-up-gui></app-stat-up-gui>
-    </div>
-    <div *ngIf="currentGameState === 'info'" class="color-2">
-      <app-info-page-gui></app-info-page-gui>
-    </div>
+
   </div>
-  <div class="app-gui-down color-3" *ngIf="currentGameState !== 'prepare'">
-    <app-scene-options></app-scene-options>
+  <div class="divided-gui"
+    *ngIf="
+          currentGameState !== 'prepare' &&
+          currentGameState !== 'front-page'
+      "
+  >
+    <div class="app-gui-up">
+      <div *ngIf="currentGameState === 'map'" class="color-2">
+        <app-map-gui></app-map-gui>
+      </div>
+      <div *ngIf="currentGameState === 'battle'" class="color-2">
+        <app-battle-gui></app-battle-gui>
+      </div>
+      <div *ngIf="currentGameState === 'item'" class="color-2">
+        <app-item-gui></app-item-gui>
+      </div>
+      <div *ngIf="currentGameState === 'excess-item'" class="color-2">
+        <app-excess-item-gui></app-excess-item-gui>
+      </div>
+      <div *ngIf="currentGameState === 'shop'" class="color-2">
+        <app-shop-gui></app-shop-gui>
+      </div>
+      <div *ngIf="currentGameState === 'status'" class="color-2">
+        <app-status-gui></app-status-gui>
+      </div>
+      <div *ngIf="currentGameState === 'perk-tree'" class="color-2">
+        <app-select-perk-gui></app-select-perk-gui>
+      </div>
+      <div *ngIf="currentGameState === 'stat-up'" class="color-2">
+        <app-stat-up-gui></app-stat-up-gui>
+      </div>
+      <div *ngIf="currentGameState === 'info'" class="color-2">
+        <app-info-page-gui></app-info-page-gui>
+      </div>
+    </div>
+    <div class="app-gui-down color-3">
+      <app-scene-options></app-scene-options>
+    </div>
   </div>
 </div>

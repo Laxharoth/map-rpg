@@ -1,10 +1,17 @@
 .app-gui
 {
-  height: 100%;
+  inset:0;
+  position:absolute;
   display: flex;
   background-color : blue;
   flex-direction: column;
 }
+.full-page,.divided-gui{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.full-page>div{ flex-grow: 1; }
 .app-gui-up,
 .app-gui-down
 {

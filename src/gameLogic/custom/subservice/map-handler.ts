@@ -18,7 +18,6 @@ export class MapHandlerService {
   private coordinatesSubject = new Subject<number[]>();
 
   currentMapName:string ="";
-  currentRoomName:string="";
   coordinates:Array<number> = [];
 
   private readonly masterService: MasterService;
@@ -63,23 +62,20 @@ export class MapHandlerService {
    */
   loadRoom(roomName: string):void
   {
-    if(this.lockmap.isMapLocked())return;
-    const {map:mapname=null,room=null} = this.currentMap.roomcolection[roomName];
-    if(!room)
-    {
-      console.error("room does not exist");
-      return;
-    }
-
-    if(!this.currentRoom.beforeMoveTo(roomName))return;
-    this.currentRoomName = roomName;
+    const {map:mapname=null} = this.currentMap.roomcolection[roomName];
     if(mapname !== this.currentMapName)
     {
       this.currentMapName = mapname;
       this.loadMap(mapname);
     }
-    //check if room is loaded if not wait for the subscription
-    this.loadRoomHelper(roomName);
+    const { room,coordinates } = this.currentMap.findRoomByName(roomName);
+    if(!room){
+      console.error("room does not exist");
+      return;
+    }
+    if(!this.currentRoom.beforeMoveTo(roomName))return;
+
+    this.loadRoomHelper(room,roomName,coordinates);
   }
 
   /**
@@ -101,10 +97,10 @@ export class MapHandlerService {
       case "RIGHT":x++;break;
       default:return;
     }
-    const {roomName=null} = this.currentMap.findRoomByCoordinates(y,x)
+    const {roomName=null,room=null} = this.currentMap.findRoomByCoordinates(y,x)
     if(!roomName)return;//out of map border
     if(!this.currentRoom.beforeMoveTo(roomName))return;
-    this.loadRoomHelper(roomName);
+    this.loadRoomHelper(room,roomName,[y,x]);
   }
 
   /**
@@ -132,35 +128,21 @@ export class MapHandlerService {
    * Loads a room given a name or coordinates.
    *
    * @private
-   * @param {(string|number[])} roomnameORcoordinates The room name or coordinates.
+   * @param {(string|number[])} roomName The room name or coordinates.
    * @return { boolean } if the room changes.
    * @memberof MapHandlerService
    */
-  private loadRoomHelper(roomnameORcoordinates: string):boolean
+  private loadRoomHelper(room:roomFunction,roomName: string,coordinates:[number,number]):boolean
   {
-    let shouldChangeRoom = false;
-    let foundRoom:Room;
-    let room:roomFunction;
-    let coordinates:number[];
-    let roomName:string;
-    roomName = roomnameORcoordinates;
+    const foundRoom = fill_room(room?.(this.masterService));
     this.masterService.flagsHandler.setFlag('currentroom',roomName);
-    ({room,coordinates} = this.currentMap.findRoomByName(roomName))
-    foundRoom = fill_room(room?.(this.masterService));
-    if(foundRoom && this.currentRoom !== foundRoom)
-      shouldChangeRoom = true;
-    if(shouldChangeRoom)
-    {
-      this.masterService.flagsHandler.setFlag("currentroom",roomName);
-      this.currentRoom.onExit();
-      foundRoom.onEnter();
-      this.currentRoom.afterMoveTo(roomName);
-      this.currentRoom=foundRoom;
-      this.coordinates = coordinates;
-      this.coordinatesSubject.next(this.coordinates);
-      return true;
-    }
-    return false;
+    this.currentRoom.onExit();
+    foundRoom.onEnter();
+    this.currentRoom.afterMoveTo(roomName);
+    this.currentRoom=foundRoom;
+    this.coordinates = coordinates;
+    this.coordinatesSubject.next(this.coordinates);
+    return true;
   }
 
 }
