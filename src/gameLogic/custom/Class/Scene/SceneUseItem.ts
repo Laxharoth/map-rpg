@@ -2,7 +2,7 @@ import { MasterService } from 'src/app/service/master.service';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { drop_item, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
-import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
+import { game_state } from 'src/gameLogic/configurable/subservice/game-state.type';
 import { BattleUseable } from '../Items/BattleUseable';
 import { selectTarget } from './SceneSelectTarget';
 import { DescriptableSceneOptions, Scene, SceneOptions } from './Scene';

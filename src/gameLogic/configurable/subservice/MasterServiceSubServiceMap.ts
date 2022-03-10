@@ -3,7 +3,7 @@ import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { SceneHandlerService } from 'src/gameLogic/custom/subservice/scene-handler';
 import { FactWeb } from 'src/gameLogic/custom/subservice/fact-web';
-import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
+import { GameStateService } from 'src/gameLogic/core/subservice/game-state';
 import { InfoPageToggler } from 'src/gameLogic/custom/subservice/info-page-toggler';
 import { LockMapService } from 'src/gameLogic/custom/subservice/lock-map';
 import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';

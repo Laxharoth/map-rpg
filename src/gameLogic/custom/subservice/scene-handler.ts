@@ -1,8 +1,8 @@
 import { Observable, Subject } from 'rxjs';
 import { Scene } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { DoubleLinkedList, DoubleLinkedListNode } from 'src/gameLogic/custom/ClassHelper/DoubleLinkedList';
-import { GameStateService } from './game-state';
-import { game_state } from './game-state.type';
+import { GameStateService } from '../../core/subservice/game-state';
+import { game_state } from '../../configurable/subservice/game-state.type';
 import { LockMapService } from './lock-map';
 
 /**

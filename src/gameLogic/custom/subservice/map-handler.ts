@@ -1,7 +1,7 @@
 import { Observable, Subject, Subscription } from 'rxjs';
 
 import { MasterService } from "src/app/service/master.service";
-import { GameStateService } from './game-state';
+import { GameStateService } from '../../core/subservice/game-state';
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
 import { fill_room, Room, roomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { LockMapService } from './lock-map';

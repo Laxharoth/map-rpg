@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { game_state, game_state_priority } from 'src/gameLogic/custom/subservice/game-state.type';
+import { game_state, game_state_priority } from 'src/gameLogic/configurable/subservice/game-state.type';
 
 /**
  * Service that has the current game state.

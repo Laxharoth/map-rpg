@@ -6,8 +6,8 @@ import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { MainCharacter } from 'src/gameLogic/custom/Class/Character/MainCharacter/MainCharacter';
 import { SceneHandlerService } from 'src/gameLogic/custom/subservice/scene-handler';
-import { GameStateService } from 'src/gameLogic/custom/subservice/game-state';
-import { game_state } from 'src/gameLogic/custom/subservice/game-state.type';
+import { GameStateService } from 'src/gameLogic/core/subservice/game-state';
+import { game_state } from 'src/gameLogic/configurable/subservice/game-state.type';
 import { LockMapService } from 'src/gameLogic/custom/subservice/lock-map';
 import { MapHandlerService } from 'src/gameLogic/custom/subservice/map-handler';
 import { PartyService } from 'src/gameLogic/custom/subservice/party';
@@ -34,12 +34,12 @@ export class GuiComponent implements OnInit {
     set_theme()
     this.currentGameState = "prepare";
     this.register_master_service_subservice();
+    this.InitializeSubscriptions();
     load_files({}).then(() => {
       //debug to get savedata
       this.masterService.gameSaver.load("save1");
 
       this.FirstTimeUserInitialize();
-      this.InitializeSubscriptions();
 
       this.masterService.mapHandler.loadRoom(this.masterService.flagsHandler.getFlag("currentroom"));
       this.masterService.timeHandler.addTime(0);
