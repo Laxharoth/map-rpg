@@ -31,7 +31,6 @@ export abstract class Weapon extends Equipment implements DamageSource
     const damage = this.calculateDamage(user, target);
     target.takeDamage(damage);
     strings.push(`${target.name} takes ${damage} damage from ${user.name}'s ${this.name}`)
-    pushBattleActionOutput(target.react(this.tags,user),[descriptions,strings]);
     return [descriptions,strings];
   }
   /** Gets the stat from the character that will be used to calculate the damage. */

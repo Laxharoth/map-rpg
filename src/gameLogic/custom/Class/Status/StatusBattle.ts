@@ -1,6 +1,7 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { Status, StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
+import { Status } from "src/gameLogic/custom/Class/Status/Status";
+import { BattleCommand } from '../Battle/BattleCommand';
 
 /** Specific Status that occur only in battle. */
 export abstract class StatusBattle extends Status
@@ -11,10 +12,16 @@ export abstract class StatusBattle extends Status
    * Applies the effect to the status, and reduces the duration.
    * If the duration reach zero, removes itself from the character.
    */
-  applyEffect(target: Character):ActionOutput
+  applyEffect(target: Character):BattleCommand
   {
     this.DURATION--;
-    if(this.DURATION<=0)return target.removeStatus(this);
+    if(this.DURATION<=0)
+      return {
+        source:target,
+        target:[target],
+        tags:this.tags.concat(['status ended']),
+        excecute:()=>target.removeStatus(this)
+      };
     return super.applyEffect(target);
   }
   /** Increases the duration of the status */

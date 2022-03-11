@@ -42,10 +42,8 @@ export abstract class GameItem implements BattleUseable, storeable
     if(!(targets instanceof Array))targets = [targets]
     this.amount--;
     if(this.amount<=0){ user.inventory.dropItem(this) }
-    for(const target of targets)
-    {
+    for(const target of targets){
       pushBattleActionOutput(this._itemEffect(user,target),description);
-      pushBattleActionOutput(target.react(this.tags,user),description);
     }
     return  description
   };

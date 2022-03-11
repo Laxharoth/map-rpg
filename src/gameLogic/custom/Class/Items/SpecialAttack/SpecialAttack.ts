@@ -29,10 +29,8 @@ export abstract class SpecialAttack implements BattleUseable, hashable, storeabl
     const description :ActionOutput = [[],[]]
     if(!(targets instanceof Array))targets = [targets]
     this.cooldown = this.COOLDOWN;
-    for(const target of targets)
-    {
+    for(const target of targets){
       pushBattleActionOutput(this._itemEffect(user,target),description);
-      pushBattleActionOutput(target.react(this.tags,user),description);
     }
     return description;
   }

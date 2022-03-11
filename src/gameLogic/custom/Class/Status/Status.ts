@@ -8,6 +8,7 @@ import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { hashable } from "../../ClassHelper/ObjectSet";
+import { BattleCommand } from "../Battle/BattleCommand";
 
 /** Altered status that affect characters. */
 export abstract class Status implements storeable,hashable
@@ -27,9 +28,13 @@ export abstract class Status implements storeable,hashable
    * Apply the effect on the character.
    * Also check if the character can react to the effect of the status.
    */
-  applyEffect(target: Character):ActionOutput{
-    const effect = this.effect(target);
-    return pushBattleActionOutput(target.react(this.tags,target), effect);
+  applyEffect(target: Character):BattleCommand{
+    return {
+      source:target,
+      target:[target],
+      tags:this.tags,
+      excecute:()=>this.effect(target)
+    };
   }
   applyModifiers(character:Character):void
   {
@@ -43,10 +48,16 @@ export abstract class Status implements storeable,hashable
   /** Defines what to do when the status is added to the character. */
   onStatusGainded(target: Character):ActionOutput{
     this.applyModifiers(target);
-    return target.react(this.tags.concat(['status gained']),target)
+    return this._onStatusGainded(target);
   };
+  protected _onStatusGainded(target: Character):ActionOutput{
+    return [[],[]]
+  }
   /** Defines what to do when the status is removed from the character. */
-  onStatusRemoved(target: Character)  :ActionOutput{ return target.react(this.tags.concat(['status ended']),target) };
+  onStatusRemoved(target: Character)  :ActionOutput{
+    return this._onStatusRemoved(target);
+  };
+  protected _onStatusRemoved(target: Character):ActionOutput{return [[],[]]}
   /** Tags associated with the status. */
   get tags(): tag[]{ return []}
   /** Reactions that the status grants. */

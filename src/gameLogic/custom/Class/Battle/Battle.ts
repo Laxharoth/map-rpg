@@ -47,8 +47,13 @@ export class Battle {
     }
     for(let battle_command of sortBattleCommands(battle_commands)) {
       if(battle_command.source.is_defeated())battle_command=new DefeatedCommand(battle_command.source, battle_command.target);
-      turn_characters.forEach(character=>pushBattleActionOutput(character.battle_command_react(battle_command),[this.battleRoundScene, this.battleRoundString]))
+      for(const character of turn_characters){
+        pushBattleActionOutput(character.reactBefore(battle_command),[this.battleRoundScene, this.battleRoundString])
+      }
       pushBattleActionOutput(battle_command.excecute(),[this.battleRoundScene, this.battleRoundString])
+      for(const target of battle_command.target){
+        pushBattleActionOutput(target.react(battle_command),[this.battleRoundScene, this.battleRoundString])
+      }
       if (this.enemy_formation.IsDefeated) {
         for (const enem of this.enemy_formation.enemies)
           pushBattleActionOutput(enem.onDefeated(), [this.battleRoundScene, this.battleRoundString]);
@@ -91,9 +96,13 @@ export class Battle {
     this.item_option.disabled = this.player.inventory.items.length <= 0 || this.player.inventory.items.every(item => item.disabled(this.player));
 
     for (const character of get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
-      const [scene, string] = character.startRound();
-      this.startRoundScene.push(...scene);
-      this.startRoundString.push(string.join('\n'));
+      const commands = character.startRound();
+      for(const command of sortBattleCommands(commands)){
+        const [reactScene,reactString] = character.react(command);
+        const [scene,string] = command.excecute();
+        this.startRoundScene.push(...reactScene,...scene);
+        this.startRoundString.push(reactString.concat(string).join('\n'));
+      }
     }
     this.startRoundScene.push({
       sceneData: () => `${this.startRoundString.join("\n\n")}`,

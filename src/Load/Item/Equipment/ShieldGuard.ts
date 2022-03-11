@@ -1,5 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
@@ -13,7 +14,7 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
     protected whatTriggers: tag[][]=[[]];
     //@ts-ignore
     protected prevent_reaction: tag[][] = [['paralized'],['benefic']]
-    protected action(react_character: Character, source: Character, target: Character[]): ActionOutput {
+    protected action(react_character: Character, {source,target}:BattleCommand): ActionOutput {
       if(this.masterService.partyHandler.is_party_member(source))return [[],[]]
       for(let i = 0; i < target.length; i++) {
         if(this.masterService.partyHandler.is_party_member(target[i])) {

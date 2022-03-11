@@ -71,18 +71,15 @@ export abstract class Character implements storeable
   unequipArmor(){this.character_equipment.unequipArmor(this)}
   unequipShield(){this.character_equipment.unequipShield(this)}
   /** Reset roundStats apply the battle status effects and cooldown the specials. */
-  startRound():ActionOutput
-  {
-    const roundDescription:ActionOutput = [[],[]];
-    roundDescription[1].push(this.currentStatusString);
-    pushBattleActionOutput(this.startRoundApplyStatus(),roundDescription)
+  startRound():BattleCommand[]{
+    const commands:BattleCommand[] = [];
+    commands.push(...this.startRoundApplyStatus())
     this.cooldownSpecials();
     this.calculateStats()
-    return roundDescription;
+    return commands;
   }
   /** Removes the battle status. */
-  onDefeated():ActionOutput
-  {
+  onDefeated():ActionOutput{
     let description:ActionOutput =[[],[]]
     for(const status of this.battle_status)
     { pushBattleActionOutput(status.onStatusRemoved(this),description) }
@@ -113,9 +110,7 @@ export abstract class Character implements storeable
   is_defeated():boolean{return this.current_energy_stats.hitpoints<=0}
   /** Adds status to the character. to the correct Array if able. */
   addStatus(status: Status): ActionOutput{
-    if(!status)return [[],[]]
-    if(this.timed_status.has(status.hash()) || this.battle_status.has(status.hash()))
-      return pushBattleActionOutput(this.react(this.tags.concat(['status regained']),this),[[],[`${this.name} is already affected by ${status.name}`]])
+    if(!status)return [[],[]];
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
     if(status instanceof StatusBattle) this.battle_status.push(status);
     else if(status instanceof TimedStatus) this.timed_status.push(status);
@@ -172,21 +167,22 @@ export abstract class Character implements storeable
    * Checks all the reactions of the character.
    * Won't react if character is paralized, zero hitpoints or the battle ended.
    */
-  react(whatTriggers:tag[],source: Character):ActionOutput
+  react(action:BattleCommand):ActionOutput
   {
-    const reactDescription:ActionOutput = [[],[]]
-    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return reactDescription;
-    for(const reaction of this.reactions)
-    { pushBattleActionOutput(reaction.reaction(whatTriggers,this,source,[this]),reactDescription);}
-    return reactDescription
+    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return [[],[]];
+    return this.reactions.reduce(
+        (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,action),scenes)
+        ,[[],[]] as ActionOutput
+      );
   }
-  battle_command_react(battle_command:BattleCommand)
-  {
-    const reactDescription:ActionOutput = [[],[]]
-    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return reactDescription;
-    for(const reaction of this.reactions)
-    { pushBattleActionOutput(reaction.reaction(battle_command.tags,this,battle_command.source,battle_command.target),reactDescription);}
-    return reactDescription
+  reactBefore(action:BattleCommand):ActionOutput{
+    const actionBefore:BattleCommand = Object.create(action);
+    actionBefore.tags.push('before-action');
+    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return [[],[]];
+    return this.reactions.reduce(
+        (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,actionBefore),scenes)
+        ,[[],[]] as ActionOutput
+      );
   }
   /** Reduces the character hitpoints up to zero. */
   takeDamage(damage:number):number
@@ -236,12 +232,8 @@ export abstract class Character implements storeable
     return tags;
   }
   /** Apply the Battle Status effects. */
-  protected startRoundApplyStatus():ActionOutput
-  {
-    const statusDescription:ActionOutput = [[],[]]
-    for(const status of [...this.battle_status])
-    { pushBattleActionOutput(status.applyEffect(this),statusDescription) }
-    return statusDescription;
+  protected startRoundApplyStatus():BattleCommand[]{
+    return [...this.battle_status].map(status=>status.applyEffect(this));
   }
   /** Cooldown the SpecialAttacks */
   protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cool() }

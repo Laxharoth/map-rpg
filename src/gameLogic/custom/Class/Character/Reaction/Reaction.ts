@@ -4,6 +4,7 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
+import { BattleCommand } from "../../Battle/BattleCommand";
 
 /** A Reaction for characters to do something after an action affects them. */
 export abstract class Reaction implements hashable, storeable{
@@ -15,7 +16,7 @@ export abstract class Reaction implements hashable, storeable{
   /** TODO doc */
   protected abstract name:string;
   /** What the reaction does when it is triggered */
-  protected abstract action(react_character: Character,source:Character,target: Character[]):ActionOutput;
+  protected abstract action(react_character: Character,action:BattleCommand):ActionOutput;
   protected masterService!:MasterService;
 
   constructor(masterService:MasterService)
@@ -25,8 +26,9 @@ export abstract class Reaction implements hashable, storeable{
    * Checks the tags of the action to see if should trigger the reaction.
    * Then applies the reaction.
    */
-  reaction(actionTags: tag[],react_character:Character,source:Character,targets:Character[]): ActionOutput
+  reaction(react_character:Character,action:BattleCommand): ActionOutput
   {
+    const { tags:actionTags } = action;
     //reaction is prevented
     if(this.prevent_reaction.some(prevent_pattern => prevent_pattern.every(tag=>actionTags.includes(tag))))return [[],[]]
       for( const trigger of this.whatTriggers )
@@ -34,7 +36,7 @@ export abstract class Reaction implements hashable, storeable{
           if(trigger.every(tag=>actionTags.includes(tag)))
           {
             //reaction is triggered
-            return this.action(react_character,source,targets)
+            return this.action(react_character,action)
           }
       }
       //reaction is not triggered

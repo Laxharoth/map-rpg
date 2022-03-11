@@ -21,12 +21,8 @@ export abstract class Shield extends Equipment{
   defend(targets:Character[]):ActionOutput
   {
     const output = [[],[]] as ActionOutput;
-    for(const target of targets)
-    {
-      const statusOutput = target.addStatus(new StatusDefend(this.masterService));
-      const reactionOutput = target.react(this.tags,target);
-      pushBattleActionOutput(statusOutput,reactionOutput)
-      pushBattleActionOutput(reactionOutput,output);
+    for(const target of targets){
+      pushBattleActionOutput(target.addStatus(new StatusDefend(this.masterService)),output);
     }
     return output;
   }
