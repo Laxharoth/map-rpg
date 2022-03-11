@@ -38,6 +38,8 @@ import { PerkUpItemComponent } from './component/perk-up/perk-up-item/perk-up-it
 import { PerkUpRowComponent } from './component/perk-up/perk-up-row/perk-up-row.component';
 import { InfoPageGuiComponent } from './component/gui/info-page-gui/info-page-gui.component';
 import { FrontPageGuiComponent } from './component/gui/front-page-gui/front-page-gui.component';
+import { SavePageGuiComponent } from './component/gui/save/save-page-gui/save-page-gui.component';
+import { SettingsPageGuiComponent } from './component/gui/settings/settings-page-gui/settings-page-gui.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,8 @@ import { FrontPageGuiComponent } from './component/gui/front-page-gui/front-page
     PerkUpRowComponent,
     InfoPageGuiComponent,
     FrontPageGuiComponent,
+    SavePageGuiComponent,
+    SettingsPageGuiComponent,
   ],
   imports: [
     BrowserModule,
