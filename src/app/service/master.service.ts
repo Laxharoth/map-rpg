@@ -7,9 +7,6 @@ import { MasterServiceSubServiceMap } from 'src/gameLogic/configurable/subservic
 
 /**
  * A object to pack all services
- *
- * @export
- * @class MasterService
  */
 export class MasterService extends MasterServiceSubServiceMap
 {

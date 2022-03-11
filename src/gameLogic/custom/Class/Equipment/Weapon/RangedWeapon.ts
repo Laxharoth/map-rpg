@@ -6,14 +6,7 @@ import { StatusRangedAttack } from "src/gameLogic/custom/Class/Status/StatusTemp
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
-/**
- * A type of weapon thar normally uses aim to determinate damage.
- *
- * @export
- * @abstract
- * @class RangedWeapon
- * @extends {Weapon}
- */
+/** A type of weapon thar normally uses aim to determinate damage. */
 export abstract class RangedWeapon extends Weapon
 {
   damagestat(user   : Character):number{return user.calculated_stats.ranged_attack;}
@@ -36,14 +29,7 @@ export abstract class RangedWeapon extends Weapon
     if(user.hasTag('restrained')) accuracyFix-=20;
     return super.accuracyTest(user,target)+randomBetween(0,accuracyFix);
   }
-  /**
-   * Equips into the character ranged weapon
-   *
-   * @param {Character} user
-   * @param {Character} target
-   * @return { ActionOutput }
-   * @memberof RangedWeapon
-   */
+  /** Equips into the character ranged weapon */
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipRanged();

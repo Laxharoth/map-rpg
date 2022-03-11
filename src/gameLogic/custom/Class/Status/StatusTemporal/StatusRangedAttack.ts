@@ -1,6 +1,4 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { StatusBattle } from "../StatusBattle";

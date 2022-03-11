@@ -3,9 +3,6 @@ import { game_state, game_state_priority } from 'src/gameLogic/configurable/subs
 
 /**
  * Service that has the current game state.
- *
- * @export
- * @class GameStateService
  */
 export class GameStateService {
   private gameStateSubject = new Subject<game_state>();
@@ -14,25 +11,12 @@ export class GameStateService {
   private _gameStateIndex:number = 0;
   constructor() {this.gameState = this._gameStatePriority[0]; }
 
-  /**
-   * Sets a new game state priority.
-   *
-   * @memberof GameStateService
-   */
+  /** Sets a new game state priority. */
   set gameStatePriority(state:game_state[]){ this._gameStatePriority = state;this.gameState = this._gameStatePriority[0]; }
 
-  /**
-   * Gets the current game state.
-   *
-   * @type {game_state}
-   * @memberof GameStateService
-   */
+  /** Gets the current game state. */
   get gameState():game_state { return this._gameState[this._gameState.length - 1]; }
-  /**
-   * Sets the current state of the game.
-   *
-   * @memberof GameStateService
-   */
+  /** Sets the current state of the game. */
   set gameState(state:game_state)
   {
     const pushStateInPriority=()=>{
@@ -43,23 +27,14 @@ export class GameStateService {
     while(this.gameState!==state){pushStateInPriority();}
     this.gameStateSubject.next(this.gameState);
   }
-  /**
-   * Returns to the previous game state acording to the game state priority.
-   *
-   * @memberof GameStateService
-   */
+  /** Returns to the previous game state acording to the game state priority. */
   popState()
   {
     this._gameState.pop();
     this._gameStateIndex--;
     this.gameStateSubject.next(this.gameState)
   }
-  /**
-   * Returns a observable for when the game state changes.
-   *
-   * @return { Observable<game_state> }
-   * @memberof GameStateService
-   */
+  /** Returns a observable for when the game state changes. */
   onSetGameState():Observable<game_state> {
     return this.gameStateSubject.asObservable();
   }

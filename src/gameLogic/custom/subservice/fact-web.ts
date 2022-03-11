@@ -23,11 +23,7 @@ export class FactWeb implements storeable
   private spread_subscriptions:Subscription;
   private create_subscriptions:()=>void
 
-  /**
-   * Stores a group of facts, then spreads them through a graph of characters.
-   * @param time_handler Creates a subscription to spread facts every set amount of time.
-   * @param game_saver Required to get the characters from the unique characters.
-   */
+  /** Stores a group of facts, then spreads them through a graph of characters. */
   constructor(time_handler:TimeHandler, game_saver:GameSaver,unique_character_handler:UniqueCharacterHandler){
     game_saver.register("FactWeb",this);
     this.unique_character_handler = unique_character_handler;
@@ -35,20 +31,17 @@ export class FactWeb implements storeable
       if(!this.spread_subscriptions)this.spread_subscriptions = time_handler.onTimeChanged().subscribe( time => this.spread_fact(time) )
     }
   }
-
   private initialize_character_map()
   {
     for(const character of this.unique_character_handler.unique_characters)
       this.initialize_character(character);
   }
-
   private initialize_character(character: UniqueCharacter) {
     this.character_map.set(character.uuid, {
       known_facts: new Set(),
       acquaintacer_map: new Map(),
     });
   }
-
   get_fact(fact_name:factName){ return this.known_facts.get(fact_name); }
   set_fact(fact_name:factName,state:any,importance:fact_importance=1,who_knows:UniqueCharacter[])
   {

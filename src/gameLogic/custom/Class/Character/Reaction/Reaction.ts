@@ -5,14 +5,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-/**
- * A Reaction for characters to do something after an action affects them.
- *
- * @export
- * @abstract
- * @class Reaction
- * @constructor Initializes the masterService
- */
+/** A Reaction for characters to do something after an action affects them. */
 export abstract class Reaction implements hashable, storeable{
   /** The list of tags the reaction should be triggered with. */
   protected abstract whatTriggers: tag[][];
@@ -21,38 +14,16 @@ export abstract class Reaction implements hashable, storeable{
   readonly type:string;
   /** TODO doc */
   protected abstract name:string;
-  /**
-   * What the reaction does when it is triggered
-   *
-   * @protected
-   * @abstract
-   * @param {Character} react_character The character who reacts
-   * @param {Character} source The character whose action triggered the reaction.
-   * @param {Character} target The character that does the reaction.
-   * @return { ActionOutput }
-   * @memberof Reaction
-   */
+  /** What the reaction does when it is triggered */
   protected abstract action(react_character: Character,source:Character,target: Character[]):ActionOutput;
   protected masterService!:MasterService;
 
-  /**
-   * Creates an instance of Reaction.
-   * @param {MasterService} masterService
-   * @memberof Reaction
-   */
   constructor(masterService:MasterService)
   { this.masterService = masterService; }
 
   /**
    * Checks the tags of the action to see if should trigger the reaction.
    * Then applies the reaction.
-   *
-   * @param {tag[]} actionTags The tags of the action to react to.
-   * @param {Character} react_character The character who reacts
-   * @param {Character} source The character whose action should trigger the reaction.
-   * @param {Character} targets The character who is going to be affected by the action.
-   * @return { ActionOutput }
-   * @memberof Reaction
    */
   reaction(actionTags: tag[],react_character:Character,source:Character,targets:Character[]): ActionOutput
   {

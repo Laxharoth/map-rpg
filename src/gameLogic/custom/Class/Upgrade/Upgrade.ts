@@ -4,13 +4,7 @@ import { descriptable, GameElementDescriptionSection } from "../GameElementDescr
 import { Perk } from "../Perk/Perk";
 import { perkname } from "../Perk/Perk.type";
 
-/**
- * An  upgrades contains a perk to be added to the character.
- *
- * @export
- * @class Upgrade
- * @implements {descriptable}
- */
+/** An  upgrades contains a perk to be added to the character. */
 export class Upgrade implements descriptable
 {
   name:string;

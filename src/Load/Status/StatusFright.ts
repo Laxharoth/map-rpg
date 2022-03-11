@@ -3,10 +3,7 @@ import { register_function } from "src/gameLogic/core/Factory/Register_Module/Re
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
-import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 

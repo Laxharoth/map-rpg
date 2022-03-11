@@ -4,26 +4,12 @@ import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
 import { armorname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-/**
- * A type of equipment. with no aditional properties.
- *
- * @export
- * @abstract
- * @class Armor
- * @extends {Equipment}
- */
+/** A type of equipment. with no aditional properties. */
 export abstract class Armor extends Equipment
 {
   readonly abstract type:armorname
   abstract get name():string;
-  /**
-   * Equips into character armor.
-   *
-   * @param {Character} user
-   * @param {Character} target
-   * @return { ActionOutput }
-   * @memberof Armor
-   */
+  /** Equips into character armor. */
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipArmor();

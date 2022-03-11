@@ -4,13 +4,7 @@ import { Character } from "../Character/Character";
 import { nextOption } from "./CommonOptions";
 import { Scene, SceneOptions } from "./Scene";
 
-/**
- * Returns options to select target.
- *
- * @param {Character[]} targets
- * @param {(target:Character[])=>ActionOutput} playerAction
- * @return { Scene }
- */
+/** Returns options to select target. */
  export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene
  {
    const targetsOptions:SceneOptions[] = [];

@@ -9,15 +9,7 @@ import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { hashable } from "../../ClassHelper/ObjectSet";
 
-/**
- * Altered status to affect characters.
- *
- * @export
- * @abstract
- * @class Status
- * @implements {storeable}
- * @constructor Initializes the masterService
- */
+/** Altered status that affect characters. */
 export abstract class Status implements storeable,hashable
 {
   abstract type:statustype;
@@ -25,41 +17,15 @@ export abstract class Status implements storeable,hashable
   protected _stats_modifier:CalculatedStats = {};
   protected _resistance_stats:ResistanceStats = {};
   constructor(masterService:MasterService){this.masterService=masterService;}
-  /**
-   * The name of the status.
-   *
-   * @readonly
-   * @abstract
-   * @type {statustype}
-   * @memberof Status
-   */
+  /** The name of the status. */
   abstract get name(): string;
-  /**
-   * A string that explains the status.
-   *
-   * @readonly
-   * @abstract
-   * @type {string}
-   * @memberof Status
-   */
+  /** A string that explains the status. */
   abstract get description(): string;
-  /**
-   * The effect of the status on the characters.
-   *
-   * @protected
-   * @abstract
-   * @param {Character} target The character the status should be applied to.
-   * @return { ActionOutput }
-   * @memberof Status
-   */
+  /** The effect of the status on the characters. */
   protected effect(target: Character):ActionOutput { return [[],[]] }
   /**
    * Apply the effect on the character.
    * Also check if the character can react to the effect of the status.
-   *
-   * @param {Character} target The character the status should be applied to.
-   * @return { ActionOutput }
-   * @memberof Status
    */
   applyEffect(target: Character):ActionOutput{
     const effect = this.effect(target);
@@ -72,56 +38,20 @@ export abstract class Status implements storeable,hashable
     for(const [key,value] of Object.entries(this._resistance_stats))
     { character.calculated_resistance[key] += value}
   }
-  /**
-   * Check if the status can be added to the character.
-   *
-   * @param {Character} target The character to attach the status to.
-   * @return { boolean }
-   * @memberof Status
-   */
+  /** Check if the status can be added to the character. */
   canApply(target: Character):boolean{return true;}
-  /**
-   * Defines what to do when the status is added to the character.
-   *
-   * @param {Character} target
-   * @return { ActionOutput }
-   * @memberof Status
-   */
+  /** Defines what to do when the status is added to the character. */
   onStatusGainded(target: Character):ActionOutput{
     this.applyModifiers(target);
     return target.react(this.tags.concat(['status gained']),target)
   };
-  /**
-   * Defines what to do when the status is removed from the character.
-   *
-   * @param {Character} target
-   * @return { ActionOutput }
-   * @memberof Status
-   */
+  /** Defines what to do when the status is removed from the character. */
   onStatusRemoved(target: Character)  :ActionOutput{ return target.react(this.tags.concat(['status ended']),target) };
-  /**
-   * Tags associated with the status.
-   *
-   * @readonly
-   * @type {tag[]}
-   * @memberof Status
-   */
+  /** Tags associated with the status. */
   get tags(): tag[]{ return []}
-  /**
-   * Reactions that the status grants.
-   *
-   * @readonly
-   * @type {Reaction[]}
-   * @memberof Status
-   */
+  /** Reactions that the status grants. */
   get reactions(): Reaction[]{ return [];}
-  /**
-   * SpecialAttacks that the status grants.
-   *
-   * @readonly
-   * @type {SpecialAttack[]}
-   * @memberof Status
-   */
+  /** SpecialAttacks that the status grants. */
   get specials():SpecialAttack[]{ return [];}
 
   toJson():StatusStoreable{return { Factory:"Status",type:this.type}};

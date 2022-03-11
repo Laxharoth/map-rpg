@@ -5,9 +5,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
-import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 

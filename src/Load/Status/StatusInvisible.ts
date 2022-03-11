@@ -1,6 +1,5 @@
 import { register_function } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{

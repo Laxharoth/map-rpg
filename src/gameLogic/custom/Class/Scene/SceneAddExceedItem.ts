@@ -4,15 +4,7 @@ import { fillItemStoreable, GameItem } from "src/gameLogic/custom/Class/Items/It
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { Inventory } from "../Character/Inventory/Inventory";
 import { Scene, SceneOptions } from "./Scene";
-/**
- * Returns a scene to drop items if adding a item to inventory exceeds max inventory.
- *
- * @export
- * @param {MasterService} masterService The master service.
- * @param {GameItem} item The item tring to add.
- * @param {Character} character The character to add the inventory.
- * @return { Scene }
- */
+/** Returns a scene to drop items if adding a item to inventory exceeds max inventory. */
 export const AddExceedItem = function () {
   let dropping=false;
   const excessItemList: GameItem[] = [];
@@ -67,12 +59,7 @@ export const AddExceedItem = function () {
       }
     }
   }
-  /**
-   * 'Moves' the items from the first stack to the second until the second stack is full.
-   *
-   * @param {GameItem} item2TakeFrom The item to take items from.
-   * @param {GameItem} item2Fill The item stack to fill.
-   */
+  /** 'Moves' the items from the first stack to the second until the second stack is full. */
   function MergeItemStacks(item2TakeFrom: GameItem, item2Fill: GameItem) {
     const item2AddAmount = item2TakeFrom.amount;
     const item2FillCurrentAmount = item2Fill.amount;

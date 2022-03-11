@@ -17,60 +17,21 @@ import { factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
  */
 export abstract class EnemyFormation
 {
-  /**
-   * The Array with the enemies.
-   *
-   * @protected
-   * @abstract Can be initialize directly or in the constructor.
-   * @type {(Character&Enemy)[]}
-   * @memberof EnemyFormation
-   */
+  /** The Array with the enemies. */
   protected abstract _enemies:(Character&Enemy)[];
   protected readonly masterService: MasterService;
 
-  /**
-   * Creates an instance of EnemyFormation.
-   * @param {MasterService} masterService
-   * @memberof EnemyFormation
-   */
   constructor( masterService:MasterService){this.masterService =masterService;}
   get IsDefeated():boolean{ return this.enemies.every(character=>character.is_defeated()); }
-  /**
-   * Gets the private array of enemies.
-   *
-   * @readonly
-   * @type {(Character&Enemy)[]}
-   * @memberof EnemyFormation
-   */
+  /** Gets the private array of enemies. */
   get enemies():(Character&Enemy)[] {return this._enemies;}
 
-  /**
-   * Defines the description if the enemy party win.
-   *
-   * @abstract
-   * @param {Character[]} party The party of the player.
-   * @return {Scene}
-   * @memberof EnemyFormation
-   */
+  /** Defines the scene if the enemy party win.*/
   abstract onEnemyVictory(party: Character[]):Scene;
-  /**
-   * Defines the description if the enemy party lose.
-   *
-   * @abstract
-   * @param {Character[]} party The party of the player.
-   * @return {Scene}
-   * @memberof EnemyFormation
-   */
+  /** Defines the scene if the enemy party lose. */
   abstract onPartyVictory(party: Character[]):Scene;
-  /**
-   * Defines the loot the enemyformation will drop when defeated
-   *
-   * @abstract
-   * @return { GameItem[] }
-   * @memberof EnemyFormation
-   */
-  loot():GameItem[]
-  {
+  /** Defines the loot the enemyformation will drop when defeated */
+  loot():GameItem[]{
     return this._enemies.reduce((accumulator,enemy)=>accumulator.concat(enemy.loot.map(storeable=>ItemFactory(this.masterService,storeable))),[] as GameItem[])
   }
   give_experience(party: Character[]):ActionOutput
@@ -85,13 +46,7 @@ export abstract class EnemyFormation
     }
     return [[],experience_str]
   }
-  /**
-   * Returns a description of whether escaped or not.
-   *
-   * @param {Character[]} party The player party
-   * @return { [ ()=>string , boolean ] } the description text and if the escape wass successfull
-   * @memberof EnemyFormation
-   */
+  /** Returns a description of whether escaped or not. */
   attemptEscape(party: Character[]):[descriptionString,boolean]
   {
     if(!this.escapeCheck(party))return [this.escapeFail(),false];
@@ -100,42 +55,13 @@ export abstract class EnemyFormation
     return [this.escapeSuccess(),true];
   }
 
-  /**
-   * Returs as description of the player party successfully escaped.
-   *
-   * @protected
-   * @abstract
-   * @return { Scene }
-   * @memberof EnemyFormation
-   */
+  /** Returs as description of the player party successfully escaped. */
   protected abstract escapeSuccess():descriptionString;
-  /**
-   * Returs as description of the player party failed to escape
-   *
-   * @protected
-   * @abstract
-   * @return { Scene }
-   * @memberof EnemyFormation
-   */
+  /** Returs as description of the player party failed to escape */
   protected abstract escapeFail():descriptionString;
-  /**
-   * Determine if the player can escape the enemy.
-   *
-   * @protected
-   * @abstract
-   * @param {Character[]} party The party of the player.
-   * @return { boolean }
-   * @memberof EnemyFormation
-   */
+  /** Determine if the player can escape the enemy. */
   protected abstract escapeCheck(party: Character[]):boolean;
-  /**
-   * A DescriptionOption to get the to the next description.
-   *
-   * @protected
-   * @param {string} exitString The string displayed on the button.
-   * @return { DescriptionOptions }
-   * @memberof EnemyFormation
-   */
+  /** A DescriptionOption to get the to the next description. */
   protected exitOption(exitString:string):SceneOptions
   {
     return {

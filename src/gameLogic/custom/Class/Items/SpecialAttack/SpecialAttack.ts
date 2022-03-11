@@ -7,7 +7,7 @@ import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelpe
 import { ActionOutput } from "../../Character/Character.type";
 import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 import { BattleUseable } from "../BattleUseable";
-import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
 
 export abstract class SpecialAttack implements BattleUseable, hashable, storeable
 {

@@ -6,38 +6,18 @@ import { StatusDefend } from "src/gameLogic/custom/Class/Status/StatusTemporal/S
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
-/**
- * Type of equipment, adds defend method.
- *
- * @export
- * @abstract
- * @class Shield
- * @extends {Equipment}
- */
+/** Type of equipment, adds defend method. */
 export abstract class Shield extends Equipment{
   readonly abstract type:shieldname
   abstract get name(): string;
-  /**
-   * Equips into user shield
-   *
-   * @param {Character} user The character that uses the shield.
-   * @param {Character} target
-   * @return { ActionOutput }
-   * @memberof Shield
-   */
+  /** Equips into user shield */
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipShield();
     user.character_equipment.shield = this;
     return super._itemEffect(user, target);
   }
-  /**
-   * Adds the StatusDefend to the character with the shield.
-   *
-   * @param {Character} targets
-   * @return { ActionOutput }
-   * @memberof Shield
-   */
+  /** Adds the StatusDefend to the character with the shield. */
   defend(targets:Character[]):ActionOutput
   {
     const output = [[],[]] as ActionOutput;

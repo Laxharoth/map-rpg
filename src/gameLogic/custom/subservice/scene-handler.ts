@@ -5,12 +5,7 @@ import { GameStateService } from '../../core/subservice/game-state';
 import { game_state } from '../../configurable/subservice/game-state.type';
 import { LockMapService } from './lock-map';
 
-/**
- * Inserts and loads scenes to/from the appropriate scene list.
- *
- * @export
- * @class SceneHandlerService
- */
+/** Inserts and loads scenes to/from the appropriate scene list. */
 export class SceneHandlerService {
   /** * An object with the sceneLists */
   private _sceneList:{[key: string]:DoubleLinkedList<Scene>}={};
@@ -31,13 +26,7 @@ export class SceneHandlerService {
     this.addSceneListWithGameState('map');
     this._sceneList['map'].insertHead(null);
   }
-  /**
-   * Sets the current scene to the head of the current list.
-   *
-   * @param {boolean} [addToHistory=true] If should be inserted in the history list.
-   * @return { SceneHandlerService } Itself The SceneHandlerService
-   * @memberof SceneHandlerService
-   */
+  /** Sets the current scene to the head of the current list. */
   setScene(addToHistory:boolean=true):SceneHandlerService
   {
     //if the current scene list is empty pop the game state until finds a scenelist with elements.
@@ -60,10 +49,6 @@ export class SceneHandlerService {
   /**
    * Inserts scenes at the start of a scene list.
    * Also sets the current game state.
-   * @param {(Scene|Scene[])} scene The scene to insert
-   * @param {game_state} gameState The game state the scene list is associated with.
-   * @return { SceneHandlerService } Itself
-   * @memberof SceneHandlerService
    */
   headScene(scene:Scene|Scene[],gameState:game_state):SceneHandlerService{
     this.gameStateHandler.gameState = gameState;
@@ -75,10 +60,6 @@ export class SceneHandlerService {
   /**
    * Inserts scenes right after the fist scene of a scene list.
    * Also sets the current game state.
-   * @param {(Scene|Scene[])} scene The scene to insert
-   * @param {game_state} gameState The game state the scene list is associated with.
-   * @return { SceneHandlerService } Itself
-   * @memberof SceneHandlerService
    */
   afterHeadScene(scene:Scene|Scene[],gameState:game_state):SceneHandlerService{
     this.gameStateHandler.gameState = gameState;
@@ -90,10 +71,6 @@ export class SceneHandlerService {
   /**
    * Inserts scenes at the end of a scene list.
    * Also sets the current game state.
-   * @param {(Scene|Scene[])} scene The scene to insert
-   * @param {game_state} gameState The game state the scene list is associated with.
-   * @return { SceneHandlerService } Itself
-   * @memberof SceneHandlerService
    */
   tailScene(scene:Scene|Scene[],gameState:game_state):SceneHandlerService{
     this.gameStateHandler.gameState = gameState;
@@ -103,11 +80,7 @@ export class SceneHandlerService {
     return this
   }
   /**
-   * Sest the current scene to the next scene in the current scene list.
-   *
-   * @param {boolean} [addToHistory=true]  If should be inserted in the history list.
-   * @return { SceneHandlerService } Itself The SceneHandlerService
-   * @memberof SceneHandlerService
+   * Sets the current scene to the next scene in the current scene list.
    */
   nextScene(addToHistory:boolean=true):SceneHandlerService{
     this.sceneList?.removeAt(0);
@@ -116,20 +89,12 @@ export class SceneHandlerService {
   }
   /**
    * Returns an observable to observe the current scene.
-   *
-   * @return { Observable<Scene> }
-   * @memberof SceneHandlerService
    */
   onSetScene():Observable<Scene>
   {
     return this.sceneSubject.asObservable();
   }
-  /**
-   *Returns an observable to observe the current scene text.
-   *
-   * @return { Observable<string> }
-   * @memberof SceneHandlerService
-   */
+  /** Returns an observable to observe the current scene text. */
   onSetTextScene():Observable<string>
   {
     return this.sceneTextSubject.asObservable();
@@ -146,13 +111,7 @@ export class SceneHandlerService {
     if(this.pivot.prev  ) this.pivot = this.pivot.prev;
     this.sceneTextSubject.next(this.pivot.value);
   }
-  /**
-   * Gets the current scene.
-   *
-   * @readonly
-   * @type {Scene}
-   * @memberof SceneHandlerService
-   */
+  /** Gets the current scene. */
   get currentScene():Scene
   {
     return this.sceneList.head.value;
@@ -161,10 +120,6 @@ export class SceneHandlerService {
   /**
    * Removes scenes from the current scene list.
    * Used to remove nested scenes.
-   *
-   * @param {number} sceneNumber
-   * @return { SceneHandlerService } Itself
-   * @memberof SceneHandlerService
    */
   flush(sceneNumber: number):SceneHandlerService
   {
@@ -179,13 +134,7 @@ export class SceneHandlerService {
       list.clear()
     }
   }
-  /**
-   * Adds a new scene list with a key
-   *
-   * @private
-   * @param {string} gameState
-   * @memberof SceneHandlerService
-   */
+  /** Adds a new scene list with a key */
   private addSceneListWithGameState(gameState: string) {
     if(!this._sceneList[gameState])
       this._sceneList[gameState] = new DoubleLinkedList<Scene>();

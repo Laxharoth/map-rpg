@@ -5,7 +5,7 @@ import { ActionOutput, CalculatedStats, EnergyStats, FullCalculatedStats, FullCo
 import { ArrayTree, tree_node } from "src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree";
 import { experience_cap } from "src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass";
 import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
-import { armorname, itemname, meleename, rangedname, shieldname } from "src/gameLogic/custom/Class/Items/Item.type";
+import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Upgrade } from "src/gameLogic/custom/Class/Upgrade/Upgrade";
 import { UpgradeOptions } from "src/gameLogic/custom/Class/Upgrade/Upgrade.type";
 

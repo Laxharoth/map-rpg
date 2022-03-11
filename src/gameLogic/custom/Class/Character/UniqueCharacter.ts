@@ -5,7 +5,6 @@ import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { StatusFactory } from 'src/gameLogic/custom/Factory/StatusFactory';
 import { EnergyStats, CoreStats, ResistanceStats, LevelStats } from "./Character.type";
 import { Character, CharacterStoreable } from "./Character";
-import { Scene } from '../Scene/Scene';
 import { tree_node } from '../CharacterBattleClass/ArrayTree';
 import { Upgrade } from '../Upgrade/Upgrade';
 import { CharacterEquipmentOptions } from './Inventory/CharacterEquipment';

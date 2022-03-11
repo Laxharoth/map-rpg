@@ -6,23 +6,10 @@ import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameEl
 import { weaponname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
-/**
- * Type of equipment that can attack.
- *
- * @export
- * @abstract
- * @class Weapon
- * @extends {Equipment}
- */
+/** Type of equipment that can attack. */
 export abstract class Weapon extends Equipment implements DamageSource
 {
-  /**
-   * The damage types associated with this weapon.
-   *
-   * @protected
-   * @type {damageTypes}
-   * @memberof Weapon
-   */
+  /** The damage types associated with this weapon. */
   protected _damageTypes:damageTypes = {};
   private filledDamageTypes:boolean = false;
   get damageTypes():damageTypes {
@@ -35,14 +22,7 @@ export abstract class Weapon extends Equipment implements DamageSource
   }
   readonly abstract type: weaponname;
   abstract get name():string;
-  /**
-   * Applies damage to a target.
-   *
-   * @param {Character} user The character that uses the weapon.
-   * @param {Character} target The target that will be attacked.
-   * @return { ActionOutput }
-   * @memberof Weapon
-   */
+  /** Applies damage to a target. */
   attack(user:Character,target:Character):ActionOutput
   {
     if(this.accuracyTest(user,target) < 0 )
@@ -54,46 +34,14 @@ export abstract class Weapon extends Equipment implements DamageSource
     pushBattleActionOutput(target.react(this.tags,user),[descriptions,strings]);
     return [descriptions,strings];
   }
-  /**
-   * Gets the stat from the character that will be used to calculate the damage.
-   *
-   * @protected
-   * @abstract
-   * @param {Character} user The character with the equiped weapon.
-   * @return { number }
-   * @memberof Weapon
-   */
+  /** Gets the stat from the character that will be used to calculate the damage. */
   abstract damagestat(user   : Character):number;
-  /**
-   * Gets the stat from the character that will be used to calculate the reduction of damage.
-   *
-   * @protected
-   * @abstract
-   * @param {Character} target The character target of the attack.
-   * @return { number }
-   * @memberof Weapon
-   */
+  /** Gets the stat from the character that will be used to calculate the reduction of damage. */
   abstract defencestat(target: Character):number;
-  /**
-   * Calculated the damage based on the weapon damage types.
-   *
-   * @protected
-   * @param {Character} user The character that performed the attack.
-   * @param {Character} target The character that received the attack.
-   * @return { number }
-   * @memberof Weapon
-   */
+  /** Calculated the damage based on the weapon damage types. */
   protected calculateDamage(user:Character,target:Character):number
   { return calculateDamage(this,user,target); }
-  /**
-   * Check if the attack is successful.
-   *
-   * @protected
-   * @param {Character} user The character that performed the attack.
-   * @param {Character} target The character that received the attack.
-   * @return { number }
-   * @memberof Weapon
-   */
+  /** Check if the attack is successful. */
   protected accuracyTest(user:Character,target:Character): number {
     let [minaccuracy,maxaccuracy] = [0,100];
     if(user.hasTag('blind')) maxaccuracy -= 20;

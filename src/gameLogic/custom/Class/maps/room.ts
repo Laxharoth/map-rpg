@@ -1,12 +1,7 @@
 import { MasterService } from "src/app/service/master.service";
 import { Scene } from "../Scene/Scene";
 
-/**
- * A model of a specific room
- *
- * @export
- * @class Room
- */
+/** A model of a specific room */
 export interface Room{
   /**
    * The action to be performed when the room is entered.

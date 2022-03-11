@@ -2,7 +2,7 @@ import { AddExceedItem } from 'src/gameLogic/custom/Class/Scene/SceneAddExceedIt
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
-import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { MasterService } from 'src/app/service/master.service';
 import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { ActionOutput } from '../Character.type';
@@ -15,13 +15,7 @@ export class Inventory implements storeable {
   constructor(master_service: MasterService) {
     this.master_service = master_service;
   }
-  /**
-   * Adds Item to the inventory.
-   *
-   * @param {GameItem} item The item to add.
-   * @return { void }
-   * @memberof Character
-   */
+  /** Adds Item to the inventory. */
   addItem(item: GameItem): void {
     if (!item) {
       console.warn("Item not found, Is null or undefined.");
@@ -40,13 +34,7 @@ export class Inventory implements storeable {
     AddExceedItem(this.master_service, item, this)
   }
   dropItem(item: GameItem) { removeItem(this.items, item); }
-  /**
-   * Check if the Item can be Inserted into the inventory.
-   *
-   * @private
-   * @param {GameItem} item
-   * @memberof Character
-   */
+  /** Check if the Item can be Inserted into the inventory. */
   private fitItemIntoinventory(item: GameItem): void {
     if (item.amount <= 0) return;
     for (const characteritem of this.items) {
@@ -60,14 +48,7 @@ export class Inventory implements storeable {
       }
     }
   }
-  /**
-   * Use an item from inventory
-   *
-   * @param {(number|GameItem)} itemIndexOrItem The Index of the item or the item.
-   * @param {Character[]} targets The targets the item will target.
-   * @return { ActionOutput }
-   * @memberof Character
-   */
+  /** Use an item from inventory */
   useItem(itemIndexOrItem: GameItem, source:Character, targets: Character[]): ActionOutput {
     let itemIndex: number;
     if (itemIndexOrItem instanceof GameItem) itemIndex = this.items.indexOf(itemIndexOrItem);

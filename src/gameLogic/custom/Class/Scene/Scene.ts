@@ -17,30 +17,14 @@ export interface Scene
 export type sceneData=() => any;
 export type descriptionString=() => string;
 
-/**
- * A representation of the options (buttons) for a description.
- *
- * @export
- * @interface SceneOptions
- */
+/** A representation of the options (buttons) for a description. */
 export interface SceneOptions
 {
-  /**
-   * The text to display
-   *
-   * @type {string}
-   */
+  /** The text to display */
   text  : string;
-  /**
-   * The action to perform.
-   *
-   */
+  /** The action to perform. */
   action: () => void;
-  /**
-   * If the button is disabled.
-   *
-   */
-
+  /** If the button is disabled. */
   disabled: boolean
 }
 

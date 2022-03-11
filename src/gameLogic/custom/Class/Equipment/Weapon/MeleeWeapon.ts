@@ -8,14 +8,7 @@ import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/Sp
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
-/**
- * A type of weapon that normally uses attack stat to determine damage.
- *
- * @export
- * @abstract
- * @class MeleeWeapon
- * @extends {Weapon}
- */
+/** A type of weapon that normally uses attack stat to determine damage. */
 export abstract class MeleeWeapon extends Weapon
 {
   damagestat(user   : Character):number{return user.calculated_stats.physical_attack;}
@@ -28,14 +21,7 @@ export abstract class MeleeWeapon extends Weapon
     if(target.hasTag('prone')) accuracyFix+=20;
     return super.accuracyTest(user,target)+randomBetween(0,accuracyFix);
   }
-  /**
-   * Equips into the character melee weapon
-   *
-   * @param {Character} user
-   * @param {Character} target
-   * @return { ActionOutput }
-   * @memberof MeleeWeapon
-   */
+  /** Equips into the character melee weapon */
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipMelee();

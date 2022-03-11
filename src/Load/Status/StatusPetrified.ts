@@ -1,7 +1,6 @@
 import { register_function } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from 'src/gameLogic/custom/Class/Status/StatusBattle';
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 

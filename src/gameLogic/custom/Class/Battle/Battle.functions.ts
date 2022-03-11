@@ -48,26 +48,12 @@ export function DefendCommand(source: Character, targets: Character[]):BattleCom
     priority:DEFEND_PRIORITY
     };
 }
-/**
- * Attacks with a weapon.
- *
- * @param {Character} source The source of the attack.
- * @param {Character[]} targets The targets to attack.
- * @param {Weapon} weapon The weapon used to attack the targets.
- * @param {ActionOutput} attackDescription
- */
+/** Attacks with a weapon. */
 function attackWithWeapon(source: Character, targets: Character[], weapon: Weapon, attackDescription: ActionOutput) {
   for (const target of targets) pushBattleActionOutput(tryAttack(source, target, (target: Character) => weapon.attack(source, target)), attackDescription);
 }
 
-/**
- * Check if the attack action can be performed on the target character.
- *
- * @param {Character} target The target of the attack action.
- * @param {(target:Character)=>ActionOutput} action The action to be performed.
- * @return { ActionOutput }
- * @memberof Character
- */
+/** Check if the attack action can be performed on the target character. */
 export function tryAttack(source: Character, target: Character, action: (target: Character) => ActionOutput): ActionOutput
 {
   if (source.hasTag('paralized')) return [

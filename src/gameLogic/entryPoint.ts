@@ -2,7 +2,6 @@ import { MasterService } from "src/app/service/master.service";
 import { default_flags } from "./configurable/subservice/flag-handler.type";
 import { Factory } from "./core/Factory/Factory";
 import { MainCharacter } from "./custom/Class/Character/MainCharacter/MainCharacter";
-import { SceneOptions } from "./custom/Class/Scene/Scene";
 import { ItemFactory } from "./custom/Factory/ItemFactory";
 import { FactWeb } from "./custom/subservice/fact-web";
 import { InfoPageToggler } from "./custom/subservice/info-page-toggler";

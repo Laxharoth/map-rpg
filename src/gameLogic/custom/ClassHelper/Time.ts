@@ -1,9 +1,4 @@
-/**
- * A object to represent Time.
- *
- * @export
- * @class Time
- */
+/** A object to represent Time. */
 export class Time
 {
   private static timeconvertion = {
@@ -24,38 +19,24 @@ export class Time
     years   :518400,
   }
   private minutes: number;
-
   constructor(minutes: number|string)
   {
     this.minutes = this.convert2Time(minutes);
   }
-
   setTime(value: number|string)
   {
     this.minutes = this.convert2Time(value);
   }
-
   getMinutes()
   {
     return this.minutes;
   }
-
-  /**
-   * Adds to the current time the specified value.
-   *
-   * @param {(number|string)} value The time to add.
-   * @memberof Time
-   */
+  /** Adds to the current time the specified value. */
   addTime(value:number|string)
   {
     this.minutes+=this.convert2Time(value);
   }
-  /**
-   * Divides the minutes in the max posible integer value it can represent for each time unit.
-   *
-   * @return { TimeValues }
-   * @memberof Time
-   */
+  /** Divides the minutes in the max posible integer value it can represent for each time unit. */
   getTimeValues():TimeValues
   {
     let backupMinutes = this.minutes;
@@ -77,14 +58,7 @@ export class Time
 
     return values;
   }
-  /**
-   * Converts a string into it's representation in minutes.
-   *
-   * @private
-   * @param {(number|string)} value The time representation
-   * @return { number } if number is provided return the number, otherwise the time representation of the string.
-   * @memberof Time
-   */
+  /** Converts a string into it's representation in minutes. */
   private convert2Time(value: number|string):number
   {
     if(typeof value === 'number') return value;

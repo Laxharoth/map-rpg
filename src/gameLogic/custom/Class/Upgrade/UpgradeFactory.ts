@@ -1,6 +1,4 @@
 import { MasterService } from "src/app/service/master.service";
-import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
-import { StoreableType } from "src/gameLogic/core/Factory/Factory";
 import { Upgrade } from "./Upgrade";
 import { UpgradeOptions, upgrade_name } from "./Upgrade.type";
 import { UpgradeCharm } from "./Upgrades/UpgradeCharm";

@@ -1,4 +1,3 @@
-import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { MasterService } from "src/app/service/master.service";
 import { storeable } from "src/gameLogic/core/Factory/Factory";
@@ -9,113 +8,35 @@ import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { BattleUseable } from './BattleUseable';
 import { GameElementDescriptionSection } from '../GameElementDescription/GameElementDescription';
 
-/**
- * Model of game items.
- *
- * @export
- * @abstract
- * @class Item
- * @implements {storeable}
- * @constructor Initializes the masterService
- */
+/** Model of game items. */
 export abstract class GameItem implements BattleUseable, storeable
 {
-  /**
-   * The max number of items than can be held in a single stack.
-   *
-   * @type {number}
-   * @memberof Item
-   */
+  /** The max number of items than can be held in a single stack. */
   readonly maxStack: number = 9;
-  /**
-   * The number of items in the stack.
-   *
-   * @type {number}
-   * @memberof Item
-   */
+  /** The number of items in the stack. */
   amount: number = 1;
   basePrice: number = 0.0;
   protected readonly masterService: MasterService;
-  /**
-   * Creates an instance of Item.
-   * @param {MasterService} masterService The master service
-   * @memberof Item
-   */
+  /** Creates an instance of Item. */
   constructor(masterService:MasterService){this.masterService=masterService;}
   readonly abstract type:itemname;
-  /**
-   * The name of the Item.
-   *
-   * @readonly
-   * @abstract
-   * @type {itemname}
-   * @memberof Item
-   */
+  /** The name of the Item. */
   abstract get name(): string;
-  /**
-   * If the Item can be used during a battle.
-   *
-   * @readonly
-   * @type {boolean}
-   * @memberof Item
-   */
+  /** If the Item can be used during a battle. */
   get isBattleUsable(): boolean {return true; }
-  /**
-   * If the Item can be used only during a battle
-   *
-   * @readonly
-   * @type {boolean}
-   * @memberof Item
-   */
+  /** If the Item can be used only during a battle */
   get isMapUsable(): boolean {return true; }
-  /**
-   * If the Item can be used on the player's party
-   *
-   * @readonly
-   * @type {boolean}
-   * @memberof Item
-   */
+  /** If the Item can be used on the player's party */
   get isPartyUsable(): boolean { return true; }
-  /**
-   * If the Item can be used on the enemy's party'
-   *
-   * @readonly
-   * @type {boolean}
-   * @memberof Item
-   */
+  /** If the Item can be used on the enemy's party' */
   get isEnemyUsable(): boolean { return false; }
-  /**
-   * If the item can be used on the player
-   *
-   * @readonly
-   * @type {boolean}
-   * @memberof Item
-   */
+  /** If the item can be used on the player */
   get isSelfUsable():   boolean { return true; }
-  /**
-   * When the item is disabled.
-   *
-   * @param {Character} user
-   * @return { boolean }
-   * @memberof Item
-   */
+  /** When the item is disabled. */
   disabled(user: Character): boolean { return false;}
-  /**
-   * If the item is single target.
-   *
-   * @readonly
-   * @type {boolean}
-   * @memberof Item
-   */
+  /** If the item is single target. */
   get isSingleTarget(): boolean { return true; }
-  /**
-   * The action the item perform.
-   *
-   * @param {Character} user The Character that uses the item.
-   * @param {Character} targets The target of the item.
-   * @return { ActionOutput }
-   * @memberof Item
-   */
+  /** The action the item perform. */
   itemEffect(user:Character,targets: Character|Character[]):ActionOutput {
     const description :ActionOutput = [[],[]]
     if(!(targets instanceof Array))targets = [targets]
@@ -130,13 +51,7 @@ export abstract class GameItem implements BattleUseable, storeable
   };
 
   protected abstract _itemEffect(user:Character,target: Character):ActionOutput;
-  /**
-   * Teh tags associated with the item.
-   *
-   * @readonly
-   * @type {tag[]}
-   * @memberof Item
-   */
+  /** The tags associated with the item. */
   get tags(): tag[] {return []};
   breakIntoStacks():GameItem[]
   {
@@ -151,22 +66,12 @@ export abstract class GameItem implements BattleUseable, storeable
     }
     return stacks;
   }
-  /**
-   * Stores the amount of items in the stack.
-   *
-   * @return { ItemStoreable }
-   * @memberof Item
-   */
+  /** Stores the amount of items in the stack. */
   toJson():ItemStoreable
   {
     return {Factory:"Item",type:this.type,amount:this.amount}
   }
-  /**
-   * Loads the amount of items in the stack.
-   *
-   * @param {{[key: string]: any}} options
-   * @memberof Item
-   */
+  /** Loads the amount of items in the stack. */
   fromJson(options: ItemStoreable): void
   {
     const {amount=null,basePrice=null} = options;

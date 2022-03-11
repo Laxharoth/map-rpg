@@ -22,12 +22,6 @@ export class Battle {
   protected battleRoundScene: Scene[] = [];
   protected startRoundScene: Scene[] = [];
 
-  /**
-   *
-   * @param master_service The MasterService
-   * @param enemy_formation The EnemyFormation
-   * @param initialize_battle_options Sets up the battle options (should not be an arrow function)
-   */
   constructor(master_service: MasterService, enemy_formation: EnemyFormation, post_initialize_battle_options: (battle_options:SceneOptions[])=>void=null) {
     this.player = master_service.partyHandler.user;
     this.party = master_service.partyHandler.party;
@@ -42,12 +36,7 @@ export class Battle {
     this.battle_options = this.initialize_battle_options();
     post_initialize_battle_options?.(this.battle_options);
   }
-  /**
-   * Iterates the character actions appling their actions.
-   *
-   * @param {(target:Character[])=>ActionOutput} playerAction
-   * @param {Character[]} playerTarget
-   */
+  /** Iterates the character actions appling their actions. */
   round(playerAction: BattleCommand): void {
     const partyIsDefeated = () => { return get_undefeated_target([this.player].concat(this.party)).length === 0 }
     const turn_characters =get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))
@@ -91,9 +80,7 @@ export class Battle {
     return {sceneData: () => `${roundStrings.join("\n\n")}`, options:[nextOption],fixed_options:[null,null,null,null,null]}
   }
 
-  /**
-   * Reset the round strings and scenes lists.
-   */
+  /** Reset the round strings and scenes lists. */
   startRound(): void {
     this.startRoundString = [];
     this.battleRoundString = [];
@@ -124,13 +111,7 @@ export class Battle {
     this.fistRound = false;
   }
 
-  /**
-   * Returns options to select target.
-   *
-   * @param {Character[]} targets
-   * @param {(target:Character[])=>ActionOutput} playerAction
-   * @return { Scene }
-   */
+  /** Returns options to select target. */
   private selectTarget(targets: Character[], playerAction:BattleCommand): void {
     const select_target_action = (target:Character[]) => {
       playerAction.target = target;
@@ -143,12 +124,7 @@ export class Battle {
       )
       .setScene(false);
   }
-  /**
-   * Returns options to select an item
-   *
-   * @param {GameItem[]} items
-   * @return { Scene }
-   */
+  /** Returns options to select an item */
   selectItem(items: BattleUseable[]): void {
     this.master_service.sceneHandler
       .headScene(this.use_Item_on_battle(items), 'battle')
@@ -240,13 +216,7 @@ export class Battle {
       this.escape_option,
     ]
   }
-  /**
-   * TODO document method
-   *
-   * @param {GameItem[]} items
-   * @return {Scene}
-   * @memberof Battle
-   */
+  /** TODO document method */
   private use_Item_on_battle(items:BattleUseable[]):Scene
   {
     const use_item_on_battle = (item:GameItem,target:Character[])=>{

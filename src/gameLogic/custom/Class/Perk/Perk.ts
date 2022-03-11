@@ -9,11 +9,6 @@ import { hashable } from "../../ClassHelper/ObjectSet";
 /**
  * A object that represents a perk.
  * Something like a status but without effect.
- *
- * @export
- * @abstract
- * @class Perk
- * @implements {storeable}
  */
 export abstract class Perk implements storeable, hashable
 {
@@ -22,29 +17,11 @@ export abstract class Perk implements storeable, hashable
   protected readonly masterService:MasterService;
   constructor(masterService:MasterService)
   { this.masterService = masterService; }
-  /**
-   * The tags associated with the perk.
-   *
-   * @readonly
-   * @type {tag[]}
-   * @memberof Perk
-   */
+  /** The tags associated with the perk. */
   get tags(): tag[] { return []; }
-  /**
-   * The reactions the prek grants.
-   *
-   * @readonly
-   * @type {Reaction[]}
-   * @memberof Perk
-   */
+  /** The reactions the prek grants. */
   get reactions(): Reaction[]{ return []}
-  /**
-   * The special attacks the prek grants.
-   *
-   * @readonly
-   * @type {SpecialAttack[]}
-   * @memberof Perk
-   */
+  /** The special attacks the prek grants. */
   get specials():SpecialAttack[] { return []}
   hash(): string { return this.name }
   toJson():PerkStoreable { return {Factory:"Perk",type:this.type}; }

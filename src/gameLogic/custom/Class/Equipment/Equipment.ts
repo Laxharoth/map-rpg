@@ -8,14 +8,7 @@ import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/Sp
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
 
-/**
- * A item that can be equiped to a character.
- *
- * @export
- * @abstract
- * @class Equipment
- * @extends {GameItem}
- */
+/** A item that can be equiped to a character. */
 export abstract class Equipment extends GameItem
 {
   private equipmentStats: CalculatedStats={};
@@ -49,12 +42,7 @@ export abstract class Equipment extends GameItem
     this.applyModifiers(user);
     return [[],[]];
   }
-  /**
-   * Applies stat modifiers to the equiped character.
-   *
-   * @param {Character} character
-   * @memberof Equipment
-   */
+  /** Applies stat modifiers to the equiped character. */
   applyModifiers(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))
@@ -62,12 +50,7 @@ export abstract class Equipment extends GameItem
     for(const key of Object.keys(this.resistanceStats))
     { character.calculated_resistance[key] += this.resistanceStats[key]}
   }
-  /**
-   * Removes stat modifiers to the equiped character.
-   *
-   * @param {Character} character
-   * @memberof Equipment
-   */
+  /** Removes stat modifiers to the equiped character. */
   removeModifier(character:Character):void
   {
     for(const key of Object.keys(this.statsModifier))

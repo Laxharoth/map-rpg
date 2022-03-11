@@ -3,8 +3,6 @@ import { register_function } from "src/gameLogic/core/Factory/Register_Module/Re
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
-import { shieldname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({reaction,game_item,status}, {status:{StatusBattle},game_item:{Shield},reaction:{BeforeActionReaction}}, Factory)=>{

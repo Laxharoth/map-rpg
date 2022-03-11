@@ -1,7 +1,7 @@
 import { MasterService } from "src/app/service/master.service";
 import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { gamesavenames } from "src/gameLogic/configurable/subservice/game-saver.type";
-import { storeable, StoreableType} from "src/gameLogic/core/Factory/Factory";
+import { storeable} from "src/gameLogic/core/Factory/Factory";
 import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
 import { Quest, QuestOptions } from "../Class/Quest/Quest";
 import { QuestFactory } from "../Factory/QuestFactory";

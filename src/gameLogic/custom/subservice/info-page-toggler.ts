@@ -1,4 +1,4 @@
-import { Scene, SceneOptions } from "../Class/Scene/Scene";
+import { Scene } from "../Class/Scene/Scene";
 import { SceneHandlerService } from "./scene-handler";
 
 export class InfoPageToggler{

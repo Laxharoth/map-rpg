@@ -4,12 +4,7 @@ import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 
 const rng = new Chance()
-/**
- * In scenes that use input elements get the value of the input and select.
- *
- * @export
- * @return { {input:string,select:string} }
- */
+/** In scenes that use input elements get the value of the input and select. */
 export function getInputs():{input:string,select:string}
 {
   const input:any = document.getElementById('unique-input');
@@ -18,15 +13,7 @@ export function getInputs():{input:string,select:string}
   const selectValue = select?.value||null;
   return {input:inputValue, select:selectValue};
 }
-/**
- * Removes an element from the an array if the element is in the array.
- *
- * @export
- * @template T
- * @param {T[]} array The Array.
- * @param {T} item The element to remove.
- * @return { boolean } If the element was removed.
- */
+/** Removes an element from the an array if the element is in the array. */
 export function removeItem<T>(array:T[],item:T):boolean
 {
   const element = array.splice(array.indexOf(item),1);
@@ -36,10 +23,6 @@ export function removeItem<T>(array:T[],item:T):boolean
 /**
  * Pushes the scenes in the fisrt array to the scenes of the second
  * Pushes the strings in the first array to the strings of the second array
- * @export
- * @param {ActionOutput} source The scenes and strings to be pushed.
- * @param {ActionOutput} target The original array of scenes and strings.
- * @return { ActionOutput }
  */
 export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):ActionOutput
 {
@@ -48,25 +31,12 @@ export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):
   return target;
 }
 
-/**
- * Returns a integer between the values provided
- *
- * @export
- * @param {number} min The minimum value that can be returned
- * @param {number} max The maximum value that can be returned
- * @return {number}
- */
+/** Returns a integer between the values provided */
 export function randomBetween(min:number, max:number):number{
   return rng.integer({ min,max });
 }
 
-/**
- * Generates a random number between 0 and 100, and checks if the number provided is bigger.
- *
- * @export
- * @param {number} percent The probability the function should return true.
- * @return { boolean }
- */
+/** Generates a random number between 0 and 100, and checks if the number provided is bigger. */
 export function randomCheck(percent:number):boolean
 {
   return rng.bool({likelihood:percent})

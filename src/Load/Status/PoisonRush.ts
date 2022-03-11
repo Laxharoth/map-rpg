@@ -2,8 +2,6 @@ import { register_function } from "src/gameLogic/core/Factory/Register_Module/Re
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
-import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register: register_function = ({perk,status,reaction}, {perk:{Perk},reaction:{Reaction},status:{StatusBattle}}, Factory) => {

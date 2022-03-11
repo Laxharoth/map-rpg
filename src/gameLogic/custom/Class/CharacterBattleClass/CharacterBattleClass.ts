@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable, StoreableType } from "src/gameLogic/core/Factory/Factory";
-import {  CoreStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, LevelStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { storeable } from "src/gameLogic/core/Factory/Factory";
+import {  CoreStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, LevelStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Upgrade } from "../Upgrade/Upgrade";
 import { UpgradeOptions } from "../Upgrade/Upgrade.type";
 import { UpgradeFactory } from "../Upgrade/UpgradeFactory";

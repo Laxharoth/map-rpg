@@ -1,7 +1,6 @@
 import { MasterService } from 'src/app/service/master.service';
 import { Reaction } from '../Character/Reaction/Reaction';
 import { ReactionGuard } from "../Character/Reaction/ReactionGuard";
-import { statustype } from "./Status.type";
 import { StatusBattle } from "./StatusBattle";
 
 export class StatusGuard extends StatusBattle

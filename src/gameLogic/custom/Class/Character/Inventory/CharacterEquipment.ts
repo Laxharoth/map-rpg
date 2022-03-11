@@ -39,11 +39,7 @@ export class CharacterEquipment implements storeable
     this.masterService = masterService;
     this.initializeUnharmed();
   }
-  /**
-   * Unequip melee weapon and adds it to the inventory.
-   *
-   * @memberof Character
-   */
+  /** Unequip melee weapon and adds it to the inventory. */
    unequipMelee(character:Character)
    {
      const melee = this._meleeWeapon;
@@ -52,11 +48,7 @@ export class CharacterEquipment implements storeable
      character.inventory.addItem(melee);
      melee&&melee.removeModifier(character)
    }
-   /**
-    * Unequip ranged weapon and adds it to the inventory.
-    *
-    * @memberof Character
-    */
+   /** Unequip ranged weapon and adds it to the inventory. */
    unequipRanged(character:Character)
    {
      const ranged = this._rangedWeapon;
@@ -65,11 +57,7 @@ export class CharacterEquipment implements storeable
      character.inventory.addItem(ranged);
      ranged&&ranged.removeModifier(character)
    }
-   /**
-    * Unequip armor and adds it to the inventory.
-    *
-    * @memberof Character
-    */
+   /** Unequip armor and adds it to the inventory. */
    unequipArmor(character:Character)
    {
      const armor = this._armor;
@@ -78,11 +66,7 @@ export class CharacterEquipment implements storeable
      character.inventory.addItem(armor);
      armor&&armor.removeModifier(character)
    }
-   /**
-    * Unequip shield and adds it to the inventory.
-    *
-    * @memberof Character
-    */
+   /** Unequip shield and adds it to the inventory. */
    unequipShield(character:Character)
    {
      const shield = this._shield;
@@ -91,12 +75,7 @@ export class CharacterEquipment implements storeable
      character.inventory.addItem(shield);
      shield&&shield.removeModifier(character)
    }
-   /**
-   * Initializes the unharmed equpments.
-   *
-   * @private
-   * @memberof Character
-   */
+   /** Initializes the unharmed equpments. */
   private initializeUnharmed() {
     if(!CharacterEquipment.__meleeUnharmed__)
     {

@@ -8,9 +8,7 @@ import { GameItem, ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { armornameEnum, itemsEnum, meleenameEnum, rangednameEnum, shieldnameEnum } from 'src/gameLogic/custom/Class/Items/Item.type';
 
 export type item_factory_function = (masterService: MasterService, options: ItemStoreable)=>GameItem
-/**
- * Creates an Item with the given itemname
- */
+/** Creates an Item with the given itemname */
 export const ItemFactory:FactoryFunction<GameItem,ItemStoreable> = (masterService,options)=>{
   const item = new item_switcher[options.type](masterService);
   item.fromJson(options)

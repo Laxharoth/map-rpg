@@ -6,12 +6,7 @@ import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
 import { fill_room, Room, roomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { LockMapService } from './lock-map';
 
-/**
- * A service that allows the player to move in the map.
- *
- * @export
- * @class MapHandlerService
- */
+/** A service that allows the player to move in the map. */
 export class MapHandlerService {
 
   private loadMapSubject = new Subject<GameMap>();
@@ -36,13 +31,7 @@ export class MapHandlerService {
     })
   }
 
-  /**
-   * Loads the map functions
-   *
-   * @param {string} mapName
-   * @return { void }
-   * @memberof MapHandlerService
-   */
+  /** Loads the map functions */
   loadMap(mapName: string):void {
     if(!this.currentMap.mapcolection[mapName])
     {
@@ -53,13 +42,7 @@ export class MapHandlerService {
     this.loadMapSubject.next(this.currentMap);
   }
 
-  /**
-   * Loads a room by name.
-   *
-   * @param {string} roomName Name of the room.
-   * @return {*}
-   * @memberof MapHandlerService
-   */
+  /** Loads a room by name. */
   loadRoom(roomName: string):void
   {
     const {map:mapname=null} = this.currentMap.roomcolection[roomName];
@@ -78,18 +61,12 @@ export class MapHandlerService {
     this.loadRoomHelper(room,roomName,coordinates);
   }
 
-  /**
-   * Loads a room by position in the current map matrix.
-   *
-   * @param {string} DIRECTION
-   * @return {*}
-   * @memberof MapHandlerService
-   */
-  moveInsideMap(DIRECTION:direction):void
+  /** Loads a room by position in the current map matrix. */
+  moveInsideMap(direction:direction):void
   {
     if(this.lockmap.isMapLocked())return;
     let [y,x] = this.coordinates;
-    switch (DIRECTION)
+    switch (direction)
     {
       case "UP"   :y--;break;
       case "DOWN" :y++;break;
@@ -102,36 +79,17 @@ export class MapHandlerService {
     if(!this.currentRoom.beforeMoveTo(roomName))return;
     this.loadRoomHelper(room,roomName,[y,x]);
   }
-
-  /**
-   * Returns an observable for when the map changes.
-   *
-   * @return {*}
-   * @memberof MapHandlerService
-   */
+  /** Returns an observable for when the map changes. */
   onLoadMap():Observable<GameMap>
   {
     return this.loadMapSubject.asObservable();
   }
-  /**
-   * Returns an observable for when the room changes.
-   *
-   * @return { Observable<number[]> }
-   * @memberof MapHandlerService
-   */
+  /** Returns an observable for when the room changes. */
   onCoordinatesChanged():Observable<number[]>
   {
     return this.coordinatesSubject.asObservable();
   }
-
-  /**
-   * Loads a room given a name or coordinates.
-   *
-   * @private
-   * @param {(string|number[])} roomName The room name or coordinates.
-   * @return { boolean } if the room changes.
-   * @memberof MapHandlerService
-   */
+  /** Loads a room given a name or coordinates. */
   private loadRoomHelper(room:roomFunction,roomName: string,coordinates:[number,number]):boolean
   {
     const foundRoom = fill_room(room?.(this.masterService));
@@ -144,7 +102,5 @@ export class MapHandlerService {
     this.coordinatesSubject.next(this.coordinates);
     return true;
   }
-
 }
-
 export type direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';

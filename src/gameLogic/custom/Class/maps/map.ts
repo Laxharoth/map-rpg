@@ -2,12 +2,7 @@ import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { mapcollection } from "src/gameLogic/custom/MapCollection/maps/mapcollection";
 import { roomcollection } from "src/gameLogic/custom/MapCollection/rooms/roomcollection";
 
-/**
- * A model that represents a map
- *
- * @export
- * @class GameMap
- */
+/** A model that represents a map */
 export class GameMap{
   /**
    * The matrix of the map that contains the names

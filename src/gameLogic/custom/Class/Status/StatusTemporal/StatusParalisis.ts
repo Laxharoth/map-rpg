@@ -1,8 +1,6 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { nextOption } from "src/gameLogic/custom/Class/Scene/CommonOptions";
-import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
-import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { pushBattleActionOutput, randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";

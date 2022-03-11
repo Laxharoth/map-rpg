@@ -22,7 +22,7 @@ export class TimedStatusTest extends TimedStatus
   }
 
   /////////////////////////////////
-  //// TEST DESCRIPTION
+  //// TEST SCENE
   /////////////////////////////////
   private nextButton:SceneOptions =  nextOption(this.masterService)
   private nextScene(target: Character): Scene {
