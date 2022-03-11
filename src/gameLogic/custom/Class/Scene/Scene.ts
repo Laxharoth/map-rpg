@@ -12,7 +12,7 @@ export interface Scene
 {
   sceneData:() => any;
   options: SceneOptions[];
-  fixed_options: [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
+  fixed_options?: [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
 }
 export type sceneData=() => any;
 export type descriptionString=() => string;

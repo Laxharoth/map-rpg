@@ -51,6 +51,8 @@ export class SceneHandlerService {
       if(typeof history === "string") this.sceneTextHistory.insertHead(history);
       this.pivot = this.sceneTextHistory.head;
     }
+    if(!this.sceneList.head.value.fixed_options)
+      this.sceneList.head.value.fixed_options = [null, null, null, null, null];
     this.sceneSubject.next(this.sceneList.head.value);
     this.sceneTextSubject.next(this.sceneList.head.value.sceneData());
     return this
