@@ -1,6 +1,6 @@
 import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
-import { mapcollection } from "src/gameLogic/custom/MapCollection/maps/mapcollection";
-import { roomcollection } from "src/gameLogic/custom/MapCollection/rooms/roomcollection";
+import { mapcollection } from "src/gameLogic/custom/MapCollection/mapcollection";
+import { roomcollection } from "src/gameLogic/custom/MapCollection/roomcollection";
 
 /** A model that represents a map */
 export class GameMap{

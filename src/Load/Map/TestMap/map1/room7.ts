@@ -1,4 +1,4 @@
-import { ShopStoreable } from './../../../Class/Shop/DynamicShop';
+import { ShopStoreable } from '../../../../gameLogic/custom/Class/Shop/DynamicShop';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { SceneSelectItemFromMap, drop_item, nextOption } from "src/gameLogic/custom/Class/Scene/CommonOptions";

@@ -1,5 +1,5 @@
-import { battle_options } from './../../../Class/Battle/Battle.type';
-import { Battle } from './../../../Class/Battle/Battle';
+import { battle_options } from '../../../../gameLogic/custom/Class/Battle/Battle.type';
+import { Battle } from '../../../../gameLogic/custom/Class/Battle/Battle';
 import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";

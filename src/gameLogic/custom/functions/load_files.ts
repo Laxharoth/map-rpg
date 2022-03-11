@@ -36,5 +36,6 @@ export async function load_files({})
   await import("../../../Load/Perk/PerkUpgradeable.ts").then(module=>add_module(module))
   //@ts-ignore
   await import("../../../Load/Character/TestCharacter").then(module=>add_module(module));
+  await import("../../../Load/Map/TestMap/TestMaps").then(module=>add_module(module));
   register_all_modules()
 }
