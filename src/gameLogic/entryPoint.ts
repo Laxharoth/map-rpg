@@ -53,12 +53,14 @@ export function newGame(masterService:MasterService){
     name:"ally 1",
   }),0);
   masterService.flagsHandler.setFlags(default_flags)
+  masterService.sceneHandler.clear();
   masterService.mapHandler.loadRoom(default_flags.currentroom);
 }
 
 export function continueGame(masterService:MasterService){
   // debug to get savedata
   masterService.gameSaver.load("save1");
+  masterService.sceneHandler.clear();
   masterService.partyHandler.user = masterService.gameSaver.MainCharacter[0];
   masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
   masterService.timeHandler.addTime(0);
