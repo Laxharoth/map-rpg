@@ -7,11 +7,15 @@ export type game_state = 'map'|
                     'stat-up'|
                     'info'|
                     'status'|
-                    'prepare'
+                    'prepare'|
+                    'front-page'|
+                    'save-page'
                     ;
 
 export const game_state_priority: game_state[] = [
   'prepare',
+  'save-page',
+  'front-page',
   'map',
   'item',
   'excess-item',
