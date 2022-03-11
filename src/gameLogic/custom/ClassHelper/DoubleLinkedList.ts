@@ -103,6 +103,10 @@ export class DoubleLinkedList<T>
       for(let i = 0; i < index && current.next; i++) current = current.next;
       return current;
   }
+  clear():void{
+    this.head = null;
+    this.length =  0;
+  }
   iterator()
   {
       if(this.length===0)return (function*(){})();

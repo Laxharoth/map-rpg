@@ -173,6 +173,12 @@ export class SceneHandlerService {
     this.setScene(false);
     return this;
   }
+  /** clears the scene list of the specified game_state or all if not specified */
+  clear(game_state:game_state=null){
+    for(const [,list] of Object.entries(this._sceneList).filter( ([name]) => game_state === null || game_state === name)){
+      list.clear()
+    }
+  }
   /**
    * Adds a new scene list with a key
    *
