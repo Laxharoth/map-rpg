@@ -8,7 +8,7 @@ body{
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% - 40px);
+  width: calc(100vw - 40px);
   height: calc(100vh - 40px);
   margin: 0 !important;
   border:  20px solid black;
