@@ -51,7 +51,7 @@ export class GameMap{
     }
   }
 
-  findRoomByName(roomName:string):{room:roomFunction,coordinates:number[]} | null
+  findRoomByName(roomName:string):{room:roomFunction,coordinates:[number,number]} | null
   {
     for(let i = 0; i < this.roomsNames.length; i++)
     {
