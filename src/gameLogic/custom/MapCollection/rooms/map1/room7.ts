@@ -90,7 +90,7 @@ export function room(masterService:MasterService):Room
   const roomOptions:SceneOptions[] =[
     {text:"Shop",action:makeShop,disabled:false},
     {text:"Shop",action:makeDynamicShop,disabled:false},
-    {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })),disabled:false},
+    {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })).startRound(),disabled:false},
     {text:"Add perk point",action:()=>{
       user.level_stats.perk_point=4;
       user.emit_perk_up();
