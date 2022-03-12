@@ -13,11 +13,11 @@ export function AttackCommand(source: Character, targets: Character[]): BattleCo
   const weapon = source.character_equipment.meleeWeapon;
   return {
     source, target:targets, tags:weapon.tags,
-    excecute:() => {
+    excecute(){
       const attackDescription: ActionOutput = [[],[]];
       if (source.hasTag('double attack'))
-        attackWithWeapon(source, targets, weapon, attackDescription);
-      attackWithWeapon(source, targets, weapon, attackDescription);
+        attackWithWeapon(source, this.target, weapon, attackDescription);
+      attackWithWeapon(source, this.target, weapon, attackDescription);
       return attackDescription;
     }
   }
@@ -27,14 +27,11 @@ export function ShootCommand(source: Character, targets: Character[]): BattleCom
   const weapon = source.character_equipment.rangedWeapon;
   return {
     source, target:targets, tags:weapon.tags,
-    excecute:() => {
-      const attackDescription: ActionOutput = [
-        [],
-        []
-      ];
+    excecute(){
+      const attackDescription: ActionOutput = [ [], [] ];
       if (source.hasTag('double shoot'))
-        attackWithWeapon(source, targets, weapon, attackDescription);
-      attackWithWeapon(source, targets, weapon, attackDescription);
+        attackWithWeapon(source, this.target, weapon, attackDescription);
+      attackWithWeapon(source, this.target, weapon, attackDescription);
       return attackDescription;
     }
   }

@@ -98,7 +98,7 @@ export class Battle {
     for (const character of get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))) {
       const commands = character.startRound();
       for(const command of sortBattleCommands(commands)){
-        const [reactScene,reactString] = character.react(command);
+        const [reactScene,reactString] = character.reactBefore(command);
         const [scene,string] = command.excecute();
         this.startRoundScene.push(...reactScene,...scene);
         this.startRoundString.push(reactString.concat(string).join('\n'));

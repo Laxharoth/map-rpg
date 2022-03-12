@@ -74,6 +74,7 @@ export abstract class Character implements storeable
   startRound():BattleCommand[]{
     const commands:BattleCommand[] = [];
     commands.push(...this.startRoundApplyStatus())
+    commands.push({source:this,target:[this],tags:[],excecute:()=>[[],[this.currentStatusString]]});
     this.cooldownSpecials();
     this.calculateStats()
     return commands;
@@ -176,13 +177,14 @@ export abstract class Character implements storeable
       );
   }
   reactBefore(action:BattleCommand):ActionOutput{
-    const actionBefore:BattleCommand = Object.create(action);
-    actionBefore.tags.push('before-action');
+    action.tags.push('before-action');
     if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return [[],[]];
-    return this.reactions.reduce(
-        (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,actionBefore),scenes)
+    const t = this.reactions.reduce(
+        (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,action),scenes)
         ,[[],[]] as ActionOutput
       );
+    action.tags.pop();
+    return t;
   }
   /** Reduces the character hitpoints up to zero. */
   takeDamage(damage:number):number
