@@ -19,26 +19,27 @@ const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
         if(status!=="victory")return;
         for(const enemy of enemy_formation)
         { if(enemy.enemy_type==='enemyTest')this.enemies_defeated = Math.min(this.enemies_defeated,this.ENEMY_TARGET); }
-        this.remove_subscriptions()
+        this.complete()
       })
     }
     toJson(): QuestOptions {
       return {
         Factory:'Quest',
+        status:this.status,
         type:"DefeatEnemyQuest",
         enemies_defeated:this.enemies_defeated
       }
     }
     fromJson(options: QuestOptions): void {
-      this.enemies_defeated = options.enemies_defeated
-      this.remove_subscriptions()
+      this.enemies_defeated = options.enemies_defeated;
+      this.status = options.status;
+      this.complete();
     }
-    private remove_subscriptions()
-    {
+    complete(){
+      this.status = "complete";
       if(this.enemies_defeated===this.ENEMY_TARGET)this.enemy_defeat_subscription&&this.enemy_defeat_subscription.unsubscribe()
     }
-    get add_description():GameElementDescriptionSection[]
-    {
+    get add_description():GameElementDescriptionSection[]{
       return [
         {name:"condition",section_items:[
           {name:"enemies_defeated",value:`${this.enemies_defeated} / ${this.ENEMY_TARGET}`}
