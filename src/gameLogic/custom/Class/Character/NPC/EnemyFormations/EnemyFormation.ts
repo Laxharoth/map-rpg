@@ -6,6 +6,8 @@ import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { ActionOutput } from '../../Character.type';
 import { factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
+import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
+import { primitive } from 'src/gameLogic/core/types';
 
 /**
  * An array of characters, with the functions for battle descriptions.
@@ -15,12 +17,12 @@ import { factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
  * @class EnemyFormation
  * @constructor Initializes the masterService
  */
-export abstract class EnemyFormation
+export abstract class EnemyFormation implements storeable
 {
+  abstract type: primitive;
   /** The Array with the enemies. */
   protected abstract _enemies:(Character&Enemy)[];
   protected readonly masterService: MasterService;
-
   constructor( masterService:MasterService){this.masterService =masterService;}
   get IsDefeated():boolean{ return this.enemies.every(character=>character.is_defeated()); }
   /** Gets the private array of enemies. */
@@ -70,8 +72,11 @@ export abstract class EnemyFormation
       disabled:false
     }
   }
-
   *[Symbol.iterator](){ for(const enemy of this._enemies)yield enemy; }
+  toJson(): EnemyFormationOptions {
+    throw new Error('Method not implemented.');
+  }
+  fromJson(options: EnemyFormationOptions): void { }
 }
 
 export type EnemyFormationOptions = {
