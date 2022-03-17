@@ -83,7 +83,9 @@ export class SceneHandlerService {
    * Sets the current scene to the next scene in the current scene list.
    */
   nextScene(addToHistory:boolean=true):SceneHandlerService{
-    this.sceneList?.removeAt(0);
+    if(Object.values(this._sceneList).reduce((acc,prev)=>acc+prev.length,0)>1){
+      this.sceneList?.removeAt(0);
+    }
     this.setScene(addToHistory);
     return this
   }
