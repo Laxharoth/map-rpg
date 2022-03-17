@@ -1,4 +1,5 @@
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
@@ -10,7 +11,7 @@ const register: register_function = ({perk,status,reaction}, {perk:{Perk},reacti
     protected name: string = "PoisonRushReaction";
     type: string ="PoisonRushReaction"
     protected whatTriggers: tag[][] = [['status ended' , 'poison']];
-    protected action(react_character: Character,source:Character,target: Character[]): ActionOutput {
+    protected action(react_character: Character,{source,target}:BattleCommand): ActionOutput {
       return react_character.addStatus(new PoisonRush(this.masterService))
     }
   }
