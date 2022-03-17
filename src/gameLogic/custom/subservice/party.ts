@@ -23,14 +23,11 @@ export class PartyService implements storeable{
   private _enemyFormation:EnemyFormation;
   get enemyFormation():EnemyFormation { return this._enemyFormation}
   set enemyFormation(value:EnemyFormation) { this._enemyFormation = value; }
-
-
   constructor(gameSaver: GameSaver,unique_character_handler:UniqueCharacterHandler) {
     this._user = null;
     this.unique_character_handler = unique_character_handler;
     gameSaver.register("Party",this)
   }
-
   get user():UniqueCharacter {
     return this._user as UniqueCharacter;
   }
@@ -44,7 +41,6 @@ export class PartyService implements storeable{
     this._user = user;
     this.updateUser()
   }
-
   is_party_member(character: Character): boolean {
     return character===this._user || (this._party as Character[]).includes(character);
   }
@@ -53,7 +49,6 @@ export class PartyService implements storeable{
     this._party[index] = value;
     this.updatePartyMember(index);
   }
-
   updateUser(){ this.partySubject.next(this.user); }
   updatePartyMember(index: number){ this.partyMemberSubject.next([index, this._party[index]]); }
   battle_ended(status:battle_end_status){ this.battle_end.next([status,this.enemyFormation]) }
@@ -62,8 +57,14 @@ export class PartyService implements storeable{
   onUpdatePartyMember(): Observable<[number, Character]>{ return this.partyMemberSubject.asObservable(); }
   onBattleEnded(): Observable<[status:battle_end_status,enemy:EnemyFormation]>{ return this.battle_end.asObservable(); }
 
-  toJson():PartyStoreable
-  {
+  get userParty():Character[]{
+    return this.party.concat(this.user);
+  }
+  get enemyParty():Character[]{
+    return this.enemyFormation.enemies;
+  }
+
+  toJson():PartyStoreable{
     return {
       Factory: "CurrentParty",
       type: 'party',
