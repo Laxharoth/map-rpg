@@ -255,7 +255,17 @@ export abstract class Character implements storeable
       if(removeItem(status_array, status)) return status.onStatusRemoved(this);
       return [[],[]]
     }
-    return remove_status_from_name(status,status_array);
+    return this.remove_status_from_name(status,status_array);
+  }
+  private remove_status_from_name(status: string,status_array:Status[]) {
+    let removeStatusDescription: ActionOutput = [[], []];
+    let statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
+    while (statusIndex >= 0) {
+      const [statusRemoved] = status_array.splice(statusIndex, 1);
+      removeStatusDescription = statusRemoved.onStatusRemoved(this);
+      statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
+    }
+    return removeStatusDescription;
   }
   /** Use a special attack from the equpments, perks or status. */
   private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand
@@ -297,13 +307,3 @@ export type CharacterStoreable = { Factory: "Character"; type: characterType; ba
 /** Check if the statusname is the same as the second argument. */
 function compareStatusName(status: string | Status, characterStatus: Status):boolean
 { return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.type === status; }
-function remove_status_from_name(status: string,status_array:Status[]) {
-  let removeStatusDescription: ActionOutput = [[], []];
-  let statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
-  while (statusIndex >= 0) {
-    const [statusRemoved] = status_array.splice(statusIndex, 1);
-    removeStatusDescription = statusRemoved.onStatusRemoved(this);
-    statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
-  }
-  return removeStatusDescription;
-}
