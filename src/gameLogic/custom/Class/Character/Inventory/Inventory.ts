@@ -33,7 +33,10 @@ export class Inventory implements storeable {
     }
     AddExceedItem(this.master_service, item, this)
   }
-  dropItem(item: GameItem) { removeItem(this.items, item); }
+  dropItem(item: GameItem,amount: number=-1) {
+    if(amount < 0 || amount >= item.amount){removeItem(this.items, item); return;}
+    item.amount-=amount;
+  }
   /** Check if the Item can be Inserted into the inventory. */
   private fitItemIntoinventory(item: GameItem): void {
     if (item.amount <= 0) return;
