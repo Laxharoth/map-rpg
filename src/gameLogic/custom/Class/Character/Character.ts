@@ -15,7 +15,7 @@ import { ObjectSet } from "../../ClassHelper/ObjectSet";
 import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
 import { BattleCommand, EmptyCommand, ITEM_PRIORITY } from "../Battle/BattleCommand";
 import { BattleClassOptions, CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
-import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, CalculatedStats, FullCoreStats, LevelStats } from "./Character.type";
+import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, FullCoreStats, LevelStats, FullCalculatedStats, FullResistanceStats } from "./Character.type";
 import { Inventory } from "./Inventory/Inventory";
 import { Reaction } from "./Reaction/Reaction";
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
@@ -30,8 +30,8 @@ export abstract class Character implements storeable
   core_stats:CoreStats;
   original_resistance:ResistanceStats;
   /* The current status of the character after appling equipment during a battle round. */
-  calculated_stats:CalculatedStats;
-  calculated_resistance:ResistanceStats;
+  calculated_stats:FullCalculatedStats;
+  calculated_resistance:FullResistanceStats;
   gold:number = 0;
 
   protected perks:ObjectSet<Perk> = new ObjectSet<Perk>();
