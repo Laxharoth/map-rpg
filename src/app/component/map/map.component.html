@@ -1,9 +1,12 @@
 <div class="app-map">
   <div class="map-wrapper" #mapwrapper>
-    <div class="row-wrapper" *ngFor="let rows of currentMap.roomsNames;let row=index;">
+    <div class="row-wrapper" *ngFor="let rows of currentMap.rooms;let row=index;">
       <div class="app-map-square" *ngFor="let columns of rows; let column=index;">
         <div *ngIf="columns"
-          [ngClass]=" {'walkspace':true, 'current':currentCoordinates[0]==row && currentCoordinates[1]==column }">
+          [ngClass]=" {
+            'walkspace':true,
+            'current':currentCoordinates[0]==row && currentCoordinates[1]==column,
+            'disabled':disabledRoom(columns)||!columns }">
         </div>
       </div>
     </div>

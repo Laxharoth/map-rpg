@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
+import { roomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { TimeValues } from 'src/gameLogic/custom/ClassHelper/Time';
 
 @Component({
@@ -26,8 +27,7 @@ export class MapComponent implements OnInit {
 
   @ViewChild('mapwrapper') mapWrapper: ElementRef;
 
-  constructor(private masterService:MasterService)
-  {
+  constructor(private masterService:MasterService){
     this.InitializeSubscriptions();
     this.setLockedWASD()
   }
@@ -45,9 +45,11 @@ export class MapComponent implements OnInit {
     this.timeSubscription?.unsubscribe();
   }
 
-  move(direction)
-  {
+  move(direction){
     this.moveEvent.emit(direction);
+  }
+  disabledRoom(room:roomFunction){
+    return room?.disabled?.(this.masterService);
   }
 
   private setMapOverflow()
@@ -68,10 +70,10 @@ export class MapComponent implements OnInit {
   {
     const [y,x] = this.currentCoordinates;
     this.LockedWASD = {
-      UP:this.currentMap.roomsNames[y-1]?.[x]?false:true,
-      DOWN:this.currentMap.roomsNames[y+1]?.[x]?false:true,
-      LEFT:this.currentMap.roomsNames[y][x-1]?false:true,
-      RIGHT:this.currentMap.roomsNames[y][x+1]?false:true,
+      UP:this.currentMap.rooms[y-1]?.[x]?false:true,
+      DOWN:this.currentMap.rooms[y+1]?.[x]?false:true,
+      LEFT:this.currentMap.rooms[y][x-1]?false:true,
+      RIGHT:this.currentMap.rooms[y][x+1]?false:true,
     };
   }
   private InitializeSubscriptions() {

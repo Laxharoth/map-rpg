@@ -54,7 +54,11 @@ export interface Room{
      updateable_scene?:{[key: string]:Scene};
 }
 
-export type roomFunction = (masterService:MasterService) => Room;
+export interface roomFunction{
+  create:(masterService:MasterService) => Room,
+  roomname:string
+  disabled?:(masterService:MasterService)=>boolean,
+};
 export function fill_room(room:Room):Room
 {
   const {beforeMoveTo=null,afterMoveTo=null,icon=null} = room;

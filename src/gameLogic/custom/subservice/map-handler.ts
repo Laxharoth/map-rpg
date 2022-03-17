@@ -46,8 +46,7 @@ export class MapHandlerService {
   loadRoom(roomName: string):void
   {
     const {map:mapname=null} = this.currentMap.roomcolection[roomName];
-    if(mapname !== this.currentMapName)
-    {
+    if(mapname !== this.currentMapName){
       this.currentMapName = mapname;
       this.loadMap(mapname);
     }
@@ -58,12 +57,11 @@ export class MapHandlerService {
     }
     if(!this.currentRoom.beforeMoveTo(roomName))return;
 
-    this.loadRoomHelper(room,roomName,coordinates);
+    this.loadRoomHelper(room,coordinates);
   }
 
   /** Loads a room by position in the current map matrix. */
-  moveInsideMap(direction:direction):void
-  {
+  moveInsideMap(direction:direction):void{
     if(this.lockmap.isMapLocked())return;
     let [y,x] = this.coordinates;
     switch (direction)
@@ -74,10 +72,10 @@ export class MapHandlerService {
       case "RIGHT":x++;break;
       default:return;
     }
-    const {roomName=null,room=null} = this.currentMap.findRoomByCoordinates(y,x)
-    if(!roomName)return;//out of map border
-    if(!this.currentRoom.beforeMoveTo(roomName))return;
-    this.loadRoomHelper(room,roomName,[y,x]);
+    const room = this.currentMap.findRoomByCoordinates(y,x)
+    if(!room)return;//out of map border
+    if(!this.currentRoom.beforeMoveTo(room.roomname))return;
+    this.loadRoomHelper(room,[y,x]);
   }
   /** Returns an observable for when the map changes. */
   onLoadMap():Observable<GameMap>
@@ -90,13 +88,14 @@ export class MapHandlerService {
     return this.coordinatesSubject.asObservable();
   }
   /** Loads a room given a name or coordinates. */
-  private loadRoomHelper(room:roomFunction,roomName: string,coordinates:[number,number]):boolean
+  private loadRoomHelper(room:roomFunction,coordinates:[number,number]):boolean
   {
-    const foundRoom = fill_room(room?.(this.masterService));
-    this.masterService.flagsHandler.setFlag('currentroom',roomName);
+    if(room.disabled&&room.disabled(this.masterService)){ return false; }
+    const foundRoom = fill_room(room?.create(this.masterService));
+    this.masterService.flagsHandler.setFlag('currentroom',room.roomname);
     this.currentRoom.onExit();
     foundRoom.onEnter();
-    this.currentRoom.afterMoveTo(roomName);
+    this.currentRoom.afterMoveTo(room.roomname);
     this.currentRoom=foundRoom;
     this.coordinates = coordinates;
     this.coordinatesSubject.next(this.coordinates);
