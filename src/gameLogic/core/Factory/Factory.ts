@@ -26,7 +26,7 @@ export interface storeable {
   toJson():StoreableType;
   fromJson(options:StoreableType):void;
 }
-interface global_functions{
+export interface global_functions{
   randomCheck:typeof randomCheck;
   randomBetween:typeof randomBetween;
   pushBattleActionOutput:typeof pushBattleActionOutput;
