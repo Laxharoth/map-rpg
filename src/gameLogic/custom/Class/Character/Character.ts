@@ -261,28 +261,36 @@ export abstract class Character implements storeable
   private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand
   {
     if(this.specialAttacks.has(item.hash()))
-      return {source:this,target:targets,tags:[],excecute:()=>{
-        if(item.isSingleTarget)return tryAttack(this,targets[0],(target: Character)=>item.itemEffect(this,target))
-        const descriptions:ActionOutput = [[],[]]
-        for(const target of targets)
-        { pushBattleActionOutput(item.itemEffect(this,target),descriptions) }
-        return descriptions;
-      }}
+      return {
+        source:this, target:targets, tags:item.tags,
+        excecute:()=>{
+          if(item.isSingleTarget)return tryAttack(this,targets[0],(target: Character)=>item.itemEffect(this,target))
+          return targets.reduce( (descriptions,target)=>pushBattleActionOutput(item.itemEffect(this,target),descriptions),[[],[]] )
+        }
+      }
     return new EmptyCommand(this,targets);
   }
   /** The automatic action to perform. */
-  IA_Action():BattleCommand
-  {
-    const party = [this.masterService.partyHandler.user]
-                  .concat(this.masterService.partyHandler.party)
-    const enemy = this.masterService.partyHandler.enemyFormation.enemies;
-    return this._IA_Action(party,enemy)
+  IA_Action():BattleCommand{
+    return this._IA_Action(this.allys,this.enemies);
   }
   /** The logic behind the action. */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
   toJson(): CharacterStoreable { return { Factory:"Character",type:this.type,battle_class:this.battle_class.toJson()} }
   fromJson(options: CharacterStoreable): void {
     options.battle_class&&(this.character_battle_class=CharacterBattleClassFactory(this.masterService,options.battle_class))
+  }
+  get allys():Character[]{
+    if((this.masterService.partyHandler.enemyFormation.enemies as Character[]).some(char=>char===this)){
+      return this.masterService.partyHandler.enemyParty;
+    }
+    return this.masterService.partyHandler.userParty;
+  }
+  get enemies():Character[]{
+    if((this.masterService.partyHandler.enemyFormation.enemies as Character[]).some(char=>char===this)){
+      return this.masterService.partyHandler.userParty;
+    }
+    return this.masterService.partyHandler.enemyParty;
   }
 }
 export type CharacterStoreable = { Factory: "Character"; type: characterType; battle_class:BattleClassOptions,[key: string]:any; }
