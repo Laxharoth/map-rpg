@@ -17,6 +17,10 @@ export const character_switcher:{[key: string]:CharacterConstructor}= {
 export interface CharacterConstructor { new (masterService:MasterService):Character }
 export enum CharacterTypeValues{
   'test enemy'='test enemy',
+  'Bandit'='Bandit',
+  'Guard'='Guard',
+  'Spy'='Spy',
+  'Thug'='Thug',
 }
 export enum UniqueCharacterType{
   'test character'='test character',

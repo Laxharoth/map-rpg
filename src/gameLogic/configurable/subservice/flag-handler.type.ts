@@ -7,6 +7,11 @@ export enum FlagNames {
   caninroom1="caninroom1",
   pet="pet",
   petshout="petshout",
+  "FoolDragonSeller-plantedTrack"="FoolDragonSeller-plantedTrack",
+  "FoolDragonSeller-inspectedEgg"="FoolDragonSeller-inspectedEgg",
+  "first-enter-barn"="first-enter-barn",
+  "first-close-spy"="first-close-spy",
+  "talked-with-harper"="talked-with-harper",
 }
 
 export type flagname = `${FlagNames}`
@@ -20,4 +25,9 @@ export const default_flags:{[key in FlagNames]:any} = {
   caninroom1          : true,
   pet:null,
   petshout:null,
+  "FoolDragonSeller-plantedTrack":false,
+  "FoolDragonSeller-inspectedEgg":false,
+  "first-enter-barn":true,
+  "first-close-spy":true,
+  "talked-with-harper":false,
 }

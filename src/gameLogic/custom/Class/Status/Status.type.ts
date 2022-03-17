@@ -21,6 +21,8 @@ export enum statusBattlesEnum{
   'Sleep' ='Sleep',
   'PoisonRush'='PoisonRush',
   'StatusGuard'='StatusGuard',
+  "Hide"="Hide",
+  "Advantage"="Advantage",
 }
 
 export type statustype =`${statusEnum}`| `${statusTimeEnum}`| `${statusBattlesEnum}`

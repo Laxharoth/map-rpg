@@ -20,10 +20,14 @@ export enum specialsnameEnum{
   'Charm'='Charm',
   'Fright'='Fright',
   'Grab'='Grab',
+  'SneakAttack'='SneakAttack',
+  'MultiAttack'='MultiAttack',
 }
 export enum itemsEnum{
   'item-test'='item-test',
   'PoisonPill'='PoisonPill',
+  'FakeDragonEgg'='FakeDragonEgg',
+  'Net'='Net',
 }
 export type meleename = `${meleenameEnum}`;
 export type rangedname =`${rangednameEnum}`;

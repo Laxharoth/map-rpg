@@ -27,5 +27,9 @@ export type tag = 'melee weapon'|
                   'restrained'|
                   'before-action'|
                   'sleep'|
-                  'unequiped'
+                  'unequiped'|
+                  'Advantage'|
+                  'Restrained'|
+                  'Hide'|
+                  'Blind'
                   ;
