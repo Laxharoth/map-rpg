@@ -7,12 +7,11 @@ import { descriptable } from "../GameElementDescription/GameElementDescription";
  * @interface Scene
  * @constructor Initializes the text function and options.
  */
-type fixed_option = SceneOptions|null
 export interface Scene
 {
   sceneData:() => any;
   options: SceneOptions[];
-  fixed_options?: [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
+  fixed_options?: FixedOptions;
 }
 export type sceneData=() => any;
 export type descriptionString=() => string;
@@ -32,3 +31,5 @@ export interface DescriptableSceneOptions extends SceneOptions
 {
   descriptable:descriptable;
 }
+type fixed_option = SceneOptions|null
+export type FixedOptions = [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
