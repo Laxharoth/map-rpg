@@ -3,7 +3,7 @@ import { MasterService } from "src/app/service/master.service";
 import { FactoryFunction, factoryMap, factoryname } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { gamesavenames } from "src/gameLogic/configurable/subservice/game-saver.type";
 import { SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
-import { nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
+import { enterRoomOption, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { primitive } from '../types';
 
 /** @type {FactoryFunction&global_functions} */
@@ -14,9 +14,11 @@ Factory.randomBetween=randomBetween;
 Factory.pushBattleActionOutput=pushBattleActionOutput;
 enum options_names_enum {
   nextOption="nextOption",
+  enterRoomOption="enterRoomOption",
 }
 Factory.options = {
-  nextOption:nextOption,
+  nextOption,
+  enterRoomOption,
 };
 export type StoreableType = {Factory:factoryname,type: string,dependency_gamesave_object_key?:gamesavenames[],[key: string]:any};
 export interface storeable {
