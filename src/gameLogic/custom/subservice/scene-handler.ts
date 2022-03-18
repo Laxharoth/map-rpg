@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { Scene } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { Scene, SceneInterface } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { DoubleLinkedList, DoubleLinkedListNode } from 'src/gameLogic/custom/ClassHelper/DoubleLinkedList';
 import { GameStateService } from '../../core/subservice/game-state';
 import { game_state } from '../../configurable/subservice/game-state.type';
@@ -10,7 +10,7 @@ export class SceneHandlerService {
   /** * An object with the sceneLists */
   private _sceneList:{[key: string]:DoubleLinkedList<Scene>}={};
   private sceneTextHistory = new DoubleLinkedList<string>();
-  private pivot:DoubleLinkedListNode<string>;
+  // private pivot:DoubleLinkedListNode<string>;
   /** * A subject to handle the current scene. */
   private sceneSubject = new Subject<Scene>();
   /** * A subject to affect only the text displayed but not the options. */
@@ -18,13 +18,14 @@ export class SceneHandlerService {
   private lockmap:LockMapService;
   private gameStateHandler:GameStateService;
   /** * Gets the current sceneList */
-  private get sceneList():DoubleLinkedList<Scene>
-  {return this._sceneList[this.currentGameState]}
+  private get sceneList():DoubleLinkedList<Scene>{
+    return this._sceneList[this.currentGameState]
+  }
   constructor(lockmap:LockMapService,gameStateHandler:GameStateService){
     this.lockmap = lockmap;
     this.gameStateHandler=gameStateHandler;
     this.addSceneListWithGameState('map');
-    this._sceneList['map'].insertHead(null);
+    // this._sceneList['map'].insertHead(null);
   }
   /** Sets the current scene to the head of the current list. */
   setScene(addToHistory:boolean=true):SceneHandlerService
@@ -33,50 +34,60 @@ export class SceneHandlerService {
     while(!this.sceneList || this.sceneList.length === 0){ this.gameStateHandler.popState(); }
     if(this.sceneList.length>1)this.lockmap.lockMap("scene-lock");
     else this.lockmap.unlockMap("scene-lock");
-
+    const head = this.sceneList.head;
+    if(!head){ console.error("No scenes in list"); return this;}
     if(addToHistory)
     {
-      const history = this.sceneList.head.value.sceneData();
+      const history = head.value.sceneData();
       if(typeof history === "string") this.sceneTextHistory.insertHead(history);
-      this.pivot = this.sceneTextHistory.head;
+      // this.pivot = this.sceneTextHistory.head;
     }
-    if(!this.sceneList.head.value.fixed_options)
-      this.sceneList.head.value.fixed_options = [null, null, null, null, null];
-    this.sceneSubject.next(this.sceneList.head.value);
-    this.sceneTextSubject.next(this.sceneList.head.value.sceneData());
+    if(!head.value.fixed_options)
+      head.value.fixed_options = [null, null, null, null, null];
+    this.sceneSubject.next(head.value);
+    this.sceneTextSubject.next(head.value.sceneData());
     return this
   }
   /**
    * Inserts scenes at the start of a scene list.
    * Also sets the current game state.
    */
-  headScene(scene:Scene|Scene[],gameState:game_state):SceneHandlerService{
+  headScene(scenes:SceneInterface|SceneInterface[],gameState:game_state):SceneHandlerService{
     this.gameStateHandler.gameState = gameState;
-    if(!(scene instanceof Array))scene = [scene]
+    if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
-    this._sceneList[gameState].insertHead(...scene);
+    for(const scene of scenes){
+      (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
+    }
+    this._sceneList[gameState].insertHead(...scenes as Scene[]);
     return this
   }
   /**
    * Inserts scenes right after the fist scene of a scene list.
    * Also sets the current game state.
    */
-  afterHeadScene(scene:Scene|Scene[],gameState:game_state):SceneHandlerService{
+  afterHeadScene(scenes:SceneInterface|SceneInterface[],gameState:game_state):SceneHandlerService{
     this.gameStateHandler.gameState = gameState;
-    if(!(scene instanceof Array))scene = [scene]
+    if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
-    this._sceneList[gameState].insertBefore(1,...scene);
+    for(const scene of scenes){
+      (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
+    }
+    this._sceneList[gameState].insertBefore(1,...scenes as Scene[]);
     return this
   }
   /**
    * Inserts scenes at the end of a scene list.
    * Also sets the current game state.
    */
-  tailScene(scene:Scene|Scene[],gameState:game_state):SceneHandlerService{
+  tailScene(scenes:SceneInterface|SceneInterface[],gameState:game_state):SceneHandlerService{
     this.gameStateHandler.gameState = gameState;
-    if(!(scene instanceof Array))scene = [scene]
+    if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
-    this._sceneList[gameState].insertTail(...scene);
+    for(const scene of scenes){
+      (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
+    }
+    this._sceneList[gameState].insertTail(...scenes as Scene[]);
     return this
   }
   /**
@@ -102,21 +113,20 @@ export class SceneHandlerService {
     return this.sceneTextSubject.asObservable();
   }
 
-  getPreviousScene():void
-  {
-    if(this.pivot.next  ) this.pivot = this.pivot.next;
-    this.sceneTextSubject.next(this.pivot.value);
-  }
+  // getPreviousScene():void
+  // {
+  //   if(this.pivot.next  ) this.pivot = this.pivot.next;
+  //   this.sceneTextSubject.next(this.pivot.value);
+  // }
 
-  getFollowingScene():void
-  {
-    if(this.pivot.prev  ) this.pivot = this.pivot.prev;
-    this.sceneTextSubject.next(this.pivot.value);
-  }
+  // getFollowingScene():void
+  // {
+  //   if(this.pivot.prev  ) this.pivot = this.pivot.prev;
+  //   this.sceneTextSubject.next(this.pivot.value);
+  // }
   /** Gets the current scene. */
-  get currentScene():Scene
-  {
-    return this.sceneList.head.value;
+  get currentScene():Scene|undefined{
+    return this.sceneList.head?.value;
   }
 
   /**
@@ -131,7 +141,7 @@ export class SceneHandlerService {
     return this;
   }
   /** clears the scene list of the specified game_state or all if not specified */
-  clear(game_state:game_state=null){
+  clear(game_state:game_state|null=null){
     for(const [,list] of Object.entries(this._sceneList).filter( ([name]) => game_state === null || game_state === name)){
       list.clear();
     }

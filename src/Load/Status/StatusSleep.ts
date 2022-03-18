@@ -23,5 +23,5 @@ class StatusSleep extends StatusBattle {
 status["Sleep"]=StatusSleep
 }
 const module_name="Sleep"
-const module_dependency= []
+const module_dependency:string[]= []
 export { register, module_name, module_dependency}

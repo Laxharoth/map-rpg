@@ -1,12 +1,10 @@
 import { Chance } from 'chance';
-import random from 'random';
-import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
+import { DamageTypes, FullDamageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 
 const rng = new Chance()
 /** In scenes that use input elements get the value of the input and select. */
-export function getInputs():{input:string,select:string}
-{
+export function getInputs():{input:string,select:string}{
   const input:any = document.getElementById('unique-input');
   const inputValue = input?.value||'';
   const select:any = document.getElementById('unique-select')
@@ -14,8 +12,7 @@ export function getInputs():{input:string,select:string}
   return {input:inputValue, select:selectValue};
 }
 /** Removes an element from the an array if the element is in the array. */
-export function removeItem<T>(array:T[],item:T):boolean
-{
+export function removeItem<T>(array:T[],item:T):boolean{
   const element = array.splice(array.indexOf(item),1);
   return Boolean(element.length);
 }
@@ -42,14 +39,9 @@ export function randomCheck(percent:number):boolean
   return rng.bool({likelihood:percent})
 }
 
-/**
- *  Fills missing weapon damageTypes
- *
- * @param { damageTypes } weaponDamages The original weapon damage stats (can have attributes missing)
- * @return { damageTypes } The stats with all the possible attributes.
- */
+/** Fills missing weapon damageTypes */
 export const fillMissingWeaponDamage = (function() {
-  const _defaultStats:damageTypes = {
+  const _defaultStats:FullDamageTypes = {
      heatdamage  :0,
      energydamage:0,
      frostdamage :0,
@@ -58,10 +50,10 @@ export const fillMissingWeaponDamage = (function() {
      piercedamage:0,
      poisondamage:0,
   }
-  return function(weaponDamages:damageTypes):damageTypes
-  {
+  return function(weaponDamages:DamageTypes):DamageTypes{
     const myStats = {..._defaultStats}
     for(const key of Object.keys(weaponDamages))
+      // @ts-ignore
       myStats[key] = weaponDamages[key]
     return weaponDamages;
   }
@@ -71,8 +63,7 @@ export function MakeFilledArray<T>(array_size: number,default_value: T): T[] {
   return Array.from(Array(array_size).map(_=>default_value))
 }
 
-export function floor_to(nuber_to_round:number,coefficient:number):number
-{
+export function floor_to(nuber_to_round:number,coefficient:number):number{
   return Math.floor(nuber_to_round/coefficient)*coefficient;
 }
 
@@ -84,7 +75,7 @@ export const set_theme = (()=>{
   const themes:{[key in theme_names_enum]:string} = {
     default:"./assets/theme/default.css"
   }
-  return (theme_name:theme_name=null)=>{
+  return (theme_name:theme_name|null=null)=>{
     if(!theme_name)theme_name=localStorage.getItem('theme') as theme_name;
     if(!theme_name)theme_name='default';
     //@ts-ignore
@@ -93,27 +84,23 @@ export const set_theme = (()=>{
   }
 })();
 
-export function compare_array<T>(array1:T[],array2:T[]): boolean
-{
+export function compare_array<T>(array1:T[],array2:T[]): boolean{
   if(array1.length != array2.length)return false;
   for(let i = 0; i < array1.length; i++)
     if(array1[i] !== array2[i])return false;
   return true;
 }
-export function set_union<T>(set: Set<T>, iterable: Iterable<T>):Set<T>
-{
+export function set_union<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
   const union_set = new Set<T>(set);
   for(const item of iterable)union_set.add(item);
   return union_set
 }
-export function set_intersection<T>(set: Set<T>, iterable: Iterable<T>):Set<T>
-{
+export function set_intersection<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
   const intersection_set = new Set<T>();
   for(const item of iterable) if(set.has(item))intersection_set.add(item);
   return intersection_set
 }
-export function set_complement<T>(target: Set<T>, all_elements: Iterable<T>)
-{
+export function set_complement<T>(target: Set<T>, all_elements: Iterable<T>){
   const complement_set = new Set<T>();
   for(const item of all_elements) if(!target.has(item))complement_set.add(item)
   return complement_set

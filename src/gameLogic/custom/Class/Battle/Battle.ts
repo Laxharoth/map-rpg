@@ -7,7 +7,7 @@ import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFo
 import { get_undefeated_target } from './Battle.functions';
 import { nextOption } from '../Scene/CommonOptions';
 import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
-import { is_item_disabled_function, selectItem, valid_target_function } from '../Scene/SceneUseItem';
+import { selectItem } from '../Scene/SceneUseItem';
 import { selectTarget } from '../Scene/SceneSelectTarget';
 import { BattleUseable } from '../Items/BattleUseable';
 export class Battle {
@@ -22,7 +22,7 @@ export class Battle {
   protected battleRoundScene: Scene[] = [];
   protected startRoundScene: Scene[] = [];
 
-  constructor(master_service: MasterService, enemy_formation: EnemyFormation, post_initialize_battle_options: (battle_options:SceneOptions[])=>void=null) {
+  constructor(master_service: MasterService, enemy_formation: EnemyFormation, post_initialize_battle_options: ((battle_options:SceneOptions[])=>void)|null=null) {
     this.player = master_service.partyHandler.user;
     this.party = master_service.partyHandler.party;
     this.enemy_formation = enemy_formation;
@@ -33,6 +33,7 @@ export class Battle {
         special.reset_initial_cooldown();
       })
     });
+    // @ts-ignore
     this.battle_options = this.initialize_battle_options();
     post_initialize_battle_options?.(this.battle_options);
   }
@@ -207,7 +208,7 @@ export class Battle {
     this.startRoundScene.push({sceneData:descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]})
     this.round(playerAction)
   },disabled:false};
-  protected initialize_battle_options(): SceneOptions[] {
+  protected initialize_battle_options(): (SceneOptions|null)[] {
     return [
       this.attack_option,
       this.shoot_option,
@@ -232,16 +233,17 @@ export class Battle {
       const battle_action =  this.player.useItem(item,target);
       this.round(battle_action)
     }
-    const is_valid_target:valid_target_function = (item:GameItem,target:Character)=>{
+    const is_valid_target = (item:GameItem,target:Character)=>{
       return (item.isPartyUsable&&this.party.includes(target))||
       (item.isEnemyUsable&&(this.enemy_formation.enemies as Character[]).includes(target))||
       (item.isSelfUsable&&this.player===(target))
     }
-    const is_item_disabled:is_item_disabled_function = (character:Character,item:GameItem)=>!item.isBattleUsable||item.disabled(this.player)
+    const is_item_disabled = (character:Character,item:GameItem)=>!item.isBattleUsable||item.disabled(this.player)
     return selectItem(this.master_service,
       this.player,get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies)),
       items,
       'battle',
+      // @ts-ignore
       use_item_on_battle,
       is_valid_target,
       is_item_disabled)

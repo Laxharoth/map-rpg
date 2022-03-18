@@ -20,49 +20,38 @@ export class ShopInterfaceComponent implements OnInit {
   items2Shop:GameItem[]=[];
   CharacterInvetoryAfterSale:GameItem[]=[];
   items2Character:GameItem[]=[];
-  constructor(private masterService:MasterService,private shopCurrentItemService:ShopCurrentItemService)
-  {
+  constructor(private masterService:MasterService,private shopCurrentItemService:ShopCurrentItemService){
     this.player = this.masterService.partyHandler.user;
-    this.shop = this.masterService.sceneHandler.currentScene.sceneData();
+    this.shop = this.masterService.sceneHandler.currentScene?.sceneData();
     this.reloadShopArrays();
   }
-
   ngOnInit(): void {}
-
-  setShopAmount(amount:number)
-  {
+  setShopAmount(amount:number){
     this.shopAmount = amount
   }
-  setUserAmount(amount:number)
-  {
+  setUserAmount(amount:number){
     this.playerAmount = amount
   }
-  shopSellItem(event:any)
-  {
+  shopSellItem(event:any){
     this.reloadShopArrays()
     this.shop.shopSellItem(event,this.shopAmount)
   }
-  shopRemoveBuyItem(event:any)
-  {
+  shopRemoveBuyItem(event:any){
     this.reloadShopArrays()
     this.shop.shopRemoveBuyItem(event,this.shopAmount)
   }
-  shopBuyItem(event:any)
-  {
+  shopBuyItem(event:any){
     this.reloadShopArrays()
     this.shop.shopBuyItem(event,this.playerAmount)
   }
-  shopRemoveSellItem(event:any)
-  {
+  shopRemoveSellItem(event:any){
     this.reloadShopArrays()
     this.shop.shopRemoveSellItem(event,this.playerAmount)
   }
-  unsetItem(event:Event)
-  {
+  unsetItem(event:Event){
     event?.stopPropagation();
     this.shopCurrentItemService.currentItem = null;
   }
-
   private reloadShopArrays() {
     this.shopInventoryAfterSale = this.shop.shopInventoryAfterSale;
     this.items2Shop = this.shop.sale.items2Shop;

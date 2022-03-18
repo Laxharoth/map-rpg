@@ -13,19 +13,17 @@ import { TimeValues } from 'src/gameLogic/custom/ClassHelper/Time';
 export class MapComponent implements OnInit {
 
   @Output() moveEvent = new EventEmitter<string>();
-
-  lockedMap:boolean;
+  lockedMap!:boolean;
   LockedWASD = {UP:false,DOWN:false,LEFT:false,RIGHT:false}
   currentCoordinates=[0,0];
-  currentMap:GameMap;
-  timeValues:TimeValues;
+  currentMap!:GameMap;
+  timeValues!:TimeValues;
 
-  private mapSubscription:Subscription;
-  private lockmapSubscription:Subscription;
-  private coordinatesSubscription: Subscription;
-  private timeSubscription: Subscription;
-
-  @ViewChild('mapwrapper') mapWrapper: ElementRef;
+  private mapSubscription!:Subscription;
+  private lockmapSubscription!:Subscription;
+  private coordinatesSubscription!: Subscription;
+  private timeSubscription!: Subscription;
+  @ViewChild('mapwrapper') mapWrapper!: ElementRef;
 
   constructor(private masterService:MasterService){
     this.InitializeSubscriptions();
@@ -45,15 +43,14 @@ export class MapComponent implements OnInit {
     this.timeSubscription?.unsubscribe();
   }
 
-  move(direction){
+  move(direction:string){
     this.moveEvent.emit(direction);
   }
   disabledRoom(room:roomFunction){
     return room?.disabled?.(this.masterService);
   }
 
-  private setMapOverflow()
-  {
+  private setMapOverflow(){
     const mapWrapper = this.mapWrapper.nativeElement;
     const currentTile=mapWrapper.getElementsByClassName('current')[0].parentNode;
     const { width:parentWidth,height:parentHeight } = mapWrapper.getBoundingClientRect();
@@ -66,8 +63,7 @@ export class MapComponent implements OnInit {
     mapWrapper.scrollLeft = x;
     mapWrapper.scrollTop = y;
   }
-  private setLockedWASD()
-  {
+  private setLockedWASD(){
     const [y,x] = this.currentCoordinates;
     this.LockedWASD = {
       UP:this.currentMap.rooms[y-1]?.[x]?false:true,

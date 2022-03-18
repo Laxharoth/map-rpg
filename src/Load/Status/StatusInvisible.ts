@@ -17,5 +17,5 @@ const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
   status["Invisible"]=StatusInvisible
 }
 const module_name="Invisible"
-const module_dependency=[]
+const module_dependency:string[]=[]
 export { register, module_name, module_dependency }

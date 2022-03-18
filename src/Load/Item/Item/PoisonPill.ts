@@ -23,5 +23,5 @@ const register: register_function = ({game_item}, {game_item:{GameItem}}, Factor
 }
 
 const module_name = 'PoisonPill'
-const module_dependency = ['Poison']
+const module_dependency:string[] = ['Poison']
 export { register, module_name, module_dependency};

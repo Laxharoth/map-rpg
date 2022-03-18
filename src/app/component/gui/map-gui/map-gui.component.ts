@@ -13,8 +13,7 @@ export class MapGuiComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  move(direction:any)
-  {
+  move(direction:any){
     this.masterService.mapHandler.moveInsideMap(direction);
   }
 

@@ -59,13 +59,13 @@ export interface ResistanceStats {
   poisonresistance ? : number;
 }
 export interface FullResistanceStats {
-  heatresistance ? : number;
-  energyresistance ? : number;
-  frostresistance ? : number;
-  slashresistance ? : number;
-  bluntresistance ? : number;
-  pierceresistance ? : number;
-  poisonresistance ? : number;
+  heatresistance : number;
+  energyresistance : number;
+  frostresistance : number;
+  slashresistance : number;
+  bluntresistance : number;
+  pierceresistance : number;
+  poisonresistance : number;
 }
 
 export type ActionOutput = [Scene[], string[]];

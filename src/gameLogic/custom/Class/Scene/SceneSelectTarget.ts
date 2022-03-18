@@ -5,21 +5,19 @@ import { nextOption } from "./CommonOptions";
 import { Scene, SceneOptions } from "./Scene";
 
 /** Returns options to select target. */
- export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene
- {
+ export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene{
    const targetsOptions:SceneOptions[] = [];
    const returnOption = nextOption(masterService,'return');
-   for(const target of targets)
-   {
+   for(const target of targets){
      targetsOptions.push({text:target.name,action:()=>{ playerAction([target]) },disabled:false})
    }
-   if(targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE)
-   {
+   if(targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE){
+     // @ts-ignore
      while(targetsOptions.length < MAXOPTIONSNUMBERPERPAGE-1) targetsOptions.push(null);
      targetsOptions.push(returnOption)
    }
-   else
-   {
+   else{
+     // @ts-ignore
      while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3) targetsOptions.push(null);
      targetsOptions.push(returnOption)
    }

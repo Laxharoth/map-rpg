@@ -6,14 +6,12 @@ import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
   providedIn: 'root'
 })
 export class ShopCurrentItemService {
-  private _currentItem: GameItem = null;
-  private _currentItemSubject = new Subject<GameItem>();
-  get currentItem():GameItem{return this._currentItem}
-  set currentItem(item:GameItem){this._currentItem = item;this._currentItemSubject.next(this._currentItem)}
-  constructor() { }
-
-  onCurrentItemChanged():Observable<GameItem>
-  {
+  private _currentItem: GameItem | null = null;
+  private _currentItemSubject = new Subject<GameItem | null>();
+  get currentItem():GameItem | null{return this._currentItem}
+  set currentItem(item:GameItem | null){this._currentItem = item;this._currentItemSubject.next(this._currentItem)}
+  constructor() {}
+  onCurrentItemChanged():Observable<GameItem | null>{
     return this._currentItemSubject.asObservable();
   }
 }

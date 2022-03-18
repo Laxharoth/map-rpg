@@ -41,7 +41,7 @@ export class TimeHandler implements storeable{
       }
   }
 }
-export const SetTimeHandler:FactoryFunction = (masterService:MasterService,options:timeHandlerStoreable)=>{
+export const SetTimeHandler:FactoryFunction<void,timeHandlerStoreable> = (masterService,options)=>{
   masterService.timeHandler.fromJson(options)
 }
 type timeHandlerStoreable = {

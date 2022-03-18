@@ -6,6 +6,7 @@ import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
 import { Quest, QuestOptions } from "../Class/Quest/Quest";
 import { QuestFactory } from "../Factory/QuestFactory";
 import { ObjectSet } from "../ClassHelper/ObjectSet";
+import { questnames } from "../Class/Quest/Quest.type";
 
 export class QuestHolder implements storeable
 {
@@ -18,7 +19,7 @@ export class QuestHolder implements storeable
     game_saver.register("QuestHolder",this)
   }
   add(quest:Quest){this.active_quest.push(quest)}
-
+  get(type:questnames){return this.active_quest.find(quest=>quest.type===type);}
   toJson():QuestHolderOptions
   {
     const options:QuestHolderOptions = {
@@ -47,6 +48,6 @@ type QuestHolderOptions = {
     dependency_gamesave_object_key:gamesavenames[]
 }
 
-export const loadQuest:FactoryFunction = (master_service:MasterService, options:QuestHolderOptions)=>{
+export const loadQuest:FactoryFunction<void,QuestHolderOptions> = (master_service, options)=>{
   master_service.QuestHolder.fromJson(options)
 }

@@ -12,15 +12,11 @@ export class ShopSaleComponentComponent implements OnInit {
 
   player:Character;
   shop:Shop;
-  constructor(private masterService:MasterService)
-  {
+  constructor(private masterService:MasterService){
     this.player = this.masterService.partyHandler.user;
-    this.shop = this.masterService.sceneHandler.currentScene.sceneData();
+    this.shop = this.masterService.sceneHandler.currentScene?.sceneData();
     if(!(this.shop instanceof Shop))this.shop = ErrorShop(this.masterService);
   }
-
   ngOnInit(): void {
   }
-
-
 }

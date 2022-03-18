@@ -3,7 +3,7 @@ import { Battle } from '../../../../gameLogic/custom/Class/Battle/Battle';
 import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
-import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
+import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
@@ -42,7 +42,7 @@ export function room(roomName: string): roomFunction {
           `${($flag('pet'))?`\n\nOMG there is a ${$flag('pet')}`:``}` +
           `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
       },options: [nextOptionInputs],fixed_options:[null,null,null,null,null]}
-      const roomOptions = [
+      const roomOptions:SceneOptions[] = [
         {
           text:'option1',
           action:function () {
@@ -66,15 +66,17 @@ export function room(roomName: string): roomFunction {
           action:()=>{
             let index = 0;
             let option = roomOptions[index];
-            while (option.text !== "option3" && index < roomOptions.length)
+            while (option?.text !== "option3" && index < roomOptions.length)
               option = roomOptions[++index];
             if (index < roomOptions.length) {
-              if (option.disabled) {
+              if (option?.disabled) {
                 option.disabled = false;
+                // @ts-ignore
                 this.text = "lock 3";
                 return;
               }
-              option.disabled = true;
+              option&&(option.disabled = true);
+              // @ts-ignore
               this.text = "unlock 3";
             }
           },
@@ -85,6 +87,7 @@ export function room(roomName: string): roomFunction {
           action:()=>{masterService.timeHandler.addTime("1h")},
           disabled:false
         },
+        // @ts-ignore
         (roomName === 'room24') ?{
           text:'Map2',
           action:()=>{masterService.mapHandler.loadRoom("room25")},
@@ -110,6 +113,7 @@ export function room(roomName: string): roomFunction {
           },
           disabled:false
         },
+        // @ts-ignore
         null,
         {
           text:'add 1 month',
@@ -206,14 +210,15 @@ export function room(roomName: string): roomFunction {
           masterService.sceneHandler.nextScene();
           if (randomCheck(10)) {
             new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" }),
-            function (battle_options:battle_options)
-            {
+            // @ts-ignore
+            function(battle_options:battle_options){
               const options=[
                 battle_options[0],
                 battle_options[3],
                 battle_options[7],
                 battle_options[13],,
               ]
+              // @ts-ignore
               battle_options.splice(0,battle_options.length,...options)
             }
             ).startRound()
@@ -226,10 +231,10 @@ export function room(roomName: string): roomFunction {
             masterService.sceneHandler.tailScene(firstExit, 'map');
           }
         },
-        beforeMoveTo(roomName) {
+        beforeMoveTo(roomName:string) {
           return true;
         },
-        afterMoveTo(roomName) {
+        afterMoveTo(roomName:string) {
           if (roomName !== 'room1') {
             masterService.timeHandler.addTime('5m')
           }

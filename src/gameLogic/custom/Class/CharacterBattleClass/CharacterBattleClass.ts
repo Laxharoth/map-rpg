@@ -23,14 +23,11 @@ export abstract class CharacterBattleClass implements storeable{
     pierceresistance: 0,
     poisonresistance: 0,
   };
-  max_core_stats:CoreStats[] = [1,2,3,4,5].map(level=>{return {aim:level*10,intelligence:level*10,speed:level*10,stamina:level*10,strenght:level*10}})
-
+  max_core_stats:FullCoreStats[] = [1,2,3,4,5].map(level=>{return {aim:level*10,intelligence:level*10,speed:level*10,stamina:level*10,strenght:level*10}})
   constructor() {}
-
-  upgrade_tree(masterService: MasterService):ArrayTree<Upgrade>
-  {
-    if(!(this._upgrade_tree instanceof ArrayTree))
-    {
+  upgrade_tree(masterService: MasterService):ArrayTree<Upgrade>{
+    if(!(this._upgrade_tree instanceof ArrayTree)){
+      // @ts-ignore
       const virtual_root_node:tree_node<Upgrade> = {value:null, children:this.initialize_upgrades(masterService)}
       this._upgrade_tree = new ArrayTree(virtual_root_node)
     }
@@ -38,7 +35,7 @@ export abstract class CharacterBattleClass implements storeable{
   }
   total_experience_to_next_level(level:number):number { return this.experience_cap[level]||0; }
   current_level_experience(level_stats:LevelStats):number { return level_stats.experience - this.total_experience_to_next_level(level_stats.level-1) }
-  max_core_at_level(level:number):CoreStats{return this.max_core_stats[level]}
+  max_core_at_level(level:number):FullCoreStats{return this.max_core_stats[level]}
   calculate_stats({
     strenght,
     stamina,
@@ -58,8 +55,7 @@ export abstract class CharacterBattleClass implements storeable{
       initiative: 0,
     }
   }
-  private initialize_upgrades(masterService: MasterService):tree_node<Upgrade>[]
-  {
+  private initialize_upgrades(masterService: MasterService):tree_node<Upgrade>[]{
     if(this._upgrade_tree instanceof ArrayTree)return [this._upgrade_tree.root];
     return fill_root(this._upgrade_tree);
     function fill_root(root: tree_node < UpgradeOptions > []) {
@@ -72,7 +68,7 @@ export abstract class CharacterBattleClass implements storeable{
       }
       return upgrade_tree_nodes;
     }
-    }
+  }
   toJson(): BattleClassOptions {
     return {
       Factory:"CharacterBattleClass",

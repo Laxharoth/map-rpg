@@ -42,5 +42,5 @@ const register: register_function = ({perk,status,reaction}, {perk:{Perk},reacti
   reaction["PoisonRushReaction"]=PoisonRushReaction
 }
 const module_name = "PoisonRush"
-const module_dependency = ["Poison"]
+const module_dependency:string[] = ["Poison"]
 export { register, module_name, module_dependency}

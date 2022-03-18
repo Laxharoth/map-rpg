@@ -8,39 +8,18 @@ import { MasterService } from 'src/app/service/master.service';
   styleUrls: ['./scene.component.css']
 })
 export class SceneComponent implements OnInit {
-
   //strings for befor and after Input and select
-  /**
-   * Text to be displayed before the input element
-   *
-   * @type {string}
-   * @memberof SceneComponent
-   */
-  beforeInput:string;
+  /** Text to be displayed before the input element */
+  beforeInput!:string;
   //strings for befor and after Input and select
-  /**
-   * Text to be displayed after the input element
-   *
-   * @type {string}
-   * @memberof SceneComponent
-   */
-  afterInput:string;
+  /** Text to be displayed after the input element */
+  afterInput!:string;
   //strings for befor and after Input and select
-  /**
-   * Text to be displayed before the select element
-   *
-   * @type {string}
-   * @memberof SceneComponent
-   */
-  beforeSelect:string;
+  /** Text to be displayed before the select element */
+  beforeSelect!:string;
   //strings for befor and after Input and select
-  /**
-   * Text to be displayed after the select element
-   *
-   * @type {string}
-   * @memberof SceneComponent
-   */
-  afterSelect:string;
+  /** Text to be displayed after the select element */
+  afterSelect!:string;
 
   //if input goes first and if has input and select
   inputGoesFirst:boolean = false;
@@ -48,30 +27,24 @@ export class SceneComponent implements OnInit {
   hasSelect:boolean = false;
 
   //initial value of input and placeholder
-  input:inputObject;
+  input!:inputObject;
   //select options
-  inputOptions:string[];
+  inputOptions!:string[];
 
   private descriptionSubscription:Subscription;
 
-  constructor(private masterService:MasterService)
-  {
+  constructor(private masterService:MasterService){
     //get original description
     this.updateDescription(this.masterService.sceneHandler.currentScene?.sceneData());
     this.descriptionSubscription = this.masterService.sceneHandler.onSetTextScene().subscribe((scene)=>{
       this.updateDescription(scene)
     });
   }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
   ngOnDestroy(): void {
     this.descriptionSubscription.unsubscribe()
   }
-
-  private updateDescription(description: string)
-  {
+  private updateDescription(description: string){
     this.beforeInput  = ''
     this.afterInput   = ''
     this.beforeSelect = ''

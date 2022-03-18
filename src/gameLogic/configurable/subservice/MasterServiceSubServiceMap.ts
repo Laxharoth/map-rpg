@@ -12,19 +12,30 @@ import { TimeHandler } from 'src/gameLogic/custom/subservice/time-handler';
 import { UniqueCharacterHandler } from 'src/gameLogic/custom/subservice/unique-character-handler';
 import { QuestHolder } from 'src/gameLogic/custom/subservice/quest-holder';
 
-
 export class MasterServiceSubServiceMap
 {
-  gameSaver?:GameSaver&GameSaverMap;
-  flagsHandler?:FlagHandlerService;
-  lockmap?:LockMapService;
-  sceneHandler?:SceneHandlerService;
-  mapHandler?:MapHandlerService;
-  partyHandler?:PartyService;
-  gameStateHandler?:GameStateService;
-  timeHandler?:TimeHandler;
-  FactWeb?:FactWeb;
-  UniqueCharacterHandler?:UniqueCharacterHandler;
-  InfoPageToggler?:InfoPageToggler
-  QuestHolder?:QuestHolder
+  // @ts-ignore
+  gameSaver:GameSaver&GameSaverMap;
+  // @ts-ignore
+  flagsHandler:FlagHandlerService;
+  // @ts-ignore
+  lockmap:LockMapService;
+  // @ts-ignore
+  sceneHandler:SceneHandlerService;
+  // @ts-ignore
+  mapHandler:MapHandlerService;
+  // @ts-ignore
+  partyHandler:PartyService;
+  // @ts-ignore
+  gameStateHandler:GameStateService;
+  // @ts-ignore
+  timeHandler:TimeHandler;
+  // @ts-ignore
+  FactWeb:FactWeb;
+  // @ts-ignore
+  UniqueCharacterHandler:UniqueCharacterHandler;
+  // @ts-ignore
+  InfoPageToggler:InfoPageToggler
+  // @ts-ignore
+  QuestHolder:QuestHolder
 }

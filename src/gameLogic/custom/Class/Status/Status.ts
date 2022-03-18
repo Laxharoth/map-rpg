@@ -6,13 +6,11 @@ import { Reaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction
 import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack';
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
-import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { hashable } from "../../ClassHelper/ObjectSet";
 import { BattleCommand } from "../Battle/BattleCommand";
 
 /** Altered status that affect characters. */
-export abstract class Status implements storeable,hashable
-{
+export abstract class Status implements storeable,hashable{
   abstract type:statustype;
   protected masterService:MasterService;
   protected _stats_modifier:CalculatedStats = {};
@@ -36,12 +34,15 @@ export abstract class Status implements storeable,hashable
       excecute:()=>this.effect(target)
     };
   }
-  applyModifiers(character:Character):void
-  {
-    for(const [key,value] of Object.entries(this._stats_modifier))
-    { character.calculated_stats[key] += value}
-    for(const [key,value] of Object.entries(this._resistance_stats))
-    { character.calculated_resistance[key] += value}
+  applyModifiers(character:Character):void{
+    for(const [key,value] of Object.entries(this._stats_modifier)){
+      // @ts-ignore
+      character.calculated_stats[key] += value
+    }
+    for(const [key,value] of Object.entries(this._resistance_stats)){
+      // @ts-ignore
+      character.calculated_resistance[key] += value
+    }
   }
   /** Check if the status can be added to the character. */
   canApply(target: Character):boolean{return true;}

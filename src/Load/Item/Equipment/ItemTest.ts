@@ -1,7 +1,7 @@
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
-import { damageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
+import { DamageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput, CalculatedStats, EnergyStats, FullCalculatedStats, FullCoreStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput, CalculatedStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { ArrayTree, tree_node } from "src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree";
 import { experience_cap } from "src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass";
 import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
@@ -48,14 +48,14 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
   class MeleeTest extends MeleeWeapon
   {
     protected _stats_modifier:CalculatedStats = {physical_attack:20}
-    protected _damageTypes:damageTypes = {bluntdamage:30};
+    protected _damageTypes:DamageTypes = {bluntdamage:30};
     readonly type:"MeleeTest"="MeleeTest"
     get name(): string { return 'Melee test'; }
     canEquip(character: Character): boolean { return true; }
   }
   class RangedTest extends RangedWeapon
   {
-    protected _damageTypes:damageTypes = {piercedamage:20,energydamage:10}
+    protected _damageTypes:DamageTypes = {piercedamage:20,energydamage:10}
     readonly type:"RangedTest"="RangedTest"
     get name(): string { return 'Ranged Test'; }
     canEquip(character: Character): boolean { return true; }
@@ -113,7 +113,7 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
       speed:25,
       intelligence:25,
     };
-    initial_resistance_stats: ResistanceStats = {
+    initial_resistance_stats: FullResistanceStats = {
       heatresistance:10,
       energyresistance:10,
       frostresistance:10,
@@ -204,6 +204,6 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
   character_battle_class["TestMainCharacterBattleClass"]=TestMainCharacterBattleClass
 }
 const module_name="EquipmentTest";
-const module_dependency=[]
+const module_dependency:string[]=[]
 
 export {register, module_name, module_dependency}

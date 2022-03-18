@@ -11,8 +11,7 @@ import { MasterService } from 'src/app/service/master.service';
 import { gamesavenames } from 'src/gameLogic/configurable/subservice/game-saver.type';
 import { UniqueCharacterHandler } from './unique-character-handler';
 
-export class FactWeb implements storeable
-{
+export class FactWeb implements storeable{
   type:"FactWeb"="FactWeb";
   static readonly TIME_INTERVAL_2_SPREAD = 1440;
   private static readonly SPREAD_COEFFICIENT = 20;
@@ -20,7 +19,7 @@ export class FactWeb implements storeable
   private unique_character_handler:UniqueCharacterHandler;
   private known_facts:Map<factName,Fact> = new Map();
   private character_map:Map<string,CharacterDataWebData> = new Map();
-  private spread_subscriptions:Subscription;
+  private spread_subscriptions:Subscription|null = null;
   private create_subscriptions:()=>void
 
   /** Stores a group of facts, then spreads them through a graph of characters. */
@@ -31,8 +30,7 @@ export class FactWeb implements storeable
       if(!this.spread_subscriptions)this.spread_subscriptions = time_handler.onTimeChanged().subscribe( time => this.spread_fact(time) )
     }
   }
-  private initialize_character_map()
-  {
+  private initialize_character_map(){
     for(const character of this.unique_character_handler.unique_characters)
       this.initialize_character(character);
   }
@@ -43,48 +41,42 @@ export class FactWeb implements storeable
     });
   }
   get_fact(fact_name:factName){ return this.known_facts.get(fact_name); }
-  set_fact(fact_name:factName,state:any,importance:fact_importance=1,who_knows:UniqueCharacter[])
-  {
+  set_fact(fact_name:factName,state:any,importance:fact_importance=1,who_knows:UniqueCharacter[]){
     let fact = this.known_facts.get(fact_name);
     if(fact)return fact.state = state;
     fact = new Fact(state,importance);
     this.known_facts.set(fact_name,fact);
     this.create_subscriptions();
-    for(const character of who_knows)
-    {
+    for(const character of who_knows){
       if(!this.character_map.get(character.uuid))this.initialize_character(character);
-      this.character_map.get(character.uuid).known_facts.add(fact_name);
+      this.character_map.get(character.uuid)?.known_facts.add(fact_name);
     }
   }
-  register_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness)
-  {
+  register_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness){
     this.register_directional_character_link(character1,character2,acquaintace)
     this.register_directional_character_link(character2,character1,acquaintace)
   }
-  register_directional_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness)
-  {
+  register_directional_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness){
     if(character1===character2)return;
     if(!this.character_map.get(character1.uuid))this.initialize_character(character1);
     if(!this.character_map.get(character2.uuid))this.initialize_character(character2);
-    this.character_map.get(character1.uuid).acquaintacer_map.set(character2.uuid,acquaintace);
+    this.character_map.get(character1.uuid)?.acquaintacer_map.set(character2.uuid,acquaintace);
   }
-  spread_fact(time:Time):void
-  {
+  spread_fact(time:Time):void{
     let surrounding_characters_know_the_same_things = true;
     if(this.last_spread_time < time.getMinutes() - FactWeb.TIME_INTERVAL_2_SPREAD)return;
     this.last_spread_time=floor_to(time.getMinutes(),FactWeb.TIME_INTERVAL_2_SPREAD);
     const mark_for_spread:(()=>void)[]=[]
     for(const [,{known_facts:facts,acquaintacer_map:acquaintaces}] of this.character_map)
-    for(const [acquaintace,closeness] of acquaintaces)
-    {
-      const acquaintace_facts = this.character_map.get(acquaintace).known_facts;
+    for(const [acquaintace,closeness] of acquaintaces){
+      const acquaintace_facts = this.character_map.get(acquaintace)?.known_facts;
+      if( !acquaintace_facts ){ continue; }
       surrounding_characters_know_the_same_things &&= set_equality(facts,acquaintace_facts);
       //no need to spread if both know the same facts
       if(surrounding_characters_know_the_same_things)continue;
-      for(const fact_name of facts )
-      {
-        if(acquaintace_facts.has(fact_name))continue;
+      for(const fact_name of facts ){
         const fact = this.known_facts.get(fact_name);
+        if(!fact || acquaintace_facts.has(fact_name)){continue;}
         if(randomCheck(FactWeb.SPREAD_COEFFICIENT*fact.importance*closeness))
         //only mark for spread, prevent spread the same fact in the same iteration
         mark_for_spread.push(()=>{acquaintace_facts.add(fact_name)});
@@ -103,11 +95,9 @@ export class FactWeb implements storeable
     const known_facts_per_character:[character_id:string,facts:factName[]][]=[];
     //Store Facts
     for(const [name,fact] of this.known_facts.entries()) { known_facts.push([name,fact.toJson()]) }
-    for(const [character,{known_facts:facts,acquaintacer_map:acquaintaces}] of this.character_map)
-    {
+    for(const [character,{known_facts:facts,acquaintacer_map:acquaintaces}] of this.character_map){
       //Store relationships
-      for(const [acquaintace,closeness] of acquaintaces)
-      {
+      for(const [acquaintace,closeness] of acquaintaces){
         acquaintace_graph.add(hash_acquanintace(character,acquaintace,closeness));
       }
       //Store fact known per character
@@ -129,15 +119,13 @@ export class FactWeb implements storeable
     this.character_map.clear();
     this.initialize_character_map();
     //Load Facts
-    for(const [factname,fact_options] of options.known_facts)
-    {
+    for(const [factname,fact_options] of options.known_facts){
       const fact = new Fact('',0)
       fact.fromJson(fact_options)
       this.known_facts.set(factname,fact)
     }
     //Load relationships
-    for(const hashed_relationship of options.acquaintace_graph)
-    {
+    for(const hashed_relationship of options.acquaintace_graph){
       const [character1_id,character2_id,closeness] = unhash_acquaintance(hashed_relationship)
       this.register_directional_character_link(
         this.unique_character_handler.get_character(character1_id),
@@ -147,13 +135,13 @@ export class FactWeb implements storeable
     }
     this.last_spread_time=options.last_spread_time;
     //Load fact known per character
-    for(const [character_id,facts] of options.known_facts_per_character)
-    {
+    for(const [character_id,facts] of options.known_facts_per_character){
+      // @ts-ignore
       this.character_map.get( character_id )&&(this.character_map.get( character_id ).known_facts=new Set(facts))
     }
   }
 }
-export const SetDataweb:FactoryFunction = (masterService:MasterService, options:DataWebStoreable) =>{
+export const SetDataweb:FactoryFunction<void,DataWebStoreable> = (masterService, options) =>{
   masterService.FactWeb.fromJson(options);
 }
 
@@ -167,8 +155,7 @@ type DataWebStoreable = {
   known_facts_per_character:[character_id:string,facts:factName[]][]
 }
 
-class Fact implements storeable
-{
+class Fact implements storeable{
   type:"Fact"="Fact";
   state:any;
   private _importance:fact_importance;
@@ -202,8 +189,7 @@ type FactStoreable = {
 const HASH_SEPARATOR = "<!¡>"
 function hash_acquanintace(character1_id:string,character2_id:string,closeness:number):string
 { return [character1_id,character2_id,closeness].join(HASH_SEPARATOR) }
-function unhash_acquaintance(hash: string):hashed_acquanitance
-{
+function unhash_acquaintance(hash: string):hashed_acquanitance{
   const unhash:[string,string,number] = hash.split(HASH_SEPARATOR) as any;
   unhash[2] = Number.parseInt(unhash[2].toString())
   return unhash;

@@ -34,8 +34,9 @@ const register:register_function = ({status},{status:status_constructor},Factory
     get tags(): tag[] { return super.tags.concat(['poison'])}
   }
   status["Poison"]=StatusPoison
+  //@ts-ignore
   status_constructor["Poison"]=StatusPoison
 }
 const module_name = "Poison";
-const module_dependency = [];
+const module_dependency:string[] = [];
 export { register, module_name, module_dependency}

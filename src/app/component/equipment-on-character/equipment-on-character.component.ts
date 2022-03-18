@@ -7,7 +7,7 @@ import { Character } from 'src/gameLogic/custom/Class/Character/Character';
   styleUrls: ['./equipment-on-character.component.css']
 })
 export class EquipmentOnCharacterComponent implements OnInit {
-  @Input() character: Character;
+  @Input() character!: Character;
 
   constructor() { }
 

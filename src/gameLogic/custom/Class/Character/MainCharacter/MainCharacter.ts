@@ -1,20 +1,13 @@
 import { MasterService } from "src/app/service/master.service";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
-import { CharacterBattleClassFactory } from "src/gameLogic/custom/Factory/CharacterBattleClassFactory";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { BattleCommand } from "../../Battle/BattleCommand";
-import { CharacterBattleClass } from "../../CharacterBattleClass/CharacterBattleClass";
-
-export class MainCharacter extends UniqueCharacter
-{
+export class MainCharacter extends UniqueCharacter{
   protected _name: string;
   type:characterType = "main-character";
   uuid = this.type;
-  protected character_battle_class:CharacterBattleClass;
-
-  constructor(masterService:MasterService,name:string='', character_battle_type:string=null)
-  {
+  constructor(masterService:MasterService,name:string='', character_battle_type:string|null=null){
     super(masterService,character_battle_type);
     masterService.gameSaver.register("MainCharacter",this)
     this._name = name;

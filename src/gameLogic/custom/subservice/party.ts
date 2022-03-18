@@ -13,18 +13,21 @@ import { UniqueCharacterHandler } from './unique-character-handler';
 export class PartyService implements storeable{
   type:"PartyService"="PartyService"
   private _user: UniqueCharacter;
-  private _party: [PersistentCharacter,PersistentCharacter] = [null, null];
+  private _party: [PersistentCharacter|null,PersistentCharacter|null] = [null, null];
   persistents: { [key: string]: PersistentCharacter } = {};
 
   private partySubject = new Subject < Character > ();
-  private partyMemberSubject = new Subject < [number, Character] > ();
+  private partyMemberSubject = new Subject < [number, Character | null]> ();
   private battle_end = new Subject< [status:battle_end_status,enemy:EnemyFormation] > ();
   private unique_character_handler:UniqueCharacterHandler;
   private _enemyFormation:EnemyFormation;
   get enemyFormation():EnemyFormation { return this._enemyFormation}
   set enemyFormation(value:EnemyFormation) { this._enemyFormation = value; }
   constructor(gameSaver: GameSaver,unique_character_handler:UniqueCharacterHandler) {
+    // @ts-ignore
     this._user = null;
+    // @ts-ignore
+    this._enemyFormation = null;
     this.unique_character_handler = unique_character_handler;
     gameSaver.register("Party",this)
   }
@@ -32,6 +35,7 @@ export class PartyService implements storeable{
     return this._user as UniqueCharacter;
   }
   get party(): UniqueCharacter[] {
+    // @ts-ignore
     return this._party.filter(character => character !== null);
   }
   getPersistent(characterType: characterType) {
@@ -54,7 +58,7 @@ export class PartyService implements storeable{
   battle_ended(status:battle_end_status){ this.battle_end.next([status,this.enemyFormation]) }
 
   onUpdateUser(): Observable<Character>{ return this.partySubject.asObservable(); }
-  onUpdatePartyMember(): Observable<[number, Character]>{ return this.partyMemberSubject.asObservable(); }
+  onUpdatePartyMember(): Observable<[number, Character|null]>{ return this.partyMemberSubject.asObservable(); }
   onBattleEnded(): Observable<[status:battle_end_status,enemy:EnemyFormation]>{ return this.battle_end.asObservable(); }
 
   get userParty():Character[]{
@@ -73,20 +77,19 @@ export class PartyService implements storeable{
       characterUiPosition2: this._party[1]?.uuid||null,
     }
   }
-  fromJson(options:PartyStoreable)
-  {
-    this.setPartyMember(this.unique_character_handler.get_character(options.characterUiPosition1)||null,0);
-    this.setPartyMember(this.unique_character_handler.get_character(options.characterUiPosition2)||null,1);
+  fromJson(options:PartyStoreable){
+    this.setPartyMember(this.unique_character_handler.get_character(options.characterUiPosition1||"")||null,0);
+    this.setPartyMember(this.unique_character_handler.get_character(options.characterUiPosition2||"")||null,1);
   }
 }
 export type PartyStoreable = {
   Factory: "CurrentParty";
   type: 'party';
   dependency_gamesave_object_key: ["PersistentCharacter"];
-  characterUiPosition1: string;
-  characterUiPosition2: string;
+  characterUiPosition1: string|null;
+  characterUiPosition2: string|null;
 }
-export const SetCurrentParty: FactoryFunction = (masterService: MasterService, options: PartyStoreable) => {
+export const SetCurrentParty: FactoryFunction<void,PartyStoreable> = (masterService, options) => {
   masterService.partyHandler.fromJson(options)
 }
 

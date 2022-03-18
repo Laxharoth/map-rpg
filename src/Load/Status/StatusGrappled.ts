@@ -11,18 +11,17 @@ import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBat
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:register_function = ({status,special_attack,perk},{status:{Status,StatusBattle},special_attack:{SpecialAttack},perk:{Perk}},Factory)=>{
-class StatusGrappled extends StatusBattle  implements StatusPreventAttack
-{
+class StatusGrappled extends StatusBattle  implements StatusPreventAttack{
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
   readonly type:"Grappled"="Grappled";
   get name(): string { return 'Grappled'; }
   protected DURATION: number = Infinity;
   private _source:Character;
-  private _target:Character;
+  private _target!:Character;
 
-  constructor(masterService:MasterService,source:Character=null)
-  {
+  constructor(masterService:MasterService,source:Character|null=null){
       super(masterService)
+      // @ts-ignore
       this._source = source;
   }
 
@@ -31,8 +30,7 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack
   }
   protected effect(target: Character): ActionOutput { return [[],[`${target.name} is being grabbed by ${this._source.name}`]]; }
   applyModifiers(character: Character): void { character.calculated_stats.initiative = 0; }
-  onStatusGainded(target: Character):ActionOutput
-  {
+  onStatusGainded(target: Character):ActionOutput{
     this._target = target;
     return super.onStatusGainded(target);
   }
@@ -51,33 +49,29 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack
     this._target=options["target"]
   }
 }
-class StatusGrappling extends StatusBattle implements StatusPreventAttack
-{
+class StatusGrappling extends StatusBattle implements StatusPreventAttack{
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
   readonly type: "Grappling"="Grappling";
   get name(): statustype { return 'Grappling'; }
   protected DURATION: number = 4;
-  private _source:Character;
+  private _source!:Character;
   private _target:Character;
 
-  constructor(masterService:MasterService,target:Character=null)
-  {
+  constructor(masterService:MasterService,target:Character|null=null){
       super(masterService);
+      // @ts-ignore
       this._target = target;
   }
-
   get description(): string {
   return 'Being grabbed by something impedes movements.';
   }
   protected effect(target: Character): ActionOutput { return [[],[`${target.name} is grabbing ${this._target.name}`]]; }
-  onStatusGainded(target: Character):ActionOutput
-  {
+  onStatusGainded(target: Character):ActionOutput{
     this._source = target;
     const description:ActionOutput = [[],[`${target.name} is grabbing ${this._target.name}`]];
     return Factory.pushBattleActionOutput(super.onStatusGainded(target),description);
   }
-  onStatusRemoved(target: Character): ActionOutput
-  {
+  onStatusRemoved(target: Character): ActionOutput{
     const effectEndedDescription = this._target.removeStatus('Grappled');
     return Factory.pushBattleActionOutput(super.onStatusRemoved(target), effectEndedDescription);
   }
@@ -93,8 +87,7 @@ class StatusGrappling extends StatusBattle implements StatusPreventAttack
     this._target=options["target"]
   }
 }
-class SpecialGrab extends SpecialAttack
-{
+class SpecialGrab extends SpecialAttack{
   protected COOLDOWN = 6;
   readonly type: "Grab"="Grab";
   get name(): specialsname { return 'Grab' }
@@ -116,15 +109,14 @@ class PerkGrappler extends Perk {
   readonly specialGrab = new SpecialGrab(this.masterService)
   readonly type: "Grappler"="Grappler";
   get name():string { return 'Grappler'; }
-
   get specials() :SpecialAttack[]{return [this.specialGrab]}
 }
-status["Grappling"]=StatusGrappling
-status["Grappled"]=StatusGrappled
-special_attack["Grab"]=SpecialGrab
-perk["Grappler"]=PerkGrappler
+status["Grappling"]=StatusGrappling;
+status["Grappled"]=StatusGrappled;
+special_attack["Grab"]=SpecialGrab;
+perk["Grappler"]=PerkGrappler;
 }
 
 const module_name = "Grab"
-const module_dependency = []
+const module_dependency:string[] = []
 export { register, module_name, module_dependency }

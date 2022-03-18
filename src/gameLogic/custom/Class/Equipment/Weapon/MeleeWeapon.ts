@@ -1,4 +1,4 @@
-import { damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
+import { DamageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Weapon } from 'src/gameLogic/custom/Class/Equipment/Weapon/Weapon';
@@ -36,7 +36,7 @@ export class MeleeUnharmed extends MeleeWeapon
   readonly onePunch = new OnePunch(this.masterService);
   maxStack = 0;
   protected _stats_modifier: CalculatedStats = {accuracy:30};
-  protected _damageTypes:damageTypes = {bluntdamage:10};
+  protected _damageTypes:DamageTypes = {bluntdamage:10};
   readonly type:"MeleeUnharmed"="MeleeUnharmed";
   get name(): string { return 'hand'; }
   canEquip(character: Character): boolean { return true; }

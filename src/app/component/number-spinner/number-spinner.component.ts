@@ -9,7 +9,7 @@ export class NumberSpinnerComponent implements OnInit {
 
   @Input() spinnerType:'horizontal'|'vertical'='horizontal';
   @Input() min:number=0;
-  @Input() value:number;
+  @Input() value!:number;
   @Input() max:number=100;
   @Input() step:number=1;
   @Input() show_input:boolean = true;
@@ -22,8 +22,7 @@ export class NumberSpinnerComponent implements OnInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {}
-  changeInput(change:number)
-  {
+  changeInput(change:number){
     const new_value = Math.max(
       this.min,
       Math.min(this.max,this.value+change)
@@ -34,8 +33,7 @@ export class NumberSpinnerComponent implements OnInit {
     this.value = new_value;
     this.emmitChange()
   }
-  emmitChange()
-  {
+  emmitChange(){
     this.SpinnerChangedEvent.emit(this.value);
   }
 }

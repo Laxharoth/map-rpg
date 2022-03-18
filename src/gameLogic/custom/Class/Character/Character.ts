@@ -27,8 +27,8 @@ export abstract class Character implements storeable
   level_stats:LevelStats;
   current_energy_stats:EnergyStats;
   /* The original stats of the character. */
-  core_stats:CoreStats;
-  original_resistance:ResistanceStats;
+  core_stats:FullCoreStats;
+  original_resistance:FullResistanceStats;
   /* The current status of the character after appling equipment during a battle round. */
   calculated_stats:FullCalculatedStats;
   calculated_resistance:FullResistanceStats;
@@ -47,7 +47,7 @@ export abstract class Character implements storeable
   get name(): string{ return this._name};
   protected readonly masterService:MasterService
   private __bypass_scene__ = false;
-  constructor(masterService:MasterService, character_battle_class:string=null)
+  constructor(masterService:MasterService, character_battle_class:string|null=null)
   {
     this.character_battle_class=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:character_battle_class||'CharacterBattleClassEmpty'})
     this.inventory = new Inventory(masterService);
@@ -56,6 +56,10 @@ export abstract class Character implements storeable
     this.level_stats = {experience:0, upgrade_point:0, perk_point:0, level:0, upgrade_path:[]}
     this.core_stats = {...this.character_battle_class.initial_physic_stats};
     this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
+    //@ts-ignore
+    this.calculated_stats = {};
+    //@ts-ignore
+    this.calculated_resistance = {};
     this.calculateStats();
     this.current_energy_stats = { hitpoints: this.calculated_stats.hitpoints, energypoints:this.calculated_stats.energypoints};
     this.applyStatus();
@@ -121,9 +125,9 @@ export abstract class Character implements storeable
   /** Adds perk if does not already has it. */
   addPerk(perk:Perk):void { this.perks.push(perk); }
   /** Returns a perk if the character has it. */
-  getPerk(perkOrName:Perk|perkname):Perk
+  getPerk(perkOrName:Perk|perkname):Perk|null
   {
-    if(perkOrName instanceof Perk)return this.perks.get(perkOrName.hash());
+    if(perkOrName instanceof Perk){ return this.perks.get(perkOrName.hash())||null; }
     for(const perk of this.perks)if(perk.name === perkOrName)return perk;
     return null;
   }
@@ -158,12 +162,11 @@ export abstract class Character implements storeable
     return new EmptyCommand(this, targets)
   }
   /** Iterator of character status. */
-  iterStatus    = function*():Generator<Status, void,unknown>
-                  {
-                    for(const status of this.status) yield status;
-                    for(const status of this.timed_status) yield status;
-                    for(const status of this.battle_status) yield status;
-                  }
+  *iterStatus():Generator<Status, void,unknown>{
+    for(const status of this.status) yield status;
+    for(const status of this.timed_status) yield status;
+    for(const status of this.battle_status) yield status;
+  }
   /**
    * Checks all the reactions of the character.
    * Won't react if character is paralized, zero hitpoints or the battle ended.
@@ -275,7 +278,7 @@ export abstract class Character implements storeable
         source:this, target:targets, tags:item.tags,
         excecute:()=>{
           if(item.isSingleTarget)return tryAttack(this,targets[0],(target: Character)=>item.itemEffect(this,target))
-          return targets.reduce( (descriptions,target)=>pushBattleActionOutput(item.itemEffect(this,target),descriptions),[[],[]] )
+          return targets.reduce( (descriptions:ActionOutput,target)=>pushBattleActionOutput(item.itemEffect(this,target),descriptions),[[],[]] )
         }
       }
     return new EmptyCommand(this,targets);

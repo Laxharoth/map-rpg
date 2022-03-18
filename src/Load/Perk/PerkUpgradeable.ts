@@ -28,5 +28,5 @@ const register: register_function = ({perk}, {perk:{Perk}}, Factory) => {
   perk["PerkUpgradeable"]=PerkUpgradeable
 }
 const module_name = "PerkUpgradeable"
-const module_dependency = []
+const module_dependency:string[] = []
 export { register, module_name, module_dependency}

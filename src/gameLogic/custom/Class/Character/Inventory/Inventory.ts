@@ -16,7 +16,7 @@ export class Inventory implements storeable {
     this.master_service = master_service;
   }
   /** Adds Item to the inventory. */
-  addItem(item: GameItem): void {
+  addItem(item: GameItem|null): void {
     if (!item) {
       console.warn("Item not found, Is null or undefined.");
       return;
@@ -53,17 +53,16 @@ export class Inventory implements storeable {
   }
   /** Use an item from inventory */
   useItem(itemIndexOrItem: GameItem, source:Character, targets: Character[]): ActionOutput {
-    let itemIndex: number;
+    let itemIndex: number = -1;
     if (itemIndexOrItem instanceof GameItem) itemIndex = this.items.indexOf(itemIndexOrItem);
     if (itemIndex < 0) return [[],[]]
     const item = this.items[itemIndex];
     return item.itemEffect(source, targets)
   }
-
   toJson(): InventoryOptions {
     return {
-      Factory: null,
-      type: null,
+      Factory: "Item",
+      type: "",
       inventory_size: this.inventory_size,
       items: this.items.map(item => item.toJson())
     }
@@ -75,8 +74,8 @@ export class Inventory implements storeable {
 }
 
 export type InventoryOptions = {
-  Factory: null;
-  type: null;
+  Factory: "Item";
+  type: string;
   inventory_size: number;
   items: ItemStoreable[]
 }

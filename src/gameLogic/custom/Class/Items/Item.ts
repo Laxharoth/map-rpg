@@ -9,8 +9,7 @@ import { BattleUseable } from './BattleUseable';
 import { GameElementDescriptionSection } from '../GameElementDescription/GameElementDescription';
 
 /** Model of game items. */
-export abstract class GameItem implements BattleUseable, storeable
-{
+export abstract class GameItem implements BattleUseable, storeable{
   /** The max number of items than can be held in a single stack. */
   readonly maxStack: number = 9;
   /** The number of items in the stack. */
@@ -47,16 +46,13 @@ export abstract class GameItem implements BattleUseable, storeable
     }
     return  description
   };
-
   protected abstract _itemEffect(user:Character,target: Character):ActionOutput;
   /** The tags associated with the item. */
   get tags(): tag[] {return []};
-  breakIntoStacks():GameItem[]
-  {
+  breakIntoStacks():GameItem[]{
     const copy = Object.create(this);
     const stacks:GameItem[] = [];
-    while(copy.amount>0)
-    {
+    while(copy.amount>0){
       const item = Object.create(copy);
       item.amount = Math.min(copy.amount,copy.maxStack);
       copy.amount-=item.amount;
@@ -65,20 +61,17 @@ export abstract class GameItem implements BattleUseable, storeable
     return stacks;
   }
   /** Stores the amount of items in the stack. */
-  toJson():ItemStoreable
-  {
+  toJson():ItemStoreable{
     return {Factory:"Item",type:this.type,amount:this.amount}
   }
   /** Loads the amount of items in the stack. */
-  fromJson(options: ItemStoreable): void
-  {
+  fromJson(options: ItemStoreable): void{
     const {amount=null,basePrice=null} = options;
     amount&&(this.amount = amount);
     basePrice&&(this.basePrice = basePrice);
   }
-  private _description:GameElementDescriptionSection[];
-  get description(): GameElementDescriptionSection[]
-  {
+  private _description:GameElementDescriptionSection[]=[];
+  get description(): GameElementDescriptionSection[]{
     if(!this._description)
       this._description = [
         {name:"name",section_items:[{name:'name',value:this.name}]},
@@ -87,14 +80,11 @@ export abstract class GameItem implements BattleUseable, storeable
       ]
     return this._description
   }
-  protected get added_description_sections():GameElementDescriptionSection[]
-  {
+  protected get added_description_sections():GameElementDescriptionSection[]{
     return []
   }
 }
-
-export function fillItemStoreable(item_data:{type:itemname,[key:string]:any})
-{
+export function fillItemStoreable(item_data:{type:itemname,[key:string]:any}){
   const item_storeable:ItemStoreable = { Factory:"Item", type:item_data.type }
   item_storeable.amount = item_data?.amount;
   item_storeable.basePrice = item_data?.basePrice;
@@ -106,8 +96,7 @@ export type ItemStoreable ={
   amount?:number;
   basePrice?:number;
 }
-export interface TagsDescriptionSection
-{
+export interface TagsDescriptionSection{
   name:'tags';
   section_items:{name:'tag';value:tag}[]
 }

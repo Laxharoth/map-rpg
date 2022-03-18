@@ -17,13 +17,13 @@ export class SelectPerkGuiComponent implements OnInit {
 
   get fixed_path():number[]{return this.character.level_stats.upgrade_path};
   selected_path:number[]=[];
-  private character: UniqueCharacter;
+  private character!: UniqueCharacter;
   private get_character_subsciption:Subscription;
   constructor(private masterService:MasterService) {
     this.get_character_subsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
       this.initialize_scene(scene)
     })
-    this.initialize_scene(masterService.sceneHandler.currentScene)
+    this.initialize_scene(masterService.sceneHandler.currentScene as Scene)
     masterService.sceneHandler.setScene(false);
   }
 
@@ -43,13 +43,13 @@ export class SelectPerkGuiComponent implements OnInit {
   {
     const new_selected_path = this.selected_path.slice(0,depth)
     new_selected_path.push(index)
+    // @ts-ignore
     new_selected_path.push(null)
     this.selected_path = new_selected_path;
   }
 
-  private _option_select:SceneOptions;
-  get option_select():SceneOptions
-  {
+  private _option_select!:SceneOptions;
+  get option_select():SceneOptions{
     const masterService = this.masterService;
     const selected_path = this.selected_path;
     const fixed_path = this.fixed_path;
@@ -71,15 +71,13 @@ export class SelectPerkGuiComponent implements OnInit {
       }
     return this._option_select;
   }
-  private _option_skip:SceneOptions;
-  get option_skip():SceneOptions
-  {
+  private _option_skip!:SceneOptions;
+  get option_skip():SceneOptions{
     if(!this._option_skip)this._option_skip = nextOption(this.masterService,'skip');
     return this._option_skip;
   }
-  private _option_reset:SceneOptions
-  get option_reset():SceneOptions
-  {
+  private _option_reset!:SceneOptions
+  get option_reset():SceneOptions{
     if (!this._option_reset) this._option_reset = {
       text: 'reset',
       action: () => {
@@ -89,16 +87,18 @@ export class SelectPerkGuiComponent implements OnInit {
     }
     return this._option_reset;
   }
-  private initialize_scene(description:Scene)
-  {
+  private initialize_scene(description:Scene){
     const character = description.sceneData();
     if(!(character instanceof UniqueCharacter))return;
     if(character.level_stats.perk_point===0) { this.masterService.sceneHandler.nextScene(false); return; }
     this.character = character;
+    //@ts-ignore
     this.selected_path = [...this.character.level_stats.upgrade_path,null]
     const fixed_options = description.fixed_options;
-    fixed_options[0] = this.option_select;
-    fixed_options[1] = this.option_reset;
-    fixed_options[4] = this.option_skip;
+    if(fixed_options){
+      fixed_options[0] = this.option_select;
+      fixed_options[1] = this.option_reset;
+      fixed_options[4] = this.option_skip;
+    }
   }
 }

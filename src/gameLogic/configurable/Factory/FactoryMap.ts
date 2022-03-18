@@ -39,20 +39,36 @@ export type factoryname= `${FactoryName}`;
 export type FactoryFunction<T=any,U=StoreableType> = (masterService:MasterService,options:U)=>T;
 
 export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
+  // @ts-ignore
   Item: ItemFactory,
+  // @ts-ignore
   Character: CharacterFactory,
+  // @ts-ignore
   Perk: PerkFactory,
+  // @ts-ignore
   Status: StatusFactory,
+  // @ts-ignore
   Flags: MasterFlagsSetter,
+  // @ts-ignore
   Shop: ShopFactory,
+  // @ts-ignore
   CurrentParty: SetCurrentParty,
+  // @ts-ignore
   FactWeb: SetDataweb,
+  // @ts-ignore
   TimeHandler: SetTimeHandler,
+  // @ts-ignore
   Upgrade:UpgradeFactory,
+  // @ts-ignore
   Quest:QuestFactory,
+  // @ts-ignore
   load_quests:loadQuest,
+  // @ts-ignore
   SpecialAttack:SpecialAttackFactory,
+  // @ts-ignore
   Reaction:ReactionFactory,
+  // @ts-ignore
   CharacterBattleClass:CharacterBattleClassFactory,
+  // @ts-ignore
   EnemyFormation:EnemyFormationFactory,
 }

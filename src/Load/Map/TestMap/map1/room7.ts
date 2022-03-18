@@ -18,22 +18,19 @@ import { item_factory_function } from 'src/gameLogic/custom/Factory/ItemFactory'
 
 export const room:roomFunction = {
   roomname:"room7",
-  create(masterService:MasterService):Room
-  {
+  create(masterService:MasterService):Room{
     const roomName = 'room7'
-    let dynamicShop:DynamicShop = null;
+    let dynamicShop!:DynamicShop;
     const $flag = (name:flagname) => masterService.flagsHandler.getFlag(name);
     const user = masterService.partyHandler.user;
     const equipMelee = {
       get text(){return user.character_equipment.shield instanceof MeleeUnharmed?'Equip Shield':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof MeleeUnharmed)
-        {
+        if(user.character_equipment.armor instanceof MeleeUnharmed){
           const armor = user.inventory.items.find(item=>item instanceof MeleeWeapon)
-          user.useItem(armor,[user]).excecute();
+          armor&&user.useItem(armor,[user]).excecute();
         }
-        else
-        {
+        else{
           user.unequipShield();
         }
         console.log(user)
@@ -43,13 +40,11 @@ export const room:roomFunction = {
     const equipRanged = {
       get text(){return user.character_equipment.shield instanceof RangedUnharmed?'Equip Shield':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof RangedUnharmed)
-        {
+        if(user.character_equipment.armor instanceof RangedUnharmed){
           const armor = user.inventory.items.find(item=>item instanceof RangedWeapon)
-          user.useItem(armor,[user]).excecute();
+          armor&&user.useItem(armor,[user]).excecute();
         }
-        else
-        {
+        else{
           user.unequipShield();
         }
         console.log(user)
@@ -59,13 +54,11 @@ export const room:roomFunction = {
     const equipShield = {
       get text(){return user.character_equipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof ShieldNoShield)
-        {
+        if(user.character_equipment.armor instanceof ShieldNoShield){
           const armor = user.inventory.items.find(item=>item instanceof Shield)
-          user.useItem(armor,[user]).excecute();
+          armor&&user.useItem(armor,[user]).excecute();
         }
-        else
-        {
+        else{
           user.unequipShield();
         }
         console.log(user)
@@ -75,13 +68,11 @@ export const room:roomFunction = {
     const equipArmor = {
       get text(){return user.character_equipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof ArmorNoArmor)
-        {
+        if(user.character_equipment.armor instanceof ArmorNoArmor){
           const armor = user.inventory.items.find(item=>item instanceof Armor)
-          user.useItem(armor,[user]).excecute();
+          armor&&user.useItem(armor,[user]).excecute();
         }
-        else
-        {
+        else{
           user.unequipArmor();
         }
         console.log(user)
@@ -116,8 +107,7 @@ export const room:roomFunction = {
         disabled:false
       }
       ,
-      drop_item(masterService,user),
-      {
+      drop_item(masterService,user),{
         text:"level up perk",
         action:function(){
           const perk = (user.getPerk('PerkUpgradeable'));
@@ -145,24 +135,20 @@ export const room:roomFunction = {
         masterService.sceneHandler.nextScene();
       },
       onExit   : () => {},
-      beforeMoveTo(roomName){
+      beforeMoveTo(roomName:string){
         //if(["room6","room8"].includes(roomName))
-        if(["room6"].includes(roomName))
-        {
+        if(["room6"].includes(roomName)){
           masterService.sceneHandler.headScene(cantGoThere,'map');
           masterService.sceneHandler.setScene();
           return false;
         }
-        if(["room8"].includes(roomName) && $flag("firstreturn2room1"))
-        {
+        if(["room8"].includes(roomName) && $flag("firstreturn2room1")){
           masterService.sceneHandler.headScene(cantGoThereYet,'map');
           masterService.sceneHandler.setScene();
           return false;
         }
-        if(roomName === "room1")
-        {
-          if($flag("firstreturn2room1"))
-          {
+        if(roomName === "room1"){
+          if($flag("firstreturn2room1")){
             masterService.flagsHandler.setFlag("firstreturn2room1",false);
             masterService.sceneHandler.tailScene([goBackThere,goBackThere2],'map');
           }
@@ -172,9 +158,7 @@ export const room:roomFunction = {
       icon:""
       }
     return room;
-
-    function makeShop():void
-    {
+    function makeShop():void{
       const shop = new StaticShop('test-shop'
         ,['item-test','ShieldTest','ArmorTest','ShieldGuard','PoisonPill']
         ,()=>'this is a static stock shop'
@@ -183,10 +167,8 @@ export const room:roomFunction = {
       );
       SetShopScene(masterService,shop);
     }
-    function makeDynamicShop():void
-    {
-      if(!dynamicShop)
-      {
+    function makeDynamicShop():void{
+      if(!dynamicShop){
         dynamicShop = new DynamicShop('test-shop',()=>'This is a dynamic stock shop',masterService,{'item-test':10});
         const items:ShopStoreable = {
           Factory:"Shop",

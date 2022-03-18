@@ -9,24 +9,21 @@ import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 })
 export class ShopItemComponent implements OnInit {
 
-  @Input() item:GameItem;
+  @Input() item!:GameItem;
   @Input() inventoryOverflow:boolean = false;
-  @Output() ShopItemEvent = new EventEmitter<GameItem>();
-  constructor(private shopService: ShopCurrentItemService){ }
+  @Output() ShopItemEvent = new EventEmitter<GameItem|null>();
+  constructor(private shopService: ShopCurrentItemService){}
 
   ngOnInit(): void {}
   ngOnDestroy(): void { this.unsetItem() }
-  Emit()
-  {
+  Emit(){
     this.ShopItemEvent.emit(this.item);
   }
   isFinite(number: number): boolean {return isFinite(number)}
-  setItem()
-  {
+  setItem(){
     this.shopService.currentItem = this.item;
   }
-  unsetItem()
-  {
+  unsetItem(){
     this.shopService.currentItem = null;
   }
 }

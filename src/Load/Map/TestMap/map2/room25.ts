@@ -1,13 +1,12 @@
 import { MasterService } from "src/app/service/master.service";
-import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { fill_room, Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
 
 export function room25(roomname: string): roomFunction
 {
   return {
     roomname,
-    create:function(masterService:MasterService): Room
-    {
+    create:function(masterService:MasterService): Room{
       const returnToMap1={text:"Map1",action:()=>{masterService.mapHandler.loadRoom("room24")},disabled:false}
       const roomScene: Scene = {
         sceneData: function () {
@@ -21,7 +20,6 @@ export function room25(roomname: string): roomFunction
         onExit: function(){},
         beforeMoveTo: function(roomname: string){return true},
         afterMoveTo: function(roomname: string){},
-        icon:null
       })
     }
   }

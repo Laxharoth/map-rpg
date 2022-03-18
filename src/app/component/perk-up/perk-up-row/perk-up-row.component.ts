@@ -9,10 +9,10 @@ import { Upgrade } from 'src/gameLogic/custom/Class/Upgrade/Upgrade';
   styleUrls: ['./perk-up-row.component.css']
 })
 export class PerkUpRowComponent implements OnInit {
-  @Input() selected_path:number[];
-  @Input() fixed_path:number[];
-  @Input() row:number;
-  @Input() upgrades:tree_node<Upgrade>[];
+  @Input() selected_path:number[]=[];
+  @Input() fixed_path:number[]=[];
+  @Input() row:number=0;
+  @Input() upgrades:tree_node<Upgrade>[]=[];
   constructor() { }
   @Output() selected_position_and_value= new EventEmitter<path_position_and_value>();
   ngOnInit(): void {

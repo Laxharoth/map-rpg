@@ -62,5 +62,5 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
   status["StatusGuard"]=StatusGuard
 }
 const module_name="StatusGuard";
-const module_dependency = [];
+const module_dependency:string[] = [];
 export { register, module_name, module_dependency}

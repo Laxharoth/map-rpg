@@ -49,17 +49,17 @@ export abstract class SpecialAttack implements BattleUseable, hashable, storeabl
   get added_description_sections():GameElementDescriptionSection[] { return [] }
   cool(){this.cooldown = Math.max(0,this.cooldown-1)}
   reset_initial_cooldown(){this.cooldown = 0;}
-  hash(): string { return this.name }
+  hash(): string { return this.type }
   toJson(): SpecialAttackOptions {
       return {
         Factory: "SpecialAttack",
-        type:this.name
+        type:this.type
       }
   }
   fromJson(options:SpecialAttackOptions){}
 }
 export type SpecialAttackOptions = {
   Factory: "SpecialAttack",
-  type:string,
+  type:specialsname,
   [key:string]:any
 }

@@ -1,17 +1,14 @@
 import { primitive } from "src/gameLogic/core/types";
 
-export interface GameElementDescriptionSection
-{
+export interface GameElementDescriptionSection{
   name: section_names;
   section_items:game_element_description_section_item[]
 }
-export interface game_element_description_section_item
-{
+export interface game_element_description_section_item{
   name: string;
   value:primitive;
 }
-export interface descriptable
-{
+export interface descriptable{
   get description():GameElementDescriptionSection[];
 }
 enum section_names_enum {

@@ -12,11 +12,11 @@ import { MakeFilledArray } from 'src/gameLogic/custom/functions/htmlHelper.funct
 })
 export class SceneOptionsComponent implements OnInit {
 
-  currentOptions:SceneOptions[];
-  fixed_options:SceneOptions[];
-  private descriptionOptions:SceneOptions[];
+  currentOptions!:SceneOptions[];
+  fixed_options!:SceneOptions[];
+  private descriptionOptions!:SceneOptions[];
 
-  private getDescriptionOptionsSubscription : Subscription;
+  private getDescriptionOptionsSubscription : Subscription|null=null;
 
   private offset = 0;
 
@@ -27,12 +27,11 @@ export class SceneOptionsComponent implements OnInit {
   ngOnInit(): void { }
 
   ngOnDestroy(): void {
-    this.getDescriptionOptionsSubscription.unsubscribe();
+    this.getDescriptionOptionsSubscription&&this.getDescriptionOptionsSubscription.unsubscribe();
   }
 
   @HostListener('body:keydown',["$event"])
-  selectOption(event: any): void
-  {
+  selectOption(event: any): void{
     if(event.target.tagName.toLowerCase()==='input')return;
     const isnumber = (string: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(string)?string:'';
     switch(event.key){
@@ -51,17 +50,22 @@ export class SceneOptionsComponent implements OnInit {
     this.getDescriptionOptionsSubscription = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
       this.offset = 0;
       this.descriptionOptions = scene.options;
+      // @ts-ignore
       this.fixed_options = scene.fixed_options;
       this.setCurrentOptions();
     });
-    this.descriptionOptions = this.masterService.sceneHandler.currentScene.options;
-    this.fixed_options = this.masterService.sceneHandler.currentScene.fixed_options;
+    if(this.masterService.sceneHandler.currentScene){
+      this.descriptionOptions = this.masterService.sceneHandler.currentScene.options;
+      // @ts-ignore
+      this.fixed_options = this.masterService.sceneHandler.currentScene.fixed_options;
+    }
     this.setCurrentOptions();
   }
 
   private setCurrentOptions()
   {
     let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+MAXOPTIONSNUMBERPERPAGE)
+      // @ts-ignore
     aux_currentOptions.push(...MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-aux_currentOptions.length,null))
     this.currentOptions = aux_currentOptions;
   }

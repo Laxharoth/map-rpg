@@ -10,6 +10,7 @@ import { armornameEnum, itemsEnum, meleenameEnum, rangednameEnum, shieldnameEnum
 export type item_factory_function = (masterService: MasterService, options: ItemStoreable)=>GameItem
 /** Creates an Item with the given itemname */
 export const ItemFactory:FactoryFunction<GameItem,ItemStoreable> = (masterService,options)=>{
+  // @ts-ignore
   const item = new item_switcher[options.type](masterService);
   item.fromJson(options)
   return item;

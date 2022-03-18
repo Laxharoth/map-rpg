@@ -6,12 +6,10 @@ export interface Room{
   /**
    * The action to be performed when the room is entered.
    * * Room functions order:
-   *  * onEnter
-   *  * beforeMoveTo
-   *  * onExit
-   *  * afterMoveTo
-   *
-   * @memberof Room
+   *   * onEnter
+   *   * beforeMoveTo
+   *   * onExit
+   *   * afterMoveTo
    */
      onEnter     : () => void;
      /**
@@ -21,8 +19,6 @@ export interface Room{
       *   * beforeMoveTo
       *   * onExit
       *   * afterMoveTo
-      *
-      * @memberof Room
       */
      onExit      : () => void;
      /**
@@ -32,10 +28,6 @@ export interface Room{
       *   * beforeMoveTo
       *   * onExit
       *   * afterMoveTo
-      *
-      * @param {string} roomName The name of the room to be moved.
-      * @returns true if can move to the specified room.
-      * @memberof Room
       */
      beforeMoveTo ?: (roomName:string) => boolean;
      /**
@@ -45,9 +37,6 @@ export interface Room{
       *   * beforeMoveTo
       *   * onExit
       *   * afterMoveTo
-      *
-      * @param {string} roomName The name of the room to be moved.
-      * @memberof Room
       */
      afterMoveTo ?: (roomName:string) => void;
      icon        ?: string;

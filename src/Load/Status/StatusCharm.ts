@@ -17,10 +17,11 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
     protected DURATION: number = 3;
     private _charmer:Character;
     private _charmed:Character;
-    constructor(masterService:MasterService, charmer:Character=null, charmed:Character=null)
-    {
+    constructor(masterService:MasterService, charmer:Character|null=null, charmed:Character|null=null){
         super(masterService)
+        // @ts-ignore
         this._charmer = charmer;
+        // @ts-ignore
         this._charmed = charmed;
     }
     get name(): string { return 'Charm'; }
@@ -65,5 +66,5 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
   perk["PerkCharm"]=PerkCharm
 }
 const module_name = "Charm";
-const module_dependency = [];
+const module_dependency:string[] = [];
 export { register, module_name, module_dependency}

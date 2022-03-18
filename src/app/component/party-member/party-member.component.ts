@@ -9,9 +9,8 @@ import { Status } from 'src/gameLogic/custom/Class/Status/Status';
   styleUrls: ['./party-member.component.css']
 })
 export class PartyMemberComponent implements OnInit {
-
-  @Input() partyMember:Character;
-  constructor() { }
+  @Input() partyMember!:Character;
+  constructor() {}
 
   ngOnInit(): void { }
 

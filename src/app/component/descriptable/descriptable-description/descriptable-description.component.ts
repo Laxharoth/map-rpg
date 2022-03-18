@@ -7,7 +7,7 @@ import { descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/
   styleUrls: ['./descriptable-description.component.css']
 })
 export class DescriptableDescriptionComponent implements OnInit {
-  @Input() descriptable:descriptable;
+  @Input() descriptable!:descriptable;
   @Input() small:boolean=true;
   constructor() { }
 

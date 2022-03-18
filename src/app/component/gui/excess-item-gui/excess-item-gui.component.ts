@@ -15,16 +15,11 @@ export class ExcessItemGuiComponent implements OnInit {
 
   private excess_item_list_update_subscription:Subscription;
   constructor(private masterService:MasterService) {
-    this.excess_item_list_update_subscription = masterService.sceneHandler.onSetScene().subscribe(scene=>
-      {
+    this.excess_item_list_update_subscription = masterService.sceneHandler.onSetScene().subscribe(scene=>{
         if(masterService.gameStateHandler.gameState==="excess-item")
-        ( [this.character_inventory,this.excess_item_list]
-          =
-          scene.sceneData())
+          [this.character_inventory,this.excess_item_list] = scene.sceneData()
       });
-      ( [this.character_inventory,this.excess_item_list]
-        =
-        masterService.sceneHandler.currentScene.sceneData());
+      [this.character_inventory,this.excess_item_list] = masterService.sceneHandler.currentScene?.sceneData();
   }
   ngOnInit(): void {
   }

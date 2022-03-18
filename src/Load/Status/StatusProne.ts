@@ -18,5 +18,5 @@ const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
 status["Prone"]=StatusProne
 }
 const module_name = "Prone"
-const module_dependency = []
+const module_dependency:string[] = []
 export { register, module_name, module_dependency}

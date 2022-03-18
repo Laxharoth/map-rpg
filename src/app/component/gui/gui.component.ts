@@ -16,7 +16,7 @@ import { entryPoint } from 'src/gameLogic/entryPoint';
 })
 export class GuiComponent implements OnInit {
   currentGameState:game_state;
-  private gameStateSubscription : Subscription;
+  private gameStateSubscription !: Subscription;
 
   constructor(private masterService:MasterService) {
     set_theme()

@@ -51,5 +51,5 @@ const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
 };
 
 const module_name = "DefeatEnemyQuest"
-const module_dependency = []
+const module_dependency:string[] = []
 export { register, module_name, module_dependency };

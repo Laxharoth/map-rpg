@@ -8,9 +8,9 @@ import { Status } from 'src/gameLogic/custom/Class/Status/Status';
 })
 export class StatusIconComponent implements OnInit {
 
-  @Input() status: Status;
+  @Input() status!: Status;
   elRef: ElementRef;
-  xOffset:number;
+  xOffset:number=0;
   constructor(elRef:ElementRef) { this.elRef=elRef;}
 
   ngOnInit(): void {
@@ -19,8 +19,6 @@ export class StatusIconComponent implements OnInit {
     const parentX = parentNode.offsetLeft;
     this.xOffset = parentX -x
   }
-
   ngAfterViewInit(): void {
   }
-
 }

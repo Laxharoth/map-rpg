@@ -20,6 +20,6 @@ const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
   status["Blind"] = StatusBlind;
 }
 const module_name = "Blind"
-const module_dependency = []
+const module_dependency:string[] = []
 
 export {register,module_name,module_dependency}

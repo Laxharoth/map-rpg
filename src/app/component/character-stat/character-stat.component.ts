@@ -7,8 +7,8 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 })
 export class CharacterStatComponent implements OnInit {
 
-  @Input() statName: string;
-  @Input() statValue: number;
+  @Input() statName!: string;
+  @Input() statValue!: number;
   @Input() maxValue: number = 100;
   @Input() barColor = "red";
 

@@ -8,7 +8,7 @@ import { Scene, SceneOptions } from "./Scene";
 export const AddExceedItem = function () {
   let dropping=false;
   const excessItemList: GameItem[] = [];
-  const dropable_inventory=[],dropable_item=[];
+  const dropable_inventory:game_item_dropable[]=[],dropable_item:game_item_dropable[]=[];
   return function (masterService: MasterService, items: GameItem|GameItem[], inventory: Inventory): void {
     if(items instanceof GameItem) items = [items];
     //If the item is already in the excessItemList adds to the stack
@@ -27,10 +27,9 @@ export const AddExceedItem = function () {
     const [_dropable_inventory,_dropable_item] = map_dropables(inventory.items,excessItemList)
     dropable_inventory.splice(0,dropable_inventory.length,..._dropable_inventory)
     dropable_item.splice(0,dropable_item.length,..._dropable_item)
-    /** @type { Scene } Scene to replace item in inventory with excee item.*/
-    //only create scene if not already in the scene
-    if(!dropping)
-    {
+    // Scene to replace item in inventory with excee item.
+    // only create scene if not already in the scene
+    if(!dropping){
       dropping = true;
       //Option to drop the marked item
       const ExceedItemOptions: SceneOptions[] = [{text:"next",action:()=>drop_exess_items(),disabled:false}];
@@ -39,22 +38,18 @@ export const AddExceedItem = function () {
         options:ExceedItemOptions,
         fixed_options:[null,null,null,null,null]
       };
-
       masterService.sceneHandler.tailScene(ExceedItemScene,'excess-item');
     }
     masterService.sceneHandler.setScene(false)
 
-    function drop_exess_items()
-    {
-      for(const [drop,item] of dropable_inventory)
-      {
+    function drop_exess_items(){
+      for(const [drop,item] of dropable_inventory){
         if(drop)inventory.dropItem(item);
       }
       excessItemList.splice(0,excessItemList.length)
       dropping = false;
       masterService.sceneHandler.nextScene(false);
-      for(const [drop,item] of dropable_item)
-      {
+      for(const [drop,item] of dropable_item){
         if(!drop)inventory.addItem(item);
       }
     }
@@ -89,4 +84,3 @@ function create_stacks_with_remaining_items(item: GameItem, masterService: Maste
   }
   return itemStacks;
 }
-

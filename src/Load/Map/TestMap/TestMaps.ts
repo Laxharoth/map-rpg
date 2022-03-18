@@ -8,7 +8,7 @@ import { map as map2 } from "src/Load/Map/TestMap/map2"
 
 const register: register_function = ({rooms,maps}, {}, _ ) => {
   //map 1
-  maps["map1"]=map1;
+  maps["map1"]=map1 as string[][];
   rooms["room1"]={map:"map1",room:room1('room1')}
   rooms["room2"]={map:"map1",room:room1('room2')}
   rooms["room3"]={map:"map1",room:room1('room3')}
@@ -34,7 +34,7 @@ const register: register_function = ({rooms,maps}, {}, _ ) => {
   rooms["room23"]={map:"map1",room:room1('room23')}
   rooms["room24"]={map:"map1",room:room1('room24')}
   //map 2
-  maps["map2"] = map2;
+  maps["map2"] = map2 as string[][];
   rooms["room25"]={map:"map2",room:room25('room25')}
   rooms["room26"]={map:"map2",room:room25('room26')}
   rooms["room27"]={map:"map2",room:room25('room27')}
@@ -61,5 +61,5 @@ const register: register_function = ({rooms,maps}, {}, _ ) => {
   rooms["room48"]={map:"map2",room:room25('room48')}
 }
 const module_name = "TestMap";
-const module_dependency = [];
+const module_dependency:string[] = [];
 export { register, module_name, module_dependency};

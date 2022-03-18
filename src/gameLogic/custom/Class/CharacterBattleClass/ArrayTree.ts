@@ -2,7 +2,7 @@ export class ArrayTree<T> {
   root: tree_node<T>;
   constructor(root: tree_node<T>) { this.root = root; }
 
-  get_node(path: number[]): tree_node<T> {
+  get_node(path: number[]): tree_node<T> | null {
     let travel_node = this.root;
     if (!travel_node)
       return null;

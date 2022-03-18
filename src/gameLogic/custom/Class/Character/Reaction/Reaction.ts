@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable, StoreableType } from "src/gameLogic/core/Factory/Factory";
+import { storeable } from "src/gameLogic/core/Factory/Factory";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { hashable } from "src/gameLogic/custom/ClassHelper/ObjectSet";
@@ -12,29 +12,27 @@ export abstract class Reaction implements hashable, storeable{
   protected abstract whatTriggers: tag[][];
   /** The list of tags the reaction should be never trigger. */
   protected prevent_reaction:tag[][] = [['paralized'],['before-action']];
-  readonly type:string;
+  abstract readonly type:string;
   /** TODO doc */
   protected abstract name:string;
   /** What the reaction does when it is triggered */
   protected abstract action(react_character: Character,action:BattleCommand):ActionOutput;
   protected masterService!:MasterService;
 
-  constructor(masterService:MasterService)
-  { this.masterService = masterService; }
+  constructor(masterService:MasterService){
+    this.masterService = masterService;
+  }
 
   /**
    * Checks the tags of the action to see if should trigger the reaction.
    * Then applies the reaction.
    */
-  reaction(react_character:Character,action:BattleCommand): ActionOutput
-  {
+  reaction(react_character:Character,action:BattleCommand): ActionOutput{
     const { tags:actionTags } = action;
     //reaction is prevented
     if(this.prevent_reaction.some(prevent_pattern => prevent_pattern.every(tag=>actionTags.includes(tag))))return [[],[]]
-      for( const trigger of this.whatTriggers )
-      {
-          if(trigger.every(tag=>actionTags.includes(tag)))
-          {
+      for( const trigger of this.whatTriggers ){
+          if(trigger.every(tag=>actionTags.includes(tag))){
             //reaction is triggered
             return this.action(react_character,action)
           }
@@ -44,20 +42,17 @@ export abstract class Reaction implements hashable, storeable{
   }
   //@ts-ignore
   hash(): string { return this.constructor }
-  fromJson(options: ReactionOptions): void { }
-  toJson():ReactionOptions
-  {
+  fromJson(options: ReactionOptions): void {}
+  toJson():ReactionOptions{
     return {
       Factory:"Reaction",
       type:this.type
     };
   }
 }
-export abstract class BeforeActionReaction extends Reaction
-{
+export abstract class BeforeActionReaction extends Reaction{
   protected prevent_reaction: tag[][]= [['paralized']]
 }
-
 export type ReactionOptions={
   Factory:"Reaction";
   type:string;

@@ -8,7 +8,7 @@ import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 })
 export class ShopDataItemComponent implements OnInit {
 
-  @Input() item:GameItem;
+  @Input() item!:GameItem;
   constructor() { }
 
   ngOnInit(): void {

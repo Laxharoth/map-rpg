@@ -19,26 +19,21 @@ export class Time
     years   :518400,
   }
   private minutes: number;
-  constructor(minutes: number|string)
-  {
+  constructor(minutes: number|string){
     this.minutes = this.convert2Time(minutes);
   }
-  setTime(value: number|string)
-  {
+  setTime(value: number|string){
     this.minutes = this.convert2Time(value);
   }
-  getMinutes()
-  {
+  getMinutes(){
     return this.minutes;
   }
   /** Adds to the current time the specified value. */
-  addTime(value:number|string)
-  {
+  addTime(value:number|string){
     this.minutes+=this.convert2Time(value);
   }
   /** Divides the minutes in the max posible integer value it can represent for each time unit. */
-  getTimeValues():TimeValues
-  {
+  getTimeValues():TimeValues{
     let backupMinutes = this.minutes;
     const values= {Years:0,Months:0,Days:0,Hours:0,Minutes:0};
     //year
@@ -59,20 +54,19 @@ export class Time
     return values;
   }
   /** Converts a string into it's representation in minutes. */
-  private convert2Time(value: number|string):number
-  {
+  private convert2Time(value: number|string):number{
     if(typeof value === 'number') return value;
 
     let unitIndex  = 0;
     let unitOffset = 0;
     const pendingConvertions = separateTime(unitOffset, value, unitIndex);
-    const minutes = pendingConvertions.reduce((accumulator,[quantity,unit]) =>
-    {
-      if(!Time.timeconvertion?.[unit])
-      {
+    const minutes = pendingConvertions.reduce((accumulator,[quantity,unit]) =>{
+      // @ts-ignore
+      if(!Time.timeconvertion[unit]){
         console.warn(`Unit ${unit} not supported`);
         return accumulator;
       }
+      // @ts-ignore
       return Time.timeconvertion?.[unit]*Number.parseInt(quantity) + accumulator
     } ,0)
     return minutes;

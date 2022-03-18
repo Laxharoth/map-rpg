@@ -1,30 +1,27 @@
-import { calculateDamage, DamageSource, damageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
+import { calculateDamage, DamageSource, DamageTypes, FullDamageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
 import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 import { weaponname } from 'src/gameLogic/custom/Class/Items/Item.type';
-import { fillMissingWeaponDamage, pushBattleActionOutput, randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { fillMissingWeaponDamage, randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
 /** Type of equipment that can attack. */
-export abstract class Weapon extends Equipment implements DamageSource
-{
+export abstract class Weapon extends Equipment implements DamageSource{
   /** The damage types associated with this weapon. */
-  protected _damageTypes:damageTypes = {};
+  protected _damageTypes:DamageTypes = {};
   private filledDamageTypes:boolean = false;
-  get damageTypes():damageTypes {
-    if(!this.filledDamageTypes)
-    {
+  get damageTypes():FullDamageTypes {
+    if(!this.filledDamageTypes){
       this.filledDamageTypes = true;
       this._damageTypes = fillMissingWeaponDamage(this.damageTypes);
     }
-    return this._damageTypes;
+    return this._damageTypes as FullDamageTypes;
   }
   readonly abstract type: weaponname;
   abstract get name():string;
   /** Applies damage to a target. */
-  attack(user:Character,target:Character):ActionOutput
-  {
+  attack(user:Character,target:Character):ActionOutput{
     if(this.accuracyTest(user,target) < 0 )
     {return [[],[`${user.name} attack ${target.name} but missed`]];}
     const [descriptions,strings]:ActionOutput = [[],[]];
@@ -48,14 +45,12 @@ export abstract class Weapon extends Equipment implements DamageSource
     const check = randomBetween(minaccuracy,maxaccuracy+user.calculated_stats.accuracy);
     return check
   }
-
-  get added_description_sections():GameElementDescriptionSection[]
-  {
+  get added_description_sections():GameElementDescriptionSection[]{
     const damage_stats_description:GameElementDescriptionSection={name:'damage',section_items:[]};
     if(Math.max(...Object.values(this.damageTypes)))
-    for(const [stat,value] of Object.entries(this.damageTypes))
-    {
+    for(const [stat,value] of Object.entries(this.damageTypes)){
       if(value===0)continue;
+      //@ts-ignore
       damage_stats_description.section_items.push({name:aliasDamageType[stat],value});
     }
     return  [
@@ -63,7 +58,6 @@ export abstract class Weapon extends Equipment implements DamageSource
       ...super.added_description_sections
     ]
   }
-
 }
 const aliasDamageType={
   "heatdamage"   : "heat  ",

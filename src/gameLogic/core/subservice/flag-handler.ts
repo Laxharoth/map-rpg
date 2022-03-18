@@ -13,7 +13,7 @@ export class FlagHandlerService implements storeable{
   /** The game flags */
   private gameFlags: { [key: string]: any; } = default_flags;
   /** Subject to check flags changes. */
-  private flagsSubject:Subject<flagname|"ALL">;
+  private flagsSubject=new Subject<flagname|"ALL">();
 
   constructor(gameSaver: GameSaver) {
     gameSaver.register("Flags",this)
@@ -26,39 +26,33 @@ export class FlagHandlerService implements storeable{
   }
 
   /** Sets the value of a flag. */
-  setFlag(key: flagname, value: any):void
-  {
-    if(!this.gameFlags[key]===undefined)
-    {
+  setFlag(key: flagname, value: any):void{
+    if(!this.gameFlags[key]===undefined){
       console.warn(`Invalid Flag ${key}`);
       return;
     }
     this.gameFlags[key] = value;
-    if(this.flagsSubject)this.flagsSubject.next(key);
+    this.flagsSubject.next(key);
   }
 
   /** Gets the value of the flag. */
-  getFlag(key:flagname):any
-  {
+  getFlag(key:flagname):any{
     return this.gameFlags[key];
   }
 
   /** Returns and observable that gives the name of the flag that changed. */
-  onFlagChanged():Observable<flagname|"ALL">
-  {
+  onFlagChanged():Observable<flagname|"ALL">{
     return this.gameFlags.asObservable();
   }
 
   /** Sets all the game flags */
-  setFlags(gameFlags:{[key: string]:any})
-  {
+  setFlags(gameFlags:{[key: string]:any}){
     this.gameFlags = gameFlags;
-    if(!this.flagsSubject)this.flagsSubject=new Subject<flagname|"ALL">()
     this.flagsSubject.next("ALL");
   }
 }
 
-export const MasterFlagsSetter:FactoryFunction = (masterService:MasterService, options:FlagsOptions) => {
+export const MasterFlagsSetter:FactoryFunction<void,FlagsOptions> = (masterService, options) => {
     masterService.flagsHandler.fromJson(options);
-  }
+}
 export type FlagsOptions = {Factory:"Flags";type:"Flags";flags:{[key : string]:any}}

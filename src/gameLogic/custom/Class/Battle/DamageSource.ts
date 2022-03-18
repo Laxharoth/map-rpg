@@ -2,7 +2,7 @@ import { Character } from "../Character/Character";
 
 export interface DamageSource
 {
-  damageTypes:damageTypes
+  damageTypes:FullDamageTypes
   damagestat(user   : Character):number;
   defencestat(target: Character):number;
 }
@@ -20,7 +20,7 @@ export function calculateDamage(damage_source: DamageSource,user:Character,targe
   finalDamage += (damageRelation * damage_source.damageTypes.frostdamage ||0 / (100 - target.calculated_resistance.frostresistance));
   return Math.round(finalDamage)||0;
 }
-export interface damageTypes {
+export interface DamageTypes {
   heatdamage ? : number;
   energydamage ? : number;
   frostdamage ? : number;
@@ -28,4 +28,13 @@ export interface damageTypes {
   bluntdamage ? : number;
   piercedamage ? : number;
   poisondamage ? : number;
+}
+export interface FullDamageTypes {
+  heatdamage : number;
+  energydamage : number;
+  frostdamage : number;
+  slashdamage : number;
+  bluntdamage : number;
+  piercedamage : number;
+  poisondamage : number;
 }
