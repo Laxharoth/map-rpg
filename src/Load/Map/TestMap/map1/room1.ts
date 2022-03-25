@@ -186,13 +186,15 @@ export function room(roomName: string): roomFunction {
       const roomScene:Scene = {
         sceneData: function () {
         return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
-      }, options:roomOptions,fixed_options:[null,null,null,null,null]}
-      roomScene.fixed_options[0] = SceneSelectItemFromMap(masterService)
-      roomScene.fixed_options[1] = {
-        text:'info',
-        action:()=>{masterService.InfoPageToggler.toggle()},
-        disabled:false
-      }
+      }, options:roomOptions,fixed_options:[
+        SceneSelectItemFromMap(masterService),
+        {
+          text:'info',
+          action:()=>{masterService.InfoPageToggler.toggle()},
+          disabled:false
+        },
+        null,null,null
+      ]}
       const firstExit:Scene = {sceneData:function () {
         return `It was the first time`
       }, options:[nextoption],fixed_options:[null,null,null,null,null]};
@@ -221,7 +223,7 @@ export function room(roomName: string): roomFunction {
               // @ts-ignore
               battle_options.splice(0,battle_options.length,...options)
             }
-            ).startRound()
+            ).start()
           }
         },
         onExit: () => {
