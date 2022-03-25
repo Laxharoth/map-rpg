@@ -30,34 +30,14 @@ export function pushBattleActionOutput(source:ActionOutput,target:ActionOutput):
 
 /** Returns a integer between the values provided */
 export function randomBetween(min:number, max:number):number{
+  if(min > max) [min,max] = [max,min];
   return rng.integer({ min,max });
 }
 
 /** Generates a random number between 0 and 100, and checks if the number provided is bigger. */
-export function randomCheck(percent:number):boolean
-{
-  return rng.bool({likelihood:percent})
+export function randomCheck(percent:number):boolean{
+  return rng.bool({likelihood:percent })
 }
-
-/** Fills missing weapon damageTypes */
-export const fillMissingWeaponDamage = (function() {
-  const _defaultStats:FullDamageTypes = {
-     heatdamage  :0,
-     energydamage:0,
-     frostdamage :0,
-     slashdamage :0,
-     bluntdamage :0,
-     piercedamage:0,
-     poisondamage:0,
-  }
-  return function(weaponDamages:DamageTypes):DamageTypes{
-    const myStats = {..._defaultStats}
-    for(const key of Object.keys(weaponDamages))
-      // @ts-ignore
-      myStats[key] = weaponDamages[key]
-    return weaponDamages;
-  }
-})()
 
 export function MakeFilledArray<T>(array_size: number,default_value: T): T[] {
   return Array.from(Array(array_size).map(_=>default_value))
