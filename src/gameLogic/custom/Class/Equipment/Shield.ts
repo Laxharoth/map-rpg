@@ -18,8 +18,7 @@ export abstract class Shield extends Equipment{
     return super._itemEffect(user, target);
   }
   /** Adds the StatusDefend to the character with the shield. */
-  defend(targets:Character[]):ActionOutput
-  {
+  defend(targets:Character[]):ActionOutput{
     const output = [[],[]] as ActionOutput;
     for(const target of targets){
       pushBattleActionOutput(target.addStatus(new StatusDefend(this.masterService)),output);

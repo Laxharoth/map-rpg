@@ -31,7 +31,7 @@ export abstract class Reaction implements hashable, storeable{
     const { tags:actionTags } = action;
     //reaction is prevented
     if(this.prevent_reaction.some(prevent_pattern => prevent_pattern.every(tag=>actionTags.includes(tag))))return [[],[]]
-      for( const trigger of this.whatTriggers ){
+    for( const trigger of this.whatTriggers ){
           if(trigger.every(tag=>actionTags.includes(tag))){
             //reaction is triggered
             return this.action(react_character,action)

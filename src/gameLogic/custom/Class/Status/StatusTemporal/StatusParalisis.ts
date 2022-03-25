@@ -13,10 +13,8 @@ export class StatusParalisis extends StatusBattle {
     return "The target can't move due to an energy shock.";
   }
   protected effect(target: Character): ActionOutput { return [[],[`${target.name} can't move`]] }
-  onStatusGainded(target: Character): ActionOutput
-  {
-    switch(randomBetween(0,7))
-    {
+  onStatusGainded(target: Character): ActionOutput{
+    switch(randomBetween(0,7)){
       case 1:case 2:case 3: case 4:this.DURATION =1;break;
       case 5: case 6:this.DURATION=2; break;
       case 7: this.DURATION=3; break;

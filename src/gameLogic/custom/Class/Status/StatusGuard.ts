@@ -7,8 +7,7 @@ export class StatusGuard extends StatusBattle
 {
   private static REACTION_GUARD:ReactionGuard;
   protected DURATION: number=1;
-  constructor(masterService:MasterService)
-  {
+  constructor(masterService:MasterService){
     super(masterService)
     if(!StatusGuard.REACTION_GUARD)StatusGuard.REACTION_GUARD=new ReactionGuard(masterService);
   }
