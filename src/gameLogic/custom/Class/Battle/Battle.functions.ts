@@ -52,6 +52,16 @@ function attackWithDamageSource(source: Character, targets: Character[], damageS
     pushBattleActionOutput(tryAttack(source, target, (target: Character) => attack(damageSource,source, target)), attackDescription);
   }
 }
+export function escapeBattle(masterService: MasterService){
+  const { partyHandler } = masterService;
+  const [descriptionText, successfulEscaping] =  partyHandler.enemyFormation.attemptEscape(partyHandler.userParty)
+  if (successfulEscaping) {
+    partyHandler.battle_ended('escape')
+    masterService.sceneHandler
+      .flush(0)
+      .tailScene({sceneData: ()=>descriptionText, options:[nextOption(masterService)]}, 'battle')
+      .nextScene(false);
+  }
 }
 /** Check if the attack action can be performed on the target character. */
 export function tryAttack(source: Character, target: Character, action: (target: Character) => ActionOutput): ActionOutput{
