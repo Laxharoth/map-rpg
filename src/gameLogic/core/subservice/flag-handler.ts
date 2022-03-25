@@ -11,7 +11,7 @@ import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 export class FlagHandlerService implements storeable{
   readonly type:"FlagHandlerService"="FlagHandlerService";
   /** The game flags */
-  private gameFlags: { [key: string]: any; } = default_flags;
+  private gameFlags = default_flags;
   /** Subject to check flags changes. */
   private flagsSubject=new Subject<flagname|"ALL">();
 
@@ -22,7 +22,7 @@ export class FlagHandlerService implements storeable{
     return {Factory:"Flags",type:"Flags",flags:this.gameFlags}
   }
   fromJson(options: FlagsOptions): void {
-    this.gameFlags = options.flags;
+    this.setFlags(options.flags as typeof default_flags);
   }
 
   /** Sets the value of a flag. */
@@ -42,11 +42,11 @@ export class FlagHandlerService implements storeable{
 
   /** Returns and observable that gives the name of the flag that changed. */
   onFlagChanged():Observable<flagname|"ALL">{
-    return this.gameFlags.asObservable();
+    return this.flagsSubject.asObservable();
   }
 
   /** Sets all the game flags */
-  setFlags(gameFlags:{[key: string]:any}){
+  setFlags(gameFlags:typeof default_flags){
     this.gameFlags = gameFlags;
     this.flagsSubject.next("ALL");
   }
