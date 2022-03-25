@@ -35,7 +35,7 @@ export class FactWeb implements storeable{
       this.initialize_character(character);
   }
   private initialize_character(character: UniqueCharacter) {
-    this.character_map.set(character.uuid, {
+    this.character_map.set(character.type, {
       known_facts: new Set(),
       acquaintacer_map: new Map(),
     });
@@ -48,8 +48,8 @@ export class FactWeb implements storeable{
     this.known_facts.set(fact_name,fact);
     this.create_subscriptions();
     for(const character of who_knows){
-      if(!this.character_map.get(character.uuid))this.initialize_character(character);
-      this.character_map.get(character.uuid)?.known_facts.add(fact_name);
+      if(!this.character_map.get(character.type))this.initialize_character(character);
+      this.character_map.get(character.type)?.known_facts.add(fact_name);
     }
   }
   register_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness){
@@ -58,9 +58,9 @@ export class FactWeb implements storeable{
   }
   register_directional_character_link(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness){
     if(character1===character2)return;
-    if(!this.character_map.get(character1.uuid))this.initialize_character(character1);
-    if(!this.character_map.get(character2.uuid))this.initialize_character(character2);
-    this.character_map.get(character1.uuid)?.acquaintacer_map.set(character2.uuid,acquaintace);
+    if(!this.character_map.get(character1.type))this.initialize_character(character1);
+    if(!this.character_map.get(character2.type))this.initialize_character(character2);
+    this.character_map.get(character1.type)?.acquaintacer_map.set(character2.type,acquaintace);
   }
   spread_fact(time:Time):void{
     let surrounding_characters_know_the_same_things = true;
