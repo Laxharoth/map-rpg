@@ -27,13 +27,9 @@ export function street(roomname: string,Factory:FactoryFunction&global_functions
       }
       return {
         onEnter(){
-          masterService.sceneHandler.tailScene({
+          Factory.enterRoom(masterService.sceneHandler,()=>streetStrings[roomname as 'street1'] ,options,
             // @ts-ignore
-            sceneData(){return streetStrings[roomname]},
-            options,
-            // @ts-ignore
-            fixed_options:Factory.options.roomOptions(masterService)
-          },"map").nextScene();
+            Factory.options.roomOptions(masterService));
           if(masterService.flagsHandler.getFlag("thug-revenge")){
             masterService.flagsHandler.setFlag("thug-revenge",false);
             masterService.sceneHandler.headScene(banditsWantRealEgg(masterService,Factory),"talk").setScene(false);

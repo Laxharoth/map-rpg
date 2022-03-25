@@ -32,13 +32,9 @@ export function entrace(roomname: string, Factory:FactoryFunction&global_functio
       }
       return {
         onEnter(){
-          sceneHandler.tailScene({
-            //@ts-ignore
-            sceneData(){return entranceString[roomname]},
-            options,
+          Factory.enterRoom(masterService.sceneHandler,()=>entranceString[roomname as 'entrance1'] ,options,
             // @ts-ignore
-            fixed_options:Factory.options.roomOptions(masterService)
-          },"map").nextScene();
+            Factory.options.roomOptions(masterService));
         },
         onExit(){},
       }
@@ -52,13 +48,9 @@ export function stairs(Factory:FactoryFunction&global_functions):roomFunction{
       const {sceneHandler} = masterService;
       return {
         onEnter(){
-          sceneHandler.tailScene({
-            //@ts-ignore
-            sceneData(){return 'the is a stair'},
-            options:[],
+          Factory.enterRoom(masterService.sceneHandler,()=>'the is a stair' ,[],
             // @ts-ignore
-            fixed_options:Factory.options.roomOptions(masterService)
-          },"map").nextScene();
+            Factory.options.roomOptions(masterService));
         },
         onExit(){},
       }
@@ -78,12 +70,9 @@ export function upper(Factory:FactoryFunction&global_functions):roomFunction{
     ]
       return {
         onEnter(){
-          sceneHandler.tailScene({
-            sceneData(){return "Upper room the harper is here"},
-            options,
+          Factory.enterRoom(masterService.sceneHandler,()=>'Upper room the harper is here' ,options,
             // @ts-ignore
-            fixed_options:Factory.options.roomOptions(masterService)
-          },"map").nextScene();
+            Factory.options.roomOptions(masterService));
           if(!$$("talked-with-harper")){
             $$("talked-with-harper",true);
             sceneHandler.tailScene(harperGivesQuest(masterService,Factory),"talk");

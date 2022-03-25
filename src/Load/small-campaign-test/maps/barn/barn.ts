@@ -29,14 +29,9 @@ export function barn(roomname:string,Factory:FactoryFunction&global_functions):r
       if(roomname==="barn8")options.push(Factory.options.enterRoomOption(masterService,"street7","Exit the barn"));
       return {
         onEnter(){
-          masterService.sceneHandler.tailScene({
-            sceneData(){return sceneStrings[roomname as 'room1']},
-            // TODO: add options
-            options,
+          Factory.enterRoom(masterService.sceneHandler,()=>sceneStrings[roomname as 'room1'],options,
             // @ts-ignore
-            fixed_options:Factory.options.roomOptions(masterService)
-          },"map").nextScene();
-          // TODO: add flag to list
+            Factory.options.roomOptions(masterService));
           if(roomname==="barn8" && !$$("first-enter-barn")){
             $$("first-enter-barn",true);
           }

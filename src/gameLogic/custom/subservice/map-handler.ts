@@ -1,3 +1,5 @@
+import { SceneOptions, FixedOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { SceneHandlerService } from 'src/gameLogic/custom/subservice/scene-handler';
 import { roomcollection } from 'src/gameLogic/custom/MapCollection/roomcollection';
 import { Observable, Subject, Subscription } from 'rxjs';
 
@@ -96,5 +98,14 @@ export class MapHandlerService {
     this.coordinatesSubject.next(this.coordinates);
     return true;
   }
+}
+export function enterRoom(sceneHandler:SceneHandlerService,
+    sceneData:()=>string,options:SceneOptions[]=[],
+    fixed_options:FixedOptions=[null,null,null,null,null]){
+  sceneHandler.tailScene({
+    sceneData,
+    options,
+    fixed_options
+  },"map").nextScene();
 }
 export type direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
