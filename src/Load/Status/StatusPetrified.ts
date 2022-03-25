@@ -16,7 +16,18 @@ const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
     }
     readonly type: "Petrified"="Petrified";
     get name(): string { return 'Petrified'; }
-    onStatusGainded(target: Character): ActionOutput { return super.onStatusGainded(target); }
+    onStatusGainded(target: Character): ActionOutput {
+      this.target = target;
+      return super.onStatusGainded(target);
+    }
+    // @ts-ignore
+    protected get _stats_modifier():CalculatedStats{
+      return {
+        physical_defence : this.target.calculated_stats.physical_defence * (0.2),
+        ranged_defence : this.target.calculated_stats.ranged_defence * (0.2),
+        initiative : this.target.calculated_stats.initiative,
+      };
+    }
     onStatusRemoved(target: Character): ActionOutput { return super.onStatusRemoved(target); }
     private getPoison(target: Character):StatusBattle { return target.getStatus('Poison') as StatusBattle; }
     get tags(): tag[] { return super.tags.concat(['paralized','petrified'])}
