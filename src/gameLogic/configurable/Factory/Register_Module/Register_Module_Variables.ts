@@ -20,7 +20,7 @@ import { Character } from '../../../custom/Class/Character/Character';
 import { UniqueCharacter } from '../../../custom/Class/Character/UniqueCharacter';
 import { PersistentCharacter } from '../../../custom/Class/Character/NPC/PersistentCharacter';
 import { TimedStatus } from '../../../custom/Class/Status/TimedStatus';
-import { SpecialAttack } from '../../../custom/Class/Items/SpecialAttack/SpecialAttack';
+import { DamageSpecialAttack, SpecialAttack } from '../../../custom/Class/Items/SpecialAttack/SpecialAttack';
 import { Perk } from '../../../custom/Class/Perk/Perk';
 import { reaction_switcher } from 'src/gameLogic/custom/Factory/ReactionFactory';
 import { CharacterBattleClass } from 'src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass';
@@ -40,7 +40,7 @@ export const constructor = {
   character:{ Character,UniqueCharacter,PersistentCharacter },
   enemy_formation:{EnemyFormation},
   status:{ Status,TimedStatus,StatusBattle },
-  special_attack:{SpecialAttack},
+  special_attack:{SpecialAttack,DamageSpecialAttack},
   quest:{Quest},
   perk:{Perk},
   reaction:{Reaction,BeforeActionReaction},
