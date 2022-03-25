@@ -15,6 +15,7 @@ import { Factory } from 'src/gameLogic/core/Factory/Factory';
 import { Shield, ShieldNoShield } from 'src/gameLogic/custom/Class/Equipment/Shield';
 import { ArmorNoArmor, Armor } from 'src/gameLogic/custom/Class/Equipment/Armor';
 import { item_factory_function } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { Int } from 'src/gameLogic/custom/ClassHelper/Int';
 
 export const room:roomFunction = {
   roomname:"room7",
@@ -83,14 +84,14 @@ export const room:roomFunction = {
     const roomOptions:SceneOptions[] =[
       {text:"Shop",action:makeShop,disabled:false},
       {text:"Shop",action:makeDynamicShop,disabled:false},
-      {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })).startRound(),disabled:false},
+      {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })).start(),disabled:false},
       {text:"Add perk point",action:()=>{
-        user.level_stats.perk_point=4;
+        user.level_stats.perk_point=4 as Int;
         user.emit_perk_up();
       },disabled:false},
       {text:"Add stats point",action:()=>{
-        user.level_stats.level=4;
-        user.level_stats.upgrade_point=4;
+        user.level_stats.level=4 as Int;
+        user.level_stats.upgrade_point=4 as Int;
         user.emit_stat_up();
       },disabled:false},
       equipMelee,
