@@ -22,6 +22,9 @@ export enum specialsnameEnum{
   'Grab'='Grab',
   'SneakAttack'='SneakAttack',
   'MultiAttack'='MultiAttack',
+  'SacredFlame'='SacredFlame',
+  'Mending'='Mending',
+  'Guidance'='Guidance',
 }
 export enum itemsEnum{
   'item-test'='item-test',

@@ -6,6 +6,11 @@ import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 
 /** Creates a character */
 export const CharacterFactory:FactoryFunction<Character,UniqueCharacterStoreable> = (masterService,options)=>{
+  if(!character_switcher[options.type]){
+    console.warn(`Character type ${options.type} not found`);
+    options.name = options.type;
+    options.type = "test character";
+  }
   const character = new character_switcher[options.type](masterService)
   character.fromJson(options);
   return character;
@@ -19,12 +24,13 @@ export enum CharacterTypeValues{
   'test enemy'='test enemy',
   'Bandit'='Bandit',
   'Guard'='Guard',
-  'Spy'='Spy',
+  'DragonSeller'='DragonSeller',
   'Thug'='Thug',
-}
-export enum UniqueCharacterType{
   'test character'='test character',
   'john'='john',
   'main-character'='main-character',
+  'FrankiePeanuts'='FrankiePeanuts',
+  'BishopVault'='BishopVault',
+  'Timber'='Timber',
 }
-export type characterType = `${CharacterTypeValues}`|`${UniqueCharacterType}`;
+export type characterType = `${CharacterTypeValues}`;

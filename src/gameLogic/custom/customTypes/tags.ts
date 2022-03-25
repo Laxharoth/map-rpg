@@ -31,5 +31,7 @@ export type tag = 'melee weapon'|
                   'Advantage'|
                   'Restrained'|
                   'Hide'|
-                  'Blind'
+                  'Blind'|
+                  'net'|
+                  'fake egg'
                   ;

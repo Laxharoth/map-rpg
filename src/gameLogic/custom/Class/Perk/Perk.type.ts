@@ -8,6 +8,9 @@ export enum perknameEnum {
   'PackTactics'='PackTactics',
   'SneakAttack'='SneakAttack',
   'MultiAttack'='MultiAttack',
+  'SacredFlame'='SacredFlame',
+  'Mending'='Mending',
+  'Guidance'='Guidance',
 }
 
 export type perkname =`${perknameEnum}`;

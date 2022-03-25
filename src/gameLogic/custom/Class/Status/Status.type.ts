@@ -23,6 +23,7 @@ export enum statusBattlesEnum{
   'StatusGuard'='StatusGuard',
   "Hide"="Hide",
   "Advantage"="Advantage",
+  "Guidance"="Guidance",
 }
 
 export type statustype =`${statusEnum}`| `${statusTimeEnum}`| `${statusBattlesEnum}`
