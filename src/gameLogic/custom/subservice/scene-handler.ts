@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { Scene, SceneInterface } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { FixedOptions, Scene as SceneInterface, SceneOptions, wrapAction } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { DoubleLinkedList, DoubleLinkedListNode } from 'src/gameLogic/custom/ClassHelper/DoubleLinkedList';
 import { GameStateService } from '../../core/subservice/game-state';
 import { game_state } from '../../configurable/subservice/game-state.type';
@@ -8,7 +8,7 @@ import { LockMapService } from './lock-map';
 /** Inserts and loads scenes to/from the appropriate scene list. */
 export class SceneHandlerService {
   /** * An object with the sceneLists */
-  private _sceneList:{[key: string]:DoubleLinkedList<Scene>}={};
+  private _sceneList:{[key: string]:DoubleLinkedList<SceneInterface>}={};
   private sceneTextHistory = new DoubleLinkedList<string>();
   // private pivot:DoubleLinkedListNode<string>;
   /** * A subject to handle the current scene. */
@@ -18,7 +18,7 @@ export class SceneHandlerService {
   private lockmap:LockMapService;
   private gameStateHandler:GameStateService;
   /** * Gets the current sceneList */
-  private get sceneList():DoubleLinkedList<Scene>{
+  private get sceneList():DoubleLinkedList<SceneInterface>{
     return this._sceneList[this.currentGameState]
   }
   constructor(lockmap:LockMapService,gameStateHandler:GameStateService){
@@ -36,15 +36,18 @@ export class SceneHandlerService {
     else this.lockmap.unlockMap("scene-lock");
     const head = this.sceneList.head;
     if(!head){ console.error("No scenes in list"); return this;}
-    if(addToHistory)
-    {
+    if(addToHistory){
       const history = head.value.sceneData();
       if(typeof history === "string") this.sceneTextHistory.insertHead(history);
       // this.pivot = this.sceneTextHistory.head;
     }
-    if(!head.value.fixed_options)
+    if(!head.value.fixed_options){
       head.value.fixed_options = [null, null, null, null, null];
-    this.sceneSubject.next(head.value);
+    }
+    for(const option of head.value.fixed_options.concat(head.value.options)){
+      wrapAction(option)
+    }
+    this.sceneSubject.next(head.value as Scene);
     this.sceneTextSubject.next(head.value.sceneData());
     return this
   }
@@ -59,7 +62,7 @@ export class SceneHandlerService {
     for(const scene of scenes){
       (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
     }
-    this._sceneList[gameState].insertHead(...scenes as Scene[]);
+    this._sceneList[gameState].insertHead(...scenes as SceneInterface[]);
     return this
   }
   /**
@@ -73,7 +76,7 @@ export class SceneHandlerService {
     for(const scene of scenes){
       (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
     }
-    this._sceneList[gameState].insertBefore(1,...scenes as Scene[]);
+    this._sceneList[gameState].insertBefore(1,...scenes as SceneInterface[]);
     return this
   }
   /**
@@ -87,7 +90,7 @@ export class SceneHandlerService {
     for(const scene of scenes){
       (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
     }
-    this._sceneList[gameState].insertTail(...scenes as Scene[]);
+    this._sceneList[gameState].insertTail(...scenes as SceneInterface[]);
     return this
   }
   /**
@@ -103,7 +106,7 @@ export class SceneHandlerService {
   /**
    * Returns an observable to observe the current scene.
    */
-  onSetScene():Observable<Scene>
+  onSetScene():Observable<SceneInterface>
   {
     return this.sceneSubject.asObservable();
   }
@@ -125,7 +128,7 @@ export class SceneHandlerService {
   //   this.sceneTextSubject.next(this.pivot.value);
   // }
   /** Gets the current scene. */
-  get currentScene():Scene|undefined{
+  get currentScene():SceneInterface|undefined{
     return this.sceneList.head?.value;
   }
 
@@ -150,7 +153,14 @@ export class SceneHandlerService {
   /** Adds a new scene list with a key */
   private addSceneListWithGameState(gameState: string) {
     if(!this._sceneList[gameState])
-      this._sceneList[gameState] = new DoubleLinkedList<Scene>();
+      this._sceneList[gameState] = new DoubleLinkedList<SceneInterface>();
   }
   private get currentGameState() { return this.gameStateHandler.gameState; }
+}
+
+/** A Representation of what the game will displayed (text and options)*/
+interface Scene{
+  sceneData:() => any;
+  options: SceneOptions[];
+  fixed_options: FixedOptions;
 }
