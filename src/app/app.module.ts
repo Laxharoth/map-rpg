@@ -40,6 +40,7 @@ import { InfoPageGuiComponent } from './component/gui/info-page-gui/info-page-gu
 import { FrontPageGuiComponent } from './component/gui/front-page-gui/front-page-gui.component';
 import { SavePageGuiComponent } from './component/gui/save/save-page-gui/save-page-gui.component';
 import { SettingsPageGuiComponent } from './component/gui/settings/settings-page-gui/settings-page-gui.component';
+import { TalkGuiComponent } from './component/gui/talk/talk-gui/talk-gui.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { SettingsPageGuiComponent } from './component/gui/settings/settings-page
     FrontPageGuiComponent,
     SavePageGuiComponent,
     SettingsPageGuiComponent,
+    TalkGuiComponent,
   ],
   imports: [
     BrowserModule,
