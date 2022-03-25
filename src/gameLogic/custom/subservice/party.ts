@@ -35,8 +35,7 @@ export class PartyService implements storeable{
     return this._user as UniqueCharacter;
   }
   get party(): UniqueCharacter[] {
-    // @ts-ignore
-    return this._party.filter(character => character !== null);
+    return this._party.filter(character => character !== null) as UniqueCharacter[];
   }
   getPersistent(characterType: characterType) {
     return this.persistents[characterType];
@@ -73,8 +72,8 @@ export class PartyService implements storeable{
       Factory: "CurrentParty",
       type: 'party',
       dependency_gamesave_object_key: ["PersistentCharacter"],
-      characterUiPosition1: this._party[0]?.uuid||null,
-      characterUiPosition2: this._party[1]?.uuid||null,
+      characterUiPosition1: this._party[0]?.type||null,
+      characterUiPosition2: this._party[1]?.type||null,
     }
   }
   fromJson(options:PartyStoreable){
