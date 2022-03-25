@@ -4,7 +4,6 @@ import { Weapon } from "src/gameLogic/custom/Class/Equipment/Weapon/Weapon";
 import { rangedname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { StatusRangedAttack } from "src/gameLogic/custom/Class/Status/StatusTemporal/StatusRangedAttack";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { randomBetween } from "src/gameLogic/custom/functions/htmlHelper.functions";
 
 /** A type of weapon thar normally uses aim to determinate damage. */
 export abstract class RangedWeapon extends Weapon
@@ -13,22 +12,7 @@ export abstract class RangedWeapon extends Weapon
   defencestat(target: Character):number{return target.calculated_stats.ranged_defence;}
   readonly abstract type:rangedname;
   abstract get name():string;
-  attack(user:Character,target:Character):ActionOutput
-  {
-    const [scenes,strings]=user.addStatus(new StatusRangedAttack(this.masterService));
-    const [attack_scene,attackstring] =super.attack(user,target);
-    scenes.push(...attack_scene);
-    strings.push(...attackstring);
-    return [scenes,strings];
-  }
   get tags(): tag[] { return ['ranged weapon']; }
-
-  protected accuracyTest(user:Character,target:Character)
-  {
-    let accuracyFix = 0;
-    if(user.hasTag('restrained')) accuracyFix-=20;
-    return super.accuracyTest(user,target)+randomBetween(0,accuracyFix);
-  }
   /** Equips into the character ranged weapon */
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {

@@ -6,7 +6,6 @@ import { meleename } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { OnePunch } from 'src/gameLogic/custom/Class/Items/SpecialAttack/OnePunch';
 import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack';
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
-import { randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
 /** A type of weapon that normally uses attack stat to determine damage. */
 export abstract class MeleeWeapon extends Weapon
@@ -15,12 +14,6 @@ export abstract class MeleeWeapon extends Weapon
   defencestat(target: Character):number{return target.calculated_stats.physical_defence;}
   readonly abstract type:meleename
   abstract get name():string;
-  protected accuracyTest(user:Character,target:Character)
-  {
-    let accuracyFix = 0;
-    if(target.hasTag('prone')) accuracyFix+=20;
-    return super.accuracyTest(user,target)+randomBetween(0,accuracyFix);
-  }
   /** Equips into the character melee weapon */
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
@@ -36,7 +29,7 @@ export class MeleeUnharmed extends MeleeWeapon
   readonly onePunch = new OnePunch(this.masterService);
   maxStack = 0;
   protected _stats_modifier: CalculatedStats = {accuracy:30};
-  protected _damageTypes:DamageTypes = {bluntdamage:10};
+  protected _damageTypes:DamageTypes = {bluntdamage:100};
   readonly type:"MeleeUnharmed"="MeleeUnharmed";
   get name(): string { return 'hand'; }
   canEquip(character: Character): boolean { return true; }
