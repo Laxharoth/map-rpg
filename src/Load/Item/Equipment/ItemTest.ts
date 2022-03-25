@@ -1,7 +1,7 @@
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { DamageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput, CalculatedStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput, CalculatedStats, CoreStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { ArrayTree, tree_node } from "src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree";
 import { experience_cap } from "src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass";
 import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
@@ -72,11 +72,7 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
     readonly type:"TestCharacterBattleClass"="TestCharacterBattleClass"
     name: string="TestCharacterBattleClass";
     protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = []
-    initial_core_stats: EnergyStats = {
-      hitpoints: 100,
-      energypoints: 100,
-    };
-    initial_physic_stats: FullCoreStats = {
+    protected _initial_physic_stats: CoreStats = {
       strenght: 20,
       stamina: 20,
       aim: 20,
@@ -84,17 +80,17 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
       intelligence: 20,
     };
     experience_cap:experience_cap = [ 100,1000,2000,5000,10000 ]
-    calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): FullCalculatedStats {
+    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
-        hitpoints : 100 + Math.round(stamina),
-        energypoints : 100 + Math.round(stamina),
-        physical_attack: Math.round(strenght + stamina / 2) || 0,
-        ranged_attack: Math.round(aim / 2 + strenght / 8 + stamina / 8) || 0,
-        physical_defence: Math.round(stamina) || 0,
-        ranged_defence: Math.round(aim / 2 + stamina / 2) || 0,
-        accuracy: Math.round(aim) || 0,
-        evasion: Math.round(speed / 2) || 0,
-        initiative: Math.round(speed + intelligence) || 0,
+        hitpoints : 100 + (stamina),
+        energypoints : 100 + (stamina),
+        physical_attack: (strenght + stamina / 2) || 0,
+        ranged_attack: (aim / 2 + strenght / 8 + stamina / 8) || 0,
+        physical_defence: (stamina) || 0,
+        ranged_defence: (aim / 2 + stamina / 2) || 0,
+        accuracy: (aim) || 0,
+        evasion: (speed / 2) || 0,
+        initiative: (speed + intelligence) || 0,
       }
     }
   }
@@ -102,18 +98,14 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
   {
     readonly type:"TestMainCharacterBattleClass"="TestMainCharacterBattleClass"
     readonly name: string="TestMainCharacterBattleClass";
-    initial_core_stats: EnergyStats = {
-      hitpoints:150,
-      energypoints:150,
-    };
-    initial_physic_stats: FullCoreStats = {
+    protected _initial_physic_stats: CoreStats = {
       strenght:25,
       stamina:25,
       aim:25,
       speed:25,
       intelligence:25,
     };
-    initial_resistance_stats: FullResistanceStats = {
+    protected _initial_resistance_stats: ResistanceStats = {
       heatresistance:10,
       energyresistance:10,
       frostresistance:10,
@@ -123,17 +115,17 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
       poisonresistance:10,
     };
     experience_cap:experience_cap = [ 100,1000,2000,5000,10000 ]
-    calculate_stats({strenght, stamina, aim, speed, intelligence,}:FullCoreStats):FullCalculatedStats {
+    protected _calculate_stats({strenght, stamina, aim, speed, intelligence,}:FullCoreStats):CalculatedStats {
       return {
-        hitpoints : 100 + Math.round(stamina),
-        energypoints : 100 + Math.round(stamina),
-        physical_attack:Math.round(strenght+stamina/2)+10||0,
-        ranged_attack:Math.round(aim/2+strenght/8+stamina/8)+10||0,
-        physical_defence:Math.round(stamina)+10||0,
-        ranged_defence:Math.round(aim/2+stamina/2)+10||0,
-        accuracy:Math.round(aim)+10||0,
-        evasion:Math.round(speed/2)+10||0,
-        initiative:Math.round(speed+intelligence)+10||0,
+        hitpoints : 100 + (stamina),
+        energypoints : 100 + (stamina),
+        physical_attack:(strenght+stamina/2)+10||0,
+        ranged_attack:(aim/2+strenght/8+stamina/8)+10||0,
+        physical_defence:(stamina)+10||0,
+        ranged_defence:(aim/2+stamina/2)+10||0,
+        accuracy:(aim)+10||0,
+        evasion:(speed/2)+10||0,
+        initiative:(speed+intelligence)+10||0,
       }
     }
     protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [
