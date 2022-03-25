@@ -6,7 +6,6 @@ import { BattleCommand } from "../../Battle/BattleCommand";
 export class MainCharacter extends UniqueCharacter{
   protected _name: string;
   type:characterType = "main-character";
-  uuid = this.type;
   constructor(masterService:MasterService,name:string='', character_battle_type:string|null=null){
     super(masterService,character_battle_type);
     masterService.gameSaver.register("MainCharacter",this)

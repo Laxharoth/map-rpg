@@ -11,7 +11,6 @@ import { CharacterEquipmentOptions } from './Inventory/CharacterEquipment';
 import { InventoryOptions } from './Inventory/Inventory';
 
 export abstract class UniqueCharacter extends Character implements storeable {
-  abstract uuid: string;
   level_up():void{
     const level = ++this.level_stats.level;
     this.level_stats.perk_point = this.character_battle_class.level_up_perk_point[level]||0;
@@ -36,7 +35,6 @@ export abstract class UniqueCharacter extends Character implements storeable {
   toJson(): UniqueCharacterStoreable {
     const storeables: UniqueCharacterStoreable = {
     ...super.toJson(),
-    uuid: this.uuid,
     name: this.name,
     originalStats:this.core_stats,
     originalResistance:this.original_resistance,
@@ -87,7 +85,6 @@ export interface UniqueCharacterStoreable extends CharacterStoreable{
   equipment: CharacterEquipmentOptions;
   inventory: InventoryOptions;
   perk?:PerkStoreable[];
-  uuid: string;
-  name: string;
+  name?: string;
   [key: string]: any;
 };
