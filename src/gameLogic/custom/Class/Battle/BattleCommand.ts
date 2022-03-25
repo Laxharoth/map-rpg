@@ -2,16 +2,20 @@ import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 
-export interface BattleCommand
-{
+export interface BattleCommand{
   source:Character;
   target:Character[];
   tags:tag[];
   priority?:number;
   excecute:() => ActionOutput;
 }
-export class EmptyCommand implements BattleCommand
-{
+export interface SingleTargetCommand extends BattleCommand{
+  target:[Character];
+}
+export type SelectTargetStrategy = (user:Character,ally: Character[], enemy: Character[]) => Character[];
+export type SelectSingleTargetStrategy = (user:Character,ally: Character[], enemy: Character[]) => [Character];
+export type SelectCommandTargetStrategy = (user:Character,ally: Character[], enemy: Character[],targetStrategy:SelectTargetStrategy) => BattleCommand;
+export class EmptyCommand implements BattleCommand{
   source:Character;
   target:Character[];
   tags:tag[]=[];
@@ -22,8 +26,7 @@ export class EmptyCommand implements BattleCommand
     this.excecute = ()=>[[],[]];
   }
 }
-export class DefeatedCommand implements BattleCommand
-{
+export class DefeatedCommand implements BattleCommand{
   source:Character;
   target:Character[];
   tags:tag[]=[];
