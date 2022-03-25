@@ -6,10 +6,12 @@ import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { equipmentname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
+import { Int, roundToInt } from "../../ClassHelper/Int";
+import { applyModifiers, StatsModifier } from "../Character/StatsModifier";
 import { GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
 
 /** A item that can be equiped to a character. */
-export abstract class Equipment extends GameItem{
+export abstract class Equipment extends GameItem implements StatsModifier{
   private equipmentStats: CalculatedStats={};
   maxStack = 1;
   readonly abstract type:equipmentname
@@ -22,8 +24,8 @@ export abstract class Equipment extends GameItem{
   /** * The stats that are going to be applied to the character */
   protected _stats_modifier:CalculatedStats = {};
   protected _resistance_stats:ResistanceStats = {};
-  protected get statsModifier() { return this._stats_modifier; }
-  protected get resistanceStats() { return this._resistance_stats; }
+  get statsModifier() { return this._stats_modifier; }
+  get resistanceStats() { return this._resistance_stats; }
   constructor(masterService:MasterService)
   { super(masterService); }
   /** * The reactions the equipment privides. */
@@ -37,30 +39,8 @@ export abstract class Equipment extends GameItem{
   get isSelfUsable() : boolean {return true;};
   get isSingleTarget(): boolean {return true;};
   protected _itemEffect(user:Character,target: Character):ActionOutput{
-    this.applyModifiers(user);
+    applyModifiers(user,this);
     return [[],[]];
-  }
-  /** Applies stat modifiers to the equiped character. */
-  applyModifiers(character:Character):void{
-    for(const key of Object.keys(this.statsModifier)){
-      //@ts-ignore
-      character.calculated_stats[key] += this.statsModifier[key]
-    }
-    for(const key of Object.keys(this.resistanceStats)){
-      //@ts-ignore
-      character.calculated_resistance[key] += this.resistanceStats[key]
-    }
-  }
-  /** Removes stat modifiers to the equiped character. */
-  removeModifier(character:Character):void{
-    for(const key of Object.keys(this.statsModifier)){
-      //@ts-ignore
-      character.calculated_stats[key] -= this.statsModifier[key]
-    }
-    for(const key of Object.keys(this.resistanceStats)){
-      //@ts-ignore
-      character.calculated_resistance[key] -= this.resistanceStats[key]
-    }
   }
   get added_description_sections():GameElementDescriptionSection[]{
     const equipmentDescripitonStats:GameElementDescriptionSection={name:'stats',section_items:[]};

@@ -8,13 +8,14 @@ import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { hashable } from "../../ClassHelper/ObjectSet";
 import { BattleCommand } from "../Battle/BattleCommand";
+import { applyModifiers, StatsModifier } from "../Character/StatsModifier";
 
 /** Altered status that affect characters. */
-export abstract class Status implements storeable,hashable{
+export abstract class Status implements storeable,hashable,StatsModifier{
   abstract type:statustype;
   protected masterService:MasterService;
-  protected _stats_modifier:CalculatedStats = {};
-  protected _resistance_stats:ResistanceStats = {};
+  get statsModifier():CalculatedStats{ return {} };
+  resistanceStats:ResistanceStats = {};
   constructor(masterService:MasterService){this.masterService=masterService;}
   /** The name of the status. */
   abstract get name(): string;
@@ -38,7 +39,7 @@ export abstract class Status implements storeable,hashable{
   canApply(target: Character):boolean{return true;}
   /** Defines what to do when the status is added to the character. */
   onStatusGainded(target: Character):ActionOutput{
-    this.applyModifiers(target);
+    applyModifiers(target,this);
     return this._onStatusGainded(target);
   };
   protected _onStatusGainded(target: Character):ActionOutput{

@@ -15,11 +15,13 @@ import { ObjectSet } from "../../ClassHelper/ObjectSet";
 import { AttackCommand, DefendCommand, ShootCommand, tryAttack } from "../Battle/Battle.functions";
 import { BattleCommand, EmptyCommand, ITEM_PRIORITY } from "../Battle/BattleCommand";
 import { BattleClassOptions, CharacterBattleClass } from "../CharacterBattleClass/CharacterBattleClass";
-import { EnergyStats, CoreStats, ResistanceStats, ActionOutput, FullCoreStats, LevelStats, FullCalculatedStats, FullResistanceStats } from "./Character.type";
+import { EnergyStats, ActionOutput, FullCoreStats, LevelStats, FullCalculatedStats, FullResistanceStats } from "./Character.type";
 import { Inventory } from "./Inventory/Inventory";
 import { Reaction } from "./Reaction/Reaction";
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { CharacterBattleClassFactory } from '../../Factory/CharacterBattleClassFactory';
+import { Int, roundToInt } from '../../ClassHelper/Int';
+import { applyModifiers } from './StatsModifier';
 
 /** A model of a character. */
 export abstract class Character implements storeable
@@ -200,7 +202,7 @@ export abstract class Character implements storeable
   healHitPoints(hitpointsgain:number):number
   {
     const hitpointsBeforeHeal = this.current_energy_stats.hitpoints;
-    this.current_energy_stats.hitpoints=Math.min(this.calculated_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain);
+    this.current_energy_stats.hitpoints=roundToInt(Math.min(this.calculated_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain));
     return this.current_energy_stats.hitpoints-hitpointsBeforeHeal;
   }
   gain_experience(experience:number):number {
@@ -243,10 +245,10 @@ export abstract class Character implements storeable
   /** Cooldown the SpecialAttacks */
   protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cool() }
   calculateStats():void {
-    this.calculated_stats = this.character_battle_class.calculate_stats(this.core_stats as FullCoreStats);
+    this.calculated_stats = this.character_battle_class.calculate_stats(this.core_stats);
     this.calculated_resistance = {...this.original_resistance};
-    for(const equipment of this.character_equipment){ equipment.applyModifiers(this); }
-    for(const status of this.iterStatus()){ status.applyModifiers(this); }
+    for(const equipment of this.character_equipment){ applyModifiers(this,equipment); }
+    for(const status of this.iterStatus()){ applyModifiers(this,status); }
   }
   /** Apply status effects. */
   protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
