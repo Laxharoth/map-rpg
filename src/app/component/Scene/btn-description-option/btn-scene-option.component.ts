@@ -1,6 +1,6 @@
 import { descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 import { Component, OnInit, Input } from '@angular/core';
-import { DescriptableSceneOptions, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { runWrappedAction, DescriptableSceneOptions, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 
 @Component({
   selector: 'app-btn-scene-option',
@@ -8,7 +8,7 @@ import { DescriptableSceneOptions, SceneOptions } from 'src/gameLogic/custom/Cla
   styleUrls: ['./btn-scene-option.component.css']
 })
 export class BtnSceneOptionComponent implements OnInit {
-  @Input()option!:SceneOptions;
+  @Input()option!:SceneOptions|null;
   constructor() { }
 
   ngOnInit(): void {}

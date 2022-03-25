@@ -12,9 +12,9 @@ import { MakeFilledArray } from 'src/gameLogic/custom/functions/htmlHelper.funct
 })
 export class SceneOptionsComponent implements OnInit {
 
-  currentOptions!:SceneOptions[];
-  fixed_options!:SceneOptions[];
-  private descriptionOptions!:SceneOptions[];
+  currentOptions!:(SceneOptions|null)[];
+  fixed_options!:(SceneOptions|null)[];
+  private descriptionOptions!:(SceneOptions|null)[];
 
   private getDescriptionOptionsSubscription : Subscription|null=null;
 
@@ -35,7 +35,7 @@ export class SceneOptionsComponent implements OnInit {
     if(event.target.tagName.toLowerCase()==='input')return;
     const isnumber = (string: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(string)?string:'';
     switch(event.key){
-      case ' ':case 'Enter':this.currentOptions?.[0].action();break;
+      case ' ':case 'Enter':this.currentOptions?.[0]?.action();break;
       default:
         if(!isnumber(event.key))return;
         let number = event.key==='0'? 10: parseInt(event.key)
@@ -84,4 +84,7 @@ export class SceneOptionsComponent implements OnInit {
     _disabled: () => this.isLast(),
     get disabled(){return this._disabled()}
   }
+}
+function fillFixedOptions(options:SceneOptions[]|undefined){
+  return (options || [ null, null, null, null, null]) as unknown as SceneOptions[];
 }
