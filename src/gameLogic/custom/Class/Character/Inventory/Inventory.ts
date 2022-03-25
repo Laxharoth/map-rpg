@@ -7,6 +7,7 @@ import { MasterService } from 'src/app/service/master.service';
 import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { ActionOutput } from '../Character.type';
 import { Character } from '../Character';
+import { itemname } from '../../Items/Item.type';
 export class Inventory implements storeable {
   readonly type:string="Inventory"
   inventory_size = 9;
@@ -58,6 +59,12 @@ export class Inventory implements storeable {
     if (itemIndex < 0) return [[],[]]
     const item = this.items[itemIndex];
     return item.itemEffect(source, targets)
+  }
+  has(itemName:itemname){
+    return this.items.some((item) => item.type === itemName);
+  }
+  find(itemName:itemname){
+    return this.items.find((item) => item.type === itemName);
   }
   toJson(): InventoryOptions {
     return {
