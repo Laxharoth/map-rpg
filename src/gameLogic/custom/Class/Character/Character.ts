@@ -55,7 +55,7 @@ export abstract class Character implements storeable
     this.inventory = new Inventory(masterService);
     this.character_equipment = new CharacterEquipment(masterService);
     this.masterService = masterService;
-    this.level_stats = {experience:0, upgrade_point:0, perk_point:0, level:0, upgrade_path:[]}
+    this.level_stats = {experience:0 as Int, upgrade_point:0 as Int, perk_point:0 as Int, level:0 as Int, upgrade_path:[]}
     this.core_stats = {...this.character_battle_class.initial_physic_stats};
     this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
     //@ts-ignore
@@ -192,21 +192,19 @@ export abstract class Character implements storeable
     return t;
   }
   /** Reduces the character hitpoints up to zero. */
-  takeDamage(damage:number):number
-  {
+  takeDamage(damage:number):number{
     const hitpointsBeforeDamage = this.current_energy_stats.hitpoints;
-    this.current_energy_stats.hitpoints=Math.max(0,this.current_energy_stats.hitpoints-damage);
+    this.current_energy_stats.hitpoints=roundToInt(Math.max(0,this.current_energy_stats.hitpoints-damage));
     return this.current_energy_stats.hitpoints-hitpointsBeforeDamage;
   }
   /** Heals hitpoints from the character up to original hitpoints. */
-  healHitPoints(hitpointsgain:number):number
-  {
+  healHitPoints(hitpointsgain:number):number{
     const hitpointsBeforeHeal = this.current_energy_stats.hitpoints;
     this.current_energy_stats.hitpoints=roundToInt(Math.min(this.calculated_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain));
     return this.current_energy_stats.hitpoints-hitpointsBeforeHeal;
   }
   gain_experience(experience:number):number {
-    this.level_stats.experience+=experience;
+    this.level_stats.experience=roundToInt(this.level_stats.experience+experience);
     return experience;
   }
   /** Gets the current status of the character. */
@@ -308,7 +306,7 @@ export abstract class Character implements storeable
     return this.masterService.partyHandler.enemyParty;
   }
 }
-export type CharacterStoreable = { Factory: "Character"; type: characterType; battle_class:BattleClassOptions,[key: string]:any; }
+export type CharacterStoreable = { Factory: "Character"; type: characterType; battle_class?:BattleClassOptions,[key: string]:any; }
 /** Check if the statusname is the same as the second argument. */
 function compareStatusName(status: string | Status, characterStatus: Status):boolean
 { return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.type === status; }

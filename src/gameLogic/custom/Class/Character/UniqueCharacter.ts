@@ -9,12 +9,13 @@ import { tree_node } from '../CharacterBattleClass/ArrayTree';
 import { Upgrade } from '../Upgrade/Upgrade';
 import { CharacterEquipmentOptions } from './Inventory/CharacterEquipment';
 import { InventoryOptions } from './Inventory/Inventory';
+import { roundToInt } from '../../ClassHelper/Int';
 
 export abstract class UniqueCharacter extends Character implements storeable {
   level_up():void{
     const level = ++this.level_stats.level;
-    this.level_stats.perk_point = this.character_battle_class.level_up_perk_point[level]||0;
-    this.level_stats.upgrade_point = this.character_battle_class.level_up_upgrade_point[level]||0;
+    this.level_stats.perk_point = roundToInt(this.character_battle_class.level_up_perk_point[level]||0);
+    this.level_stats.upgrade_point = roundToInt(this.character_battle_class.level_up_upgrade_point[level]||0);
   }
   upgrade(current_level_upgrade_index:number):void{
     this.level_stats.upgrade_path.push(current_level_upgrade_index);
@@ -70,7 +71,8 @@ export abstract class UniqueCharacter extends Character implements storeable {
       this.inventory.fromJson(options.inventory)
     if (options['perk'])
       for (const perk of options['perk']) { this.addPerk(PerkFactory(this.masterService, perk)); };
-    this._name = options.name;
+    if (options['name'])
+      this._name = options.name;
     this.calculateStats();
     this.applyStatus();
   }
