@@ -7,6 +7,7 @@ import { Character } from '../Character';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { ItemStoreable } from '../../Items/Item';
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { removeModifier } from '../StatsModifier';
 
 export class CharacterEquipment implements storeable{
   readonly type:string="CharacterEquipment"
@@ -47,7 +48,7 @@ export class CharacterEquipment implements storeable{
      if(melee)melee.amount++
      this._meleeWeapon = null;
      character.inventory.addItem(melee);
-     melee&&melee.removeModifier(character)
+     melee&&removeModifier(character,melee)
    }
    /** Unequip ranged weapon and adds it to the inventory. */
    unequipRanged(character:Character){
@@ -55,7 +56,7 @@ export class CharacterEquipment implements storeable{
      if(ranged)ranged.amount++;
      this._rangedWeapon = null;
      character.inventory.addItem(ranged);
-     ranged&&ranged.removeModifier(character)
+     ranged&&removeModifier(character,ranged)
    }
    /** Unequip armor and adds it to the inventory. */
    unequipArmor(character:Character){
@@ -63,7 +64,7 @@ export class CharacterEquipment implements storeable{
      if(armor)armor.amount++;
      this._armor = null;
      character.inventory.addItem(armor);
-     armor&&armor.removeModifier(character)
+     armor&&removeModifier(character,armor)
    }
    /** Unequip shield and adds it to the inventory. */
    unequipShield(character:Character){
@@ -71,7 +72,7 @@ export class CharacterEquipment implements storeable{
      if(shield)shield.amount++;
      this._shield = null;
      character.inventory.addItem(shield);
-     shield&&shield.removeModifier(character)
+     shield&&removeModifier(character,shield)
    }
    /** Initializes the unharmed equpments. */
   private initializeUnharmed() {
