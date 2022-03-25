@@ -10,5 +10,5 @@ export class DescriptionSwitchComponent implements OnInit {
   @Input() section!:GameElementDescriptionSection;
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { console.log(this.section.section_items.length === 0, this.section) }
 }

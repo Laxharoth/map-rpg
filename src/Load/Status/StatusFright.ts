@@ -51,7 +51,7 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
     get isSelfUsable(): boolean { return false }
     get isSingleTarget(): boolean { return true }
     get added_description_sections(): GameElementDescriptionSection[]
-    { return [ {name: "description",section_items:[{name: "description",value:'fright'}]}, ]}
+    { return [ {type: "description",section_items:[{name: "description",value:'fright'}]}, ]}
     protected _itemEffect(user:Character,target: Character): ActionOutput{
         return target.addStatus(new StatusFright(this.masterService,target,user))
     }

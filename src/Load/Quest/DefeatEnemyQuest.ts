@@ -41,7 +41,7 @@ const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
     }
     get add_description():GameElementDescriptionSection[]{
       return [
-        {name:"condition",section_items:[
+        {type: "label",name:"condition",section_items:[
           {name:"enemies_defeated",value:`${this.enemies_defeated} / ${this.ENEMY_TARGET}`}
         ]}
       ]

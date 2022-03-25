@@ -102,14 +102,14 @@ function chooseScene(masterService: MasterService){
       get description(){
         return [
           {
-            name: "name",
+            type: "name",
             section_items: [{
               name: "character name",
               value: character.name
             }]
           },
           {
-            name: "description",
+            type: "description",
             section_items:[{
               name:"class",
               value:character.class

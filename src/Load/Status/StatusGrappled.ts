@@ -99,7 +99,7 @@ class SpecialGrab extends SpecialAttack{
   get isSelfUsable(): boolean { return false }
   get isSingleTarget(): boolean { return true }
   get added_description_sections(): GameElementDescriptionSection[]
-  { return [ {name: "description",section_items:[{name: "description",value:'grab'}]}, ]}
+  { return [ {type: "description",section_items:[{name: "description",value:'grab'}]}, ]}
 
   protected _itemEffect(user:Character,target: Character): ActionOutput {
       const description:ActionOutput = [[],[]];

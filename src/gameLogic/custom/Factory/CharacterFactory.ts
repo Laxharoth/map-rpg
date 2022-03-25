@@ -15,7 +15,6 @@ export const CharacterFactory:FactoryFunction<Character,UniqueCharacterStoreable
   character.fromJson(options);
   return character;
 }
-// TODO Test load characters
 export const character_switcher:{[key: string]:CharacterConstructor}= {
   'main-character':MainCharacter,
 }

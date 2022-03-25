@@ -1,17 +1,13 @@
-.app-description-switch
-{
+.app-description-switch{
   --padding:0;
 }
-.app-description-switch *
-{
+.app-description-switch *{
   margin: 0;
 }
-:is(.damage,.resistance,.stats)
-{
+:is(.list){
     padding-bottom: 10px;
 }
-:is(.damage,.resistance,.stats) ul
-{
+:is(.list) ul{
     padding: 0;
     list-style: none;
     display: flex;
@@ -19,12 +15,10 @@
     width: 25ch;
     justify-items: space-between;
 }
-:is(.damage,.resistance,.stats) li
-{
+:is(.list) li{
     width: 10ch;
 }
-.name p
-{
+.name p{
   font-weight: bold;
   font-style: italic;
 }

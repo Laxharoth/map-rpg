@@ -43,8 +43,8 @@ export abstract class Equipment extends GameItem implements StatsModifier{
     return [[],[]];
   }
   get added_description_sections():GameElementDescriptionSection[]{
-    const equipmentDescripitonStats:GameElementDescriptionSection={name:'stats',section_items:[]};
-    const equipmentDescripitonResistance:GameElementDescriptionSection={name:'resistance',section_items:[]};
+    const equipmentDescripitonStats:GameElementDescriptionSection={type:"list",name:"stats",section_items:[]};
+    const equipmentDescripitonResistance:GameElementDescriptionSection={type:"list",name:"resistance",section_items:[]};
     if(Math.max(...Object.values(this.statsModifier)))
     for(const [stat,value] of Object.entries(this.statsModifier)){
       if(value===0)continue;

@@ -33,7 +33,7 @@ export abstract class Weapon extends Equipment implements DamageSource{
     return check < 0;
   }
   get added_description_sections():GameElementDescriptionSection[]{
-    const damage_stats_description:GameElementDescriptionSection={name:'damage',section_items:[]};
+    const damage_stats_description:GameElementDescriptionSection={type:"list",name:"damage",section_items:[]};
     if(Math.max(...Object.values(this.damageTypes)))
     for(const [stat,value] of Object.entries(this.damageTypes)){
       if(value===0)continue;

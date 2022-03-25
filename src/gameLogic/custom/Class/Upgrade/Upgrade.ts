@@ -21,6 +21,6 @@ export class Upgrade implements descriptable
     this.description_text = description_text;
   }
   get description(): GameElementDescriptionSection[] {
-    return [{name:'description',section_items:[{name:'description',value:this.description_text}]}]
+    return [{type:'description',section_items:[{name:'description',value:this.description_text}]}]
   }
 }

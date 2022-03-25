@@ -65,14 +65,14 @@ const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
     get add_description(): GameElementDescriptionSection[] {
       if(this.outcome)
         return [
-          {name:"condition",section_items:[
+          {type:"label",name:"condition",section_items:[
             {name:'delivered egg',value:this.outcome.deliveredEgg},
             {name:'inspected the egg',value:this.outcome.inspectedEgg},
             {name:'planted device',value:this.outcome.plantedTrack},
           ]}
         ]
       return [
-        {name:"condition",section_items:[
+        {type:"label",name:"condition",section_items:[
           {name:'has the egg',value:this.hasEgg},
           {name:'inspected the egg',value:this.inspectedEgg},
           {name:'planted device',value:this.plantedTrack},

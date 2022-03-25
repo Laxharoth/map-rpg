@@ -23,7 +23,7 @@ export function enterRoomOption(masterService:MasterService,roomname:string,alte
     get disabled():boolean{ return ( typeof disabled === "function")?disabled():disabled; },
     descriptable:{
       description:[
-        {name:"description",section_items:[{name:"description",value:alternDescription||`Enter ${roomname}`}]}
+        {type:"description",section_items:[{name:"description",value:alternDescription||`Enter ${roomname}`}]}
       ]
     }
   }

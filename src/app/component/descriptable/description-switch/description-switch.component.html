@@ -1,42 +1,28 @@
-<div class="app-description-switch">
-  <div class="tags" *ngIf="section.name==='tags' && section.section_items.length">
-    <p>tags:</p>
+<div class="app-description-switch" *ngIf="section.section_items.length > 0">
+  <div class="name" *ngIf="section.type==='name'">
+    <p *ngFor="let item of section.section_items">{{ item.value }}</p>
+  </div>
+  <div class="description" *ngIf="section.type==='description'">
+    <pre *ngFor="let item of section.section_items">{{ item.value }}</pre>
+  </div>
+  <div class="label" *ngIf="section.type==='label'">
+    <p *ngFor="let item of section.section_items">
+      {{ item.name }}:{{ item.value }}
+    </p>
+  </div>
+  <div class="list" *ngIf="section.type==='list'">
+    <p>{{  section.name  }}:</p>
+    <ul>
+      <li *ngFor="let item of section.section_items">
+        {{ item.name }}:{{ item.value }}
+      </li>
+    </ul>
+  </div>
+  <div class="sequence" *ngIf="section.type==='sequence'">
+    <p>{{ section.name }}:</p>
     <ul>
       <li *ngFor="let item of section.section_items">
         {{ item.value }}
-      </li>
-    </ul>
-  </div>
-  <div class="cooldown" *ngIf="section.name==='cooldown' && section.section_items.length">
-    <p><span>cooldown:</span><span>{{ section.section_items[0].value }}</span></p>
-  </div>
-  <div class="description" *ngIf="section.name==='description' && section.section_items.length">
-    <pre>{{ section.section_items[0].value }}</pre>
-  </div>
-  <div class="name" *ngIf="section.name==='name' && section.section_items.length">
-    <p>{{ section.section_items[0].value }}</p>
-  </div>
-  <div class="stats" *ngIf="section.name==='stats' && section.section_items.length">
-    <p>stats:</p>
-    <ul>
-      <li *ngFor="let item of section.section_items">
-        {{ item.name }}:{{ item.value }}
-      </li>
-    </ul>
-  </div>
-  <div class="resistance" *ngIf="section.name==='resistance' && section.section_items.length">
-    <p>resistance:</p>
-    <ul>
-      <li *ngFor="let item of section.section_items">
-        {{ item.name }}:{{ item.value }}
-      </li>
-    </ul>
-  </div>
-  <div class="damage" *ngIf="section.name==='damage' && section.section_items.length">
-    <p>damage:</p>
-    <ul>
-      <li *ngFor="let item of section.section_items">
-        {{ item.name }}:{{ item.value }}
       </li>
     </ul>
   </div>

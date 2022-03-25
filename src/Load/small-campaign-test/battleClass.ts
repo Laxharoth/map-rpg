@@ -29,9 +29,9 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     const target  = targets[Math.floor(Math.random() * targets.length)];
     return [target];
   }
-  const selectSingleEnemy:SelectSingleTargetStrategy = function(user,userally: Character[], enemy: Character[]){
-    // TODO select enemy with some logic
-    return [enemy[0]];
+  const selectSingleEnemyMaxHP:SelectSingleTargetStrategy = function(user,userally: Character[], enemy: Character[]){
+    const maxHP = Math.max(...enemy.map( enemy => enemy.current_energy_stats.hitpoints ));
+    return [enemy.find( enemy => enemy.current_energy_stats.hitpoints === maxHP ) || enemy[0]];
   }
   const AttackOrDefend:SelectCommandTargetStrategy = (user,ally,enemy,targetStrategy)=>{
     if(Factory.randomCheck(95)){
@@ -139,9 +139,9 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
       const net = this.inventory.find("Net");
       if(net){
-        return this.useItem(net,selectSingleEnemy(this,ally,enemy));
+        return this.useItem(net,selectSingleEnemyMaxHP(this,ally,enemy));
       }
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemy)
+      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
     }
   }
   class GuardEnemy extends BaseEnemy{
@@ -153,7 +153,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"BlindInmune"}));
     }
     protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemy)
+      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
     }
   }
   class Seller extends PersistentCharacter implements Enemy{
@@ -177,9 +177,9 @@ const register:register_function = ({enemy_formation,character_battle_class,char
         return this.useItem(sneakAttack,possibleTargets(this,ally,enemy,sneakAttack));
       }
       if(multyAttack && !multyAttack.disabled(this) && Factory.randomCheck(5)){
-        return this.useItem(multyAttack,selectSingleEnemy(this,ally,enemy));
+        return this.useItem(multyAttack,selectSingleEnemyMaxHP(this,ally,enemy));
       }
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemy)
+      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
     }
   }
   class ThugEnemy extends BaseEnemy{
@@ -194,9 +194,9 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
       const multyAttack = this.specialAttacks.get("MultiAttack");
       if(multyAttack && !multyAttack.disabled(this) && Factory.randomCheck(5)){
-        return this.useItem(multyAttack,selectSingleEnemy(this,ally,enemy));
+        return this.useItem(multyAttack,selectSingleEnemyMaxHP(this,ally,enemy));
       }
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemy)
+      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
     }
   }
   class SellerCrew extends EnemyFormation{
@@ -322,7 +322,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
         },
         descriptable:{
           description:[
-            {name:"description",section_items:[{name:"description",value:"Give the egg to the bandits"}]}
+            {type:"description",section_items:[{name:"description",value:"Give the egg to the bandits"}]}
           ]
         }
       }
@@ -340,7 +340,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
         },
         descriptable:{
           description:[
-            {name:"description",section_items:[{name:"description",value:"Give the egg to the bandits"}]}
+            {type:"description",section_items:[{name:"description",value:"Give the egg to the bandits"}]}
           ]
         }
       }
@@ -463,7 +463,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
       }
     }
     protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemy);
+      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP);
     }
   }
   class FrankiePeanuts extends UsableCharacter{
@@ -479,7 +479,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
       const guidance = this.specialAttacks.get("Guidance");
       const mending = this.specialAttacks.get("Mending");
       const sacredFlame = this.specialAttacks.get("SacredFlame");
-      if(guidance && !guidance.disabled(this) /* //TODO add check */){
+      if(guidance && !guidance.disabled(this)){
         const targets = possibleTargets(this,ally,enemy, guidance);
         this.useItem(guidance,randomAnyTarget(targets));
       }
@@ -487,10 +487,10 @@ const register:register_function = ({enemy_formation,character_battle_class,char
       if(mending && !mending.disabled(this) && hurtedAlly ){
         this.useItem(mending,[hurtedAlly]);
       }
-      if(sacredFlame && !sacredFlame.disabled(this) /* //TODO add check */){
-        this.useItem(sacredFlame,selectSingleEnemy(this,ally,enemy));
+      if(sacredFlame && !sacredFlame.disabled(this) && Factory.randomCheck(29)){
+        this.useItem(sacredFlame,selectSingleEnemyMaxHP(this,ally,enemy));
       }
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemy)
+      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
     }
   }
   class BishopVault extends UsableCharacter{

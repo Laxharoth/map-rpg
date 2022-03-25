@@ -15,8 +15,8 @@ export abstract class Quest implements storeable, descriptable,hashable
   get add_description():GameElementDescriptionSection[]{return []};
   get description(): GameElementDescriptionSection[]{
     return [
-      {name:"name",section_items:[{name:'name',value:this.name}]},
-      {name:"description",section_items:[{name:'description',value:this.description_text}]},
+      {type:"name",section_items:[{name:'name',value:this.name}]},
+      {type:"description",section_items:[{name:'description',value:this.description_text}]},
       ...this.add_description
     ]
   }

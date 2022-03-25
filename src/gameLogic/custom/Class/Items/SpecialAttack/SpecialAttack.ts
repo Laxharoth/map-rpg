@@ -37,13 +37,12 @@ export abstract class SpecialAttack implements BattleUseable, hashable, storeabl
   protected abstract _itemEffect(user: Character, targets: Character): ActionOutput;
   disabled(user:Character): boolean { return this.cooldown > 0;}
   constructor(masterService:MasterService){this.masterService=masterService;}
-  get description(): GameElementDescriptionSection[]
-  {
+  get description(): GameElementDescriptionSection[]{
     return [
-      {name:"name",section_items:[{name:'name',value:this.name}]},
+      {type:"name",section_items:[{value:this.name}]},
       ...this.added_description_sections,
-      {name:"tags",section_items:this.tags.map(tag =>{return {name:'tag',value:tag}})},
-      {name:"cooldown",section_items:[{name:'cooldown',value:this.cooldown}]},
+      {type:"sequence",name:"tags",section_items:this.tags.map(tag =>{return {value:tag}})},
+      {type:"label",name:"cooldown",section_items:[{name:'cooldown',value:this.cooldown}]},
     ]
   }
   get added_description_sections():GameElementDescriptionSection[] { return [] }

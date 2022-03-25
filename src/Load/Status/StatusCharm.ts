@@ -50,7 +50,7 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
     get isSelfUsable() : boolean { return false; }
     get isSingleTarget(): boolean { return true; }
     get added_description_sections(): GameElementDescriptionSection[]
-    { return [ {name: "description",section_items:[{name: "description",value:'charm'}]}, ]}
+    { return [ {type: "description",section_items:[{name: "description",value:'charm'}]}, ]}
     protected _itemEffect(user:Character,target: Character): ActionOutput {
       return target.addStatus(new StatusCharm(this.masterService,user,target))
     }
