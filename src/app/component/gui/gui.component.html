@@ -21,6 +21,9 @@
       <div *ngIf="currentGameState === 'map'" class="color-2">
         <app-map-gui></app-map-gui>
       </div>
+      <div *ngIf="currentGameState === 'talk'" class="color-2">
+        <app-talk-gui></app-talk-gui>
+      </div>
       <div *ngIf="currentGameState === 'battle'" class="color-2">
         <app-battle-gui></app-battle-gui>
       </div>
