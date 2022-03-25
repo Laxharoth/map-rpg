@@ -35,12 +35,14 @@ export class Battle implements storeable{
         special.reset_initial_cooldown();
       })
     });
-    // @ts-ignore
-    this.battle_options = this.initialize_battle_options();
+    this.battle_options = this.initialize_battle_options() as SceneOptions[];
     post_initialize_battle_options?.(this.battle_options);
   }
+  start(): void {
+    this.startRound();
+  }
   /** Iterates the character actions appling their actions. */
-  round(playerAction: BattleCommand): void {
+  private round(playerAction: BattleCommand): void {
     const partyIsDefeated = () => { return get_undefeated_target([this.player].concat(this.party)).length === 0 }
     const turn_characters =get_undefeated_target([this.player].concat(this.party).concat(this.enemy_formation.enemies))
     const battle_commands:BattleCommand[] = []
@@ -83,13 +85,13 @@ export class Battle implements storeable{
       .nextScene(false);
   }
 
-  roundMessage(roundStrings: string[]): Scene {
+  private roundMessage(roundStrings: string[]): Scene {
     const nextOption = {text:"next", action:() => this.startRound(),disabled:false}
     return {sceneData: () => `${roundStrings.join("\n\n")}`, options:[nextOption],fixed_options:[null,null,null,null,null]}
   }
 
   /** Reset the round strings and scenes lists. */
-  startRound(): void {
+  private startRound(): void {
     this.startRoundString = [];
     this.battleRoundString = [];
     this.startRoundScene = [];
@@ -201,13 +203,13 @@ export class Battle implements storeable{
       this.master_service.partyHandler.battle_ended('escape')
       this.master_service.sceneHandler
         .flush(0)
-        .tailScene({sceneData: descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]}, 'battle')
+        .tailScene({sceneData:()=>descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]}, 'battle')
         .nextScene(false);
       return;
     }
     //player will do nothing
     const playerAction= new EmptyCommand(this.player,[])
-    this.startRoundScene.push({sceneData:descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]})
+    this.startRoundScene.push({sceneData:()=>descriptionText, options:[nextOption(this.master_service)],fixed_options:[null,null,null,null,null]})
     this.round(playerAction)
   },disabled:false};
   protected initialize_battle_options(): (SceneOptions|null)[] {
