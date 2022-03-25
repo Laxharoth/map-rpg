@@ -1,16 +1,16 @@
-import { hashable } from 'src/gameLogic/custom/ClassHelper/ObjectSet';
-import { MasterService } from "src/app/service/master.service";
-import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { pushBattleActionOutput } from "src/gameLogic/custom/functions/htmlHelper.functions";
-import { ActionOutput } from "../../Character/Character.type";
-import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
-import { BattleUseable } from "../BattleUseable";
+import { MasterService } from 'src/app/service/master.service';
 import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { attack, DamageSource, DamageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
+import { Character } from 'src/gameLogic/custom/Class/Character/Character';
+import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
+import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
+import { BattleUseable } from 'src/gameLogic/custom/Class/Items/BattleUseable';
+import { specialsname } from 'src/gameLogic/custom/Class/Items/Item.type';
+import { hashable } from 'src/gameLogic/custom/ClassHelper/ObjectSet';
+import { tag } from 'src/gameLogic/custom/customTypes/tags';
+import { pushBattleActionOutput, randomCheck } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
-export abstract class SpecialAttack implements BattleUseable, hashable, storeable
-{
+export abstract class SpecialAttack implements BattleUseable, hashable, storeable{
   abstract type:specialsname;
   abstract readonly name:string;
   protected masterService:MasterService;
@@ -57,6 +57,26 @@ export abstract class SpecialAttack implements BattleUseable, hashable, storeabl
       }
   }
   fromJson(options:SpecialAttackOptions){}
+}
+export abstract class DamageSpecialAttack extends SpecialAttack implements DamageSource{
+  abstract damageTypes: DamageTypes;
+  abstract damagestat(user: Character): number;
+  abstract defencestat(target: Character): number;
+  isPartyUsable: boolean = false;
+  isEnemyUsable: boolean = true;
+  isSelfUsable: boolean = false;
+  didAttackMiss(source: Character, target: Character): boolean {
+    return randomCheck(source.calculated_stats.accuracy-target.calculated_stats.evasion);
+  }
+  attackLanded(damage: number, user: Character, target: Character): ActionOutput {
+    return [[],[`${user.name}'s ${this.name} deals ${damage} to ${target.name}`]]
+  }
+  attackMissed(user: Character, target: Character): ActionOutput {
+    return [[],[`${user.name}'s ${this.name} missed ${target.name}`]]
+  }
+  protected _itemEffect(user: Character, targets: Character): ActionOutput {
+    return attack(this,user,targets)
+  }
 }
 export type SpecialAttackOptions = {
   Factory: "SpecialAttack",
