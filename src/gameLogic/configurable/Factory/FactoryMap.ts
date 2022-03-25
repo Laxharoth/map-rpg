@@ -1,3 +1,4 @@
+import { BattleFactory } from './../../custom/Factory/BattleFactory';
 import { MasterService } from "src/app/service/master.service";
 import { MasterFlagsSetter } from "src/gameLogic/core/subservice/flag-handler";
 import { QuestFactory } from "src/gameLogic/custom/Factory/QuestFactory";
@@ -34,6 +35,7 @@ export enum FactoryName{
   "Reaction"="Reaction",
   "CharacterBattleClass"="CharacterBattleClass",
   "EnemyFormation"="EnemyFormation",
+  "Battle"="Battle",
 }
 export type factoryname= `${FactoryName}`;
 export type FactoryFunction<T=any,U=StoreableType> = (masterService:MasterService,options:U)=>T;
@@ -71,4 +73,6 @@ export const factoryMap:{[key in FactoryName]:FactoryFunction} = {
   CharacterBattleClass:CharacterBattleClassFactory,
   // @ts-ignore
   EnemyFormation:EnemyFormationFactory,
+  // @ts-ignore
+  Battle:BattleFactory,
 }

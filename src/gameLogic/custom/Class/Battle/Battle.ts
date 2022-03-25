@@ -10,9 +10,11 @@ import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
 import { selectItem } from '../Scene/SceneUseItem';
 import { selectTarget } from '../Scene/SceneSelectTarget';
 import { BattleUseable } from '../Items/BattleUseable';
-export class Battle {
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
+export class Battle implements storeable{
   player: Character;
   party: Character[];
+  type="";
   enemy_formation: EnemyFormation;
   private master_service: MasterService;
   protected battle_options: SceneOptions[];
@@ -248,6 +250,20 @@ export class Battle {
       is_valid_target,
       is_item_disabled)
   }
+  toJson():BattleOptions{
+    throw new Error("Not implemented");
+  }
+  fromJson(options:BattleOptions){
+    if(options.post_initialize_battle_options)
+      options.post_initialize_battle_options(this.battle_options);
+  }
+}
+
+export interface BattleOptions{
+  Factory:"Battle"
+  type:string;
+  enemy:EnemyFormation;
+  post_initialize_battle_options?:(battle_options:SceneOptions[])=>void
 }
 
 function sortBattleCommands(commands:BattleCommand[]){
