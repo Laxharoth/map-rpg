@@ -1,7 +1,7 @@
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
@@ -23,19 +23,20 @@ const register: register_function = ({perk,status,reaction}, {perk:{Perk},reacti
 
     get reactions(): Reaction[] {return [this.poisonRush]}
   }
-  class PoisonRush extends StatusBattle
-  {
+  class PoisonRush extends StatusBattle{
+    private target!:Character;
     readonly type:"PoisonRush"="PoisonRush";
     get name(): string { return "Poison Rush"; }
     get description(): string { return 'increase physicall attack after poison status is lost' }
     protected DURATION: number = 1;
-    applyModifiers(character: Character): void {
-      character.calculated_stats.physical_attack*=4;
-    }
-    onStatusGainded(target: Character): ActionOutput
-    {
+    onStatusGainded(target: Character): ActionOutput{
+      this.target = target;
       return Factory.pushBattleActionOutput([[],['Overcoming poison grants extra attack']],super.onStatusGainded(target))
     }
+    // @ts-ignore
+    protected get _stats_modifier():CalculatedStats{
+      return { physical_attack: this.target.calculated_stats.physical_attack * 3  };
+    };
   }
   perk["PerkPoisonRush"]=PerkPoisonRush
   status["PoisonRush"]=PoisonRush

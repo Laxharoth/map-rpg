@@ -1,7 +1,7 @@
 import { MasterService } from "src/app/service/master.service";
 import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
@@ -29,11 +29,14 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack{
       return 'Being grabbed by something impedes movements.'
   }
   protected effect(target: Character): ActionOutput { return [[],[`${target.name} is being grabbed by ${this._source.name}`]]; }
-  applyModifiers(character: Character): void { character.calculated_stats.initiative = 0; }
   onStatusGainded(target: Character):ActionOutput{
     this._target = target;
     return super.onStatusGainded(target);
   }
+    // @ts-ignore
+  protected get _stats_modifier():CalculatedStats{
+    return { initiative: this._target.calculated_stats.initiative };
+  };
   canAttack(target: Character): boolean {return this._source === target;}
   preventAttackDescription(target: Character): ActionOutput {
     return [[],[`${this._target.name} can attack only the grappling one.`]];
