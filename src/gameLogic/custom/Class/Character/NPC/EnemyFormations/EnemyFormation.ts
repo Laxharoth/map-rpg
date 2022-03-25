@@ -1,21 +1,16 @@
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { MasterService } from "src/app/service/master.service";
 import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
-import { Scene, SceneOptions, descriptionString } from "src/gameLogic/custom/Class/Scene/Scene";
+import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { GameItem } from "src/gameLogic/custom/Class/Items/Item";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { ActionOutput } from '../../Character.type';
 import { factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { primitive } from 'src/gameLogic/core/types';
 
 /**
  * An array of characters, with the functions for battle descriptions.
- *
- * @export
- * @abstract
- * @class EnemyFormation
- * @constructor Initializes the masterService
  */
 export abstract class EnemyFormation implements storeable
 {
@@ -49,7 +44,7 @@ export abstract class EnemyFormation implements storeable
     return [[],experience_str]
   }
   /** Returns a description of whether escaped or not. */
-  attemptEscape(party: Character[]):[descriptionString,boolean]
+  attemptEscape(party: Character[]):[string,boolean]
   {
     if(!this.escapeCheck(party))return [this.escapeFail(),false];
     for(const character of party){character.onEndBattle();}
@@ -58,9 +53,9 @@ export abstract class EnemyFormation implements storeable
   }
 
   /** Returs as description of the player party successfully escaped. */
-  protected abstract escapeSuccess():descriptionString;
+  protected abstract escapeSuccess():string;
   /** Returs as description of the player party failed to escape */
-  protected abstract escapeFail():descriptionString;
+  protected abstract escapeFail():string;
   /** Determine if the player can escape the enemy. */
   protected abstract escapeCheck(party: Character[]):boolean;
   /** A DescriptionOption to get the to the next description. */
@@ -80,7 +75,7 @@ export abstract class EnemyFormation implements storeable
 }
 
 export type EnemyFormationOptions = {
-  Factory:factoryname;
+  Factory:"EnemyFormation";
   type: string;
 }
 

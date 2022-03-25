@@ -6,8 +6,9 @@ import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
 import { GameItem, ItemStoreable } from "src/gameLogic/custom/Class/Items/Item";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { descriptionString, Scene } from "src/gameLogic/custom/Class/Scene/Scene";
+import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
+import { UniqueCharacterStoreable } from 'src/gameLogic/custom/Class/Character/UniqueCharacter';
 
 const register:register_function = ({character,enemy_formation}, {character:{Character,PersistentCharacter,UniqueCharacter}, enemy_formation:{EnemyFormation} },Factory)=>{
   const GameItemFactory = Factory as typeof ItemFactory;
@@ -28,7 +29,8 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
       //@ts-ignore
       this.masterService.gameSaver.unregister("PersistentCharacter",this)
       this._name = name
-      this.uuid = this._name;
+      //@ts-ignore
+      this.type = this._name;
       //@ts-ignore
       this.masterService.gameSaver.register("PersistentCharacter",this)
     }
@@ -48,10 +50,11 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
             default: return EmptyCommand(this,enemy);
         }
     }
-    fromJson(options)
+    fromJson(options:UniqueCharacterStoreable)
     {
       super.fromJson(options);
-      this.uuid = this._name;
+      //@ts-ignore
+      this.type = this._name;
       //@ts-ignore
       this.masterService.gameSaver.unregister("PersistentCharacter",this)
       //@ts-ignore
@@ -69,13 +72,13 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
         return 'test enemy';
     }
     _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
-        const target = Factory.randomBetween(0,ally.length-1);
+        const target = Factory.randomBetween(0,enemy.length-1);
         switch (Factory.randomBetween(0,2))
         {
             //ATTACK
-            case 0: return this.Attack([ally[target]]);
+            case 0: return this.Attack([enemy[target]]);
             //RANGE
-            case 1: return this.Shoot([ally[target]]);
+            case 1: return this.Shoot([enemy[target]]);
             //DEFEND
             case 2: return this.Defend([this]);
             default: return EmptyCommand(this,[]);
@@ -102,9 +105,9 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
   {
     protected _name: string = "John Smith";
     type: characterType= 'john';
-    uuid=this.type;
-    constructor(masterService:MasterService)
-    {
+      //@ts-ignore
+    type=this.type;
+    constructor(masterService:MasterService){
       super(masterService);
       masterService.gameSaver.register('PersistentCharacter',this)
     }
@@ -121,10 +124,10 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
         this._enemies = [new enemyTest(this.masterService)]
         this._enemies = [new enemyTest(this.masterService),new enemyTest(this.masterService)]
     }
-    protected escapeSuccess():descriptionString{
-      return ()=>`${this.masterService.partyHandler.user.name} escapes`;
+    protected escapeSuccess():string{
+      return `${this.masterService.partyHandler.user.name} escapes`;
     }
-    protected escapeFail():descriptionString{
+    protected escapeFail():string{
       throw Error("");
     }
     protected escapeCheck(party: Character[]):boolean{
@@ -167,6 +170,6 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
 }
 
 const module_name="TestCharacters";
-const module_dependency=["EquipmentTest"]
+const module_dependency:string[]=["EquipmentTest"]
 
 export {register, module_name, module_dependency}
