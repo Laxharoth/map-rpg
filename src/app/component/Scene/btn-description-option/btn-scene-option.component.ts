@@ -17,8 +17,9 @@ export class BtnSceneOptionComponent implements OnInit {
     return Boolean(this.option)&&(this.option as DescriptableSceneOptions).descriptable !== undefined;
   }
   get has_description(): boolean {
-    // @ts-ignore
-    if(this.is_descriptable){ return this.descriptable.description.some(section => section.section_items.length); }
+    if(this.is_descriptable){
+      return this.descriptable.description.some(section => section.section_items.length);
+    }
     return false;
   }
   get descriptable():descriptable{

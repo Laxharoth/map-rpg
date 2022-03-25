@@ -50,22 +50,17 @@ export class SceneOptionsComponent implements OnInit {
     this.getDescriptionOptionsSubscription = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
       this.offset = 0;
       this.descriptionOptions = scene.options;
-      // @ts-ignore
-      this.fixed_options = scene.fixed_options;
+      this.fixed_options = fillFixedOptions(scene.fixed_options as SceneOptions[]);
       this.setCurrentOptions();
     });
     if(this.masterService.sceneHandler.currentScene){
       this.descriptionOptions = this.masterService.sceneHandler.currentScene.options;
-      // @ts-ignore
-      this.fixed_options = this.masterService.sceneHandler.currentScene.fixed_options;
+      this.fixed_options = fillFixedOptions(this.masterService.sceneHandler.currentScene.fixed_options as SceneOptions[]);
     }
     this.setCurrentOptions();
   }
-
-  private setCurrentOptions()
-  {
+  private setCurrentOptions(){
     let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+MAXOPTIONSNUMBERPERPAGE)
-      // @ts-ignore
     aux_currentOptions.push(...MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-aux_currentOptions.length,null))
     this.currentOptions = aux_currentOptions;
   }

@@ -5,6 +5,7 @@ import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { FullCoreStats } from 'src/gameLogic/custom/Class/Character/Character.type';
 import { nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { Scene, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { Int, roundToInt } from 'src/gameLogic/custom/ClassHelper/Int';
 
 @Component({
   selector: 'app-stat-up-gui',
@@ -20,10 +21,10 @@ export class StatUpGuiComponent implements OnInit {
 
   constructor(private masterService:MasterService) {
     this.get_character_subsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
-      this.initialize_description(scene)
-    })
-    // @ts-ignore
-    this.initialize_description(masterService.sceneHandler.currentScene)
+      this.initialize_description(scene);
+    });
+    if(!masterService.sceneHandler.currentScene){ return; }
+    this.initialize_description(masterService.sceneHandler.currentScene);
     masterService.sceneHandler.setScene(false);
   }
 
@@ -39,7 +40,7 @@ export class StatUpGuiComponent implements OnInit {
       text:'select',
       action:()=>{
         this.character.core_stats = {...this.core_stats}
-        this.character.level_stats.upgrade_point  = this.upgrade_points;
+        this.character.level_stats.upgrade_point  = roundToInt(this.upgrade_points);
         this.character.calculateStats();
         this.masterService.sceneHandler.nextScene(false);
       },
@@ -76,11 +77,10 @@ export class StatUpGuiComponent implements OnInit {
     }
   }
   update_stat(value:number,stat:string){
+    const characterCoreStats = this.core_stats as unknown as { [key: string]:Int };
     const new_stat = value;
-    // @ts-ignore
-    const difference = new_stat-this.core_stats[stat]
-    // @ts-ignore
-    this.core_stats[stat] = value;
+    const difference = new_stat-characterCoreStats[stat];
+    characterCoreStats[stat] = roundToInt(value);
     this.upgrade_points -=  difference;
   }
 }
