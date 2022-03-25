@@ -76,14 +76,14 @@ export abstract class UniqueCharacter extends Character implements storeable {
   }
 }
 export interface UniqueCharacterStoreable extends CharacterStoreable{
-  originalStats: FullCoreStats;
-  levelStats: LevelStats;
-  originalResistance: FullResistanceStats;
-  currentCore: EnergyStats;
-  gold: number;
-  status: StatusStoreable[];
-  equipment: CharacterEquipmentOptions;
-  inventory: InventoryOptions;
+  originalStats?: FullCoreStats;
+  levelStats?: LevelStats;
+  originalResistance?: FullResistanceStats;
+  currentCore?: EnergyStats;
+  gold?: number;
+  status?: StatusStoreable[];
+  equipment?: CharacterEquipmentOptions;
+  inventory?: InventoryOptions;
   perk?:PerkStoreable[];
   name?: string;
   [key: string]: any;
