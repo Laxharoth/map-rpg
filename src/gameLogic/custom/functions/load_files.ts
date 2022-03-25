@@ -20,5 +20,13 @@ export async function load_files({})
   await import("../../../Load/Perk/PerkUpgradeable").then(module=>add_module(module))
   await import("../../../Load/Character/TestCharacter").then(module=>add_module(module));
   await import("../../../Load/Map/TestMap/TestMaps").then(module=>add_module(module));
+  /* ------------------------ */
+  await import("../../../Load/small-campaign-test/maps/maps").then(module=>add_module(module));
+  await import("../../../Load/small-campaign-test/battleClass").then(module=>add_module(module));
+  await import("../../../Load/small-campaign-test/items").then(module=>add_module(module));
+  await import("../../../Load/small-campaign-test/quest").then(module=>add_module(module));
+  await import("../../../Load/small-campaign-test/reactions").then(module=>add_module(module));
+  await import("../../../Load/small-campaign-test/specialAttack").then(module=>add_module(module));
+  await import("../../../Load/small-campaign-test/status").then(module=>add_module(module));
   register_all_modules()
 }
