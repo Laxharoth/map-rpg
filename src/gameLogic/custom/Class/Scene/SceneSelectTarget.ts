@@ -6,7 +6,7 @@ import { Scene, SceneOptions } from "./Scene";
 
 /** Returns options to select target. */
  export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene{
-   const targetsOptions:SceneOptions[] = [];
+   const targetsOptions:(SceneOptions|null)[] = [];
    const returnOption = nextOption(masterService,'return');
    for(const target of targets){
      targetsOptions.push({text:target.name,action:()=>{ playerAction([target]) },disabled:false})
@@ -21,5 +21,5 @@ import { Scene, SceneOptions } from "./Scene";
    }
    return {
      sceneData:()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
-     options:targetsOptions,fixed_options:[null,null,null,null,null]}
+     options:targetsOptions as SceneOptions[]}
  }
