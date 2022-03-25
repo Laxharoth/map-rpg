@@ -155,7 +155,7 @@ export abstract class Character implements storeable
       return {
         source: this,
         target: targets,
-        tags: ['item-use'],
+        tags: item.tags,
         excecute: () => this.inventory.useItem(item, this, targets),
         priority:ITEM_PRIORITY
       }
