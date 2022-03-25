@@ -2,39 +2,22 @@ import { add_module, register_all_modules } from "src/gameLogic/core/Factory/Reg
 
 export async function load_files({})
 {
-  //@ts-ignore
-  await import("../../../Load/Quest/DefeatEnemyQuest.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Item/Item/PoisonPill.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusBlind.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusCharm.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusInvisible.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusPetrified.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusProne.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusRestrained.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusSleep.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusPoison.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusGrappled.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/StatusFright.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Status/PoisonRush.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Item/Equipment/ShieldGuard.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Item/Equipment/ItemTest.ts").then(module=>add_module(module))
-  //@ts-ignore
-  await import("../../../Load/Perk/PerkUpgradeable.ts").then(module=>add_module(module))
-  //@ts-ignore
+  await import("../../../Load/Quest/DefeatEnemyQuest").then(module=>add_module(module))
+  await import("../../../Load/Item/Item/PoisonPill").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusBlind").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusCharm").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusInvisible").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusPetrified").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusProne").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusRestrained").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusSleep").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusPoison").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusGrappled").then(module=>add_module(module))
+  await import("../../../Load/Status/StatusFright").then(module=>add_module(module))
+  await import("../../../Load/Status/PoisonRush").then(module=>add_module(module))
+  await import("../../../Load/Item/Equipment/ItemTest").then(module=>add_module(module))
+  await import("../../../Load/Item/Equipment/ShieldGuard").then(module=>add_module(module))
+  await import("../../../Load/Perk/PerkUpgradeable").then(module=>add_module(module))
   await import("../../../Load/Character/TestCharacter").then(module=>add_module(module));
   await import("../../../Load/Map/TestMap/TestMaps").then(module=>add_module(module));
   register_all_modules()

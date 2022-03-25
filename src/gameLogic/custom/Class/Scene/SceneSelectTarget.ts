@@ -12,12 +12,10 @@ import { Scene, SceneOptions } from "./Scene";
      targetsOptions.push({text:target.name,action:()=>{ playerAction([target]) },disabled:false})
    }
    if(targetsOptions.length <= MAXOPTIONSNUMBERPERPAGE){
-     // @ts-ignore
      while(targetsOptions.length < MAXOPTIONSNUMBERPERPAGE-1) targetsOptions.push(null);
      targetsOptions.push(returnOption)
    }
    else{
-     // @ts-ignore
      while(targetsOptions.length%MAXOPTIONSNUMBERPERPAGE-2 !==MAXOPTIONSNUMBERPERPAGE-3) targetsOptions.push(null);
      targetsOptions.push(returnOption)
    }

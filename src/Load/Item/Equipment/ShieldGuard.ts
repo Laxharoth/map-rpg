@@ -12,8 +12,7 @@ const register:register_function = ({reaction,game_item,status}, {status:{Status
     readonly type:"ReactionGuard"="ReactionGuard"
     protected name: string = "ReactionGuard";
     protected whatTriggers: tag[][]=[[]];
-    //@ts-ignore
-    protected prevent_reaction: tag[][] = [['paralized'],['benefic']]
+    protected prevent_reaction: tag[][] = [['paralized']]
     protected action(react_character: Character, {source,target}:BattleCommand): ActionOutput {
       if(this.masterService.partyHandler.is_party_member(source))return [[],[]]
       for(let i = 0; i < target.length; i++) {

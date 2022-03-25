@@ -12,10 +12,9 @@ export class InfoPageGuiComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  set_tab(event:Event)
-  {
-    //@ts-ignore
-    const tab_target = event.target.getAttribute('for') ;
+  set_tab(event:Event){
+    if(!event.target){ return; }
+    const tab_target = (event.target as HTMLElement).getAttribute('for') ;
     if(tab_target) this.current_tab = tab_target ;
   }
 }

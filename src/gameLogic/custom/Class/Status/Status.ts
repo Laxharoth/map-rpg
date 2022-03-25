@@ -34,16 +34,6 @@ export abstract class Status implements storeable,hashable{
       excecute:()=>this.effect(target)
     };
   }
-  applyModifiers(character:Character):void{
-    for(const [key,value] of Object.entries(this._stats_modifier)){
-      // @ts-ignore
-      character.calculated_stats[key] += value
-    }
-    for(const [key,value] of Object.entries(this._resistance_stats)){
-      // @ts-ignore
-      character.calculated_resistance[key] += value
-    }
-  }
   /** Check if the status can be added to the character. */
   canApply(target: Character):boolean{return true;}
   /** Defines what to do when the status is added to the character. */
