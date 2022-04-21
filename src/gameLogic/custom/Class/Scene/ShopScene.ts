@@ -6,7 +6,7 @@ import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
 export function SetShopScene(masterService:MasterService,shop:Shop):void
 {
   const options:SceneOptions[] = getShopOptions();
-  const description:Scene = {sceneData:()=>shop,options,fixed_options:[null,null,null,null,null]};
+  const description:Scene = {sceneData:()=>shop,options,fixedOptions:[null,null,null,null,null]};
 
   masterService.sceneHandler
     .headScene(description,'shop')

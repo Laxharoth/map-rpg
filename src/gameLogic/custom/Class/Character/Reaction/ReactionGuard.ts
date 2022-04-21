@@ -9,12 +9,12 @@ export class ReactionGuard extends BeforeActionReaction{
   protected name: string = "ReactionGuard";
   protected whatTriggers: tag[][]=[[]];
   //@ts-ignore
-  protected prevent_reaction: tag[][] = [['paralized'],['benefic']]
-  protected action(react_character: Character, {source, target}:BattleCommand): ActionOutput {
-    if(react_character.allys.includes(source)){ return [[],[]]; }
+  protected preventReaction: tag[][] = [['paralized'],['benefic']]
+  protected action(reactCharacter: Character, {source, target}:BattleCommand): ActionOutput {
+    if(reactCharacter.allys.includes(source)){ return [[],[]]; }
     for(let i = 0; i < target.length; i++) {
-      if(react_character.allys.includes(target[i])) {
-        target[i] = react_character
+      if(reactCharacter.allys.includes(target[i])) {
+        target[i] = reactCharacter
       }
     }
     return [[],[]]

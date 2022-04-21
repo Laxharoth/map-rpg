@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
@@ -7,7 +7,7 @@ import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({status,special_attack,perk},{status:{Status,StatusBattle},special_attack:{SpecialAttack},perk:{Perk}},Factory)=>{
+const register:registerFunction = ({status,specialAttack,perk},{status:{Status,StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
   class StatusFright extends StatusBattle implements StatusPreventAttack
   {
     type:"Fright"="Fright";
@@ -64,7 +64,7 @@ const register:register_function = ({status,special_attack,perk},{status:{Status
     get specials(){return [this.specialFright]}
   }
   status["Fright"]=StatusFright
-  special_attack["Fright"]=SpecialFright
+  specialAttack["Fright"]=SpecialFright
   // @ts-ignore
   perk["Frighter"]=PerkFright
 }

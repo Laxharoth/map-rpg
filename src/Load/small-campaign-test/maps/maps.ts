@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { map as barn } from "src/Load/small-campaign-test/maps/barn/map";
 import { map as mansion } from "src/Load/small-campaign-test/maps/mansion/map";
 import { map as street } from "src/Load/small-campaign-test/maps/street/map";
@@ -7,7 +7,7 @@ import { loft, secretExit, stairs, barn as fnBarn } from "./barn/barn";
 import { entrace as fnentrance, stairs as mstairs, upper } from "./mansion/mansion"
 import { street as fnstreet } from "./street/street";
 
-const register:register_function = ({maps,rooms}, {}, Factory)=>{
+const register:registerFunction = ({maps,rooms}, {}, Factory)=>{
   // @ts-ignore
   Factory.options.roomOptions = (masterService:MasterService)=>[
     {

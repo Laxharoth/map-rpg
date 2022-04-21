@@ -1,8 +1,7 @@
 import { Observable, Subject } from 'rxjs';
-import { MasterService } from "src/app/service/master.service";
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
 import { default_flags, flagname } from 'src/gameLogic/configurable/subservice/flag-handler.type';
-import { storeable, StoreableType } from 'src/gameLogic/core/Factory/Factory';
+import { storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 
 /**

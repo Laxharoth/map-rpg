@@ -1,11 +1,11 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register: register_function = ({perk,status,reaction}, {perk:{Perk},reaction:{Reaction},status:{StatusBattle}}, Factory) => {
+const register: registerFunction = ({perk,status,reaction}, {perk:{Perk},reaction:{Reaction},status:{StatusBattle}}, Factory) => {
   class PoisonRushReaction extends Reaction
   {
     protected name: string = "PoisonRushReaction";
@@ -35,7 +35,7 @@ const register: register_function = ({perk,status,reaction}, {perk:{Perk},reacti
     }
     // @ts-ignore
     protected get _stats_modifier():CalculatedStats{
-      return { physical_attack: this.target.calculated_stats.physical_attack * 3  };
+      return { physicalAttack: this.target.calculatedStats.physicalAttack * 3  };
     };
   }
   perk["PerkPoisonRush"]=PerkPoisonRush

@@ -11,12 +11,12 @@ export type item_factory_function = (masterService: MasterService, options: Item
 /** Creates an Item with the given itemname */
 export const ItemFactory:FactoryFunction<GameItem,ItemStoreable> = (masterService,options)=>{
   // @ts-ignore
-  const item = new item_switcher[options.type](masterService);
+  const item = new itemSwitcher[options.type](masterService);
   item.fromJson(options)
   return item;
 }
 //@ts-ignore
-export const item_switcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armornameEnum| itemsEnum]:ItemConstructor} = {
+export const itemSwitcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armornameEnum| itemsEnum]:ItemConstructor} = {
   'MeleeUnharmed':MeleeUnharmed,
   'RangedUnharmed':RangedUnharmed,
   'ShieldNoShield':ShieldNoShield,

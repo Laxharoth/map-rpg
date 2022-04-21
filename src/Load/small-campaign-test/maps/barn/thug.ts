@@ -1,11 +1,10 @@
-import { BattleFactory } from './../../../../gameLogic/custom/Factory/BattleFactory';
 import { MasterService } from "src/app/service/master.service";
-import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
-import { global_functions } from "src/gameLogic/core/Factory/Factory";
+import { FactoryForModules } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
+import { BattleFactory } from "src/gameLogic/custom/Factory/BattleFactory";
 import { EnemyFormationFactory } from "src/gameLogic/custom/Factory/EnemyFormationFactory";
 
-export function thugIntroScene(masterService:MasterService, Factory:FactoryFunction&global_functions):Scene{
+export function thugIntroScene(masterService:MasterService, Factory:FactoryForModules):Scene{
   const thug = (Factory as typeof EnemyFormationFactory)(masterService,{ Factory:"EnemyFormation", type:"ThugCrew"});
   const options:SceneOptions[] = [
     //@ts-ignore
@@ -18,7 +17,7 @@ export function thugIntroScene(masterService:MasterService, Factory:FactoryFunct
         Factory: "Battle",
         type: "Battle",
         enemy: thug,
-        post_initialize_battle_options:(options)=>{
+        postInitializeBattleOptions:(options)=>{
           //@ts-ignore
           options[12] = thug.escapeByGiveUpEgg();
         }

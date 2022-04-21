@@ -1,4 +1,4 @@
-import { battle_options } from '../../../../gameLogic/custom/Class/Battle/Battle.type';
+import { battleOptions } from '../../../../gameLogic/custom/Class/Battle/Battle.type';
 import { Battle } from '../../../../gameLogic/custom/Class/Battle/Battle';
 import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { MasterService } from "src/app/service/master.service";
@@ -41,7 +41,7 @@ export function room(roomName: string): roomFunction {
         return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing` +
           `${($flag('pet'))?`\n\nOMG there is a ${$flag('pet')}`:``}` +
           `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
-      },options: [nextOptionInputs],fixed_options:[null,null,null,null,null]}
+      },options: [nextOptionInputs],fixedOptions:[null,null,null,null,null]}
       const roomOptions:SceneOptions[] = [
         {
           text:'option1',
@@ -95,7 +95,7 @@ export function room(roomName: string): roomFunction {
         }:null,
         {
           text:'add  20 exp',
-          action:()=>{masterService.partyHandler.user.gain_experience(20);},
+          action:()=>{masterService.partyHandler.user.gainExperience(20);},
           disabled:false
         },
         {
@@ -145,21 +145,21 @@ export function room(roomName: string): roomFunction {
             return `AAAAAAAAh`
           },
           options: [nextoption],
-          fixed_options: [null, null, null, null, null]
+          fixedOptions: [null, null, null, null, null]
         }
         const flyDescription2: Scene = {
           sceneData: function () {
             return `I can see the place where I started`
           },
           options: [nextoption],
-          fixed_options: [null, null, null, null, null]
+          fixedOptions: [null, null, null, null, null]
         }
         const flyDescription3: Scene = {
           sceneData: function () {
             return `That was something`
           },
           options: [nextoption],
-          fixed_options: [null, null, null, null, null]
+          fixedOptions: [null, null, null, null, null]
         }
         const cannonDescription:Scene = {
           sceneData: function () {
@@ -169,7 +169,7 @@ export function room(roomName: string): roomFunction {
             masterService.sceneHandler.tailScene([flyDescription1, flyDescription2, flyDescription3], 'map');
             masterService.mapHandler.loadRoom('room1');
             masterService.timeHandler.addTime('30m');
-          }), noOption], fixed_options: [null, null, null, null, null]
+          }), noOption], fixedOptions: [null, null, null, null, null]
           }
         roomOptions.splice(2, 0, {
           text:'Cannon',
@@ -182,11 +182,11 @@ export function room(roomName: string): roomFunction {
       }
       const fistEnter:Scene = {sceneData: function () {
         return `It's the first time`
-      }, options:[nextoption],fixed_options: [null, null, null, null, null]};
+      }, options:[nextoption],fixedOptions: [null, null, null, null, null]};
       const roomScene:Scene = {
         sceneData: function () {
         return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
-      }, options:roomOptions,fixed_options:[
+      }, options:roomOptions,fixedOptions:[
         SceneSelectItemFromMap(masterService),
         {
           text:'info',
@@ -197,11 +197,11 @@ export function room(roomName: string): roomFunction {
       ]}
       const firstExit:Scene = {sceneData:function () {
         return `It was the first time`
-      }, options:[nextoption],fixed_options:[null,null,null,null,null]};
+      }, options:[nextoption],fixedOptions:[null,null,null,null,null]};
       const kickCanDescription:Scene = {sceneData:function () {
         return `You kick the can, it's fun.
     The can flew awa}`
-      }, options:[nextoption],fixed_options:[null,null,null,null,null]};
+      }, options:[nextoption],fixedOptions:[null,null,null,null,null]};
 
       const room = {
         onEnter: () => {
@@ -213,7 +213,7 @@ export function room(roomName: string): roomFunction {
           if (randomCheck(10)) {
             new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" }),
             // @ts-ignore
-            function(battle_options:battle_options){
+            function(battle_options:battleOptions){
               const options=[
                 battle_options[0],
                 battle_options[3],

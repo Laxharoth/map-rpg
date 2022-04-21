@@ -4,13 +4,12 @@ import { specialsname } from "../Class/Items/Item.type";
 import { SpecialAttack, SpecialAttackOptions } from "../Class/Items/SpecialAttack/SpecialAttack";
 
 /** Creates a special attack */
-export const SpecialAttackFactory=(masterService:MasterService,options:SpecialAttackOptions)=>
-{
-  const special_attack = new special_attack_switcher[options.type](masterService) as SpecialAttack;
-  special_attack.fromJson(options)
-  return special_attack
+export const SpecialAttackFactory=(masterService:MasterService,options:SpecialAttackOptions)=>{
+  const specialAttack = new specialAttackSwitcher[options.type](masterService) as SpecialAttack;
+  specialAttack.fromJson(options)
+  return specialAttack
 }
 //@ts-ignore
-export const special_attack_switcher:{[key in specialsname]:SpecialAttackConstructor} = {}
+export const specialAttackSwitcher:{[key in specialsname]:SpecialAttackConstructor} = {}
 export type SpecialAttackFactoryFunction = FactoryFunction<SpecialAttack>;
 export interface SpecialAttackConstructor {new (MasterService:MasterService):SpecialAttack};

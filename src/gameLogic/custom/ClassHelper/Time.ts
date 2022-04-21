@@ -1,6 +1,5 @@
 /** A object to represent Time. */
-export class Time
-{
+export class Time{
   private static timeconvertion = {
     m       :1,
     min     :1,
@@ -50,13 +49,11 @@ export class Time
     backupMinutes-= values.Hours*Time.timeconvertion.hours
     //minutes
     values.Minutes = backupMinutes;
-
     return values;
   }
   /** Converts a string into it's representation in minutes. */
   private convert2Time(value: number|string):number{
     if(typeof value === 'number') return value;
-
     let unitIndex  = 0;
     let unitOffset = 0;
     const pendingConvertions = separateTime(unitOffset, value, unitIndex);

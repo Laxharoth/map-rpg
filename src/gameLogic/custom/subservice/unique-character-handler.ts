@@ -5,8 +5,7 @@ import { characterType } from "../Factory/CharacterFactory";
 import { MasterService } from "src/app/service/master.service";
 import { Factory } from "src/gameLogic/core/Factory/Factory";
 
-export class UniqueCharacterHandler
-{
+export class UniqueCharacterHandler{
   private _characters:{[key: string]:UniqueCharacter}={};
   private readonly masterService: MasterService;
   constructor(masterService:MasterService){
@@ -19,11 +18,11 @@ export class UniqueCharacterHandler
       this._characters[unique_character.type] = unique_character
     })
   }
-  get_character(type: string):UniqueCharacter{
+  getCharacter(type: string):UniqueCharacter{
     let character:UniqueCharacter|undefined = this._characters[type];
     if(!character)
       character = (Factory as typeof CharacterFactory)(this.masterService,{ Factory:"Character",type:type as characterType  }) as UniqueCharacter
     return character;
   }
-  get unique_characters():UniqueCharacter[]{ return Object.values(this._characters); }
+  get uniqueCharacters():UniqueCharacter[]{ return Object.values(this._characters); }
 }

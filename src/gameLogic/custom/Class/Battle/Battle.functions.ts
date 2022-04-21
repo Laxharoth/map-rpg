@@ -6,13 +6,12 @@ import { isStatusPreventAttack, StatusPreventAttack } from '../Status/StatusBatt
 import { attack, DamageSource } from './DamageSource';
 import { MasterService } from 'src/app/service/master.service';
 import { nextOption } from '../Scene/CommonOptions';
-export function get_undefeated_target(group: Character[]): Character[] {
-  return group.filter(character => !character.is_defeated());
-}
 
-export function AttackCommand(source: Character, targets: Character[]): BattleCommand
-{
-  const weapon = source.character_equipment.meleeWeapon;
+export function getUndefeatedTarget(group: Character[]): Character[] {
+  return group.filter(character => !character.isDefeated());
+}
+export function AttackCommand(source: Character, targets: Character[]): BattleCommand{
+  const weapon = source.characterEquipment.meleeWeapon;
   return {
     source, target:targets, tags:weapon.tags,
     excecute(){
@@ -24,9 +23,8 @@ export function AttackCommand(source: Character, targets: Character[]): BattleCo
     }
   }
 }
-export function ShootCommand(source: Character, targets: Character[]): BattleCommand
-{
-  const weapon = source.character_equipment.rangedWeapon;
+export function ShootCommand(source: Character, targets: Character[]): BattleCommand{
+  const weapon = source.characterEquipment.rangedWeapon;
   return {
     source, target:targets, tags:weapon.tags,
     excecute(){
@@ -39,7 +37,7 @@ export function ShootCommand(source: Character, targets: Character[]): BattleCom
   }
 }
 export function DefendCommand(source: Character, targets: Character[]):BattleCommand{
-  const shield = source.character_equipment.shield;
+  const shield = source.characterEquipment.shield;
   return {
     source, target:targets, tags:shield.tags,
     excecute:() => shield.defend(targets),
@@ -56,7 +54,7 @@ export function escapeBattle(masterService: MasterService){
   const { partyHandler } = masterService;
   const [descriptionText, successfulEscaping] =  partyHandler.enemyFormation.attemptEscape(partyHandler.userParty)
   if (successfulEscaping) {
-    partyHandler.battle_ended('escape')
+    partyHandler.battleEnded('escape')
     masterService.sceneHandler
       .flush(0)
       .tailScene({sceneData: ()=>descriptionText, options:[nextOption(masterService)]}, 'battle')

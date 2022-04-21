@@ -11,7 +11,5 @@ export class DescriptableDescriptionComponent implements OnInit {
   @Input() small:boolean=true;
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

@@ -1,5 +1,5 @@
 import { SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
-export type battle_options = [
+export type battleOptions = [
   attack_option:SceneOptions,
   shoot_option:SceneOptions,
   special_option:SceneOptions,
@@ -13,4 +13,4 @@ export type battle_options = [
   empty:null,
   empty:null,
   empty:null,
-  escape_option:SceneOptions,]
+  escapeOption:SceneOptions,]

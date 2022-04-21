@@ -6,7 +6,6 @@ import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { equipmentname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { Int, roundToInt } from "../../ClassHelper/Int";
 import { applyModifiers, StatsModifier } from "../Character/StatsModifier";
 import { GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
 
@@ -22,9 +21,9 @@ export abstract class Equipment extends GameItem implements StatsModifier{
   /** * The tags associated with the equipment. */
   abstract get tags():tag[];
   /** * The stats that are going to be applied to the character */
-  protected _stats_modifier:CalculatedStats = {};
+  protected _statsModifier:CalculatedStats = {};
   protected _resistance_stats:ResistanceStats = {};
-  get statsModifier() { return this._stats_modifier; }
+  get statsModifier() { return this._statsModifier; }
   get resistanceStats() { return this._resistance_stats; }
   constructor(masterService:MasterService)
   { super(masterService); }
@@ -42,7 +41,7 @@ export abstract class Equipment extends GameItem implements StatsModifier{
     applyModifiers(user,this);
     return [[],[]];
   }
-  get added_description_sections():GameElementDescriptionSection[]{
+  get addedDescriptionSections():GameElementDescriptionSection[]{
     const equipmentDescripitonStats:GameElementDescriptionSection={type:"list",name:"stats",section_items:[]};
     const equipmentDescripitonResistance:GameElementDescriptionSection={type:"list",name:"resistance",section_items:[]};
     if(Math.max(...Object.values(this.statsModifier)))

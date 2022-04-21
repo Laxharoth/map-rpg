@@ -13,7 +13,7 @@ import { MakeFilledArray } from 'src/gameLogic/custom/functions/htmlHelper.funct
 export class SceneOptionsComponent implements OnInit {
 
   currentOptions!:(SceneOptions|null)[];
-  fixed_options!:(SceneOptions|null)[];
+  fixedOptions!:(SceneOptions|null)[];
   private descriptionOptions!:(SceneOptions|null)[];
 
   private getDescriptionOptionsSubscription : Subscription|null=null;
@@ -50,12 +50,12 @@ export class SceneOptionsComponent implements OnInit {
     this.getDescriptionOptionsSubscription = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
       this.offset = 0;
       this.descriptionOptions = scene.options;
-      this.fixed_options = fillFixedOptions(scene.fixed_options as SceneOptions[]);
+      this.fixedOptions = fillFixedOptions(scene.fixedOptions as SceneOptions[]);
       this.setCurrentOptions();
     });
     if(this.masterService.sceneHandler.currentScene){
       this.descriptionOptions = this.masterService.sceneHandler.currentScene.options;
-      this.fixed_options = fillFixedOptions(this.masterService.sceneHandler.currentScene.fixed_options as SceneOptions[]);
+      this.fixedOptions = fillFixedOptions(this.masterService.sceneHandler.currentScene.fixedOptions as SceneOptions[]);
     }
     this.setCurrentOptions();
   }

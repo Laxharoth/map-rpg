@@ -29,7 +29,7 @@ export class TimedStatusTest extends TimedStatus
     return {
       sceneData: () => `Remove Test Description from  ${target.name}`,
       options: [this.nextButton],
-      fixed_options: [null, null, null, null, null]
+      fixedOptions: [null, null, null, null, null]
     }
   }
 }

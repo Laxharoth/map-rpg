@@ -13,17 +13,17 @@ export class BtnSceneOptionComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  get is_descriptable(): boolean {
+  get isDescriptable(): boolean {
     return Boolean(this.option)&&(this.option as DescriptableSceneOptions).descriptable !== undefined;
   }
-  get has_description(): boolean {
-    if(this.is_descriptable){
+  get hasDescription(): boolean {
+    if(this.isDescriptable){
       return this.descriptable.description.some(section => section.section_items.length);
     }
     return false;
   }
   get descriptable():descriptable{
-    if(this.is_descriptable){ return (this.option as DescriptableSceneOptions).descriptable; }
+    if(this.isDescriptable){ return (this.option as DescriptableSceneOptions).descriptable; }
     console.warn(`not found description in ${JSON.stringify(this.option)}`)
     return { get description(){ return [] } }
   }

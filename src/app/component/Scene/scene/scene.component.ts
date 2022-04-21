@@ -8,6 +8,7 @@ import { MasterService } from 'src/app/service/master.service';
   styleUrls: ['./scene.component.css']
 })
 export class SceneComponent implements OnInit {
+  // TODO try to simplify
   //strings for befor and after Input and select
   /** Text to be displayed before the input element */
   beforeInput!:string;

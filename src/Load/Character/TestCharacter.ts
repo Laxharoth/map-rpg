@@ -1,6 +1,6 @@
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
@@ -10,7 +10,7 @@ import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { UniqueCharacterStoreable } from 'src/gameLogic/custom/Class/Character/UniqueCharacter';
 
-const register:register_function = ({character,enemy_formation}, {character:{Character,PersistentCharacter,UniqueCharacter}, enemy_formation:{EnemyFormation} },Factory)=>{
+const register:registerFunction = ({character,enemyFormation}, {character:{Character,PersistentCharacter,UniqueCharacter}, enemyFormation:{EnemyFormation} },Factory)=>{
   const GameItemFactory = Factory as typeof ItemFactory;
 
   const EmptyCommand:(that:Character,enemy:Character[])=>BattleCommand = (that,enemy)=>{ return {
@@ -64,7 +64,7 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
   class enemyTest extends Character implements Enemy
   {
     _name="enemyTest";
-    enemy_type: string = "enemyTest";
+    enemyType: string = "enemyTest";
     type:characterType = 'test enemy';
     constructor(masterService:MasterService)
     { super(masterService,'TestCharacterBattleClass') }
@@ -93,7 +93,7 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
         }
       ]
     }
-    base_experience: number = 20;
+    baseExperience: number = 20;
 
     private select_loot():itemname
     {
@@ -152,7 +152,7 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
     private enemyVictory(party: Character[]): Scene {
       party.forEach(char=>{char.healHitPoints(Infinity)})
         const options = [this.exitOption('next')]
-        return {sceneData:()=>`Enemy won`, options,fixed_options:[null,null,null,null,null]}
+        return {sceneData:()=>`Enemy won`, options,fixedOptions:[null,null,null,null,null]}
     }
     //////////////////////////
     // Party Victory
@@ -160,13 +160,13 @@ const register:register_function = ({character,enemy_formation}, {character:{Cha
     private partyVictory(party: Character[]): Scene {
       party.forEach(char=>{char.healHitPoints(10)})
         const options = [this.exitOption('next')]
-        return {sceneData:()=>`Party won`, options,fixed_options:[null,null,null,null,null]}
+        return {sceneData:()=>`Party won`, options,fixedOptions:[null,null,null,null,null]}
     }
   }
   character["test character"] = charTest;
   character["enemyTest"] = enemyTest;
   character["john"] = JohnSmith;
-  enemy_formation["testformation"] = testformation;
+  enemyFormation["testformation"] = testformation;
 }
 
 const module_name="TestCharacters";

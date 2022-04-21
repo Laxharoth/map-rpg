@@ -25,7 +25,7 @@ export class StatusParalisis extends StatusBattle {
             [{
               sceneData: () => `${target.name} has been paralized.`,
               options: [nextOption(this.masterService)],
-              fixed_options: [null, null, null, null, null]
+              fixedOptions: [null, null, null, null, null]
             }],
             []
           ])
@@ -35,6 +35,6 @@ export class StatusParalisis extends StatusBattle {
   onStatusRemoved(target: Character): ActionOutput
   { return pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger paralized.`]]); }
   canApply(target:Character): boolean
-  { return super.canApply(target) && target.calculated_resistance.energyresistance<Math.random()*100; }
+  { return super.canApply(target) && target.calculatedResistance.energyresistance<Math.random()*100; }
   get tags(): tag[] { return super.tags.concat(['paralized'])}
 }

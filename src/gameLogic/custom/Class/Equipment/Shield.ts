@@ -14,7 +14,7 @@ export abstract class Shield extends Equipment{
   protected _itemEffect(user:Character,target: Character): ActionOutput
   {
     user.unequipShield();
-    user.character_equipment.shield = this;
+    user.characterEquipment.shield = this;
     return super._itemEffect(user, target);
   }
   /** Adds the StatusDefend to the character with the shield. */
@@ -28,8 +28,7 @@ export abstract class Shield extends Equipment{
   get tags(): tag[] { return ['shield']}
 }
 
-export class ShieldNoShield extends Shield
-{
+export class ShieldNoShield extends Shield{
   readonly type:"ShieldNoShield"="ShieldNoShield"
   get name(): string { return 'No shield'; }
   canEquip(character: Character): boolean { return false; }

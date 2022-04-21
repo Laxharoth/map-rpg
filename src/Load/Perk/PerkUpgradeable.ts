@@ -1,9 +1,9 @@
 import { MasterService } from 'src/app/service/master.service';
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { PerkStoreable } from "src/gameLogic/custom/Class/Perk/Perk";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 
-const register: register_function = ({perk}, {perk:{Perk}}, Factory) => {
+const register: registerFunction = ({perk}, {perk:{Perk}}, Factory) => {
   class PerkUpgradeable extends Perk {
     level:number;
     constructor(masterService:MasterService)

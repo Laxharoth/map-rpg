@@ -5,7 +5,7 @@ import { FlagHandlerService } from 'src/gameLogic/core/subservice/flag-handler';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { GameStateService } from 'src/gameLogic/core/subservice/game-state';
 import { game_state } from 'src/gameLogic/configurable/subservice/game-state.type';
-import { set_theme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { setTheme } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { load_files } from 'src/gameLogic/custom/functions/load_files';
 import { entryPoint } from 'src/gameLogic/entryPoint';
 
@@ -19,9 +19,9 @@ export class GuiComponent implements OnInit {
   private gameStateSubscription !: Subscription;
 
   constructor(private masterService:MasterService) {
-    set_theme()
+    setTheme()
     this.currentGameState = "prepare";
-    this.register_master_service_subservice();
+    this.registerMasterServiceSubservice();
     this.InitializeSubscriptions();
     load_files({}).then(() => {
       entryPoint(masterService);
@@ -38,7 +38,7 @@ export class GuiComponent implements OnInit {
       this.currentGameState = gameState;
     });
   }
-  private register_master_service_subservice() {
+  private registerMasterServiceSubservice() {
     const gameSaver  = new GameSaver(this.masterService);
     const flagsHandler = new FlagHandlerService(gameSaver);
     const gameStateHandler   = new GameStateService();

@@ -5,22 +5,19 @@ import { armorname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 /** A type of equipment. with no aditional properties. */
-export abstract class Armor extends Equipment
-{
+export abstract class Armor extends Equipment{
   readonly abstract type:armorname
   abstract get name():string;
   /** Equips into character armor. */
-  protected _itemEffect(user:Character,target: Character): ActionOutput
-  {
+  protected _itemEffect(user:Character,target: Character): ActionOutput{
     user.unequipArmor();
-    user.character_equipment.armor = this;
+    user.characterEquipment.armor = this;
     return super._itemEffect(user, target);
   }
   get tags(): tag[] { return ['armor']; }
 }
 
-export class ArmorNoArmor extends Armor
-{
+export class ArmorNoArmor extends Armor{
   readonly type:"ArmorNoArmor"="ArmorNoArmor"
   get name(): string { return 'No Armor'; }
   canEquip(character: Character): boolean { return false; }

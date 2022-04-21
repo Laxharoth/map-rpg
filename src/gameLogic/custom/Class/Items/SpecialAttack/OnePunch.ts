@@ -28,7 +28,7 @@ export class OnePunch extends SpecialAttack
     return {
       sceneData: () => `${user.name.toUpperCase()} OHKO ${target.name}!`,
       options: [this.specialDescriptionOptions],
-      fixed_options: [null, null, null, null, null]
+      fixedOptions: [null, null, null, null, null]
     }
   }
 }

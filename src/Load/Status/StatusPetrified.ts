@@ -1,10 +1,10 @@
-import { register_function } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
+import { registerFunction } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { StatusBattle } from 'src/gameLogic/custom/Class/Status/StatusBattle';
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
+const register:registerFunction = ({status},{status:{StatusBattle}},Factory)=>{
   class StatusPetrified extends StatusBattle{
     private target!:Character;
     protected DURATION: number = 4;
@@ -23,9 +23,9 @@ const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
     // @ts-ignore
     protected get _stats_modifier():CalculatedStats{
       return {
-        physical_defence : this.target.calculated_stats.physical_defence * (0.2),
-        ranged_defence : this.target.calculated_stats.ranged_defence * (0.2),
-        initiative : this.target.calculated_stats.initiative,
+        physicalDefence : this.target.calculatedStats.physicalDefence * (0.2),
+        rangedDefence : this.target.calculatedStats.rangedDefence * (0.2),
+        initiative : this.target.calculatedStats.initiative,
       };
     }
     onStatusRemoved(target: Character): ActionOutput { return super.onStatusRemoved(target); }

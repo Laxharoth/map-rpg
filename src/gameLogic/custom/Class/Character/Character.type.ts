@@ -8,20 +8,19 @@ export interface EnergyStats {
 }
 export interface LevelStats {
   experience:Int,
-  upgrade_point:Int,
-  perk_point:Int,
+  upgradePoint:Int,
+  perkPoint:Int,
   level:Int,
-  upgrade_path:number[],
+  upgradePath:number[],
 }
-export interface CoreStats {
+export interface CoreStats{
   strenght?:number;
   stamina?:number;
   aim?:number;
   speed?:number;
   intelligence?:number;
 }
-export interface FullCoreStats extends CoreStats
-{
+export interface FullCoreStats extends CoreStats{
   strenght:Int;
   stamina:Int;
   aim:Int;
@@ -31,10 +30,10 @@ export interface FullCoreStats extends CoreStats
 export interface CalculatedStats {
   hitpoints ?: number;
   energypoints ?: number;
-  physical_attack?:number;
-  ranged_attack?:number;
-  physical_defence?:number;
-  ranged_defence?:number;
+  physicalAttack?:number;
+  rangedAttack?:number;
+  physicalDefence?:number;
+  rangedDefence?:number;
   accuracy?:number;
   evasion?:number;
   initiative?:number;
@@ -42,10 +41,10 @@ export interface CalculatedStats {
 export interface FullCalculatedStats extends CalculatedStats {
   hitpoints : Int;
   energypoints : Int;
-  physical_attack:Int;
-  ranged_attack:Int;
-  physical_defence:Int;
-  ranged_defence:Int;
+  physicalAttack:Int;
+  rangedAttack:Int;
+  physicalDefence:Int;
+  rangedDefence:Int;
   accuracy:Int;
   evasion:Int;
   initiative:Int;

@@ -1,4 +1,4 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
@@ -7,7 +7,7 @@ import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
 
-const register:register_function = ({reaction,perk}, {reaction:{BeforeActionReaction,Reaction},perk:{Perk}}, Factory)=>{
+const register:registerFunction = ({reaction,perk}, {reaction:{BeforeActionReaction,Reaction},perk:{Perk}}, Factory)=>{
   const statusFactory = Factory as StatusFactoryFuctioin;
   class PackTactics extends BeforeActionReaction{
     protected whatTriggers: tag[][] = [];
@@ -17,7 +17,7 @@ const register:register_function = ({reaction,perk}, {reaction:{BeforeActionReac
       if(
         this.masterService.partyHandler
           .enemyFormation.enemies
-          .find( enemy => enemy!==react_character && enemy.type === "Bandit" && !enemy.is_defeated())
+          .find( enemy => enemy!==react_character && enemy.type === "Bandit" && !enemy.isDefeated())
       ){
         react_character.addStatus(statusFactory(this.masterService,{ Factory:"Status", type:"Advantage"}));
       }

@@ -8,27 +8,24 @@ import { QuestFactory } from "../Factory/QuestFactory";
 import { ObjectSet } from "../ClassHelper/ObjectSet";
 import { questnames } from "../Class/Quest/Quest.type";
 
-export class QuestHolder implements storeable
-{
+export class QuestHolder implements storeable{
   type:"QuestHolder"="QuestHolder";
-  private active_quest=new ObjectSet<Quest>();
-  private readonly master_service: MasterService;
-  constructor(game_saver:GameSaver,master_service:MasterService)
-  {
-    this.master_service = master_service;
+  private activeQuest=new ObjectSet<Quest>();
+  private readonly masterService: MasterService;
+  constructor(game_saver:GameSaver,master_service:MasterService){
+    this.masterService = master_service;
     game_saver.register("QuestHolder",this)
   }
-  add(quest:Quest){this.active_quest.push(quest)}
-  get(type:questnames){return this.active_quest.find(quest=>quest.type===type);}
-  toJson():QuestHolderOptions
-  {
+  add(quest:Quest){this.activeQuest.push(quest)}
+  get(type:questnames){return this.activeQuest.find(quest=>quest.type===type);}
+  toJson():QuestHolderOptions{
     const options:QuestHolderOptions = {
       Factory: "load_quests",
       type:"load_quest",
-      quests:this.active_quest.map(quest=>quest.toJson()),
-      dependency_gamesave_object_key:[]
+      quests:this.activeQuest.map(quest=>quest.toJson()),
+      dependencyGamesaveObjectKey:[]
     }
-    options["dependency_gamesave_object_key"] = Array.from(
+    options["dependencyGamesaveObjectKey"] = Array.from(
       options.quests.reduce((prev, curr)=>{
       if(curr.dependency_gamesave_object_key)
       for(const name of curr.dependency_gamesave_object_key)
@@ -38,14 +35,14 @@ export class QuestHolder implements storeable
     return options;
   }
   fromJson(options:QuestHolderOptions)
-  { for(const option of options.quests)this.add(QuestFactory(this.master_service, option)) }
+  { for(const option of options.quests)this.add(QuestFactory(this.masterService, option)) }
 }
 
 type QuestHolderOptions = {
   Factory: "load_quests",
     type:"load_quest",
     quests:QuestOptions[],
-    dependency_gamesave_object_key:gamesavenames[]
+    dependencyGamesaveObjectKey:gamesavenames[]
 }
 
 export const loadQuest:FactoryFunction<void,QuestHolderOptions> = (master_service, options)=>{

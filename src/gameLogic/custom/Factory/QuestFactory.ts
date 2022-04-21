@@ -4,9 +4,9 @@ import { Quest, QuestOptions } from "../Class/Quest/Quest";
 
 /** Creates an Quest with the */
 export const QuestFactory:FactoryFunction<Quest,QuestOptions> = (master_service,options)=>{
-  const quest = new quest_switcher[options.type](master_service);
+  const quest = new questSwitcher[options.type](master_service);
   quest.fromJson(options);
   return quest;
 }
 export interface QuestConstructor{ new (master_service:MasterService):Quest }
-export const quest_switcher:{[key: string]:QuestConstructor} = {}
+export const questSwitcher:{[key: string]:QuestConstructor} = {}

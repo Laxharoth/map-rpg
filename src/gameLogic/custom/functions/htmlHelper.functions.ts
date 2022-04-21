@@ -43,20 +43,20 @@ export function MakeFilledArray<T>(array_size: number,default_value: T): T[] {
   return Array.from(Array(array_size).map(_=>default_value))
 }
 
-export function floor_to(nuber_to_round:number,coefficient:number):number{
+export function floorTo(nuber_to_round:number,coefficient:number):number{
   return Math.floor(nuber_to_round/coefficient)*coefficient;
 }
 
-export const set_theme = (()=>{
-  enum theme_names_enum {
+export const setTheme = (()=>{
+  enum themeNamesEnum {
     default="default"
   }
-  type theme_name = `${theme_names_enum}`
-  const themes:{[key in theme_names_enum]:string} = {
+  type themeName = `${themeNamesEnum}`
+  const themes:{[key in themeNamesEnum]:string} = {
     default:"./assets/theme/default.css"
   }
-  return (theme_name:theme_name|null=null)=>{
-    if(!theme_name)theme_name=localStorage.getItem('theme') as theme_name;
+  return (theme_name:themeName|null=null)=>{
+    if(!theme_name)theme_name=localStorage.getItem('theme') as themeName;
     if(!theme_name)theme_name='default';
     //@ts-ignore
     document.getElementById("theme")?.href=themes[theme_name];
@@ -64,28 +64,28 @@ export const set_theme = (()=>{
   }
 })();
 
-export function compare_array<T>(array1:T[],array2:T[]): boolean{
+export function compareArray<T>(array1:T[],array2:T[]): boolean{
   if(array1.length != array2.length)return false;
   for(let i = 0; i < array1.length; i++)
     if(array1[i] !== array2[i])return false;
   return true;
 }
-export function set_union<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
+export function setUnion<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
   const union_set = new Set<T>(set);
   for(const item of iterable)union_set.add(item);
   return union_set
 }
-export function set_intersection<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
+export function setIntersection<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
   const intersection_set = new Set<T>();
   for(const item of iterable) if(set.has(item))intersection_set.add(item);
   return intersection_set
 }
-export function set_complement<T>(target: Set<T>, all_elements: Iterable<T>){
+export function setComplement<T>(target: Set<T>, all_elements: Iterable<T>){
   const complement_set = new Set<T>();
   for(const item of all_elements) if(!target.has(item))complement_set.add(item)
   return complement_set
 }
-export function set_equality<T>(set1: Set<T>, set2: Set<T>):boolean {
+export function setEquality<T>(set1: Set<T>, set2: Set<T>):boolean {
   if(set1.size !== set2.size)return false;
   for(const item of set2)if(!set1.has(item))return false;
   return true;

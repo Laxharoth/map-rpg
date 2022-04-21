@@ -8,27 +8,24 @@ import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/Sp
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 
 /** A type of weapon that normally uses attack stat to determine damage. */
-export abstract class MeleeWeapon extends Weapon
-{
-  damagestat(user   : Character):number{return user.calculated_stats.physical_attack;}
-  defencestat(target: Character):number{return target.calculated_stats.physical_defence;}
+export abstract class MeleeWeapon extends Weapon{
+  damagestat(user   : Character):number{return user.calculatedStats.physicalAttack;}
+  defencestat(target: Character):number{return target.calculatedStats.physicalDefence;}
   readonly abstract type:meleename
   abstract get name():string;
   /** Equips into the character melee weapon */
-  protected _itemEffect(user:Character,target: Character): ActionOutput
-  {
+  protected _itemEffect(user:Character,target: Character): ActionOutput{
     user.unequipMelee();
-    user.character_equipment.meleeWeapon = this;
+    user.characterEquipment.meleeWeapon = this;
     return super._itemEffect(user, target);
   }
   get tags(): tag[] { return ['melee weapon']; }
 }
 
-export class MeleeUnharmed extends MeleeWeapon
-{
+export class MeleeUnharmed extends MeleeWeapon{
   readonly onePunch = new OnePunch(this.masterService);
   maxStack = 0;
-  protected _stats_modifier: CalculatedStats = {accuracy:30};
+  protected _statsModifier: CalculatedStats = {accuracy:30};
   protected _damageTypes:DamageTypes = {bluntdamage:100};
   readonly type:"MeleeUnharmed"="MeleeUnharmed";
   get name(): string { return 'hand'; }

@@ -1,11 +1,10 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({status,special_attack},{status:{Status,StatusBattle},special_attack:{SpecialAttack}},Factory)=>{
-class StatusRestrained extends StatusBattle
-{
+const register:registerFunction = ({status,specialAttack},{status:{Status,StatusBattle},specialAttack:{SpecialAttack}},Factory)=>{
+class StatusRestrained extends StatusBattle{
   private target!:Character;
   protected DURATION: number = 4;
   get description(): string {
@@ -22,7 +21,7 @@ class StatusRestrained extends StatusBattle
   { return Factory.pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger being grappled`]])}
   // @ts-ignore
   protected get _stats_modifier():CalculatedStats{
-    return { initiative: this.target.calculated_stats.initiative };
+    return { initiative: this.target.calculatedStats.initiative };
   }
   get tags(): tag[] { return super.tags.concat(['prone','restrained'])}
 }

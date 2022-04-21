@@ -1,4 +1,4 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { room as room1 } from "src/Load/Map/TestMap/map1/room1"
 import { room as room7 } from "src/Load/Map/TestMap/map1/room7"
 import { room25 } from "src/Load/Map/TestMap/map2/room25"
@@ -6,7 +6,7 @@ import { map as map1 } from "src/Load/Map/TestMap/map1"
 import { map as map2 } from "src/Load/Map/TestMap/map2"
 
 
-const register: register_function = ({rooms,maps}, {}, _ ) => {
+const register: registerFunction = ({rooms,maps}, {}, _ ) => {
   //map 1
   maps["map1"]=map1 as string[][];
   rooms["room1"]={map:"map1",room:room1('room1')}

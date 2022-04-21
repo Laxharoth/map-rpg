@@ -1,4 +1,4 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { DamageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
@@ -8,7 +8,7 @@ import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
 
-const register:register_function = ({special_attack,perk}, {special_attack:{SpecialAttack,DamageSpecialAttack},perk:{Perk}}, Factory)=>{
+const register:registerFunction = ({specialAttack,perk}, {specialAttack:{SpecialAttack,DamageSpecialAttack},perk:{Perk}}, Factory)=>{
   const statusFactory = Factory as StatusFactoryFuctioin;
 
   class SneakAttack extends SpecialAttack{
@@ -38,7 +38,7 @@ const register:register_function = ({special_attack,perk}, {special_attack:{Spec
     isSelfUsable: boolean = false;
     isSingleTarget: boolean = true;
     protected _itemEffect(user: Character, targets: Character): ActionOutput {
-      this.userWeaponTags  = user.character_equipment.meleeWeapon.tags;
+      this.userWeaponTags  = user.characterEquipment.meleeWeapon.tags;
       return Factory.pushBattleActionOutput(
         user.Attack([targets]).excecute(),
         user.Attack([targets]).excecute()
@@ -62,10 +62,10 @@ const register:register_function = ({special_attack,perk}, {special_attack:{Spec
       heatdamage:100
     };
     damagestat(user: Character): number {
-      return user.calculated_stats.accuracy * user.core_stats.intelligence;
+      return user.calculatedStats.accuracy * user.coreStats.intelligence;
     }
     defencestat(target: Character): number {
-      return target.calculated_stats.evasion * target.core_stats.intelligence;
+      return target.calculatedStats.evasion * target.coreStats.intelligence;
     }
     type: specialsname = "SacredFlame";
     name = "Sacred Flame";
@@ -89,7 +89,7 @@ const register:register_function = ({special_attack,perk}, {special_attack:{Spec
     isSelfUsable: boolean = true;
     isSingleTarget: boolean = true;
     protected _itemEffect(user: Character, targets: Character): ActionOutput {
-      const quarterHitpoints = targets.calculated_stats.hitpoints/4;
+      const quarterHitpoints = targets.calculatedStats.hitpoints/4;
       const variant = quarterHitpoints / 4;
       const healed = targets.healHitPoints( Factory.randomBetween(quarterHitpoints-variant,quarterHitpoints+variant) );
       return [[],[
@@ -122,15 +122,15 @@ const register:register_function = ({special_attack,perk}, {special_attack:{Spec
     readonly mending = new Mending(this.masterService);
     get specials(){ return [this.mending]}
   }
-  special_attack["SneakAttack"]=SneakAttack;
+  specialAttack["SneakAttack"]=SneakAttack;
   perk["SneakAttack"]=SneakAttackPerk;
-  special_attack["MultiAttack"]=MultiAttack;
+  specialAttack["MultiAttack"]=MultiAttack;
   perk["MultiAttack"]=MultiAttackPerk;
-  special_attack["SacredFlame"]=SacredFlame;
+  specialAttack["SacredFlame"]=SacredFlame;
   perk["SacredFlame"]=SacredFlamePerk;
-  special_attack["Mending"]=Mending;
+  specialAttack["Mending"]=Mending;
   perk["Mending"]=MendingPerk;
-  special_attack["Guidance"]=Guidance;
+  specialAttack["Guidance"]=Guidance;
   perk["Guidance"]=GuidancePerk;
 }
 const module_name = "small-campaign-special-attack";

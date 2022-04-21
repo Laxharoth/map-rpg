@@ -14,73 +14,73 @@ import { Int, roundToInt } from 'src/gameLogic/custom/ClassHelper/Int';
 })
 export class StatUpGuiComponent implements OnInit {
   character!: Character;
-  core_stats!:FullCoreStats;
-  max_core_stats!:FullCoreStats;
-  upgrade_points!:number;
-  private get_character_subsciption:Subscription;
+  coreStats!:FullCoreStats;
+  maxCoreStats!:FullCoreStats;
+  upgradePoints!:number;
+  private getCharacterSubsciption:Subscription;
 
   constructor(private masterService:MasterService) {
-    this.get_character_subsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
-      this.initialize_description(scene);
+    this.getCharacterSubsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
+      this.initializeDescription(scene);
     });
     if(!masterService.sceneHandler.currentScene){ return; }
-    this.initialize_description(masterService.sceneHandler.currentScene);
+    this.initializeDescription(masterService.sceneHandler.currentScene);
     masterService.sceneHandler.setScene(false);
   }
 
   ngOnInit(): void {
   }
   ngOnDestroy(): void {
-    this.get_character_subsciption && this.get_character_subsciption.unsubscribe();
+    this.getCharacterSubsciption && this.getCharacterSubsciption.unsubscribe();
   }
-  private _option_select!:SceneOptions;
+  private _optionSelect!:SceneOptions;
   get option_select():SceneOptions
   {
-    if(!this._option_select)this._option_select = {
+    if(!this._optionSelect)this._optionSelect = {
       text:'select',
       action:()=>{
-        this.character.core_stats = {...this.core_stats}
-        this.character.level_stats.upgrade_point  = roundToInt(this.upgrade_points);
+        this.character.coreStats = {...this.coreStats}
+        this.character.levelStats.upgradePoint  = roundToInt(this.upgradePoints);
         this.character.calculateStats();
         this.masterService.sceneHandler.nextScene(false);
       },
       get disabled(){return false}
     }
-    return this._option_select;
+    return this._optionSelect;
   }
-  private _option_skip!:SceneOptions;
+  private _optionSkip!:SceneOptions;
   get option_skip():SceneOptions{
-    if(!this._option_skip)this._option_skip = nextOption(this.masterService,'skip');
-    return this._option_skip;
+    if(!this._optionSkip)this._optionSkip = nextOption(this.masterService,'skip');
+    return this._optionSkip;
   }
-  private _option_reset!:SceneOptions
+  private _optionReset!:SceneOptions
   get option_reset():SceneOptions{
-    if(!this._option_reset)this._option_reset = {text:'reset',action:()=>{
-      this.core_stats = {...this.character.core_stats}
-      this.upgrade_points  = this.character.level_stats.upgrade_point;
+    if(!this._optionReset)this._optionReset = {text:'reset',action:()=>{
+      this.coreStats = {...this.character.coreStats}
+      this.upgradePoints  = this.character.levelStats.upgradePoint;
     },disabled:false}
-    return this._option_reset;
+    return this._optionReset;
   }
-  private initialize_description(description:Scene){
+  private initializeDescription(description:Scene){
     const character = description.sceneData();
     if(!(character instanceof Character))return;
-    if(character.level_stats.upgrade_point===0) { this.masterService.sceneHandler.nextScene(false); return; }
+    if(character.levelStats.upgradePoint===0) { this.masterService.sceneHandler.nextScene(false); return; }
     this.character = character;
-    this.core_stats = {...character.core_stats}
-    this.max_core_stats = character.battle_class.max_core_at_level(character.level_stats.level);
-    this.upgrade_points = character.level_stats.upgrade_point;
-    const fixed_options = description.fixed_options;
+    this.coreStats = {...character.coreStats}
+    this.maxCoreStats = character.battleClass.maxCoreAtLevel(character.levelStats.level);
+    this.upgradePoints = character.levelStats.upgradePoint;
+    const fixed_options = description.fixedOptions;
     if(fixed_options){
       fixed_options[0] = this.option_select;
       fixed_options[1] = this.option_reset;
       fixed_options[4] = this.option_skip;
     }
   }
-  update_stat(value:number,stat:string){
-    const characterCoreStats = this.core_stats as unknown as { [key: string]:Int };
+  updateStat(value:number,stat:string){
+    const characterCoreStats = this.coreStats as unknown as { [key: string]:Int };
     const new_stat = value;
     const difference = new_stat-characterCoreStats[stat];
     characterCoreStats[stat] = roundToInt(value);
-    this.upgrade_points -=  difference;
+    this.upgradePoints -=  difference;
   }
 }

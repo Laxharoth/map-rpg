@@ -4,7 +4,7 @@ import { descriptable } from "../GameElementDescription/GameElementDescription";
 export interface Scene{
   sceneData:() => any;
   options: SceneOptions[];
-  fixed_options?: FixedOptions;
+  fixedOptions?: FixedOptions;
 }
 export type sceneData=() => any;
 
@@ -31,5 +31,5 @@ export function wrapAction(option:SceneOptions|null):SceneOptions|null{
 export interface DescriptableSceneOptions extends SceneOptions{
   descriptable:descriptable;
 }
-type fixed_option = SceneOptions|null
-export type FixedOptions = [fixed_option,fixed_option,fixed_option,fixed_option,fixed_option];
+type fixedOption = SceneOptions|null
+export type FixedOptions = [fixedOption,fixedOption,fixedOption,fixedOption,fixedOption];

@@ -1,10 +1,10 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
+const register:registerFunction = ({status},{status:{StatusBattle}},Factory)=>{
   class StatusBlind extends StatusBattle
   {
     protected DURATION: number = 4;
@@ -20,7 +20,7 @@ const register:register_function = ({status},{status:{StatusBattle}},Factory)=>{
     }
     // @ts-ignore
     protected get _stats_modifier():CalculatedStats{
-      return { accuracy: this.target.calculated_stats.accuracy * 0.2  };
+      return { accuracy: this.target.calculatedStats.accuracy * 0.2  };
     };
     get tags(): tag[] { return super.tags.concat(['blind'])}
   }

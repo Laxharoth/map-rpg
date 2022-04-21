@@ -1,7 +1,7 @@
 import { DescriptableSceneOptions } from './../../gameLogic/custom/Class/Scene/Scene';
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { BattleCommand, SelectCommandTargetStrategy, SelectSingleTargetStrategy, SelectTargetStrategy, SingleTargetCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { CalculatedStats, CoreStats, FullCoreStats } from "src/gameLogic/custom/Class/Character/Character.type";
@@ -18,7 +18,7 @@ import { UniqueCharacterStoreable } from 'src/gameLogic/custom/Class/Character/U
 import { primitive } from 'src/gameLogic/core/types';
 import { BattleUseable } from 'src/gameLogic/custom/Class/Items/BattleUseable';
 
-const register:register_function = ({enemy_formation,character_battle_class,character}, {enemy_formation:{EnemyFormation},character_battle_class:{CharacterBattleClass}, character:{Character,PersistentCharacter,UniqueCharacter}}, Factory)=>{
+const register:registerFunction = ({enemyFormation: enemy_formation,characterBattleClass: character_battle_class,character}, {enemyFormation:{EnemyFormation},characterBattleClass:{CharacterBattleClass}, character:{Character,PersistentCharacter,UniqueCharacter}}, Factory)=>{
   const perkFactory = Factory as typeof PerkFactory;
   const possibleTargets = (user:Character,userally: Character[], enemy: Character[],battleUseable:BattleUseable)=>[
       ...battleUseable.isSelfUsable?[user]:[],
@@ -30,8 +30,8 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     return [target];
   }
   const selectSingleEnemyMaxHP:SelectSingleTargetStrategy = function(user,userally: Character[], enemy: Character[]){
-    const maxHP = Math.max(...enemy.map( enemy => enemy.current_energy_stats.hitpoints ));
-    return [enemy.find( enemy => enemy.current_energy_stats.hitpoints === maxHP ) || enemy[0]];
+    const maxHP = Math.max(...enemy.map( enemy => enemy.currentEnergyStats.hitpoints ));
+    return [enemy.find( enemy => enemy.currentEnergyStats.hitpoints === maxHP ) || enemy[0]];
   }
   const AttackOrDefend:SelectCommandTargetStrategy = (user,ally,enemy,targetStrategy)=>{
     if(Factory.randomCheck(95)){
@@ -40,27 +40,27 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     return user.Defend([user]);
   }
   abstract class EnemyBaseClass extends CharacterBattleClass{
-    protected _initial_physic_stats: CoreStats = {
+    protected _initialPhysicStats: CoreStats = {
       strenght:1,
       aim:1,
       intelligence:1,
       speed:1,
       stamina:1,
     };
-    protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [];
-    experience_cap: experience_cap = [0,0,0,0,0];
+    protected _upgradeTree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [];
+    experienceCap: experience_cap = [0,0,0,0,0];
   }
   class Bandit extends EnemyBaseClass{
     type: string = "Bandit";
     name: string = "Bandit";
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:11*stamina,
         energypoints:0,
-        physical_attack:1.1*strenght,
-        ranged_attack:1.2*aim,
-        physical_defence:1.2*stamina,
-        ranged_defence:1.2*speed,
+        physicalAttack:1.1*strenght,
+        rangedAttack:1.2*aim,
+        physicalDefence:1.2*stamina,
+        rangedDefence:1.2*speed,
         accuracy:1.2*(intelligence+speed)/2,
         evasion:1.2*(intelligence+speed)/2,
         initiative:30*speed,
@@ -70,14 +70,14 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class Guard extends EnemyBaseClass{
     type: string = "Guard";
     name: string = "Guard";
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:11*stamina,
         energypoints:0,
-        physical_attack:1.3*strenght,
-        ranged_attack:1*aim,
-        physical_defence:1.6*stamina,
-        ranged_defence:1.7*speed,
+        physicalAttack:1.3*strenght,
+        rangedAttack:1*aim,
+        physicalDefence:1.6*stamina,
+        rangedDefence:1.7*speed,
         accuracy:1.2*(intelligence+speed)/2,
         evasion:1.2*(intelligence+speed)/2,
         initiative:25*speed,
@@ -87,14 +87,14 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class Spy extends EnemyBaseClass{
     type: string = "Spy";
     name: string = "Spy";
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:27,
         energypoints:20,
-        physical_attack:1.0*strenght,
-        ranged_attack:1.5*aim*speed*intelligence/3,
-        physical_defence:1.2*stamina,
-        ranged_defence:1.2*speed,
+        physicalAttack:1.0*strenght,
+        rangedAttack:1.5*aim*speed*intelligence/3,
+        physicalDefence:1.2*stamina,
+        rangedDefence:1.2*speed,
         accuracy:1.5*aim*intelligence/2,
         evasion:1.5*aim*intelligence/2,
         initiative:30*speed*intelligence/2,
@@ -104,15 +104,15 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class Thug extends EnemyBaseClass{
     type: string = "Thug ";
     name: string = "Thug ";
-    protected _initial_physic_stats: CoreStats = { ...super.initial_physic_stats, stamina:2 };
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _initialPhysicStats: CoreStats = { ...super.initialPhysicStats, stamina:2 };
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:16*stamina,
         energypoints:16*stamina,
-        physical_attack:15*strenght,
-        ranged_attack:15*speed,
-        physical_defence:6*stamina,
-        ranged_defence:6*stamina,
+        physicalAttack:15*strenght,
+        rangedAttack:15*speed,
+        physicalDefence:6*stamina,
+        rangedDefence:6*stamina,
         accuracy:11*aim,
         evasion:11*aim,
         initiative:30*speed,
@@ -120,8 +120,8 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     }
   }
   abstract class BaseEnemy extends Character implements Enemy{
-    abstract enemy_type: string;
-    base_experience: number = 25;
+    abstract enemyType: string;
+    baseExperience: number = 25;
     get loot(): ItemStoreable[] {
       return [];
     }
@@ -132,7 +132,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class BanditEnemy extends BaseEnemy{
     protected _name: string = "Bandit";
     type: characterType="Bandit";
-    enemy_type: string = "Bandit";
+    enemyType: string = "Bandit";
     constructor(masterService:MasterService){
       super(masterService,"Bandit");
     }
@@ -145,7 +145,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     }
   }
   class GuardEnemy extends BaseEnemy{
-    enemy_type: string="Guard";
+    enemyType: string="Guard";
     protected _name: string="Guard";
     type: characterType="Guard";
     constructor(masterService:MasterService){
@@ -157,7 +157,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     }
   }
   class Seller extends PersistentCharacter implements Enemy{
-    enemy_type: string="Spy";
+    enemyType: string="Spy";
     protected _name: string="Dragon Egg Seller";
     warryScore = 70;
     distractionScore = 0;
@@ -169,7 +169,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"MultiAttack"}));
     }
     get loot(): ItemStoreable[] { return []; }
-    base_experience: number = 10;
+    baseExperience: number = 10;
     protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
       const sneakAttack = this.specialAttacks.get("SneakAttack");
       const multyAttack = this.specialAttacks.get("MultiAttack");
@@ -185,7 +185,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class ThugEnemy extends BaseEnemy{
     protected _name: string = "Thug";
     type: characterType="Thug";
-    enemy_type: string = "Thug";
+    enemyType: string = "Thug";
     constructor(masterService:MasterService){
       super(masterService,"Thug");
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"PackTactics"}))
@@ -205,7 +205,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     constructor(masterService:MasterService){
       super(masterService);
       this._enemies = [
-        masterService.UniqueCharacterHandler.get_character("DragonSeller") as unknown as (Character & Enemy),
+        masterService.UniqueCharacterHandler.getCharacter("DragonSeller") as unknown as (Character & Enemy),
         new GuardEnemy(masterService),
         new GuardEnemy(masterService),
       ];
@@ -259,11 +259,11 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     protected get _enemies(): (Character & Enemy)[]{
       return [
         this.boss,
-        ...this.bandits.sort( (bandit1,bandit2)=>Number(bandit1.is_defeated() && !bandit2.is_defeated())).slice(2)
+        ...this.bandits.sort( (bandit1,bandit2)=>Number(bandit1.isDefeated() && !bandit2.isDefeated())).slice(2)
       ];
     }
     get IsDefeated(): boolean {
-      return this.boss.is_defeated();
+      return this.boss.isDefeated();
     }
     onEnemyVictory(party: Character[]): Scene {
       return {
@@ -387,27 +387,27 @@ const register:register_function = ({enemy_formation,character_battle_class,char
     }
   }
   abstract class BaseUserClass extends CharacterBattleClass{
-    protected _initial_physic_stats: CoreStats = {
+    protected _initialPhysicStats: CoreStats = {
       strenght:1,
       aim:1,
       intelligence:1,
       speed:1,
       stamina:1,
     };
-    protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [];
-    experience_cap: experience_cap = [0,0,0,0,0];
+    protected _upgradeTree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [];
+    experienceCap: experience_cap = [0,0,0,0,0];
   }
   class Fighter extends BaseUserClass{
     type: string = "Fighter";
     name: string = "Fighter";
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:6*stamina,
         energypoints:3*stamina,
-        physical_attack:7*strenght,
-        ranged_attack:4*speed,
-        physical_defence:6*stamina,
-        ranged_defence:6*stamina,
+        physicalAttack:7*strenght,
+        rangedAttack:4*speed,
+        physicalDefence:6*stamina,
+        rangedDefence:6*stamina,
         accuracy:5*aim,
         evasion:5*aim,
         initiative:10*speed,
@@ -417,14 +417,14 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class Monk extends BaseUserClass{
     type: string = "Monk";
     name: string = "Monk";
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:7*stamina,
         energypoints:3*stamina,
-        physical_attack:3*(strenght+speed),
-        ranged_attack:2*speed,
-        physical_defence:Math.round(5*(stamina+speed)/3),
-        ranged_defence:Math.round(5*(stamina+speed)/3),
+        physicalAttack:3*(strenght+speed),
+        rangedAttack:2*speed,
+        physicalDefence:Math.round(5*(stamina+speed)/3),
+        rangedDefence:Math.round(5*(stamina+speed)/3),
         accuracy:5*(aim+speed),
         evasion:5*(aim+speed),
         initiative:13*(speed+intelligence),
@@ -434,14 +434,14 @@ const register:register_function = ({enemy_formation,character_battle_class,char
   class Cleric extends BaseUserClass{
     type: string = "Monk";
     name: string = "Monk";
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints:6*stamina,
         energypoints:5*intelligence,
-        physical_attack:Math.round(3*(strenght+intelligence/2)),
-        ranged_attack:2*speed,
-        physical_defence:Math.round(5*(stamina+speed)/3),
-        ranged_defence:Math.round(5*(stamina+speed)/3),
+        physicalAttack:Math.round(3*(strenght+intelligence/2)),
+        rangedAttack:2*speed,
+        physicalDefence:Math.round(5*(stamina+speed)/3),
+        rangedDefence:Math.round(5*(stamina+speed)/3),
         accuracy:5*(aim+intelligence),
         evasion:5*(aim+intelligence),
         initiative:10*speed,
@@ -483,7 +483,7 @@ const register:register_function = ({enemy_formation,character_battle_class,char
         const targets = possibleTargets(this,ally,enemy, guidance);
         this.useItem(guidance,randomAnyTarget(targets));
       }
-      const hurtedAlly = ally.find( ally => ally.current_energy_stats.hitpoints / ally.calculated_stats.hitpoints < 0.25 );
+      const hurtedAlly = ally.find( ally => ally.currentEnergyStats.hitpoints / ally.calculatedStats.hitpoints < 0.25 );
       if(mending && !mending.disabled(this) && hurtedAlly ){
         this.useItem(mending,[hurtedAlly]);
       }

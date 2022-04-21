@@ -15,8 +15,7 @@ enum GameSaveNames {
 }
 export type gamesavenames = keyof typeof GameSaveNames;
 
-export interface GameSaverMap
-{
+export interface GameSaverMap{
   MainCharacter:UniqueCharacter[];
   Party:UniqueCharacter[];
   PersistentCharacter:UniqueCharacter[];

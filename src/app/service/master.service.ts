@@ -8,10 +8,8 @@ import { MasterServiceSubServiceMap } from 'src/gameLogic/configurable/subservic
 /**
  * A object to pack all services
  */
-export class MasterService extends MasterServiceSubServiceMap
-{
-  register(name:string,service:any)
-  {
+export class MasterService extends MasterServiceSubServiceMap{
+  register(name:string,service:any){
     Object.defineProperty(this,name,{get:function(){return service;}});
   }
 }

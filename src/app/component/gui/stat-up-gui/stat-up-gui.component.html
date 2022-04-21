@@ -2,79 +2,79 @@
   <div class="stat">
     <app-character-stat
       [statName]="'strenght'"
-      [statValue]="core_stats.strenght"
-      [maxValue]="max_core_stats.strenght"
+      [statValue]="coreStats.strenght"
+      [maxValue]="maxCoreStats.strenght"
     ></app-character-stat>
     <app-number-spinner
-      [min]="character.core_stats.strenght"
-      [value]="core_stats.strenght"
-      [max]="max_core_stats.strenght"
-      [show_input]="false"
-      [disable_up]="upgrade_points===0"
-      (SpinnerChangedEvent)="update_stat($event,'strenght')"
+      [min]="character.coreStats.strenght"
+      [value]="coreStats.strenght"
+      [max]="maxCoreStats.strenght"
+      [showInput]="false"
+      [disableUp]="upgradePoints===0"
+      (SpinnerChangedEvent)="updateStat($event,'strenght')"
     ></app-number-spinner>
   </div>
   <div class="stat">
     <app-character-stat
       [statName]="'stamina'"
-      [statValue]="core_stats.stamina"
-      [maxValue]="max_core_stats.stamina"
+      [statValue]="coreStats.stamina"
+      [maxValue]="maxCoreStats.stamina"
     ></app-character-stat>
     <app-number-spinner
-      [min]="character.core_stats.stamina"
-      [value]="core_stats.stamina"
-      [max]="max_core_stats.stamina"
-      [show_input]="false"
-      [disable_up]="upgrade_points===0"
-      (SpinnerChangedEvent)="update_stat($event,'stamina')"
+      [min]="character.coreStats.stamina"
+      [value]="coreStats.stamina"
+      [max]="maxCoreStats.stamina"
+      [showInput]="false"
+      [disableUp]="upgradePoints===0"
+      (SpinnerChangedEvent)="updateStat($event,'stamina')"
     ></app-number-spinner>
   </div>
   <div class="stat">
     <app-character-stat
       [statName]="'aim'"
-      [statValue]="core_stats.aim"
-      [maxValue]="max_core_stats.aim"
+      [statValue]="coreStats.aim"
+      [maxValue]="maxCoreStats.aim"
     ></app-character-stat>
     <app-number-spinner
-      [min]="character.core_stats.aim"
-      [value]="core_stats.aim"
-      [max]="max_core_stats.aim"
-      [show_input]="false"
-      [disable_up]="upgrade_points===0"
-      (SpinnerChangedEvent)="update_stat($event,'aim')"
+      [min]="character.coreStats.aim"
+      [value]="coreStats.aim"
+      [max]="maxCoreStats.aim"
+      [showInput]="false"
+      [disableUp]="upgradePoints===0"
+      (SpinnerChangedEvent)="updateStat($event,'aim')"
     ></app-number-spinner>
   </div>
   <div class="stat">
     <app-character-stat
       [statName]="'speed'"
-      [statValue]="core_stats.speed"
-      [maxValue]="max_core_stats.speed"
+      [statValue]="coreStats.speed"
+      [maxValue]="maxCoreStats.speed"
     ></app-character-stat>
     <app-number-spinner
-      [min]="character.core_stats.speed"
-      [value]="core_stats.speed"
-      [max]="max_core_stats.speed"
-      [show_input]="false"
-      [disable_up]="upgrade_points===0"
-      (SpinnerChangedEvent)="update_stat($event,'speed')"
+      [min]="character.coreStats.speed"
+      [value]="coreStats.speed"
+      [max]="maxCoreStats.speed"
+      [showInput]="false"
+      [disableUp]="upgradePoints===0"
+      (SpinnerChangedEvent)="updateStat($event,'speed')"
     ></app-number-spinner>
   </div>
   <div class="stat">
     <app-character-stat
       [statName]="'intelligence'"
-      [statValue]="core_stats.intelligence"
-      [maxValue]="max_core_stats.intelligence"
+      [statValue]="coreStats.intelligence"
+      [maxValue]="maxCoreStats.intelligence"
     ></app-character-stat>
     <app-number-spinner
-      [min]="character.core_stats.intelligence"
-      [value]="core_stats.intelligence"
-      [max]="max_core_stats.intelligence"
-      [show_input]="false"
-      [disable_up]="upgrade_points===0"
-      (SpinnerChangedEvent)="update_stat($event,'intelligence')"
+      [min]="character.coreStats.intelligence"
+      [value]="coreStats.intelligence"
+      [max]="maxCoreStats.intelligence"
+      [showInput]="false"
+      [disableUp]="upgradePoints===0"
+      (SpinnerChangedEvent)="updateStat($event,'intelligence')"
     ></app-number-spinner>
   </div>
   <div>
-    remainint points: {{upgrade_points}}
+    remainint points: {{upgradePoints}}
   </div>
 </div>

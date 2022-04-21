@@ -1,4 +1,4 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { DamageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats, CoreStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
@@ -9,10 +9,10 @@ import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Upgrade } from "src/gameLogic/custom/Class/Upgrade/Upgrade";
 import { UpgradeOptions } from "src/gameLogic/custom/Class/Upgrade/Upgrade.type";
 
-const register:register_function = ({game_item,character_battle_class}, {game_item:{MeleeWeapon,RangedWeapon,Shield,Armor,GameItem},character_battle_class:{CharacterBattleClass} },Factory)=>{
+const register:registerFunction = ({gameItem: game_item,characterBattleClass: character_battle_class}, {gameItem:{MeleeWeapon,RangedWeapon,Shield,Armor,GameItem},characterBattleClass:{CharacterBattleClass} },Factory)=>{
   class ArmorTest extends Armor
   {
-    protected _stats_modifier:CalculatedStats = {physical_defence:20,initiative:-5};
+    protected _statsModifier:CalculatedStats = {physicalDefence:20,initiative:-5};
     protected _resistance_stats:ResistanceStats = {pierceresistance:10}
     readonly type:"ArmorTest"="ArmorTest"
     get name(): string { return "Armor Test"; }
@@ -41,13 +41,13 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
           return `Heal ${target.name} ${healHitPoints}`
         },
         options: [Factory.options.nextOption(this.masterService)],
-        fixed_options: [null, null, null, null, null]
+        fixedOptions: [null, null, null, null, null]
       }
     }
   }
   class MeleeTest extends MeleeWeapon
   {
-    protected _stats_modifier:CalculatedStats = {physical_attack:20}
+    protected _statsModifier:CalculatedStats = {physicalAttack:20}
     protected _damageTypes:DamageTypes = {bluntdamage:30};
     readonly type:"MeleeTest"="MeleeTest"
     get name(): string { return 'Melee test'; }
@@ -62,7 +62,7 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
   }
   class ShieldTest extends Shield
   {
-    protected _stats_modifier:CalculatedStats = {physical_defence:20};
+    protected _statsModifier:CalculatedStats = {physicalDefence:20};
     protected _resistance_stats:ResistanceStats = {bluntresistance:10,pierceresistance:5}
     readonly type:"ShieldTest"="ShieldTest"
     get name(): string { return 'Shield test'; }
@@ -71,23 +71,23 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
   class TestCharacterBattleClass extends CharacterBattleClass {
     readonly type:"TestCharacterBattleClass"="TestCharacterBattleClass"
     name: string="TestCharacterBattleClass";
-    protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = []
-    protected _initial_physic_stats: CoreStats = {
+    protected _upgradeTree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = []
+    protected _initialPhysicStats: CoreStats = {
       strenght: 20,
       stamina: 20,
       aim: 20,
       speed: 20,
       intelligence: 20,
     };
-    experience_cap:experience_cap = [ 100,1000,2000,5000,10000 ]
-    protected _calculate_stats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
+    experienceCap:experience_cap = [ 100,1000,2000,5000,10000 ]
+    protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
       return {
         hitpoints : 100 + (stamina),
         energypoints : 100 + (stamina),
-        physical_attack: (strenght + stamina / 2) || 0,
-        ranged_attack: (aim / 2 + strenght / 8 + stamina / 8) || 0,
-        physical_defence: (stamina) || 0,
-        ranged_defence: (aim / 2 + stamina / 2) || 0,
+        physicalAttack: (strenght + stamina / 2) || 0,
+        rangedAttack: (aim / 2 + strenght / 8 + stamina / 8) || 0,
+        physicalDefence: (stamina) || 0,
+        rangedDefence: (aim / 2 + stamina / 2) || 0,
         accuracy: (aim) || 0,
         evasion: (speed / 2) || 0,
         initiative: (speed + intelligence) || 0,
@@ -98,14 +98,14 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
   {
     readonly type:"TestMainCharacterBattleClass"="TestMainCharacterBattleClass"
     readonly name: string="TestMainCharacterBattleClass";
-    protected _initial_physic_stats: CoreStats = {
+    protected _initialPhysicStats: CoreStats = {
       strenght:25,
       stamina:25,
       aim:25,
       speed:25,
       intelligence:25,
     };
-    protected _initial_resistance_stats: ResistanceStats = {
+    protected _initialResistanceStats: ResistanceStats = {
       heatresistance:10,
       energyresistance:10,
       frostresistance:10,
@@ -114,21 +114,21 @@ const register:register_function = ({game_item,character_battle_class}, {game_it
       pierceresistance:10,
       poisonresistance:10,
     };
-    experience_cap:experience_cap = [ 100,1000,2000,5000,10000 ]
-    protected _calculate_stats({strenght, stamina, aim, speed, intelligence,}:FullCoreStats):CalculatedStats {
+    experienceCap:experience_cap = [ 100,1000,2000,5000,10000 ]
+    protected _calculateStats({strenght, stamina, aim, speed, intelligence,}:FullCoreStats):CalculatedStats {
       return {
         hitpoints : 100 + (stamina),
         energypoints : 100 + (stamina),
-        physical_attack:(strenght+stamina/2)+10||0,
-        ranged_attack:(aim/2+strenght/8+stamina/8)+10||0,
-        physical_defence:(stamina)+10||0,
-        ranged_defence:(aim/2+stamina/2)+10||0,
+        physicalAttack:(strenght+stamina/2)+10||0,
+        rangedAttack:(aim/2+strenght/8+stamina/8)+10||0,
+        physicalDefence:(stamina)+10||0,
+        rangedDefence:(aim/2+stamina/2)+10||0,
         accuracy:(aim)+10||0,
         evasion:(speed/2)+10||0,
         initiative:(speed+intelligence)+10||0,
       }
     }
-    protected _upgrade_tree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [
+    protected _upgradeTree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [
       {value:{Factory:'Upgrade',type:'Charm'}      ,children:[
         {value:{Factory:'Upgrade',type:'Fright'},children:[
           {value:{Factory:'Upgrade',type:'Grappler'},children:[]},

@@ -3,7 +3,7 @@ import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap"
 import { EnemyFormation, EnemyFormationOptions } from "../Class/Character/NPC/EnemyFormations/EnemyFormation"
 
 export const EnemyFormationFactory:FactoryFunction<EnemyFormation,EnemyFormationOptions> = (masterService,options)=>{
-  const formation:EnemyFormation = new enemy_formation_switcher[options.type](masterService)
+  const formation:EnemyFormation = new enemyFormationSwitcher[options.type](masterService)
   formation.fromJson(options)
   return formation;
 }
@@ -11,4 +11,4 @@ export const EnemyFormationFactory:FactoryFunction<EnemyFormation,EnemyFormation
 interface EnemyFormationConstructor{
   new(masterService:MasterService):EnemyFormation
 }
-export const enemy_formation_switcher:{ [key: string]:EnemyFormationConstructor }  = {}
+export const enemyFormationSwitcher:{ [key: string]:EnemyFormationConstructor }  = {}

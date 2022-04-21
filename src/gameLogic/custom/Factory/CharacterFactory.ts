@@ -6,16 +6,16 @@ import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 
 /** Creates a character */
 export const CharacterFactory:FactoryFunction<Character,UniqueCharacterStoreable> = (masterService,options)=>{
-  if(!character_switcher[options.type]){
+  if(!characterSwitcher[options.type]){
     console.warn(`Character type ${options.type} not found`);
     options.name = options.type;
     options.type = "test character";
   }
-  const character = new character_switcher[options.type](masterService)
+  const character = new characterSwitcher[options.type](masterService)
   character.fromJson(options);
   return character;
 }
-export const character_switcher:{[key: string]:CharacterConstructor}= {
+export const characterSwitcher:{[key: string]:CharacterConstructor}= {
   'main-character':MainCharacter,
 }
 export interface CharacterConstructor { new (masterService:MasterService):Character }

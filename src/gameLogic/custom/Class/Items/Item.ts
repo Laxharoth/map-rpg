@@ -75,12 +75,12 @@ export abstract class GameItem implements BattleUseable, storeable{
     if(!this._description)
       this._description = [
         {type:"name",section_items:[{name:'name',value:this.name}]},
-        ...this.added_description_sections,
+        ...this.addedDescriptionSections,
         {type:"sequence",name:"tags",section_items:this.tags.map(tag =>{return {value:tag}})}
       ]
     return this._description
   }
-  protected get added_description_sections():GameElementDescriptionSection[]{
+  protected get addedDescriptionSections():GameElementDescriptionSection[]{
     return []
   }
 }

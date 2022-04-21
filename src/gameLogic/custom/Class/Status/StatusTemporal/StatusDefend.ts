@@ -18,9 +18,9 @@ export class StatusDefend extends StatusBattle{
   get tags(): tag[] { return super.tags.concat(['defend']) }
   protected get _stats_modifier():CalculatedStats{
     return {
-      physical_defence : this.target.calculated_stats.physical_defence*(this.target.hasTag('no shield')?0.2:0.7),
-      ranged_defence   : this.target.calculated_stats.ranged_defence*(this.target.hasTag('no shield')?0.2:0.7),
-      evasion          : this.target.calculated_stats.evasion*0.3,
+      physicalDefence : this.target.calculatedStats.physicalDefence*(this.target.hasTag('no shield')?0.2:0.7),
+      rangedDefence   : this.target.calculatedStats.rangedDefence*(this.target.hasTag('no shield')?0.2:0.7),
+      evasion          : this.target.calculatedStats.evasion*0.3,
     }
   }
 }

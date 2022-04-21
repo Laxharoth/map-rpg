@@ -1,13 +1,12 @@
 import { MasterService } from 'src/app/service/master.service';
-import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
 import { flagname } from 'src/gameLogic/configurable/subservice/flag-handler.type';
-import { global_functions } from 'src/gameLogic/core/Factory/Factory';
+import { FactoryForModules } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { sellerScene } from './sellerScenes';
 import { thugIntroScene } from './thug';
 
-export function barn(roomname:string,Factory:FactoryFunction&global_functions):roomFunction{
+export function barn(roomname:string,Factory:FactoryForModules):roomFunction{
   const sceneStrings = {
     room1:"//TODO add scene",
     room2:"//TODO add scene",

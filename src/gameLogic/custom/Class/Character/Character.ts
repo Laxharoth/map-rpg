@@ -26,44 +26,43 @@ import { applyModifiers } from './StatsModifier';
 /** A model of a character. */
 export abstract class Character implements storeable
 {
-  level_stats:LevelStats;
-  current_energy_stats:EnergyStats;
+  levelStats:LevelStats;
+  currentEnergyStats:EnergyStats;
   /* The original stats of the character. */
-  core_stats:FullCoreStats;
-  original_resistance:FullResistanceStats;
+  coreStats:FullCoreStats;
+  originalResistance:FullResistanceStats;
   /* The current status of the character after appling equipment during a battle round. */
-  calculated_stats:FullCalculatedStats;
-  calculated_resistance:FullResistanceStats;
+  calculatedStats:FullCalculatedStats;
+  calculatedResistance:FullResistanceStats;
   gold:number = 0;
 
   protected perks:ObjectSet<Perk> = new ObjectSet<Perk>();
   protected status = new ObjectSet<Status>();
-  protected timed_status = new ObjectSet<TimedStatus>();
-  protected battle_status = new ObjectSet<StatusBattle>();
-  protected character_battle_class:CharacterBattleClass;
-  get battle_class():CharacterBattleClass { return this.character_battle_class;}
+  protected timedStatus = new ObjectSet<TimedStatus>();
+  protected battleStatus = new ObjectSet<StatusBattle>();
+  protected characterBattleClass:CharacterBattleClass;
+  get battleClass():CharacterBattleClass { return this.characterBattleClass;}
   protected abstract _name:string;
   abstract readonly type:characterType;
   inventory:Inventory;
-  character_equipment:CharacterEquipment;
+  characterEquipment:CharacterEquipment;
   get name(): string{ return this._name};
   protected readonly masterService:MasterService
-  private __bypass_scene__ = false;
-  constructor(masterService:MasterService, character_battle_class:string|null=null)
-  {
-    this.character_battle_class=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:character_battle_class||'CharacterBattleClassEmpty'})
+  private __bypassScene__ = false;
+  constructor(masterService:MasterService, character_battle_class:string|null=null){
+    this.characterBattleClass=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:character_battle_class||'CharacterBattleClassEmpty'})
     this.inventory = new Inventory(masterService);
-    this.character_equipment = new CharacterEquipment(masterService);
+    this.characterEquipment = new CharacterEquipment(masterService);
     this.masterService = masterService;
-    this.level_stats = {experience:0 as Int, upgrade_point:0 as Int, perk_point:0 as Int, level:0 as Int, upgrade_path:[]}
-    this.core_stats = {...this.character_battle_class.initial_physic_stats};
-    this.original_resistance = {...this.character_battle_class.initial_resistance_stats};
+    this.levelStats = {experience:0 as Int, upgradePoint:0 as Int, perkPoint:0 as Int, level:0 as Int, upgradePath:[]}
+    this.coreStats = {...this.characterBattleClass.initialPhysicStats};
+    this.originalResistance = {...this.characterBattleClass.initialResistanceStats};
     //@ts-ignore
-    this.calculated_stats = {};
+    this.calculatedStats = {};
     //@ts-ignore
-    this.calculated_resistance = {};
+    this.calculatedResistance = {};
     this.calculateStats();
-    this.current_energy_stats = { hitpoints: this.calculated_stats.hitpoints, energypoints:this.calculated_stats.energypoints};
+    this.currentEnergyStats = { hitpoints: this.calculatedStats.hitpoints, energypoints:this.calculatedStats.energypoints};
     this.applyStatus();
   }
   /** Uses the meleeWeapon to attack the target. */
@@ -72,10 +71,10 @@ export abstract class Character implements storeable
   Shoot(targets:Character[]):BattleCommand{return ShootCommand(this,targets)}
   /** Uses shield .defend */
   Defend(target:Character[]):BattleCommand{return DefendCommand(this,target)}
-  unequipMelee(){this.character_equipment.unequipMelee(this)}
-  unequipRanged(){this.character_equipment.unequipRanged(this)}
-  unequipArmor(){this.character_equipment.unequipArmor(this)}
-  unequipShield(){this.character_equipment.unequipShield(this)}
+  unequipMelee(){this.characterEquipment.unequipMelee(this)}
+  unequipRanged(){this.characterEquipment.unequipRanged(this)}
+  unequipArmor(){this.characterEquipment.unequipArmor(this)}
+  unequipShield(){this.characterEquipment.unequipShield(this)}
   /** Reset roundStats apply the battle status effects and cooldown the specials. */
   startRound():BattleCommand[]{
     const commands:BattleCommand[] = [];
@@ -88,14 +87,13 @@ export abstract class Character implements storeable
   /** Removes the battle status. */
   onDefeated():ActionOutput{
     let description:ActionOutput =[[],[]]
-    for(const status of this.battle_status)
+    for(const status of this.battleStatus)
     { pushBattleActionOutput(status.onStatusRemoved(this),description) }
-    this.battle_status.clear()
+    this.battleStatus.clear()
     return description;
   }
   /** Gets the number of instances of a specific status in the character */
-  hasStatus(status:Status|statustype):number
-  {
+  hasStatus(status:Status|statustype):number{
     let timesFound = 0;
     for(const characterStatus of this.iterStatus())
       if(compareStatusName(status, characterStatus))
@@ -103,10 +101,9 @@ export abstract class Character implements storeable
     return timesFound;
   }
   /** Gets all the specials from equipments, perks and status. */
-  get specialAttacks(): ObjectSet<SpecialAttack>
-  {
+  get specialAttacks(): ObjectSet<SpecialAttack>{
     const specials= new ObjectSet<SpecialAttack>()
-    for(const equipment of this.character_equipment) { specials.push(...equipment.specials) }
+    for(const equipment of this.characterEquipment) { specials.push(...equipment.specials) }
     for(const perk of this.perks) { specials.push(...perk.specials) }
     for(const status of this.iterStatus()) { specials.push(...status.specials) }
     return specials
@@ -114,31 +111,29 @@ export abstract class Character implements storeable
   /** Checks if the character has a tag. */
   hasTag(tag:tag):boolean { return this.tags.includes(tag); }
   /** TODO add description */
-  is_defeated():boolean{return this.current_energy_stats.hitpoints<=0}
+  isDefeated():boolean{return this.currentEnergyStats.hitpoints<=0}
   /** Adds status to the character. to the correct Array if able. */
   addStatus(status: Status): ActionOutput{
     if(!status)return [[],[]];
     if(!status.canApply(this))return [[], [`${this.name} resisted ${status.name}`]];
-    if(status instanceof StatusBattle) this.battle_status.push(status);
-    else if(status instanceof TimedStatus) this.timed_status.push(status);
+    if(status instanceof StatusBattle) this.battleStatus.push(status);
+    else if(status instanceof TimedStatus) this.timedStatus.push(status);
     else this.status.push(status);
     return status.onStatusGainded(this)
   }
   /** Adds perk if does not already has it. */
   addPerk(perk:Perk):void { this.perks.push(perk); }
   /** Returns a perk if the character has it. */
-  getPerk(perkOrName:Perk|perkname):Perk|null
-  {
+  getPerk(perkOrName:Perk|perkname):Perk|null{
     if(perkOrName instanceof Perk){ return this.perks.get(perkOrName.hash())||null; }
     for(const perk of this.perks)if(perk.name === perkOrName)return perk;
     return null;
   }
   /** Removes all instances of the given statusname or Status. */
-  removeStatus(status:Status|statustype):ActionOutput
-  {
+  removeStatus(status:Status|statustype):ActionOutput{
     let removeStatusDescription:ActionOutput = [[],[]];
-    pushBattleActionOutput(this._removeStatus(status,this.battle_status),removeStatusDescription);
-    pushBattleActionOutput(this._removeStatus(status,this.timed_status),removeStatusDescription);
+    pushBattleActionOutput(this._removeStatus(status,this.battleStatus),removeStatusDescription);
+    pushBattleActionOutput(this._removeStatus(status,this.timedStatus),removeStatusDescription);
     pushBattleActionOutput(this._removeStatus(status,this.status),removeStatusDescription);
     this.calculateStats();
     return removeStatusDescription;
@@ -150,8 +145,7 @@ export abstract class Character implements storeable
   }
   useItem(item: GameItem | SpecialAttack, targets: Character[]): BattleCommand {
     if (item instanceof SpecialAttack) return this._useSpecialAttack(item, targets);
-    if (item instanceof GameItem)
-    {
+    if (item instanceof GameItem){
       return {
         source: this,
         target: targets,
@@ -166,16 +160,15 @@ export abstract class Character implements storeable
   /** Iterator of character status. */
   *iterStatus():Generator<Status, void,unknown>{
     for(const status of this.status) yield status;
-    for(const status of this.timed_status) yield status;
-    for(const status of this.battle_status) yield status;
+    for(const status of this.timedStatus) yield status;
+    for(const status of this.battleStatus) yield status;
   }
   /**
    * Checks all the reactions of the character.
    * Won't react if character is paralized, zero hitpoints or the battle ended.
    */
-  react(action:BattleCommand):ActionOutput
-  {
-    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return [[],[]];
+  react(action:BattleCommand):ActionOutput{
+    if( this.currentEnergyStats.hitpoints<=0  || this.__bypassScene__ )return [[],[]];
     return this.reactions.reduce(
         (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,action),scenes)
         ,[[],[]] as ActionOutput
@@ -183,7 +176,7 @@ export abstract class Character implements storeable
   }
   reactBefore(action:BattleCommand):ActionOutput{
     action.tags.push('before-action');
-    if( this.current_energy_stats.hitpoints<=0  || this.__bypass_scene__ )return [[],[]];
+    if( this.currentEnergyStats.hitpoints<=0  || this.__bypassScene__ )return [[],[]];
     const t = this.reactions.reduce(
         (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,action),scenes)
         ,[[],[]] as ActionOutput
@@ -193,68 +186,63 @@ export abstract class Character implements storeable
   }
   /** Reduces the character hitpoints up to zero. */
   takeDamage(damage:number):number{
-    const hitpointsBeforeDamage = this.current_energy_stats.hitpoints;
-    this.current_energy_stats.hitpoints=roundToInt(Math.max(0,this.current_energy_stats.hitpoints-damage));
-    return this.current_energy_stats.hitpoints-hitpointsBeforeDamage;
+    const hitpointsBeforeDamage = this.currentEnergyStats.hitpoints;
+    this.currentEnergyStats.hitpoints=roundToInt(Math.max(0,this.currentEnergyStats.hitpoints-damage));
+    return this.currentEnergyStats.hitpoints-hitpointsBeforeDamage;
   }
   /** Heals hitpoints from the character up to original hitpoints. */
   healHitPoints(hitpointsgain:number):number{
-    const hitpointsBeforeHeal = this.current_energy_stats.hitpoints;
-    this.current_energy_stats.hitpoints=roundToInt(Math.min(this.calculated_stats.hitpoints,this.current_energy_stats.hitpoints+hitpointsgain));
-    return this.current_energy_stats.hitpoints-hitpointsBeforeHeal;
+    const hitpointsBeforeHeal = this.currentEnergyStats.hitpoints;
+    this.currentEnergyStats.hitpoints=roundToInt(Math.min(this.calculatedStats.hitpoints,this.currentEnergyStats.hitpoints+hitpointsgain));
+    return this.currentEnergyStats.hitpoints-hitpointsBeforeHeal;
   }
-  gain_experience(experience:number):number {
-    this.level_stats.experience=roundToInt(this.level_stats.experience+experience);
+  gainExperience(experience:number):number {
+    this.levelStats.experience=roundToInt(this.levelStats.experience+experience);
     return experience;
   }
   /** Gets the current status of the character. */
-  get currentStatusString():string { return `${this.name} looks like they are ${this.current_energy_stats.hitpoints} in a scale of 0 to ${this.calculated_stats.hitpoints}`}
+  get currentStatusString():string { return `${this.name} looks like they are ${this.currentEnergyStats.hitpoints} in a scale of 0 to ${this.calculatedStats.hitpoints}`}
   /** Removes all the Battle Status without trigger reactions. */
-  onEndBattle():void
-  {
-    const removeStatus = this.battle_status
-    this.battle_status.clear();
-    this.__bypass_scene__ = true;
+  onEndBattle():void{
+    const removeStatus = this.battleStatus
+    this.battleStatus.clear();
+    this.__bypassScene__ = true;
     for(const status of removeStatus)status.onStatusRemoved(this);
-    this.__bypass_scene__ = false;
+    this.__bypassScene__ = false;
   }
   /** Gets all the reactions from equipment, perks and status. */
-  protected get reactions(): Reaction[]
-  {
+  protected get reactions(): Reaction[]{
     const reactions = new ObjectSet<Reaction>()
-    for(const equipment of this.character_equipment) { reactions.push(...equipment.reactions) }
+    for(const equipment of this.characterEquipment) { reactions.push(...equipment.reactions) }
     for(const perk of this.perks){reactions.push(...perk.reactions)}
     for(const status of this.iterStatus()){reactions.push(...status.reactions)}
     return reactions;
   };
   /** Gets all the tags from equipment, perks and status. */
-  protected get tags():tag[]
-  {
+  protected get tags():tag[]{
     const tags:tag[] = [];
-    for(const equipment of this.character_equipment) tags.push(...equipment.tags)
+    for(const equipment of this.characterEquipment) tags.push(...equipment.tags)
     for(const status of this.iterStatus())tags.push(...status.tags)
     for(const perk of this.perks)tags.push(...perk.tags)
     return tags;
   }
   /** Apply the Battle Status effects. */
   protected startRoundApplyStatus():BattleCommand[]{
-    return [...this.battle_status].map(status=>status.applyEffect(this));
+    return [...this.battleStatus].map(status=>status.applyEffect(this));
   }
   /** Cooldown the SpecialAttacks */
   protected cooldownSpecials():void { for(const special of this.specialAttacks) special.cool() }
   calculateStats():void {
-    this.calculated_stats = this.character_battle_class.calculate_stats(this.core_stats);
-    this.calculated_resistance = {...this.original_resistance};
-    for(const equipment of this.character_equipment){ applyModifiers(this,equipment); }
+    this.calculatedStats = this.characterBattleClass.calculate_stats(this.coreStats);
+    this.calculatedResistance = {...this.originalResistance};
+    for(const equipment of this.characterEquipment){ applyModifiers(this,equipment); }
     for(const status of this.iterStatus()){ applyModifiers(this,status); }
   }
   /** Apply status effects. */
   protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
   /** TODO */
-  private _removeStatus(status: string | Status, status_array:Status[]): ActionOutput
-  {
-    if(status instanceof Status)
-    {
+  private _removeStatus(status: string | Status, status_array:Status[]): ActionOutput{
+    if(status instanceof Status){
       if(removeItem(status_array, status)) return status.onStatusRemoved(this);
       return [[],[]]
     }
@@ -271,8 +259,7 @@ export abstract class Character implements storeable
     return removeStatusDescription;
   }
   /** Use a special attack from the equpments, perks or status. */
-  private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand
-  {
+  private _useSpecialAttack(item: SpecialAttack,targets: Character[]):BattleCommand{
     if(this.specialAttacks.has(item.hash()))
       return {
         source:this, target:targets, tags:item.tags,
@@ -289,9 +276,9 @@ export abstract class Character implements storeable
   }
   /** The logic behind the action. */
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
-  toJson(): CharacterStoreable { return { Factory:"Character",type:this.type,battle_class:this.battle_class.toJson()} }
+  toJson(): CharacterStoreable { return { Factory:"Character",type:this.type,battle_class:this.battleClass.toJson()} }
   fromJson(options: CharacterStoreable): void {
-    options.battle_class&&(this.character_battle_class=CharacterBattleClassFactory(this.masterService,options.battle_class))
+    options.battle_class&&(this.characterBattleClass=CharacterBattleClassFactory(this.masterService,options.battle_class))
   }
   get allys():Character[]{
     if((this.masterService.partyHandler.enemyFormation.enemies as Character[]).some(char=>char===this)){

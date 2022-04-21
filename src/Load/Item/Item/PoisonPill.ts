@@ -1,10 +1,10 @@
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
 
 
-const register: register_function = ({game_item}, {game_item:{GameItem}}, Factory) => {
+const register: registerFunction = ({gameItem: game_item}, {gameItem:{GameItem}}, Factory) => {
   const StatusFactory = Factory as StatusFactoryFuctioin;
   class PoisonPill extends GameItem {
     readonly type:"PoisonPill"="PoisonPill"

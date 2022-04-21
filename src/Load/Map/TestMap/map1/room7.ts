@@ -25,9 +25,9 @@ export const room:roomFunction = {
     const $flag = (name:flagname) => masterService.flagsHandler.getFlag(name);
     const user = masterService.partyHandler.user;
     const equipMelee = {
-      get text(){return user.character_equipment.shield instanceof MeleeUnharmed?'Equip Shield':"Unequip"},
+      get text(){return user.characterEquipment.shield instanceof MeleeUnharmed?'Equip Shield':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof MeleeUnharmed){
+        if(user.characterEquipment.armor instanceof MeleeUnharmed){
           const armor = user.inventory.items.find(item=>item instanceof MeleeWeapon)
           armor&&user.useItem(armor,[user]).excecute();
         }
@@ -36,12 +36,12 @@ export const room:roomFunction = {
         }
         console.log(user)
       },
-      get disabled(){return !( user.character_equipment.armor instanceof MeleeUnharmed || user.inventory.items.some(item=>!(item instanceof MeleeWeapon)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof MeleeUnharmed || user.inventory.items.some(item=>!(item instanceof MeleeWeapon)))}
     }
     const equipRanged = {
-      get text(){return user.character_equipment.shield instanceof RangedUnharmed?'Equip Shield':"Unequip"},
+      get text(){return user.characterEquipment.shield instanceof RangedUnharmed?'Equip Shield':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof RangedUnharmed){
+        if(user.characterEquipment.armor instanceof RangedUnharmed){
           const armor = user.inventory.items.find(item=>item instanceof RangedWeapon)
           armor&&user.useItem(armor,[user]).excecute();
         }
@@ -50,12 +50,12 @@ export const room:roomFunction = {
         }
         console.log(user)
       },
-      get disabled(){return !( user.character_equipment.armor instanceof RangedUnharmed || user.inventory.items.some(item=>!(item instanceof RangedWeapon)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof RangedUnharmed || user.inventory.items.some(item=>!(item instanceof RangedWeapon)))}
     }
     const equipShield = {
-      get text(){return user.character_equipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip"},
+      get text(){return user.characterEquipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof ShieldNoShield){
+        if(user.characterEquipment.armor instanceof ShieldNoShield){
           const armor = user.inventory.items.find(item=>item instanceof Shield)
           armor&&user.useItem(armor,[user]).excecute();
         }
@@ -64,12 +64,12 @@ export const room:roomFunction = {
         }
         console.log(user)
       },
-      get disabled(){return !( user.character_equipment.armor instanceof ShieldNoShield || user.inventory.items.some(item=>!(item instanceof Shield)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof ShieldNoShield || user.inventory.items.some(item=>!(item instanceof Shield)))}
     }
     const equipArmor = {
-      get text(){return user.character_equipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip"},
+      get text(){return user.characterEquipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip"},
       action:function(){
-        if(user.character_equipment.armor instanceof ArmorNoArmor){
+        if(user.characterEquipment.armor instanceof ArmorNoArmor){
           const armor = user.inventory.items.find(item=>item instanceof Armor)
           armor&&user.useItem(armor,[user]).excecute();
         }
@@ -78,7 +78,7 @@ export const room:roomFunction = {
         }
         console.log(user)
       },
-      get disabled(){return !( user.character_equipment.armor instanceof ArmorNoArmor || user.inventory.items.some(item=>!(item instanceof Armor)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof ArmorNoArmor || user.inventory.items.some(item=>!(item instanceof Armor)))}
     }
     const my_nextOption      = nextOption(masterService)
     const roomOptions:SceneOptions[] =[
@@ -86,12 +86,12 @@ export const room:roomFunction = {
       {text:"Shop",action:makeDynamicShop,disabled:false},
       {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })).start(),disabled:false},
       {text:"Add perk point",action:()=>{
-        user.level_stats.perk_point=4 as Int;
+        user.levelStats.perkPoint=4 as Int;
         user.emit_perk_up();
       },disabled:false},
       {text:"Add stats point",action:()=>{
-        user.level_stats.level=4 as Int;
-        user.level_stats.upgrade_point=4 as Int;
+        user.levelStats.level=4 as Int;
+        user.levelStats.upgradePoint=4 as Int;
         user.emit_stat_up();
       },disabled:false},
       equipMelee,
@@ -124,11 +124,11 @@ export const room:roomFunction = {
     ]
     const fixed_options:[null, null, null, null, null] = [null, null,null,null,null]
     const [roomScene, cantGoThere, cantGoThereYet, goBackThere, goBackThere2]:Scene[]=[
-      {sceneData:function(){return `This actually looks the same`},options:roomOptions,fixed_options},
-      {sceneData:function(){return `I didn't wanted to go there anyway`},options:[my_nextOption],fixed_options},
-      {sceneData:function(){return `I didn't wanted to go there yet anyway`},options:[my_nextOption],fixed_options},
-      {sceneData:function(){return `Guess I will go back`},options:[my_nextOption],fixed_options},
-      {sceneData:function(){return `little choices i have`},options:[my_nextOption],fixed_options},
+      {sceneData:function(){return `This actually looks the same`},options:roomOptions,fixedOptions: fixed_options},
+      {sceneData:function(){return `I didn't wanted to go there anyway`},options:[my_nextOption],fixedOptions: fixed_options},
+      {sceneData:function(){return `I didn't wanted to go there yet anyway`},options:[my_nextOption],fixedOptions: fixed_options},
+      {sceneData:function(){return `Guess I will go back`},options:[my_nextOption],fixedOptions: fixed_options},
+      {sceneData:function(){return `little choices i have`},options:[my_nextOption],fixedOptions: fixed_options},
     ]
     const room = {
       onEnter  : () => {

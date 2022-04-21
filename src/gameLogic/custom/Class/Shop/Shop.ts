@@ -118,7 +118,7 @@ export class Shop
   doesCharacterInventoryOverflows(character: Character):boolean{
     if(!this.calculatedPlayerOverflow){
       this.calculatedPlayerOverflow = true;
-      this.currectPlayerOverflow =  character.inventory.inventory_size
+      this.currectPlayerOverflow =  character.inventory.inventorySize
                                     <
                                     this.mergeCharacterItems(character)
                                       .reduce((acc, item) => acc + Math.ceil(item.amount/item.maxStack),0);

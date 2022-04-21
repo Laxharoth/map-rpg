@@ -13,7 +13,7 @@ export function room25(roomname: string): roomFunction
           return `Sign with ${roomname} written`
         },
         options: (roomname === 'room25') ? [returnToMap1] : [],
-        fixed_options: [null, null, null, null, null]
+        fixedOptions: [null, null, null, null, null]
       }
       return fill_room({
         onEnter: function(){masterService.sceneHandler.tailScene(roomScene,'map').nextScene()},

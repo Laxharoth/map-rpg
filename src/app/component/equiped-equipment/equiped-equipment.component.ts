@@ -8,10 +8,10 @@ import { Equipment } from 'src/gameLogic/custom/Class/Equipment/Equipment';
 })
 export class EquipedEquipmentComponent implements OnInit {
   @Input() equipment!:Equipment;
-  @Output() equipment_emitter = new EventEmitter<Equipment>();
+  @Output() equipmentEmitter = new EventEmitter<Equipment>();
   constructor() {}
   ngOnInit(): void {}
   emit(){
-    this.equipment_emitter.emit(this.equipment)
+    this.equipmentEmitter.emit(this.equipment)
   }
 }

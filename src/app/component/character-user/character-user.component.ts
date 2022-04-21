@@ -10,13 +10,10 @@ import { Status } from 'src/gameLogic/custom/Class/Status/Status';
   styleUrls: ['./character-user.component.css']
 })
 export class CharacterUserComponent implements OnInit {
-
-
   character:Character;
   private characterSubscription:Subscription;
 
-  constructor(private masterService:MasterService)
-  {
+  constructor(private masterService:MasterService){
     this.character = this.masterService.partyHandler.user;
     this.characterSubscription = this.masterService.partyHandler.onUpdateUser().subscribe(data=>{ this.character = data; });
   }
@@ -30,6 +27,6 @@ export class CharacterUserComponent implements OnInit {
     for(const characterStatus of this.character.iterStatus())status.push(characterStatus)
     return status;
   }
-  get current_exp(){return this.character.battle_class.current_level_experience(this.character.level_stats);}
-  get target_exp(){return this.character.battle_class.total_experience_to_next_level(this.character.level_stats.level);}
+  get currentExp(){return this.character.battleClass.currentLevelExperience(this.character.levelStats);}
+  get targetExp(){return this.character.battleClass.totalExperienceToNextLevel(this.character.levelStats.level);}
 }

@@ -65,7 +65,7 @@ export abstract class DamageSpecialAttack extends SpecialAttack implements Damag
   isEnemyUsable: boolean = true;
   isSelfUsable: boolean = false;
   didAttackMiss(source: Character, target: Character): boolean {
-    return randomCheck(source.calculated_stats.accuracy-target.calculated_stats.evasion);
+    return randomCheck(source.calculatedStats.accuracy-target.calculatedStats.evasion);
   }
   attackLanded(damage: number, user: Character, target: Character): ActionOutput {
     return [[],[`${user.name}'s ${this.name} deals ${damage} to ${target.name}`]]

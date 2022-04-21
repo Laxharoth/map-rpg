@@ -1,11 +1,11 @@
 import { Int } from './../../gameLogic/custom/ClassHelper/Int';
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats, FullCoreStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({status}, {status:{StatusBattle}}, Factory)=>{
+const register:registerFunction = ({status}, {status:{StatusBattle}}, Factory)=>{
   class Blind extends StatusBattle{
     protected DURATION: number = 3;
     type: statustype = "Blind";
@@ -68,11 +68,11 @@ const register:register_function = ({status}, {status:{StatusBattle}}, Factory)=
       return "";
     }
     protected effect(target: Character): ActionOutput {
-      if(Factory.randomCheck(target.calculated_stats.evasion))
+      if(Factory.randomCheck(target.calculatedStats.evasion))
         this.DURATION = 0;
       else{
-        target.calculated_stats.initiative = 0 as Int;
-        target.calculated_stats.evasion = 0 as Int;
+        target.calculatedStats.initiative = 0 as Int;
+        target.calculatedStats.evasion = 0 as Int;
       }
       return super.effect(target);
     }
@@ -87,8 +87,8 @@ const register:register_function = ({status}, {status:{StatusBattle}}, Factory)=
     get description(): string { return "Increase the aim of the character"; }
 
     onStatusGainded(target: Character): ActionOutput {
-      const emptyCalculatedStats = target.battle_class.calculate_stats(Guidance.emptyStat) as unknown as unknown as { [key:string]: Int};
-      const aimCalculatedStats = target.battle_class.calculate_stats(Guidance.aimOnlyStat) as unknown as unknown as { [key:string]: Int};
+      const emptyCalculatedStats = target.battleClass.calculate_stats(Guidance.emptyStat) as unknown as unknown as { [key:string]: Int};
+      const aimCalculatedStats = target.battleClass.calculate_stats(Guidance.aimOnlyStat) as unknown as unknown as { [key:string]: Int};
       const modifiers = this.statsModifier as unknown as unknown as { [key:string]: Int};
       for( const statname of Object.keys(emptyCalculatedStats)){
         if(aimCalculatedStats[statname] - emptyCalculatedStats[statname] > 0){

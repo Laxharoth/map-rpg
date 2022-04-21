@@ -1,5 +1,4 @@
-export class DoubleLinkedList<T>
-{
+export class DoubleLinkedList<T>{
   head:DoubleLinkedListNode<T>|null;
   length:number;
   constructor(...values:Array<T>){

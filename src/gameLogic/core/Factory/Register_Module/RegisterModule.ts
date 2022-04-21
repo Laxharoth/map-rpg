@@ -1,35 +1,32 @@
-import { constructor, constructor_mapping, switcher, switcher_mapping } from "src/gameLogic/configurable/Factory/Register_Module/Register_Module_Variables";
+import { ModuleFunctions } from 'src/gameLogic/configurable/Factory/FactoryMap';
+import { constructor, constructor_mapping, switcher, switcherMapping } from "src/gameLogic/configurable/Factory/Register_Module/Register_Module_Variables";
 import { removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { Factory } from "../Factory";
 
-const registered_modules_set = new Set<string>()
-export type register_function = ( switcher:switcher_mapping,
-                                  constructor:constructor_mapping,
-                                  _Factory:typeof Factory)=>void;
-export interface registerable{register:register_function,module_name:string,module_dependency:string[]}
+const registeredModulesSet = new Set<string>()
+export type FactoryForModules = typeof Factory & ModuleFunctions
+export type registerFunction = ( switcher:switcherMapping, constructor:constructor_mapping, _Factory:FactoryForModules)=>void;
+export interface registerable{register:registerFunction,moduleName:string,moduleDependency:string[]}
 
-const waiting_modules:registerable[] = []
-export function add_module(module:registerable):void
-{
-  waiting_modules.push(module)
+const waitingModules:registerable[] = []
+export function addModule(module:registerable):void{
+  waitingModules.push(module)
 }
-export function register_all_modules()
-{
-  let previous_waiting_modules_length = 0;
-  while(previous_waiting_modules_length!==waiting_modules.length)
-  {
-    previous_waiting_modules_length = waiting_modules.length
-    const remove_modules:registerable[] = []
-    for(const module of waiting_modules)if(register_module(module))remove_modules.push(module)
-    for(const module of remove_modules )removeItem(waiting_modules, module)
+export function registerAllModules(){
+  let previousWaitingModulesLength = 0;
+  while(previousWaitingModulesLength!==waitingModules.length){
+    previousWaitingModulesLength = waitingModules.length
+    const removeModules:registerable[] = []
+    for(const module of waitingModules)if(register_module(module))removeModules.push(module)
+    for(const module of removeModules )removeItem(waitingModules, module)
   }
-  for(const module of waiting_modules)
-  { console.warn(`Module ${module.module_name} could not be loaded because depends of "${module.module_dependency.join(",")}"`) }
+  for(const module of waitingModules){
+    console.warn(`Module ${module.moduleName} could not be loaded because depends of "${module.moduleDependency.join(",")}"`)
+  }
 }
-function register_module({register,module_name,module_dependency}:registerable):boolean
-{
-  if(module_dependency.some(module=>!registered_modules_set.has(module)))return false;
-  register(switcher,constructor,Factory);
-  registered_modules_set.add(module_name)
+function register_module({register,moduleName: moduleName,moduleDependency: moduleDependency}:registerable):boolean{
+  if(moduleDependency.some(module=>!registeredModulesSet.has(module)))return false;
+  register(switcher,constructor,Factory as FactoryForModules);
+  registeredModulesSet.add(moduleName)
   return true;
 }

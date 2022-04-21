@@ -5,10 +5,10 @@ import { perknameEnum } from "src/gameLogic/custom/Class/Perk/Perk.type";
 
 /** Creates an Perk with */
 export const PerkFactory:FactoryFunction<Perk, PerkStoreable> = (masterService,options)=>{
-  const perk = new perk_switcher[options.type](masterService);
+  const perk = new perkSwitcher[options.type](masterService);
   perk.fromJson(options);
   return perk;
 }
 //@ts-ignore
-export const perk_switcher:{[key in perknameEnum]:PerkConstructor} = {}
+export const perkSwitcher:{[key in perknameEnum]:PerkConstructor} = {}
 export interface PerkConstructor{ new (masterService:MasterService):Perk }

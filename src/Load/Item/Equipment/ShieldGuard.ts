@@ -1,22 +1,22 @@
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({reaction,game_item,status}, {status:{StatusBattle},game_item:{Shield},reaction:{BeforeActionReaction}}, Factory)=>{
+const register:registerFunction = ({reaction,gameItem: game_item,status}, {status:{StatusBattle},gameItem:{Shield},reaction:{BeforeActionReaction}}, Factory)=>{
   class ReactionGuard extends BeforeActionReaction
   {
     readonly type:"ReactionGuard"="ReactionGuard"
     protected name: string = "ReactionGuard";
     protected whatTriggers: tag[][]=[[]];
-    protected prevent_reaction: tag[][] = [['paralized']]
+    protected preventReaction: tag[][] = [['paralized']]
     protected action(react_character: Character, {source,target}:BattleCommand): ActionOutput {
-      if(this.masterService.partyHandler.is_party_member(source))return [[],[]]
+      if(this.masterService.partyHandler.isPartyMember(source))return [[],[]]
       for(let i = 0; i < target.length; i++) {
-        if(this.masterService.partyHandler.is_party_member(target[i])) {
+        if(this.masterService.partyHandler.isPartyMember(target[i])) {
           target[i] = react_character
         }
       }

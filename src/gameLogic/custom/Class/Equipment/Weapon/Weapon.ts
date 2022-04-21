@@ -29,20 +29,20 @@ export abstract class Weapon extends Equipment implements DamageSource{
   { return calculateDamage(this,user,target); }
   /** Check if the attack is successful. */
   didAttackMiss(user:Character,target:Character): boolean {
-    const check = randomBetween(-this.missRate,user.calculated_stats.accuracy);
+    const check = randomBetween(-this.missRate,user.calculatedStats.accuracy);
     return check < 0;
   }
-  get added_description_sections():GameElementDescriptionSection[]{
-    const damage_stats_description:GameElementDescriptionSection={type:"list",name:"damage",section_items:[]};
+  get addedDescriptionSections():GameElementDescriptionSection[]{
+    const damageStatsDescription:GameElementDescriptionSection={type:"list",name:"damage",section_items:[]};
     if(Math.max(...Object.values(this.damageTypes)))
     for(const [stat,value] of Object.entries(this.damageTypes)){
       if(value===0)continue;
       //@ts-ignore
-      damage_stats_description.section_items.push({name:aliasDamageType[stat],value});
+      damageStatsDescription.section_items.push({name:aliasDamageType[stat],value});
     }
     return  [
-      damage_stats_description,
-      ...super.added_description_sections
+      damageStatsDescription,
+      ...super.addedDescriptionSections
     ]
   }
 }

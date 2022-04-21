@@ -10,20 +10,20 @@ import { game_item_dropable } from 'src/gameLogic/custom/Class/Scene/SceneAddExc
 })
 export class ExcessItemGuiComponent implements OnInit {
 
-  character_inventory:game_item_dropable[]=[];
-  excess_item_list:game_item_dropable[]=[];
+  characterInventory:game_item_dropable[]=[];
+  excessItemList:game_item_dropable[]=[];
 
-  private excess_item_list_update_subscription:Subscription;
+  private excessItemListUpdateSubscription:Subscription;
   constructor(private masterService:MasterService) {
-    this.excess_item_list_update_subscription = masterService.sceneHandler.onSetScene().subscribe(scene=>{
+    this.excessItemListUpdateSubscription = masterService.sceneHandler.onSetScene().subscribe(scene=>{
         if(masterService.gameStateHandler.gameState==="excess-item")
-          [this.character_inventory,this.excess_item_list] = scene.sceneData()
+          [this.characterInventory,this.excessItemList] = scene.sceneData()
       });
-      [this.character_inventory,this.excess_item_list] = masterService.sceneHandler.currentScene?.sceneData();
+      [this.characterInventory,this.excessItemList] = masterService.sceneHandler.currentScene?.sceneData();
   }
   ngOnInit(): void {
   }
   ngOnDestroy(): void {
-    if(this.excess_item_list_update_subscription)this.excess_item_list_update_subscription.unsubscribe();
+    if(this.excessItemListUpdateSubscription)this.excessItemListUpdateSubscription.unsubscribe();
   }
 }

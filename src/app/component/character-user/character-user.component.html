@@ -1,18 +1,18 @@
 <div class="user" *ngIf="character">
   <div class="name hp">
     <div class="character-name">{{ character.name }}</div>
-    <app-character-stat [statName]="'hp'" [statValue]="character.current_energy_stats.hitpoints" [maxValue]="character.calculated_stats.hitpoints" [barColor]="'cyan'"></app-character-stat>
-    <app-character-stat [statName]="'energy'" [statValue]="character.current_energy_stats.energypoints" [maxValue]="character.calculated_stats.energypoints"></app-character-stat>
+    <app-character-stat [statName]="'hp'" [statValue]="character.currentEnergyStats.hitpoints" [maxValue]="character.calculatedStats.hitpoints" [barColor]="'cyan'"></app-character-stat>
+    <app-character-stat [statName]="'energy'" [statValue]="character.currentEnergyStats.energypoints" [maxValue]="character.calculatedStats.energypoints"></app-character-stat>
   </div>
   <div class="stats border">
-    <app-character-stat [statName]="'atk'" [statValue]="character.core_stats.strenght"></app-character-stat>
-    <app-character-stat [statName]="'def'" [statValue]="character.core_stats.stamina"></app-character-stat>
-    <app-character-stat [statName]="'aim'" [statValue]="character.core_stats.aim"></app-character-stat>
-    <app-character-stat [statName]="'int'" [statValue]="character.core_stats.intelligence"></app-character-stat>
-    <app-character-stat [statName]="'spd'" [statValue]="character.core_stats.speed"></app-character-stat>
+    <app-character-stat [statName]="'atk'" [statValue]="character.coreStats.strenght"></app-character-stat>
+    <app-character-stat [statName]="'def'" [statValue]="character.coreStats.stamina"></app-character-stat>
+    <app-character-stat [statName]="'aim'" [statValue]="character.coreStats.aim"></app-character-stat>
+    <app-character-stat [statName]="'int'" [statValue]="character.coreStats.intelligence"></app-character-stat>
+    <app-character-stat [statName]="'spd'" [statValue]="character.coreStats.speed"></app-character-stat>
   </div>
   <div class="experience">
-    <app-user-experience [current_exp]="current_exp" [target_exp]="target_exp"></app-user-experience>
+    <app-user-experience [currentExp]="currentExp" [targetExp]="targetExp"></app-user-experience>
   </div>
   <div class="status border">
     <app-status-icon *ngFor="let status of getCharacterStatus()" [status]="status"></app-status-icon>

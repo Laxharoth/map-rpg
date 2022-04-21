@@ -36,7 +36,7 @@ export const AddExceedItem = function () {
       const ExceedItemScene: Scene = {
         sceneData:() => [dropable_inventory,dropable_item],
         options:ExceedItemOptions,
-        fixed_options:[null,null,null,null,null]
+        fixedOptions:[null,null,null,null,null]
       };
       masterService.sceneHandler.tailScene(ExceedItemScene,'excess-item');
     }

@@ -6,7 +6,7 @@ import { tree_node } from 'src/gameLogic/custom/Class/CharacterBattleClass/Array
 import { nextOption } from 'src/gameLogic/custom/Class/Scene/CommonOptions';
 import { Scene, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { Upgrade } from 'src/gameLogic/custom/Class/Upgrade/Upgrade';
-import { compare_array } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { compareArray } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
 @Component({
   selector: 'app-select-perk-gui',
@@ -15,15 +15,15 @@ import { compare_array } from 'src/gameLogic/custom/functions/htmlHelper.functio
 })
 export class SelectPerkGuiComponent implements OnInit {
 
-  get fixed_path():number[]{return this.character.level_stats.upgrade_path};
-  selected_path:number[]=[];
+  get fixedPath():number[]{return this.character.levelStats.upgradePath};
+  selectedPath:number[]=[];
   private character!: UniqueCharacter;
-  private get_character_subsciption:Subscription;
+  private getCharacterSubsciption:Subscription;
   constructor(private masterService:MasterService) {
-    this.get_character_subsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
-      this.initialize_scene(scene)
+    this.getCharacterSubsciption = this.masterService.sceneHandler.onSetScene().subscribe((scene) => {
+      this.initializeScene(scene)
     })
-    this.initialize_scene(masterService.sceneHandler.currentScene as Scene)
+    this.initializeScene(masterService.sceneHandler.currentScene as Scene)
     masterService.sceneHandler.setScene(false);
   }
 
@@ -31,74 +31,73 @@ export class SelectPerkGuiComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.get_character_subsciption && this.get_character_subsciption.unsubscribe();
+    this.getCharacterSubsciption && this.getCharacterSubsciption.unsubscribe();
   }
 
-  upgrade_options(path: number[]):tree_node<Upgrade>[]
-  {
+  upgradeOptions(path: number[]):tree_node<Upgrade>[]{
     return this.character.upgrade_options(path);
   }
 
-  update_selected_path([depth,index]:number[])
-  {
-    const new_selected_path = this.selected_path.slice(0,depth)
-    new_selected_path.push(index)
+  updateSelectedPath(e:Event){
+    const [depth,index] = e as unknown as [number,number];
+    const newSelectedPath = this.selectedPath.slice(0,depth)
+    newSelectedPath.push(index)
     // @ts-ignore
-    new_selected_path.push(null)
-    this.selected_path = new_selected_path;
+    newSelectedPath.push(null)
+    this.selectedPath = newSelectedPath;
   }
 
-  private _option_select!:SceneOptions;
-  get option_select():SceneOptions{
+  private _optionSelect!:SceneOptions;
+  get optionSelect():SceneOptions{
     const masterService = this.masterService;
-    const selected_path = this.selected_path;
-    const fixed_path = this.fixed_path;
+    const selected_path = this.selectedPath;
+    const fixed_path = this.fixedPath;
     const character = this.character;
-    if (!this._option_select)
-      this._option_select = {
+    if (!this._optionSelect)
+      this._optionSelect = {
         text: 'select',
         action(){
-          const new_selected = selected_path.slice(fixed_path.length, -1)
-          for (const selected of new_selected) {
+          const newSelected = selected_path.slice(fixed_path.length, -1)
+          for (const selected of newSelected) {
             character.upgrade(selected)
-            if (character.level_stats.perk_point === 0) break;
+            if (character.levelStats.perkPoint === 0) break;
           }
           masterService.sceneHandler.nextScene(false);
         },
         get disabled() {
-          return !compare_array(fixed_path, selected_path.slice(0, fixed_path.length))
+          return !compareArray(fixed_path, selected_path.slice(0, fixed_path.length))
         }
       }
-    return this._option_select;
+    return this._optionSelect;
   }
-  private _option_skip!:SceneOptions;
+  private _optionSkip!:SceneOptions;
   get option_skip():SceneOptions{
-    if(!this._option_skip)this._option_skip = nextOption(this.masterService,'skip');
-    return this._option_skip;
+    if(!this._optionSkip)this._optionSkip = nextOption(this.masterService,'skip');
+    return this._optionSkip;
   }
-  private _option_reset!:SceneOptions
+  private _optionReset!:SceneOptions
   get option_reset():SceneOptions{
-    if (!this._option_reset) this._option_reset = {
+    if (!this._optionReset) this._optionReset = {
       text: 'reset',
       action: () => {
-        this.selected_path = [...this.fixed_path]
+        this.selectedPath = [...this.fixedPath]
       },
       disabled: false
     }
-    return this._option_reset;
+    return this._optionReset;
   }
-  private initialize_scene(description:Scene){
+  private initializeScene(description:Scene){
     const character = description.sceneData();
     if(!(character instanceof UniqueCharacter))return;
-    if(character.level_stats.perk_point===0) { this.masterService.sceneHandler.nextScene(false); return; }
+    if(character.levelStats.perkPoint===0) { this.masterService.sceneHandler.nextScene(false); return; }
     this.character = character;
     //@ts-ignore
-    this.selected_path = [...this.character.level_stats.upgrade_path,null]
-    const fixed_options = description.fixed_options;
-    if(fixed_options){
-      fixed_options[0] = this.option_select;
-      fixed_options[1] = this.option_reset;
-      fixed_options[4] = this.option_skip;
+    this.selectedPath = [...this.character.levelStats.upgradePath,null]
+    const fixedOptions = description.fixedOptions;
+    if(fixedOptions){
+      fixedOptions[0] = this.optionSelect;
+      fixedOptions[1] = this.option_reset;
+      fixedOptions[4] = this.option_skip;
     }
   }
 }

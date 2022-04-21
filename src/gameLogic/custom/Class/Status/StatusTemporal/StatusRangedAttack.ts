@@ -15,7 +15,7 @@ export class StatusRangedAttack extends StatusBattle
   }
   // @ts-ignore
   protected get _stats_modifier(): CalculatedStats{
-    return {evasion:(5 + 3/5 * this.target.core_stats.speed)*1.10};
+    return {evasion:(5 + 3/5 * this.target.coreStats.speed)*1.10};
   };
   onStatusGainded(target: Character)
   {

@@ -2,10 +2,7 @@ import { MasterService } from "src/app/service/master.service";
 import { factoryMap, factoryname } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { gamesavenames } from "src/gameLogic/configurable/subservice/game-saver.type";
 import { primitive } from '../types';
-import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { ModuleFunctions } from "src/gameLogic/configurable/Factory/FactoryMap";
 
-/** @type {FactoryFunction&ModuleFunctions} */
 export function Factory(masterService:MasterService,options:StoreableType)
 { return factoryMap[options.Factory](masterService,options) }
 

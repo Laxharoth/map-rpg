@@ -8,22 +8,19 @@ export class LockMapService {
   private mapLocks:{[key:string]:boolean}={};
   constructor() {}
   /** Adds a lock to the map if does not already exist. */
-  lockMap(lockName:string)
-  {
+  lockMap(lockName:string){
     //true means locked
     this.mapLocks[lockName] = true;
     this.lockMapSubject.next(this.isMapLocked());
   }
   /** Removes a lock from the map if exists. */
-  unlockMap(lockName:string)
-  {
+  unlockMap(lockName:string){
     //false means unlocked
     this.mapLocks[lockName] = false;
     this.lockMapSubject.next(this.isMapLocked());
   }
   /** Checks if the map has any lock. */
-  isMapLocked():boolean
-  {
+  isMapLocked():boolean{
     return Object.keys(this.mapLocks).some(lockName => this.mapLocks[lockName]);
   }
   /** Returns a observable of any time a lock is added or removed. */

@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
@@ -10,7 +10,7 @@ import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:register_function = ({status,special_attack,perk},{status:{Status,StatusBattle},special_attack:{SpecialAttack},perk:{Perk}},Factory)=>{
+const register:registerFunction = ({status,specialAttack,perk},{status:{Status,StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
 class StatusGrappled extends StatusBattle  implements StatusPreventAttack{
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
   readonly type:"Grappled"="Grappled";
@@ -35,7 +35,7 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack{
   }
     // @ts-ignore
   protected get _stats_modifier():CalculatedStats{
-    return { initiative: this._target.calculated_stats.initiative };
+    return { initiative: this._target.calculatedStats.initiative };
   };
   canAttack(target: Character): boolean {return this._source === target;}
   preventAttackDescription(target: Character): ActionOutput {
@@ -116,7 +116,7 @@ class PerkGrappler extends Perk {
 }
 status["Grappling"]=StatusGrappling;
 status["Grappled"]=StatusGrappled;
-special_attack["Grab"]=SpecialGrab;
+specialAttack["Grab"]=SpecialGrab;
 perk["Grappler"]=PerkGrappler;
 }
 

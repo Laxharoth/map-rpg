@@ -1,10 +1,10 @@
 import { Subscription } from "rxjs";
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
 import { QuestOptions } from "src/gameLogic/custom/Class/Quest/Quest";
 
-const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
+const register:registerFunction = ({quest}, {quest:{Quest}}, Factory)=>{
   class DefeatEnemyQuest extends Quest
   {
     readonly type:"DefeatEnemyQuest"="DefeatEnemyQuest"
@@ -18,7 +18,7 @@ const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
       this.enemy_defeat_subscription=partyHandler.onBattleEnded().subscribe(([status,enemy_formation])=>{
         if(status!=="victory")return;
         for(const enemy of enemy_formation)
-        { if(enemy.enemy_type==='enemyTest')this.enemies_defeated = Math.min(this.enemies_defeated,this.ENEMY_TARGET); }
+        { if(enemy.enemyType==='enemyTest')this.enemies_defeated = Math.min(this.enemies_defeated,this.ENEMY_TARGET); }
         this.complete()
       })
     }

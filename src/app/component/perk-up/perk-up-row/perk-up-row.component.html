@@ -1,10 +1,10 @@
 <div class="app-perk-up-row">
-  <div class="upgrade-item" *ngFor="let upgrade_tree_node of upgrades; let option_index=index">
+  <div class="upgrade-item" *ngFor="let upgradeTreeNode of upgrades; let optionIndex=index">
     <app-perk-up-item
-    [selected_path]="selected_path"
-    [fixed_path]="fixed_path"
+    [selectedPath]="selectedPath"
+    [fixedPath]="fixedPath"
     [depth]="row"
-    [option_index]="option_index"
-    [upgrade]="upgrade_tree_node.value" (select_index)="emit($event)"></app-perk-up-item>
+    [optionIndex]="optionIndex"
+    [upgrade]="upgradeTreeNode.value" (select_index)="emit($event)"></app-perk-up-item>
   </div>
 </div>

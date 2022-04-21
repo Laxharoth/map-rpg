@@ -1,11 +1,11 @@
 import { QuestOptions } from 'src/gameLogic/custom/Class/Quest/Quest';
 import { Subscription } from "rxjs";
 import { MasterService } from "src/app/service/master.service";
-import { register_function } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
+import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { questnames } from "src/gameLogic/custom/Class/Quest/Quest.type";
 import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 
-const register:register_function = ({quest}, {quest:{Quest}}, Factory)=>{
+const register:registerFunction = ({quest}, {quest:{Quest}}, Factory)=>{
   class FoolDragonSeller extends Quest{
     type: questnames = "FoolDragonSeller";
     name: string = "Fool the Dragon Seller";

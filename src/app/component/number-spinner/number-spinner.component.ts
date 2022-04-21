@@ -12,9 +12,9 @@ export class NumberSpinnerComponent implements OnInit {
   @Input() value!:number;
   @Input() max:number=100;
   @Input() step:number=1;
-  @Input() show_input:boolean = true;
-  @Input() disable_up:boolean = false;
-  @Input() disable_down:boolean = false;
+  @Input() showInput:boolean = true;
+  @Input() disableUp:boolean = false;
+  @Input() disableDown:boolean = false;
   @Output() SpinnerChangedEvent = new EventEmitter<number>();
 
   constructor() { }
@@ -28,8 +28,8 @@ export class NumberSpinnerComponent implements OnInit {
       Math.min(this.max,this.value+change)
     );
     if(this.value===new_value ||
-      (this.disable_up && this.value < new_value)||
-      (this.disable_down && this.value > new_value))return;
+      (this.disableUp && this.value < new_value)||
+      (this.disableDown && this.value > new_value))return;
     this.value = new_value;
     this.emmitChange()
   }

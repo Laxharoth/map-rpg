@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 import { FixedOptions, Scene as SceneInterface, SceneOptions, wrapAction } from 'src/gameLogic/custom/Class/Scene/Scene';
-import { DoubleLinkedList, DoubleLinkedListNode } from 'src/gameLogic/custom/ClassHelper/DoubleLinkedList';
+import { DoubleLinkedList } from 'src/gameLogic/custom/ClassHelper/DoubleLinkedList';
 import { GameStateService } from '../../core/subservice/game-state';
 import { game_state } from '../../configurable/subservice/game-state.type';
 import { LockMapService } from './lock-map';
@@ -41,10 +41,10 @@ export class SceneHandlerService {
       if(typeof history === "string") this.sceneTextHistory.insertHead(history);
       // this.pivot = this.sceneTextHistory.head;
     }
-    if(!head.value.fixed_options){
-      head.value.fixed_options = [null, null, null, null, null];
+    if(!head.value.fixedOptions){
+      head.value.fixedOptions = [null, null, null, null, null];
     }
-    for(const option of head.value.fixed_options.concat(head.value.options)){
+    for(const option of head.value.fixedOptions.concat(head.value.options)){
       wrapAction(option)
     }
     this.sceneSubject.next(head.value as Scene);
@@ -60,7 +60,7 @@ export class SceneHandlerService {
     if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
     for(const scene of scenes){
-      (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
+      (!scene.fixedOptions)&&(scene.fixedOptions=[null,null,null,null,null,]);
     }
     this._sceneList[gameState].insertHead(...scenes as SceneInterface[]);
     return this
@@ -74,7 +74,7 @@ export class SceneHandlerService {
     if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
     for(const scene of scenes){
-      (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
+      (!scene.fixedOptions)&&(scene.fixedOptions=[null,null,null,null,null,]);
     }
     this._sceneList[gameState].insertBefore(1,...scenes as SceneInterface[]);
     return this
@@ -88,7 +88,7 @@ export class SceneHandlerService {
     if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
     for(const scene of scenes){
-      (!scene.fixed_options)&&(scene.fixed_options=[null,null,null,null,null,]);
+      (!scene.fixedOptions)&&(scene.fixedOptions=[null,null,null,null,null,]);
     }
     this._sceneList[gameState].insertTail(...scenes as SceneInterface[]);
     return this
@@ -106,13 +106,11 @@ export class SceneHandlerService {
   /**
    * Returns an observable to observe the current scene.
    */
-  onSetScene():Observable<SceneInterface>
-  {
+  onSetScene():Observable<SceneInterface>{
     return this.sceneSubject.asObservable();
   }
   /** Returns an observable to observe the current scene text. */
-  onSetTextScene():Observable<string>
-  {
+  onSetTextScene():Observable<string>{
     return this.sceneTextSubject.asObservable();
   }
 
@@ -136,8 +134,7 @@ export class SceneHandlerService {
    * Removes scenes from the current scene list.
    * Used to remove nested scenes.
    */
-  flush(sceneNumber: number):SceneHandlerService
-  {
+  flush(sceneNumber: number):SceneHandlerService{
     while(this.sceneList.length>sceneNumber+1)
     { this.sceneList.removeAt(0); }
     this.setScene(false);

@@ -6,6 +6,6 @@ export function MapScene(masterService:MasterService,sceneString:(()=>string)|st
   return {
     sceneData:() => (typeof sceneString === "function")?sceneString():sceneString,
     options:[],
-    fixed_options:[SceneSelectItemFromMap(masterService),null,null,null,null]
+    fixedOptions:[SceneSelectItemFromMap(masterService),null,null,null,null]
   }
 }

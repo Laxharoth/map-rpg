@@ -20,6 +20,6 @@ import { Scene, SceneOptions } from "./Scene";
      targetsOptions.push(returnOption)
    }
    return {
-     sceneData:()=>`${targets.map(target=>`${target.name}:${target.current_energy_stats.hitpoints}`).join('\n')}`,
+     sceneData:()=>`${targets.map(target=>`${target.name}:${target.currentEnergyStats.hitpoints}`).join('\n')}`,
      options:targetsOptions as SceneOptions[]}
  }

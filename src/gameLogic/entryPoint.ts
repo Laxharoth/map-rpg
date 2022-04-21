@@ -26,20 +26,20 @@ export function entryPoint(masterService:MasterService){
   const mapHandler   = new MapHandlerService(masterService,gameStateHandler,lockmap);
   const sceneHandler = new SceneHandlerService(lockmap, gameStateHandler);
   const timeHandler = new TimeHandler(gameSaver)
-  const unique_characters_handler = new UniqueCharacterHandler(masterService);
-  const partyHandler = new PartyService(gameSaver,unique_characters_handler);
-  const data_web = new FactWeb(timeHandler, gameSaver,unique_characters_handler);
-  const info_page_toggler = new InfoPageToggler(sceneHandler);
-  const quest_holder = new QuestHolder(gameSaver,masterService);
+  const uniqueCharactersHandler = new UniqueCharacterHandler(masterService);
+  const partyHandler = new PartyService(gameSaver,uniqueCharactersHandler);
+  const dataWeb = new FactWeb(timeHandler, gameSaver,uniqueCharactersHandler);
+  const infoPageToggler = new InfoPageToggler(sceneHandler);
+  const questHolder = new QuestHolder(gameSaver,masterService);
   masterService.register("lockmap", lockmap);
   masterService.register("partyHandler", partyHandler);
   masterService.register("sceneHandler", sceneHandler);
   masterService.register("mapHandler", mapHandler);
   masterService.register("timeHandler",timeHandler);
-  masterService.register("FactWeb",data_web);
-  masterService.register("UniqueCharacterHandler",unique_characters_handler);
-  masterService.register("InfoPageToggler",info_page_toggler);
-  masterService.register("QuestHolder",quest_holder);
+  masterService.register("FactWeb",dataWeb);
+  masterService.register("UniqueCharacterHandler",uniqueCharactersHandler);
+  masterService.register("InfoPageToggler",infoPageToggler);
+  masterService.register("QuestHolder",questHolder);
 
   masterService.sceneHandler.headScene({ options:[],sceneData:()=>null },'front-page');
 }
@@ -137,7 +137,7 @@ function initializeMainCharacter(masterService: MasterService,charactername:char
   }
   masterService.flagsHandler.setFlags(default_flags)
   masterService.sceneHandler.clear();
-  masterService.partyHandler.user.level_stats.upgrade_point = 3 as Int;
+  masterService.partyHandler.user.levelStats.upgradePoint = 3 as Int;
   masterService.mapHandler.loadRoom("entrance5");
   masterService.partyHandler.user.emit_stat_up();
 }

@@ -10,11 +10,11 @@ import { Character } from '../Character';
 import { itemname } from '../../Items/Item.type';
 export class Inventory implements storeable {
   readonly type:string="Inventory"
-  inventory_size = 9;
+  inventorySize = 9;
   items: GameItem[] = [];
-  master_service: MasterService;
-  constructor(master_service: MasterService) {
-    this.master_service = master_service;
+  masterService: MasterService;
+  constructor(masterService: MasterService) {
+    this.masterService = masterService;
   }
   /** Adds Item to the inventory. */
   addItem(item: GameItem|null): void {
@@ -24,7 +24,7 @@ export class Inventory implements storeable {
     }
     this.fitItemIntoinventory(item);
     if (item.amount <= 0) return;
-    if (this.items.length < this.inventory_size) {
+    if (this.items.length < this.inventorySize) {
       if (item.amount <= item.maxStack) {
         this.items.push(item);
         return;
@@ -32,7 +32,7 @@ export class Inventory implements storeable {
       for (const itemsFromStack of item.breakIntoStacks()) this.addItem(itemsFromStack);
       return;
     }
-    AddExceedItem(this.master_service, item, this)
+    AddExceedItem(this.masterService, item, this)
   }
   dropItem(item: GameItem,amount: number=-1) {
     if(amount < 0 || amount >= item.amount){removeItem(this.items, item); return;}
@@ -70,19 +70,19 @@ export class Inventory implements storeable {
     return {
       Factory: "Item",
       type: "",
-      inventory_size: this.inventory_size,
+      inventorySize: this.inventorySize,
       items: this.items.map(item => item.toJson())
     }
   }
   fromJson(options: InventoryOptions): void {
-    this.inventory_size = options.inventory_size;
-    this.items = options.items.map(options => ItemFactory(this.master_service, options))
+    this.inventorySize = options.inventorySize;
+    this.items = options.items.map(options => ItemFactory(this.masterService, options))
   }
 }
 
 export type InventoryOptions = {
   Factory: "Item";
   type: string;
-  inventory_size: number;
+  inventorySize: number;
   items: ItemStoreable[]
 }

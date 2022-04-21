@@ -1,15 +1,14 @@
-import { FoolDragonSellerOptions } from './../../quest';
-import { EnemyFormationFactory } from 'src/gameLogic/custom/Factory/EnemyFormationFactory';
-import { BattleFactory } from 'src/gameLogic/custom/Factory/BattleFactory';
 import { MasterService } from 'src/app/service/master.service';
+import { FactoryForModules } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
 import { FixedOptions, Scene, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
-import { global_functions } from 'src/gameLogic/core/Factory/Factory';
-import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
+import { BattleFactory } from 'src/gameLogic/custom/Factory/BattleFactory';
+import { EnemyFormationFactory } from 'src/gameLogic/custom/Factory/EnemyFormationFactory';
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
+import { FoolDragonSellerOptions } from './../../quest';
 
-export function sellerScene(masterService:MasterService,Factory:FactoryFunction & global_functions  ):Scene[]{
+export function sellerScene(masterService:MasterService,Factory:FactoryForModules  ):Scene[]{
   const fixed_options:FixedOptions=[plantTracker(),attack(),null,null,null];
-  const seller = masterService.UniqueCharacterHandler.get_character('DragonSeller') as unknown as {warryScore:number; distractionScore:number;};
+  const seller = masterService.UniqueCharacterHandler.getCharacter('DragonSeller') as unknown as {warryScore:number; distractionScore:number;};
   const quest  = masterService.QuestHolder.get('FoolDragonSeller') as unknown as FoolDragonSellerOptions;
   const sellerProxy = {
     get warryScore(): number{ return seller.warryScore },
@@ -54,7 +53,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
           disabled:false
         },
       ],
-      fixed_options,
+      fixedOptions: fixed_options,
     };
     function sellerSceneAnswerCutHair():Scene{
       return {
@@ -64,7 +63,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
         options:[
           Factory.options.nextOption(masterService)
         ],
-        fixed_options,
+        fixedOptions: fixed_options,
       }
     }
     function sellerSceneAnswerNewClothes():Scene{
@@ -75,7 +74,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
         options:[
           Factory.options.nextOption(masterService)
         ],
-        fixed_options,
+        fixedOptions: fixed_options,
       }
     }
     function sellerSceneAnswerNoIDont():Scene{
@@ -86,7 +85,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
         options:[
           Factory.options.nextOption(masterService)
         ],
-        fixed_options,
+        fixedOptions: fixed_options,
       }
     }
   }
@@ -121,7 +120,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
           disabled:false
         },
       ],
-      fixed_options
+      fixedOptions: fixed_options
     }
     function answerNotPasssword():Scene{
       return {
@@ -164,7 +163,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
         },
         Factory.options.nextOption(masterService,'Give Diamond', ()=>{ gainEgg(); })
       ],
-      fixed_options
+      fixedOptions: fixed_options
     }
     function stallSeller():Scene{
       return {
@@ -172,7 +171,7 @@ export function sellerScene(masterService:MasterService,Factory:FactoryFunction 
           return "Good weather right?"
         },
         options:[Factory.options.nextOption(masterService,'Give Diamond', ()=>{ gainEgg(); })],
-        fixed_options
+        fixedOptions: fixed_options
       }
     }
   }

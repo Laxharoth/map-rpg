@@ -9,12 +9,12 @@ import { Character } from 'src/gameLogic/custom/Class/Character/Character';
   styleUrls: ['./user-experience.component.css']
 })
 export class UserExperienceComponent implements OnInit {
-  @Input() current_exp:number=0;
-  @Input() target_exp:number=0;
+  @Input() currentExp:number=0;
+  @Input() targetExp:number=0;
   constructor(){}
   ngOnInit(): void {}
   ngOnDestroy(): void { }
   fill(){
-    return `${Math.min(this.current_exp/this.target_exp*100,100)}%`;
+    return `${Math.min(this.currentExp/this.targetExp*100,100)}%`;
   }
 }

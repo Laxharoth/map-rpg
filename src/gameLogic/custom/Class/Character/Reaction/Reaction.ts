@@ -11,7 +11,7 @@ export abstract class Reaction implements hashable, storeable{
   /** The list of tags the reaction should be triggered with. */
   protected abstract whatTriggers: tag[][];
   /** The list of tags the reaction should be never trigger. */
-  protected prevent_reaction:tag[][] = [['paralized'],['before-action']];
+  protected preventReaction:tag[][] = [['paralized'],['before-action']];
   abstract readonly type:string;
   /** TODO doc */
   protected abstract name:string;
@@ -27,14 +27,14 @@ export abstract class Reaction implements hashable, storeable{
    * Checks the tags of the action to see if should trigger the reaction.
    * Then applies the reaction.
    */
-  reaction(react_character:Character,action:BattleCommand): ActionOutput{
+  reaction(reactCharacter:Character,action:BattleCommand): ActionOutput{
     const { tags:actionTags } = action;
     //reaction is prevented
-    if(this.prevent_reaction.some(prevent_pattern => prevent_pattern.every(tag=>actionTags.includes(tag))))return [[],[]]
+    if(this.preventReaction.some(preventPattern => preventPattern.every(tag=>actionTags.includes(tag))))return [[],[]]
     for( const trigger of this.whatTriggers ){
           if(trigger.every(tag=>actionTags.includes(tag))){
             //reaction is triggered
-            return this.action(react_character,action)
+            return this.action(reactCharacter,action)
           }
       }
       //reaction is not triggered
@@ -51,7 +51,7 @@ export abstract class Reaction implements hashable, storeable{
   }
 }
 export abstract class BeforeActionReaction extends Reaction{
-  protected prevent_reaction: tag[][]= [['paralized']]
+  protected preventReaction: tag[][]= [['paralized']]
 }
 export type ReactionOptions={
   Factory:"Reaction";

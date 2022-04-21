@@ -40,9 +40,9 @@ export function selectItem(
   }
   const use_item_scene:Scene = {
     sceneData:()=>`${ items.map(item=>item.name).join('\n') }`,
-      options,fixed_options:[null,null,null,null,null]
+      options,fixedOptions:[null,null,null,null,null]
   };
-  use_item_scene.fixed_options&&(use_item_scene.fixed_options[4] = returnOption);
+  use_item_scene.fixedOptions&&(use_item_scene.fixedOptions[4] = returnOption);
   return use_item_scene
 }
 export function selectItemOverworld(masterService:MasterService):Scene{
@@ -62,7 +62,7 @@ export function selectItemOverworld(masterService:MasterService):Scene{
   const is_item_disabled:is_item_disabled_function = (action_source,item)=>!item.isMapUsable || item.disabled(action_source);
   // @ts-ignore
   const select_item_scene = selectItem(masterService,user,targets,user.inventory.items,'item',use_item_on_party,is_valid_target,is_item_disabled);
-  select_item_scene.fixed_options&&(select_item_scene.fixed_options[3]=drop_item(masterService,user));
+  select_item_scene.fixedOptions&&(select_item_scene.fixedOptions[3]=drop_item(masterService,user));
   return select_item_scene;
 }
 

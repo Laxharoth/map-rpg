@@ -35,8 +35,7 @@ export class MapHandlerService {
 
   /** Loads the map functions */
   loadMap(mapName: string):void {
-    if(!mapcollection[mapName])
-    {
+    if(!mapcollection[mapName]){
       console.error("map does not exist");
       return;
     }
@@ -105,7 +104,7 @@ export function enterRoom(sceneHandler:SceneHandlerService,
   sceneHandler.tailScene({
     sceneData,
     options,
-    fixed_options
+    fixedOptions: fixed_options
   },"map").nextScene();
 }
 export type direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';

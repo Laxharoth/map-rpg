@@ -4,12 +4,12 @@ import { CharacterBattleClass, CharacterBattleClassEmpty } from "../Class/Charac
 
 /** Creates a battle class */
 export const CharacterBattleClassFactory:FactoryFunction<CharacterBattleClass,BattleClassOptions> = (_,options)=>{
-  return new character_battle_class_switcher[options.type]();
+  return new characterBattleClassSwitcher[options.type]();
 }
 interface CharacterBattleClassFactoryConstructor{
   new ():CharacterBattleClass
 }
 
-export const character_battle_class_switcher:{[key:string]:CharacterBattleClassFactoryConstructor} = {
+export const characterBattleClassSwitcher:{[key:string]:CharacterBattleClassFactoryConstructor} = {
   CharacterBattleClassEmpty,
 }

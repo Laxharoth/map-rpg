@@ -3,7 +3,7 @@
   [disabled]="option?.disabled">
     {{ option?.text }}
   </button>
-  <div class="option-description color-1 display-on-hover-description" *ngIf="is_descriptable && has_description">
+  <div class="option-description color-1 display-on-hover-description" *ngIf="isDescriptable && hasDescription">
     <app-descriptable-description [descriptable]="descriptable"></app-descriptable-description>
   </div>
 </div>
