@@ -14,7 +14,8 @@ import { QuestFactory } from "src/gameLogic/custom/Factory/QuestFactory";
 import { ReactionFactory } from "src/gameLogic/custom/Factory/ReactionFactory";
 import { SpecialAttackFactory } from "src/gameLogic/custom/Factory/SpecialAttackFactory";
 import { StatusFactory } from "src/gameLogic/custom/Factory/StatusFactory";
-import { pushBattleActionOutput, randomBetween, randomCheck } from 'src/gameLogic/custom/functions/htmlHelper.functions';
+import { pushBattleActionOutput,
+         randomBetween, randomCheck } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { SetDataweb } from "src/gameLogic/custom/subservice/fact-web";
 import { enterRoom } from 'src/gameLogic/custom/subservice/map-handler';
 import { SetCurrentParty } from "src/gameLogic/custom/subservice/party";

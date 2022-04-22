@@ -5,18 +5,24 @@ import { Factory } from "../Factory";
 
 const registeredModulesSet = new Set<string>()
 export type FactoryForModules = typeof Factory & ModuleFunctions
-export type registerFunction = ( switcher:switcherMapping, constructor:constructor_mapping, _Factory:FactoryForModules)=>void;
-export interface registerable{register:registerFunction,moduleName:string,moduleDependency:string[]}
+export type registerFunction = ( switcher:switcherMapping,
+      constructor:constructor_mapping,
+      _Factory:FactoryForModules)=>void;
+export interface Registerable{
+  register:registerFunction,
+  moduleName:string,
+  moduleDependency:string[]
+}
 
-const waitingModules:registerable[] = []
-export function addModule(module:registerable):void{
+const waitingModules:Registerable[] = []
+export function addModule(module:Registerable):void{
   waitingModules.push(module)
 }
 export function registerAllModules(){
   let previousWaitingModulesLength = 0;
   while(previousWaitingModulesLength!==waitingModules.length){
     previousWaitingModulesLength = waitingModules.length
-    const removeModules:registerable[] = []
+    const removeModules:Registerable[] = []
     for(const module of waitingModules)if(register_module(module))removeModules.push(module)
     for(const module of removeModules )removeItem(waitingModules, module)
   }
@@ -24,7 +30,7 @@ export function registerAllModules(){
     console.warn(`Module ${module.moduleName} could not be loaded because depends of "${module.moduleDependency.join(",")}"`)
   }
 }
-function register_module({register,moduleName: moduleName,moduleDependency: moduleDependency}:registerable):boolean{
+function register_module({register,moduleName: moduleName,moduleDependency: moduleDependency}:Registerable):boolean{
   if(moduleDependency.some(module=>!registeredModulesSet.has(module)))return false;
   register(switcher,constructor,Factory as FactoryForModules);
   registeredModulesSet.add(moduleName)

@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { primitive } from 'src/gameLogic/core/types';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
@@ -11,7 +11,7 @@ import { ActionOutput } from '../../Character.type';
 /**
  * An array of characters, with the functions for battle descriptions.
  */
-export abstract class EnemyFormation implements storeable{
+export abstract class EnemyFormation implements Storeable{
   abstract type: primitive;
   /** The Array with the enemies. */
   protected abstract _enemies:(Character&Enemy)[];
@@ -21,16 +21,19 @@ export abstract class EnemyFormation implements storeable{
   /** Gets the private array of enemies. */
   get enemies():(Character&Enemy)[] {return this._enemies;}
 
-  /** Defines the scene if the enemy party win.*/
+  /**
+   * Defines the scene if the enemy party win.
+   */
   abstract onEnemyVictory(party: Character[]):Scene;
   /** Defines the scene if the enemy party lose. */
   abstract onPartyVictory(party: Character[]):Scene;
   /** Defines the loot the enemyformation will drop when defeated */
   loot():GameItem[]{
-    return this._enemies.reduce((accumulator,enemy)=>accumulator.concat(enemy.loot.map(storeable=>ItemFactory(this.masterService,storeable))),[] as GameItem[])
+    return this._enemies.reduce((accumulator,enemy)=>accumulator
+      .concat(enemy.loot.map(storeable=>ItemFactory(this.masterService,storeable))),[] as GameItem[])
   }
   give_experience(party: Character[]):ActionOutput{
-    let experienceStr:string[] = []
+    const experienceStr:string[] = []
     for(const partyMember of party)
     {
       const experience = partyMember.gainExperience(
@@ -66,7 +69,7 @@ export abstract class EnemyFormation implements storeable{
   toJson(): EnemyFormationOptions {
     throw new Error('Method not implemented.');
   }
-  fromJson(options: EnemyFormationOptions): void { }
+  fromJson(options: EnemyFormationOptions): void {return undefined;}
 }
 
 export type EnemyFormationOptions = {

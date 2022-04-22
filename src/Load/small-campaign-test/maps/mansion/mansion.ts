@@ -27,7 +27,8 @@ export function entrace(roomname: string, Factory:FactoryForModules):roomFunctio
         case "entrance7":
         case "entrance9":
         case "entrance2":
-        case "entrance3":options.push(Factory.options.enterRoomOption(masterService,"","The door is closed",true));break;
+        case "entrance3":options.push(
+          Factory.options.enterRoomOption(masterService,"","The door is closed",true));break;
       }
       return {
         onEnter(){
@@ -35,7 +36,7 @@ export function entrace(roomname: string, Factory:FactoryForModules):roomFunctio
             // @ts-ignore
             Factory.options.roomOptions(masterService));
         },
-        onExit(){},
+        onExit(){return null;},
       }
     }
   }
@@ -51,7 +52,7 @@ export function stairs(Factory:FactoryForModules):roomFunction{
             // @ts-ignore
             Factory.options.roomOptions(masterService));
         },
-        onExit(){},
+        onExit(){return null;},
       }
     }
   }
@@ -81,15 +82,14 @@ export function upper(Factory:FactoryForModules):roomFunction{
           }
           sceneHandler.setScene();
         },
-        onExit(){},
+        onExit(){return null;},
       }
     }
   }
 }
-
 function getFlagShortcut(masterService: MasterService){
-  return function(flagname:flagname,value?:any){
-    if(value){ masterService.flagsHandler.setFlag(flagname,value); }
-    return masterService.flagsHandler.getFlag(flagname)
+  return (flag: flagname, value?: any) => {
+    if (value) { masterService.flagsHandler.setFlag(flag, value); }
+    return masterService.flagsHandler.getFlag(flag);
   }
 }

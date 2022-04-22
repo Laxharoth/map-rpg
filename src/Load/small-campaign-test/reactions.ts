@@ -2,7 +2,7 @@ import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/Reg
 import { BattleCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
+import { Reaction as ReactionClass } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
@@ -13,24 +13,25 @@ const register:registerFunction = ({reaction,perk}, {reaction:{BeforeActionReact
     protected whatTriggers: tag[][] = [];
     protected name: string = "Pack Tactics";
     type="PackTactics";
-    protected action(react_character: Character, action:BattleCommand): ActionOutput {
+    protected action(reactCharacter: Character, action:BattleCommand): ActionOutput {
       if(
         this.masterService.partyHandler
           .enemyFormation.enemies
-          .find( enemy => enemy!==react_character && enemy.type === "Bandit" && !enemy.isDefeated())
+          .find( enemy => enemy!==reactCharacter && enemy.type === "Bandit" && !enemy.isDefeated())
       ){
-        react_character.addStatus(statusFactory(this.masterService,{ Factory:"Status", type:"Advantage"}));
+        reactCharacter.addStatus(statusFactory(this.masterService,{ Factory:"Status", type:"Advantage"}));
       }
       return [[],[]];
     }
   }
+  // tslint:disable: max-classes-per-file
   class BlindInmune extends BeforeActionReaction{
     protected whatTriggers: tag[][] = [["fake egg","Blind","status gained"]];
     protected name: string = "Blind Inmune";
     type="BlindInmune";
-    protected action(react_character: Character, { target }: BattleCommand): ActionOutput {
-      target.splice( target.indexOf(react_character), 1 );
-      return [[],[`${react_character.name} is inmune to blind`]]
+    protected action(reactCharacter: Character, { target }: BattleCommand): ActionOutput {
+      target.splice( target.indexOf(reactCharacter), 1 );
+      return [[],[`${reactCharacter.name} is inmune to blind`]]
     }
 
   }
@@ -40,7 +41,7 @@ const register:registerFunction = ({reaction,perk}, {reaction:{BeforeActionReact
       return "Blind Inmune Perk";
     }
     type:perkname="BlindInmune";
-    get reactions(): Reaction[] {
+    get reactions(): ReactionClass[] {
       return [this.blindInmune];
     }
   }
@@ -50,15 +51,16 @@ const register:registerFunction = ({reaction,perk}, {reaction:{BeforeActionReact
       return "Blind Inmune Perk";
     }
     type:perkname="PackTactics";
-    get reactions(): Reaction[] {
+    get reactions(): ReactionClass[] {
       return [this.packTactics];
     }
   }
+  // tslint:disable: no-string-literal
   reaction["PackTactics"] = PackTactics;
   reaction["BlindInmune"] = BlindInmune;
   perk["BlindInmune"] = BlindInmunePerk;
   perk["PackTactics"] = PackTacticsPerk;
 }
-const module_name = "small-campaign-reaction";
-const module_dependency:string[] = ["small-campaign-status"];
-export { register, module_name, module_dependency };
+const moduleName = "small-campaign-reaction";
+const moduleDependency:string[] = ["small-campaign-status"];
+export { register, moduleName, moduleDependency };

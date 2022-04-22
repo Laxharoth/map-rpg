@@ -9,6 +9,6 @@ export const PerkFactory:FactoryFunction<Perk, PerkStoreable> = (masterService,o
   perk.fromJson(options);
   return perk;
 }
-//@ts-ignore
+// @ts-ignore
 export const perkSwitcher:{[key in perknameEnum]:PerkConstructor} = {}
-export interface PerkConstructor{ new (masterService:MasterService):Perk }
+export type PerkConstructor = new (masterService:MasterService) =>Perk

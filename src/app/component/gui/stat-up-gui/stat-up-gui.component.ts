@@ -29,9 +29,11 @@ export class StatUpGuiComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    return undefined;
   }
   ngOnDestroy(): void {
-    this.getCharacterSubsciption && this.getCharacterSubsciption.unsubscribe();
+    if(this.getCharacterSubsciption)
+      this.getCharacterSubsciption.unsubscribe();
   }
   private _optionSelect!:SceneOptions;
   get option_select():SceneOptions
@@ -69,17 +71,17 @@ export class StatUpGuiComponent implements OnInit {
     this.coreStats = {...character.coreStats}
     this.maxCoreStats = character.battleClass.maxCoreAtLevel(character.levelStats.level);
     this.upgradePoints = character.levelStats.upgradePoint;
-    const fixed_options = description.fixedOptions;
-    if(fixed_options){
-      fixed_options[0] = this.option_select;
-      fixed_options[1] = this.option_reset;
-      fixed_options[4] = this.option_skip;
+    const fixedOptions = description.fixedOptions;
+    if(fixedOptions){
+      fixedOptions[0] = this.option_select;
+      fixedOptions[1] = this.option_reset;
+      fixedOptions[4] = this.option_skip;
     }
   }
   updateStat(value:number,stat:string){
     const characterCoreStats = this.coreStats as unknown as { [key: string]:Int };
-    const new_stat = value;
-    const difference = new_stat-characterCoreStats[stat];
+    const newStat = value;
+    const difference = newStat-characterCoreStats[stat];
     characterCoreStats[stat] = roundToInt(value);
     this.upgradePoints -=  difference;
   }

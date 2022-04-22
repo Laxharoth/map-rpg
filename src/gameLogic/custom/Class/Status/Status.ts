@@ -1,17 +1,17 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from "src/gameLogic/core/Factory/Factory";
+import { Storeable } from "src/gameLogic/core/Factory/Factory";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput, CalculatedStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Reaction } from 'src/gameLogic/custom/Class/Character/Reaction/Reaction';
 import { SpecialAttack } from 'src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack';
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
-import { hashable } from "../../ClassHelper/ObjectSet";
+import { Hashable } from "../../ClassHelper/ObjectSet";
 import { BattleCommand } from "../Battle/BattleCommand";
 import { applyModifiers, StatsModifier } from "../Character/StatsModifier";
 
 /** Altered status that affect characters. */
-export abstract class Status implements storeable,hashable,StatsModifier{
+export abstract class Status implements Storeable,Hashable,StatsModifier{
   abstract type:statustype;
   protected masterService:MasterService;
   get statsModifier():CalculatedStats{ return {} };
@@ -58,7 +58,9 @@ export abstract class Status implements storeable,hashable,StatsModifier{
   get specials():SpecialAttack[]{ return [];}
 
   toJson():StatusStoreable{return { Factory:"Status",type:this.type}};
-  fromJson(options:StatusStoreable):void{};
+  fromJson(options:StatusStoreable):void{
+    return undefined;
+  };
   hash(): string {return this.name}
 }
 export type StatusStoreable = {Factory:"Status",type:statustype,[key:string]:any;}

@@ -22,9 +22,9 @@ export abstract class Equipment extends GameItem implements StatsModifier{
   abstract get tags():tag[];
   /** * The stats that are going to be applied to the character */
   protected _statsModifier:CalculatedStats = {};
-  protected _resistance_stats:ResistanceStats = {};
+  protected _resistanceStats:ResistanceStats = {};
   get statsModifier() { return this._statsModifier; }
-  get resistanceStats() { return this._resistance_stats; }
+  get resistanceStats() { return this._resistanceStats; }
   constructor(masterService:MasterService)
   { super(masterService); }
   /** * The reactions the equipment privides. */
@@ -47,13 +47,13 @@ export abstract class Equipment extends GameItem implements StatsModifier{
     if(Math.max(...Object.values(this.statsModifier)))
     for(const [stat,value] of Object.entries(this.statsModifier)){
       if(value===0)continue;
-      //@ts-ignore
+      // @ts-ignore
       equipmentDescripitonStats.section_items.push({name:aliasStatType[stat],value});
     }
     if(Math.max(...Object.values(this.resistanceStats)))
     for(const [stat,value] of Object.entries(this.resistanceStats)){
       if(value===0)continue;
-      //@ts-ignore
+      // @ts-ignore
       equipmentDescripitonResistance.section_items.push({name:aliasStatType[stat],value});
     }
     return  [

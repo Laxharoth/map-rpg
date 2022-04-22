@@ -4,8 +4,7 @@ import { ActionOutput, CalculatedStats } from 'src/gameLogic/custom/Class/Charac
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
 const register:registerFunction = ({status},{status:{StatusBattle}},Factory)=>{
-  class StatusInvisible extends StatusBattle
-  {
+  class StatusInvisible extends StatusBattle{
     private target!:Character;
     protected DURATION: number = 4;
     get description(): string { return 'Hides in plain sight'; }
@@ -21,8 +20,9 @@ const register:registerFunction = ({status},{status:{StatusBattle}},Factory)=>{
     get name(): string { return 'Invisible'; }
     get tags(): tag[] { return super.tags.concat(['aim','invisible']);}
   }
+  // tslint:disable-next-line: no-string-literal
   status["Invisible"]=StatusInvisible
 }
-const module_name="Invisible"
-const module_dependency:string[]=[]
-export { register, module_name, module_dependency }
+const moduleName="Invisible"
+const moduleDependency:string[]=[]
+export { register, moduleName, moduleDependency }

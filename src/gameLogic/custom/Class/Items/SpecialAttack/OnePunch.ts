@@ -4,8 +4,7 @@ import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { GameElementDescriptionSection } from "../../GameElementDescription/GameElementDescription";
 
-export class OnePunch extends SpecialAttack
-{
+export class OnePunch extends SpecialAttack{
   protected COOLDOWN: number = Infinity;
   readonly type:"OnePunch"="OnePunch"
   get name(): string { return "One Punch"; }
@@ -23,7 +22,8 @@ export class OnePunch extends SpecialAttack
   ////////////////////
   /// SPECIAL DESCRIPTION
   ////////////////////
-  private specialDescriptionOptions = { text:'NEXT!!',action:()=>{this.masterService.sceneHandler.nextScene(false)},disabled: false }
+  private specialDescriptionOptions = {
+    text:'NEXT!!',action:()=>{this.masterService.sceneHandler.nextScene(false)},disabled: false }
   private specialScene(user: Character, target: Character):Scene{
     return {
       sceneData: () => `${user.name.toUpperCase()} OHKO ${target.name}!`,

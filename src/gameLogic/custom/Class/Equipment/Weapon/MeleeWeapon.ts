@@ -22,6 +22,7 @@ export abstract class MeleeWeapon extends Weapon{
   get tags(): tag[] { return ['melee weapon']; }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class MeleeUnharmed extends MeleeWeapon{
   readonly onePunch = new OnePunch(this.masterService);
   maxStack = 0;

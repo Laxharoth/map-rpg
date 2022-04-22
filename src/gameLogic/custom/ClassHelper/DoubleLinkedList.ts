@@ -1,7 +1,7 @@
 export class DoubleLinkedList<T>{
   head:DoubleLinkedListNode<T>|null;
   length:number;
-  constructor(...values:Array<T>){
+  constructor(...values:T[]){
       this.head = null;
       this.length =  0;
       this.insertHead(...values);
@@ -10,7 +10,7 @@ export class DoubleLinkedList<T>{
       if(this.length===0 || this.head===null){ return null; }
       return this.head.next;
   }
-  insertHead(...values:Array<T>):T | null{
+  insertHead(...values:T[]):T | null{
       if(values.length===0){ return null; }
       const valuesReversed = values.reverse();
       for(const value of valuesReversed){
@@ -21,7 +21,7 @@ export class DoubleLinkedList<T>{
       }
       return valuesReversed[0];
   }
-  insertBefore(index:number,...values:Array<T>):T | null{
+  insertBefore(index:number,...values:T[]):T | null{
       if(values.length===0){ return null; }
       if(index < 0 || index > this.length) return null;
       if(index===0){
@@ -40,33 +40,32 @@ export class DoubleLinkedList<T>{
       }
       return valuesReversed[0];
   }
-  insertTail(...values:Array<T>):T|null{
+  insertTail(...values:T[]):T|null{
     return this.insertBefore(this.length,...values);
   }
   removeAt(index:number):T|null{
       if(this.length===0 || !this.head) return null;
       if(index < 0 || index >= this.length )return null;
       if(index===undefined) index = 0;
+      let removedNode:T|null = null;
       if(index===0){
-          const returnValue = this.head.value;
+        removedNode = this.head.value;
           this.head = this.next;
           if(this.head)
               this.head.prev = null;
           this.length--;
-          return returnValue;
+          return removedNode;
       }
       let prev = this.head;
       for(let i = 0; i < index-1 && prev.next; i++){
           prev = prev.next;
       }
-      // @ts-ignore
-      const returnValue = prev.next.value;
-      // @ts-ignore
-      prev.next = prev.next.next;
+      removedNode = prev.next?.value || null;
+      prev.next = prev.next?.next || null;
       if(prev.next)
         prev.next.prev = prev;
       this.length--;
-      return returnValue;
+      return removedNode;
   }
   lookAt(index:number):T|null{
       if(index===undefined){ return null; }
@@ -89,7 +88,7 @@ export class DoubleLinkedList<T>{
     this.length =  0;
   }
   iterator(){
-      if(this.length===0)return (function*(){})();
+      if(this.length===0)return (function*(){ return; })();
       let current = this.head;
       return (function*(){
                   while(current!==null){
@@ -99,7 +98,7 @@ export class DoubleLinkedList<T>{
               })()
   }
   reverse(){
-      if(this.length===0)return (function*(){})();
+      if(this.length===0)return (function*(){ return; })();
       let current = this.head;
       if(current)
         while(current.next) current = current.next;
@@ -112,6 +111,7 @@ export class DoubleLinkedList<T>{
   }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class DoubleLinkedListNode<T>{
   value:T;
   prev:DoubleLinkedListNode<T>|null;

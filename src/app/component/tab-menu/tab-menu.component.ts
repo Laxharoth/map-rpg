@@ -16,6 +16,7 @@ export class TabMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    return undefined;
   }
 
   setTab(tab:tabs,event:any):void { TabMenuComponent._currentTab = tab; }

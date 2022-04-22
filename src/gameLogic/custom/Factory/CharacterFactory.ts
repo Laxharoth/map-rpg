@@ -18,7 +18,7 @@ export const CharacterFactory:FactoryFunction<Character,UniqueCharacterStoreable
 export const characterSwitcher:{[key: string]:CharacterConstructor}= {
   'main-character':MainCharacter,
 }
-export interface CharacterConstructor { new (masterService:MasterService):Character }
+export type CharacterConstructor = new (masterService:MasterService) =>Character
 export enum CharacterTypeValues{
   'test enemy'='test enemy',
   'Bandit'='Bandit',

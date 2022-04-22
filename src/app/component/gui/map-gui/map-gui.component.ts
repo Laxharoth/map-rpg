@@ -11,6 +11,7 @@ export class MapGuiComponent implements OnInit {
   constructor(private masterService:MasterService) { }
 
   ngOnInit(): void {
+    return undefined;
   }
 
   move(direction:any){

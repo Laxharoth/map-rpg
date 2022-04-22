@@ -2,8 +2,8 @@ import { registerFunction } from 'src/gameLogic/core/Factory/Register_Module/Reg
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-const register:registerFunction = ({status},{status:status_constructor},Factory)=>{
-  const { StatusBattle } = status_constructor
+const register:registerFunction = ({status},{status:statusConstructor},Factory)=>{
+  const { StatusBattle } = statusConstructor
   class StatusPoison extends StatusBattle
   {
     protected DURATION: number = 6;
@@ -20,7 +20,8 @@ const register:registerFunction = ({status},{status:status_constructor},Factory)
     onStatusGainded(target: Character): ActionOutput
     { return Factory.pushBattleActionOutput(super.onStatusGainded(target),[[],[`${target.name} has been poisoned.`]]); }
     onStatusRemoved(target: Character): ActionOutput
-    { return Factory.pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger poisoned.`]]); }
+    { return Factory
+        .pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger poisoned.`]]); }
 
     private calculatePoisonDamage(target: Character):number
     {
@@ -32,10 +33,11 @@ const register:registerFunction = ({status},{status:status_constructor},Factory)
     }
     get tags(): tag[] { return super.tags.concat(['poison'])}
   }
+  // tslint:disable: no-string-literal
   status["Poison"]=StatusPoison
-  //@ts-ignore
-  status_constructor["Poison"]=StatusPoison
+  // @ts-ignore
+  statusConstructor["Poison"]=StatusPoison
 }
-const module_name = "Poison";
-const module_dependency:string[] = [];
-export { register, module_name, module_dependency}
+const moduleName = "Poison";
+const moduleDependency:string[] = [];
+export { register, moduleName, moduleDependency}

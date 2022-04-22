@@ -1,5 +1,6 @@
 import { Observable, Subject } from 'rxjs';
-import { FixedOptions, Scene as SceneInterface, SceneOptions, wrapAction } from 'src/gameLogic/custom/Class/Scene/Scene';
+import { FixedOptions, Scene as SceneInterface,
+         SceneOptions, wrapAction } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { DoubleLinkedList } from 'src/gameLogic/custom/ClassHelper/DoubleLinkedList';
 import { GameStateService } from '../../core/subservice/game-state';
 import { game_state } from '../../configurable/subservice/game-state.type';
@@ -30,7 +31,7 @@ export class SceneHandlerService {
   /** Sets the current scene to the head of the current list. */
   setScene(addToHistory:boolean=true):SceneHandlerService
   {
-    //if the current scene list is empty pop the game state until finds a scenelist with elements.
+    // if the current scene list is empty pop the game state until finds a scenelist with elements.
     while(!this.sceneList || this.sceneList.length === 0){ this.gameStateHandler.popState(); }
     if(this.sceneList.length>1)this.lockmap.lockMap("scene-lock");
     else this.lockmap.unlockMap("scene-lock");
@@ -60,7 +61,8 @@ export class SceneHandlerService {
     if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
     for(const scene of scenes){
-      (!scene.fixedOptions)&&(scene.fixedOptions=[null,null,null,null,null,]);
+      if(!scene.fixedOptions)
+        (scene.fixedOptions=[null,null,null,null,null,]);
     }
     this._sceneList[gameState].insertHead(...scenes as SceneInterface[]);
     return this
@@ -74,7 +76,8 @@ export class SceneHandlerService {
     if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
     for(const scene of scenes){
-      (!scene.fixedOptions)&&(scene.fixedOptions=[null,null,null,null,null,]);
+      if(!scene.fixedOptions)
+        (scene.fixedOptions=[null,null,null,null,null,]);
     }
     this._sceneList[gameState].insertBefore(1,...scenes as SceneInterface[]);
     return this
@@ -88,7 +91,8 @@ export class SceneHandlerService {
     if(!(scenes instanceof Array))scenes = [scenes]
     this.addSceneListWithGameState(gameState);
     for(const scene of scenes){
-      (!scene.fixedOptions)&&(scene.fixedOptions=[null,null,null,null,null,]);
+      if(!scene.fixedOptions)
+        scene.fixedOptions=[null,null,null,null,null,];
     }
     this._sceneList[gameState].insertTail(...scenes as SceneInterface[]);
     return this
@@ -141,8 +145,8 @@ export class SceneHandlerService {
     return this;
   }
   /** clears the scene list of the specified game_state or all if not specified */
-  clear(game_state:game_state|null=null){
-    for(const [,list] of Object.entries(this._sceneList).filter( ([name]) => game_state === null || game_state === name)){
+  clear(gameState:game_state|null=null){
+    for(const [,list] of Object.entries(this._sceneList).filter( ([name]) => gameState === null || gameState === name)){
       list.clear();
     }
     return this;
@@ -155,7 +159,9 @@ export class SceneHandlerService {
   private get currentGameState() { return this.gameStateHandler.gameState; }
 }
 
-/** A Representation of what the game will displayed (text and options)*/
+/**
+ * A Representation of what the game will displayed (text and options)
+ */
 interface Scene{
   sceneData:() => any;
   options: SceneOptions[];

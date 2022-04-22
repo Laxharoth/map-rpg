@@ -1,4 +1,4 @@
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { PerkStoreable } from "src/gameLogic/custom/Class/Perk/Perk";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
@@ -11,27 +11,34 @@ import { EnergyStats, FullCoreStats, FullResistanceStats, LevelStats } from "./C
 import { CharacterEquipmentOptions } from './Inventory/CharacterEquipment';
 import { InventoryOptions } from './Inventory/Inventory';
 
-export abstract class UniqueCharacter extends Character implements storeable {
+export abstract class UniqueCharacter extends Character implements Storeable {
   level_up():void{
     const level = ++this.levelStats.level;
     this.levelStats.perkPoint = roundToInt(this.characterBattleClass.levelUpPerkPoint[level]||0);
     this.levelStats.upgradePoint = roundToInt(this.characterBattleClass.levelUpUpgradePoint[level]||0);
   }
-  upgrade(current_level_upgrade_index:number):void{
-    this.levelStats.upgradePath.push(current_level_upgrade_index);
+  upgrade(currentLevelUpgradeIndex:number):void{
+    this.levelStats.upgradePath.push(currentLevelUpgradeIndex);
     // @ts-ignore
-    const upgrade = this.characterBattleClass.upgradeTree(this.masterService).get_node(this.levelStats.upgradePath).value
+    const upgrade = this.characterBattleClass
+      .upgradeTree(this.masterService).getNode(this.levelStats.upgradePath).value
     this.levelStats.perkPoint--;
     this.addPerk(upgrade.perk);
   }
-  upgrade_options(path: number[]):tree_node<Upgrade>[]{
+  upgradeOptions(path: number[]):tree_node<Upgrade>[]{
     return this.characterBattleClass.upgradeTree(this.masterService).get_children(path);
   }
-  emit_stat_up():void { this.masterService.sceneHandler.headScene({sceneData:()=>this,options:[],fixedOptions:[null,null,null,null,null]},'stat-up') }
-  emit_perk_up():void { this.masterService.sceneHandler.headScene({sceneData:()=>this,options:[],fixedOptions:[null,null,null,null,null]},'perk-tree');}
-  emit_level_up():void{ this.emit_perk_up();this.emit_stat_up(); }
-  total_experience_to_next_level() { return this.characterBattleClass.totalExperienceToNextLevel(this.levelStats.level) }
-  current_level_experience() { return this.characterBattleClass.currentLevelExperience(this.levelStats) }
+  emitStatUp():void {
+    this.masterService.sceneHandler.headScene({sceneData:()=>this,options:[],fixedOptions:[null,null,null,null,null]},'stat-up')
+  }
+  emitPerkUp():void {
+    this.masterService.sceneHandler.headScene({sceneData:()=>this,options:[],fixedOptions:[null,null,null,null,null]},'perk-tree');
+  }
+  emitLevelUp():void{ this.emitPerkUp();this.emitStatUp(); }
+  total_experience_to_next_level() {
+    return this.characterBattleClass.totalExperienceToNextLevel(this.levelStats.level)
+  }
+  currentLevelExperience() { return this.characterBattleClass.currentLevelExperience(this.levelStats) }
   /** Stores character type, originalstats, status, equipment,items and perks */
   toJson(): UniqueCharacterStoreable {
     const storeables: UniqueCharacterStoreable = {
@@ -54,6 +61,7 @@ export abstract class UniqueCharacter extends Character implements storeable {
    */
   fromJson(options: UniqueCharacterStoreable): void {
     super.fromJson(options)
+    // tslint:disable: no-string-literal
     if (options['originalStats'])
       this.coreStats = options['originalStats'];
     if (options['levelStats'])
@@ -66,7 +74,8 @@ export abstract class UniqueCharacter extends Character implements storeable {
       this.gold = options['gold'];
     if (options['status'])
       for (const status of options['status']) { this.addStatus(StatusFactory(this.masterService, status)); }
-    (options['equipment']) && (this.characterEquipment.fromJson(options['equipment']))
+    if(options['equipment'])
+      this.characterEquipment.fromJson(options['equipment'])
     if (options['inventory'])
       this.inventory.fromJson(options.inventory)
     if (options['perk'])

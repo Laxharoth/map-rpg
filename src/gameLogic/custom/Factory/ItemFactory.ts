@@ -15,11 +15,12 @@ export const ItemFactory:FactoryFunction<GameItem,ItemStoreable> = (masterServic
   item.fromJson(options)
   return item;
 }
-//@ts-ignore
-export const itemSwitcher:{[key in meleenameEnum| rangednameEnum| shieldnameEnum| armornameEnum| itemsEnum]:ItemConstructor} = {
+// @ts-ignore
+export const itemSwitcher:{[key in meleenameEnum| rangednameEnum|
+    shieldnameEnum| armornameEnum| itemsEnum]:ItemConstructor} = {
   'MeleeUnharmed':MeleeUnharmed,
   'RangedUnharmed':RangedUnharmed,
   'ShieldNoShield':ShieldNoShield,
   'ArmorNoArmor':ArmorNoArmor,
 }
-export interface ItemConstructor { new (masterService:MasterService):GameItem }
+export type ItemConstructor = new (masterService:MasterService) =>GameItem

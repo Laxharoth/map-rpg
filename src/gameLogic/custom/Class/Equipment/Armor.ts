@@ -17,6 +17,7 @@ export abstract class Armor extends Equipment{
   get tags(): tag[] { return ['armor']; }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class ArmorNoArmor extends Armor{
   readonly type:"ArmorNoArmor"="ArmorNoArmor"
   get name(): string { return 'No Armor'; }

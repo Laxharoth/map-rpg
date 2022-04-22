@@ -3,13 +3,14 @@ import { Subscription } from "rxjs";
 import { MasterService } from "src/app/service/master.service";
 import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { questnames } from "src/gameLogic/custom/Class/Quest/Quest.type";
-import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
+import { GameElementDescriptionSection
+       } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 
 const register:registerFunction = ({quest}, {quest:{Quest}}, Factory)=>{
   class FoolDragonSeller extends Quest{
     type: questnames = "FoolDragonSeller";
     name: string = "Fool the Dragon Seller";
-    description_text: string = "get the egg";
+    descriptionText: string = "get the egg";
     masterService:MasterService;
     plantedTrack:boolean = false;
     inspectedEgg:boolean = false;
@@ -81,6 +82,7 @@ const register:registerFunction = ({quest}, {quest:{Quest}}, Factory)=>{
 
     }
   }
+  // tslint:disable-next-line: no-string-literal
   quest["FoolDragonSeller"] = FoolDragonSeller;
 }
 
@@ -95,6 +97,6 @@ export interface FoolDragonSellerOutcome{
   inspectedEgg:boolean;
   plantedTrack:boolean;
 }
-const module_name = "small-campaign-quest";
-const module_dependency:string[] = [];
-export { register, module_name, module_dependency };
+const moduleName = "small-campaign-quest";
+const moduleDependency:string[] = [];
+export { register, moduleName, moduleDependency };

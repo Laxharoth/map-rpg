@@ -2,8 +2,8 @@ import { DescriptableSceneOptions } from './../../gameLogic/custom/Class/Scene/S
 import { PerkFactory } from 'src/gameLogic/custom/Factory/PerkFactory';
 import { MasterService } from "src/app/service/master.service";
 import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
-import { BattleCommand, SelectCommandTargetStrategy, SelectSingleTargetStrategy, SelectTargetStrategy, SingleTargetCommand } from "src/gameLogic/custom/Class/Battle/BattleCommand";
-import { Character } from "src/gameLogic/custom/Class/Character/Character";
+import { BattleCommand, SelectCommandTargetStrategy, SelectSingleTargetStrategy } from "src/gameLogic/custom/Class/Battle/BattleCommand";
+import { Character as CharacterClass } from "src/gameLogic/custom/Class/Character/Character";
 import { CalculatedStats, CoreStats, FullCoreStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Enemy } from "src/gameLogic/custom/Class/Character/Enemy/Enemy";
 import { ArrayTree, tree_node } from "src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree";
@@ -18,20 +18,28 @@ import { UniqueCharacterStoreable } from 'src/gameLogic/custom/Class/Character/U
 import { primitive } from 'src/gameLogic/core/types';
 import { BattleUseable } from 'src/gameLogic/custom/Class/Items/BattleUseable';
 
-const register:registerFunction = ({enemyFormation: enemy_formation,characterBattleClass: character_battle_class,character}, {enemyFormation:{EnemyFormation},characterBattleClass:{CharacterBattleClass}, character:{Character,PersistentCharacter,UniqueCharacter}}, Factory)=>{
+const register: registerFunction = ({ enemyFormation, characterBattleClass, character },
+  {
+    enemyFormation: { EnemyFormation },
+    characterBattleClass: { CharacterBattleClass },
+    character: { Character, PersistentCharacter, UniqueCharacter }
+  }, Factory) => {
   const perkFactory = Factory as typeof PerkFactory;
-  const possibleTargets = (user:Character,userally: Character[], enemy: Character[],battleUseable:BattleUseable)=>[
+  const possibleTargets = (
+    user:CharacterClass,userally: CharacterClass[], enemy: CharacterClass[],battleUseable:BattleUseable
+    )=>[
       ...battleUseable.isSelfUsable?[user]:[],
       ...battleUseable.isPartyUsable?userally:[],
       ...battleUseable.isEnemyUsable?enemy:[],
     ]
-  const randomAnyTarget = function(targets: Character[]){
-    const target  = targets[Math.floor(Math.random() * targets.length)];
+  const randomAnyTarget = (targets: CharacterClass[]) => {
+    const target = targets[Math.floor(Math.random() * targets.length)];
     return [target];
   }
-  const selectSingleEnemyMaxHP:SelectSingleTargetStrategy = function(user,userally: Character[], enemy: Character[]){
-    const maxHP = Math.max(...enemy.map( enemy => enemy.currentEnergyStats.hitpoints ));
-    return [enemy.find( enemy => enemy.currentEnergyStats.hitpoints === maxHP ) || enemy[0]];
+  const selectSingleEnemyMaxHP:SelectSingleTargetStrategy =
+      (user, userally: CharacterClass[], enemies: CharacterClass[]) => {
+    const maxHP = Math.max(...enemies.map(enemy => enemy.currentEnergyStats.hitpoints));
+    return [enemies.find(enemy => enemy.currentEnergyStats.hitpoints === maxHP) || enemies[0]];
   }
   const AttackOrDefend:SelectCommandTargetStrategy = (user,ally,enemy,targetStrategy)=>{
     if(Factory.randomCheck(95)){
@@ -50,6 +58,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     protected _upgradeTree: ArrayTree<Upgrade> | tree_node<UpgradeOptions>[] = [];
     experienceCap: experience_cap = [0,0,0,0,0];
   }
+  // tslint:disable: max-classes-per-file
   class Bandit extends EnemyBaseClass{
     type: string = "Bandit";
     name: string = "Bandit";
@@ -125,7 +134,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     get loot(): ItemStoreable[] {
       return [];
     }
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(ally: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       return this.Attack(ally);
     }
   }
@@ -136,7 +145,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     constructor(masterService:MasterService){
       super(masterService,"Bandit");
     }
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(ally: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       const net = this.inventory.find("Net");
       if(net){
         return this.useItem(net,selectSingleEnemyMaxHP(this,ally,enemy));
@@ -152,7 +161,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
       super(masterService,"Guard");
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"BlindInmune"}));
     }
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(ally: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
     }
   }
@@ -170,7 +179,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     }
     get loot(): ItemStoreable[] { return []; }
     baseExperience: number = 10;
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(ally: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       const sneakAttack = this.specialAttacks.get("SneakAttack");
       const multyAttack = this.specialAttacks.get("MultiAttack");
       if(sneakAttack && !sneakAttack.disabled(this) && Factory.randomCheck(5)){
@@ -191,7 +200,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"PackTactics"}))
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"MultiAttack"}))
     }
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(ally: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       const multyAttack = this.specialAttacks.get("MultiAttack");
       if(multyAttack && !multyAttack.disabled(this) && Factory.randomCheck(5)){
         return this.useItem(multyAttack,selectSingleEnemyMaxHP(this,ally,enemy));
@@ -201,16 +210,16 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
   }
   class SellerCrew extends EnemyFormation{
     type="SellerCrew";
-    protected _enemies: (Character & Enemy)[];
+    protected _enemies: (CharacterClass & Enemy)[];
     constructor(masterService:MasterService){
       super(masterService);
       this._enemies = [
-        masterService.UniqueCharacterHandler.getCharacter("DragonSeller") as unknown as (Character & Enemy),
+        masterService.UniqueCharacterHandler.getCharacter("DragonSeller") as unknown as (CharacterClass & Enemy),
         new GuardEnemy(masterService),
         new GuardEnemy(masterService),
       ];
     }
-    onEnemyVictory(party: Character[]): Scene {
+    onEnemyVictory(party: CharacterClass[]): Scene {
       return {
         sceneData(){return "The seller open a secret door and escapes."},
         options:[
@@ -218,7 +227,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
         ]
       };
     }
-    onPartyVictory(party: Character[]): Scene {
+    onPartyVictory(party: CharacterClass[]): Scene {
       return {
         sceneData(){return "The seller open a secret door and escapes."},
         options:[
@@ -235,7 +244,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     protected escapeFail(): string {
       throw new Error('Method not implemented.');
     }
-    protected escapeCheck(party: Character[]): boolean {
+    protected escapeCheck(party: CharacterClass[]): boolean {
       return true;
     }
   }
@@ -256,7 +265,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
         enemy._name = `Bandit${i++}`;
       }
     }
-    protected get _enemies(): (Character & Enemy)[]{
+    protected get _enemies(): (CharacterClass & Enemy)[]{
       return [
         this.boss,
         ...this.bandits.sort( (bandit1,bandit2)=>Number(bandit1.isDefeated() && !bandit2.isDefeated())).slice(2)
@@ -265,7 +274,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     get IsDefeated(): boolean {
       return this.boss.isDefeated();
     }
-    onEnemyVictory(party: Character[]): Scene {
+    onEnemyVictory(party: CharacterClass[]): Scene {
       return {
         sceneData:()=>{
           const egg = this.masterService.partyHandler.user.inventory.find("FakeDragonEgg");
@@ -278,7 +287,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
         options:[Factory.options.nextOption(this.masterService,"next")]
       };
     }
-    onPartyVictory(party: Character[]): Scene {
+    onPartyVictory(party: CharacterClass[]): Scene {
       return {
         sceneData(){ return "Defeated Thug" },
         options:[ Factory.options.nextOption(this.masterService) ]
@@ -293,7 +302,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     protected escapeFail(): string {
       return "Can't escape";
     }
-    protected escapeCheck(party: Character[]): boolean {
+    protected escapeCheck(party: CharacterClass[]): boolean {
       return this.boss.inventory.has("FakeDragonEgg");
     }
     private giveUpEgg():void{
@@ -356,8 +365,9 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
         enemy._name = `Bandit${i++}`;
       }
     }
-    protected _enemies: (Character & Enemy)[] = [ new BanditEnemy(this.masterService), new BanditEnemy(this.masterService), ]
-    onEnemyVictory(party: Character[]): Scene {
+    protected _enemies: (CharacterClass & Enemy)[] = [
+      new BanditEnemy(this.masterService), new BanditEnemy(this.masterService), ]
+    onEnemyVictory(party: CharacterClass[]): Scene {
       return {
         sceneData:()=>{
           const egg = this.masterService.partyHandler.user.inventory.find("FakeDragonEgg");
@@ -370,7 +380,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
         options:[Factory.options.nextOption(this.masterService,"next")]
       };
     }
-    onPartyVictory(party: Character[]): Scene {
+    onPartyVictory(party: CharacterClass[]): Scene {
       return {
         sceneData(){ return "Defeated Thug" },
         options:[ Factory.options.nextOption(this.masterService) ]
@@ -382,7 +392,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
     protected escapeFail(): string {
       return "Can't escape";
     }
-    protected escapeCheck(party: Character[]): boolean {
+    protected escapeCheck(party: CharacterClass[]): boolean {
       return Factory.randomCheck(30);
     }
   }
@@ -462,7 +472,7 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
         this.registerKey = options["register-key"];
       }
     }
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(ally: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP);
     }
   }
@@ -475,22 +485,23 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"Mending"}))
       this.addPerk(perkFactory(this.masterService,{Factory:"Perk",type:"SacredFlame"}))
     }
-    protected _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    protected _IA_Action(allies: CharacterClass[], enemy: CharacterClass[]): BattleCommand {
       const guidance = this.specialAttacks.get("Guidance");
       const mending = this.specialAttacks.get("Mending");
       const sacredFlame = this.specialAttacks.get("SacredFlame");
       if(guidance && !guidance.disabled(this)){
-        const targets = possibleTargets(this,ally,enemy, guidance);
+        const targets = possibleTargets(this,allies,enemy, guidance);
         this.useItem(guidance,randomAnyTarget(targets));
       }
-      const hurtedAlly = ally.find( ally => ally.currentEnergyStats.hitpoints / ally.calculatedStats.hitpoints < 0.25 );
+      const hurtedAlly = allies.find(
+        ally => ally.currentEnergyStats.hitpoints / ally.calculatedStats.hitpoints < 0.25 );
       if(mending && !mending.disabled(this) && hurtedAlly ){
         this.useItem(mending,[hurtedAlly]);
       }
       if(sacredFlame && !sacredFlame.disabled(this) && Factory.randomCheck(29)){
-        this.useItem(sacredFlame,selectSingleEnemyMaxHP(this,ally,enemy));
+        this.useItem(sacredFlame,selectSingleEnemyMaxHP(this,allies,enemy));
       }
-      return AttackOrDefend(this,ally,enemy,selectSingleEnemyMaxHP)
+      return AttackOrDefend(this,allies,enemy,selectSingleEnemyMaxHP)
     }
   }
   class BishopVault extends UsableCharacter{
@@ -507,26 +518,25 @@ const register:registerFunction = ({enemyFormation: enemy_formation,characterBat
       super(master,"Fighter");
     }
   }
-  //enemy
-  character_battle_class["Bandit"]=Bandit;
-  character_battle_class["Guard"]=Guard;
-  character_battle_class["Spy"]=Spy;
-  character_battle_class["Thug"]=Thug;
+  // tslint:disable: no-string-literal
+  characterBattleClass["Bandit"]=Bandit;
+  characterBattleClass["Guard"]=Guard;
+  characterBattleClass["Spy"]=Spy;
+  characterBattleClass["Thug"]=Thug;
   character["Bandit"] = BanditEnemy;
   character["Guard"] = GuardEnemy;
   character["DragonSeller"] = Seller;
   character["Thug"] = ThugEnemy;
-  enemy_formation["SellerCrew"]=SellerCrew;
-  enemy_formation["ThugCrew"]=ThugCrew;
-  enemy_formation["Bandits"]=Bandits;
-  //player
-  character_battle_class["Cleric"]=Cleric;
-  character_battle_class["Monk"]=Monk;
-  character_battle_class["Fighter"]=Fighter;
+  enemyFormation["SellerCrew"]=SellerCrew;
+  enemyFormation["ThugCrew"]=ThugCrew;
+  enemyFormation["Bandits"]=Bandits;
+  characterBattleClass["Cleric"]=Cleric;
+  characterBattleClass["Monk"]=Monk;
+  characterBattleClass["Fighter"]=Fighter;
   character["FrankiePeanuts"] = FrankiePeanuts;
   character["BishopVault"] = BishopVault;
   character["Timber"] = Timber;
 }
-const module_name = "small-campaign-battle-class";
-const module_dependency:string[] = ["small-campaign-reaction","small-campaign-special-attack"];
-export { register, module_name, module_dependency };
+const moduleName = "small-campaign-battle-class";
+const moduleDependency:string[] = ["small-campaign-reaction","small-campaign-special-attack"];
+export { register, moduleName, moduleDependency };

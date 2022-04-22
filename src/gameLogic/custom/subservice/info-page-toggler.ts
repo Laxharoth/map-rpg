@@ -8,11 +8,13 @@ export class InfoPageToggler{
   constructor(sceneHandler:SceneHandlerService){
     this.sceneHandler = sceneHandler;
     this.infoScene={sceneData:()=>null,options:[],fixedOptions:[null,null,null,null,null]};
-    /** debug */ this.infoScene.fixedOptions&&(this.infoScene.fixedOptions[0]={
-      text: "return",
-      action:()=>this.toggle(),
-      disabled:false,
-    })
+    // debug
+    if(this.infoScene.fixedOptions)
+      this.infoScene.fixedOptions[0]={
+        text: "return",
+        action:()=>this.toggle(),
+        disabled:false,
+      }
   }
 
   toggle(){

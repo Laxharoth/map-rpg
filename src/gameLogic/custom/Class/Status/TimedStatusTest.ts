@@ -6,8 +6,7 @@ import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { nextOption } from '../Scene/CommonOptions';
 
-export class TimedStatusTest extends TimedStatus
-{
+export class TimedStatusTest extends TimedStatus{
   protected duration: number = 20;
 
   readonly type:"TimedStatusTest"="TimedStatusTest";
@@ -15,8 +14,7 @@ export class TimedStatusTest extends TimedStatus
   get description(): string { return 'testing only'}
   protected effect(target: Character): ActionOutput { return [[],[]] }
 
-  onStatusRemoved(target: Character)
-  {
+  onStatusRemoved(target: Character){
     const messages:ActionOutput = [[this.nextScene(target)],[]];
     return pushBattleActionOutput(super.onStatusRemoved(target),messages);
   }

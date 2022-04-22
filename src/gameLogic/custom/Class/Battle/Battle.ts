@@ -1,5 +1,5 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { EnemyFormation } from "src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation";
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
@@ -11,7 +11,7 @@ import { selectTarget } from '../Scene/SceneSelectTarget';
 import { selectItem } from '../Scene/SceneUseItem';
 import { getUndefeatedTarget } from './Battle.functions';
 import { BattleCommand, DefeatedCommand, EmptyCommand } from './BattleCommand';
-export class Battle implements storeable{
+export class Battle implements Storeable{
   player: Character;
   party: Character[];
   type="";
@@ -24,7 +24,8 @@ export class Battle implements storeable{
   protected battleRoundScene: Scene[] = [];
   protected startRoundScene: Scene[] = [];
 
-  constructor(masterService: MasterService, enemyFormation: EnemyFormation, postInitializeBattleOptions: ((battleOptions:SceneOptions[])=>void)|null=null) {
+  constructor(masterService: MasterService, enemyFormation: EnemyFormation,
+      postInitializeBattleOptions: ((battleOptions:SceneOptions[])=>void)|null=null) {
     this.player = masterService.partyHandler.user;
     this.party = masterService.partyHandler.party;
     this.enemyFormation = enemyFormation;
@@ -44,20 +45,21 @@ export class Battle implements storeable{
   /** Iterates the character actions appling their actions. */
   private round(playerAction: BattleCommand): void {
     const partyIsDefeated = () => { return getUndefeatedTarget([this.player].concat(this.party)).length === 0 }
-    const turn_characters =getUndefeatedTarget([this.player].concat(this.party).concat(this.enemyFormation.enemies))
-    const battle_commands:BattleCommand[] = []
-    for (const character of turn_characters) {
-      if (character === this.player) { battle_commands.push(playerAction); continue; }
-      battle_commands.push(character.IA_Action())
+    const turnCharacters =getUndefeatedTarget([this.player].concat(this.party).concat(this.enemyFormation.enemies))
+    const battleCommands:BattleCommand[] = []
+    for (const character of turnCharacters) {
+      if (character === this.player) { battleCommands.push(playerAction); continue; }
+      battleCommands.push(character.IA_Action())
     }
-    for(let battle_command of sortBattleCommands(battle_commands)) {
-      if(battle_command.source.isDefeated())battle_command=new DefeatedCommand(battle_command.source, battle_command.target);
-      for(const character of turn_characters){
-        pushBattleActionOutput(character.reactBefore(battle_command),[this.battleRoundScene, this.battleRoundString])
+    for(let battleCommand of sortBattleCommands(battleCommands)) {
+      if(battleCommand.source.isDefeated())
+        battleCommand=new DefeatedCommand(battleCommand.source, battleCommand.target);
+      for(const character of turnCharacters){
+        pushBattleActionOutput(character.reactBefore(battleCommand),[this.battleRoundScene, this.battleRoundString])
       }
-      pushBattleActionOutput(battle_command.excecute(),[this.battleRoundScene, this.battleRoundString])
-      for(const target of battle_command.target){
-        pushBattleActionOutput(target.react(battle_command),[this.battleRoundScene, this.battleRoundString])
+      pushBattleActionOutput(battleCommand.excecute(),[this.battleRoundScene, this.battleRoundString])
+      for(const target of battleCommand.target){
+        pushBattleActionOutput(target.react(battleCommand),[this.battleRoundScene, this.battleRoundString])
       }
       if (this.enemyFormation.IsDefeated) {
         for (const enem of this.enemyFormation.enemies)
@@ -71,10 +73,12 @@ export class Battle implements storeable{
       }
     }
     if (this.enemyFormation.IsDefeated) {
-      for(const character of [this.player].concat(this.party).concat(this.enemyFormation.enemies))character.onEndBattle();
+      for(const character of [this.player].concat(this.party).concat(this.enemyFormation.enemies))
+        character.onEndBattle();
       this.battleRoundScene.push(this.endBattlePlayerWins())
     } else if (partyIsDefeated()) {
-      for(const character of [this.player].concat(this.party).concat(this.enemyFormation.enemies))character.onEndBattle();
+      for(const character of [this.player].concat(this.party).concat(this.enemyFormation.enemies))
+        character.onEndBattle();
       this.battleRoundScene.push(this.endBattleEnemyWins())
     } else {
       this.battleRoundScene.push(this.roundMessage(this.battleRoundString))
@@ -86,8 +90,11 @@ export class Battle implements storeable{
   }
 
   private roundMessage(roundStrings: string[]): Scene {
-    const nextOption = {text:"next", action:() => this.startRound(),disabled:false}
-    return {sceneData: () => `${roundStrings.join("\n\n")}`, options:[nextOption],fixedOptions:[null,null,null,null,null]}
+    const startOption = {text:"next", action:() => this.startRound(),disabled:false}
+    return {
+      sceneData: () => `${roundStrings.join("\n\n")}`,
+      options:[startOption],fixedOptions:[null,null,null,null,null]
+    }
   }
 
   /** Reset the round strings and scenes lists. */
@@ -97,16 +104,17 @@ export class Battle implements storeable{
     this.startRoundScene = [];
     this.battleRoundScene = [];
     const specials = this.player.specialAttacks;
-    this.special_option.disabled = specials.length <= 0;
-    this.item_option.disabled = this.player.inventory.items.length <= 0 || this.player.inventory.items.every(item => item.disabled(this.player));
+    this.specialOption.disabled = specials.length <= 0;
+    this.itemOption.disabled = this.player.inventory.items.length <= 0 ||
+      this.player.inventory.items.every(item => item.disabled(this.player));
 
     for (const character of getUndefeatedTarget([this.player].concat(this.party).concat(this.enemyFormation.enemies))) {
       const commands = character.startRound();
       for(const command of sortBattleCommands(commands)){
         const [reactScene,reactString] = character.reactBefore(command);
-        const [scene,string] = command.excecute();
+        const [scene,message] = command.excecute();
         this.startRoundScene.push(...reactScene,...scene);
-        this.startRoundString.push(reactString.concat(string).join('\n'));
+        this.startRoundString.push(reactString.concat(message).join('\n'));
       }
     }
     this.startRoundScene.push({
@@ -146,8 +154,9 @@ export class Battle implements storeable{
   }
   private endBattlePlayerWins():Scene {
     this.masterService.partyHandler.battleEnded('victory')
-    pushBattleActionOutput(this.enemyFormation.give_experience([this.player].concat(this.party)),[this.battleRoundScene, this.battleRoundString])
-    const nextOption = {
+    pushBattleActionOutput(this.enemyFormation.give_experience([this.player].concat(this.party)),
+      [this.battleRoundScene, this.battleRoundString])
+    const next = {
       text:'next',
       action:() => {
       this.player.healHitPoints(10);
@@ -159,89 +168,95 @@ export class Battle implements storeable{
       }
     }
     ,disabled:false}
-    return { sceneData: () => `${this.battleRoundString.join("\n\n")}`,options: [nextOption],fixedOptions:[null,null,null,null,null]};
+    return { sceneData: () => `${this.battleRoundString.join("\n\n")}`,options: [next],
+      fixedOptions:[null,null,null,null,null]};
   }
   private endBattleEnemyWins():Scene {
     this.masterService.partyHandler.battleEnded('lost')
-    const nextOption = {text:'next', action:() => {
+    const next = {text:'next', action:() => {
       this.player.healHitPoints(this.player.calculatedStats.hitpoints);
       this.masterService.sceneHandler
         .tailScene(this.enemyFormation.onEnemyVictory([this.player].concat(this.party)), 'battle')
         .nextScene(false);
     },disabled:false}
-    return {sceneData: () => `${this.battleRoundString.join("\n\n")}`, options: [nextOption],fixedOptions:[null,null,null,null,null]};
+    return {sceneData: () => `${this.battleRoundString.join("\n\n")}`, options: [next],
+      fixedOptions:[null,null,null,null,null]};
   }
-  protected playerParalizedOption = {text:"Paralized", action:() => { this.round(new EmptyCommand(this.player,[])) },disabled:false}
-  protected attack_option ={text: "Attack",action: () => {
+  protected playerParalizedOption = {text:"Paralized", action:() => {
+    this.round(new EmptyCommand(this.player,[])) },disabled:false
+  }
+  protected attackOption ={text: "Attack",action: () => {
     const targets = getUndefeatedTarget(this.enemyFormation.enemies);
     const playerAction = this.player.Attack(targets);
     if (targets.length === 1) return this.round(playerAction);
     this.selectTarget(targets, playerAction);
   },disabled:false};
-  protected shoot_option ={text: "Shoot ", action:() => {
+  protected shootOption ={text: "Shoot ", action:() => {
     const targets = getUndefeatedTarget(this.enemyFormation.enemies);
     const playerAction = this.player.Shoot(targets);
     if (targets.length === 1)return this.round(playerAction);
     this.selectTarget(targets, playerAction)
   },disabled:false};
-  protected special_option={text:"Special", action:() => {
+  protected specialOption={text:"Special", action:() => {
     this.selectItem([...this.player.specialAttacks]);
   },disabled:false};
-  protected item_option = {text:"Item", action:() => {
+  protected itemOption = {text:"Item", action:() => {
     this.selectItem(this.player.inventory.items);
   },disabled:false};
-  protected defend_option = {text:"Defend", action:() => {
+  protected defendOption = {text:"Defend", action:() => {
     const playerAction = this.player.Defend([this.player]);
     this.round(playerAction);
   },disabled:false}
-  protected auto_option ={text:"Auto", action:() => {
+  protected autoOption ={text:"Auto", action:() => {
     this.round(this.player.IA_Action());
   },disabled:false};
-  protected escape_option = {text:"Escape", action:() => {
+  protected escapeOption = {text:"Escape", action:() => {
     const [descriptionText, successfulEscaping] = this.enemyFormation.attemptEscape([this.player].concat(this.party))
     if (successfulEscaping) {
       this.masterService.partyHandler.battleEnded('escape')
       this.masterService.sceneHandler
         .flush(0)
-        .tailScene({sceneData:()=>descriptionText, options:[nextOption(this.masterService)],fixedOptions:[null,null,null,null,null]}, 'battle')
+        .tailScene({sceneData:()=>descriptionText,
+            options:[nextOption(this.masterService)],fixedOptions:[null,null,null,null,null]}, 'battle')
         .nextScene(false);
       return;
     }
-    //player will do nothing
+    // player will do nothing
     const playerAction= new EmptyCommand(this.player,[])
-    this.startRoundScene.push({sceneData:()=>descriptionText, options:[nextOption(this.masterService)],fixedOptions:[null,null,null,null,null]})
+    this.startRoundScene.push({sceneData:()=>descriptionText,
+      options:[nextOption(this.masterService)],fixedOptions:[null,null,null,null,null]})
     this.round(playerAction)
   },disabled:false};
   protected initializeBattleOptions(): (SceneOptions|null)[] {
     return [
-      this.attack_option,
-      this.shoot_option,
-      this.special_option,
-      this.item_option,
+      this.attackOption,
+      this.shootOption,
+      this.specialOption,
+      this.itemOption,
       null,
       null,
       null,
-      this.defend_option,
-      this.auto_option,
+      this.defendOption,
+      this.autoOption,
       null,
       null,
       null,
       null,
-      this.escape_option,
+      this.escapeOption,
     ]
   }
   /** TODO document method */
   private useItemOnBattle(items:BattleUseable[]):Scene{
     const useItemOnBattle = (item:GameItem,target:Character[])=>{
-      const battle_action =  this.player.useItem(item,target);
-      this.round(battle_action)
+      const battleAction =  this.player.useItem(item,target);
+      this.round(battleAction)
     }
     const isValidTarget = (item:GameItem,target:Character)=>{
       return (item.isPartyUsable&&this.party.includes(target))||
       (item.isEnemyUsable&&(this.enemyFormation.enemies as Character[]).includes(target))||
       (item.isSelfUsable&&this.player===(target))
     }
-    const is_item_disabled = (character:Character,item:GameItem)=>!item.isBattleUsable||item.disabled(this.player)
+    const isItemDisabled = (character:Character,item:GameItem)=>!item.isBattleUsable||item.disabled(this.player)
     return selectItem(
       this.masterService,
       this.player,getUndefeatedTarget([this.player].concat(this.party).concat(this.enemyFormation.enemies)),
@@ -250,7 +265,7 @@ export class Battle implements storeable{
       // @ts-ignore
       useItemOnBattle,
       isValidTarget,
-      is_item_disabled)
+      isItemDisabled)
   }
   toJson():BattleOptions{
     throw new Error("Not implemented");
@@ -269,8 +284,8 @@ export interface BattleOptions{
 }
 
 function sortBattleCommands(commands:BattleCommand[]){
-  return commands.sort( (command_1, command_2) => (command_1.priority || 0) > (command_2.priority || 0)  ||
-    command_1.source.calculatedStats.initiative > command_2.source.calculatedStats.initiative
+  return commands.sort( (command1, command2) => (command1.priority || 0) > (command2.priority || 0)  ||
+    command1.source.calculatedStats.initiative > command2.source.calculatedStats.initiative
     ?1:-1
   )
 }

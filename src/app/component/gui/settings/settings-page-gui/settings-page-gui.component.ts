@@ -7,9 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsPageGuiComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit(): void {
+    return undefined;
   }
 
 }

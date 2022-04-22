@@ -5,7 +5,7 @@ import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Sale } from 'src/gameLogic/custom/Class/Shop/Sale';
 import { ItemFactory } from "src/gameLogic/custom/Factory/ItemFactory";
 
-//TODO Shop must be generic, only changes Items and maybe price.
+// TODO Shop must be generic, only changes Items and maybe price.
 export class Shop
 {
   private _name: string;
@@ -17,13 +17,15 @@ export class Shop
   shopItems:GameItem[]=[];
   sale = new Sale();
 
-  constructor(name:string,shopItemNames:itemname[],description:()=>string,masterService:MasterService,shopPrices:{[key:string]:number}={}){
+  constructor(name:string,shopItemNames:itemname[],
+      description:()=>string,masterService:MasterService,shopPrices:{[key:string]:number}={}){
     this._name = name;
     this.description=description;
     this.masterService= masterService;
-    for(const itemname of shopItemNames){
-      if(this.shopItems.some(item=>item.name==itemname))continue;
-      const item = ItemFactory(this.masterService,fillItemStoreable({type:itemname,basePrice:shopPrices?.itemname}));
+    for(const shopItemName of shopItemNames){
+      if(this.shopItems.some(shpItem=>shpItem.name===shopItemName))continue;
+      const item = ItemFactory(this.masterService,
+        fillItemStoreable({type:shopItemName,basePrice:shopPrices?.itemname}));
       this.shopItems.push(item);
     }
   }
@@ -89,7 +91,7 @@ export class Shop
   CheckoutSale(character:Character):void{
     this.CheckoutSaleUpdateCharacterItems(character);
     this.CheckoutSaleUpdateShopInventory();
-    //Reset sale items
+    // Reset sale items
     this.sale.items2Shop = [];
     this.sale.items2Character =[];
   }
@@ -105,8 +107,10 @@ export class Shop
         if(characteritem.amount>0)character.inventory.addItem(characteritem);
       }
     }
-    for (const item of this.sale.items2Character)
-    { character.inventory.addItem(ItemFactory(this.masterService,fillItemStoreable({type:item.type,amount:item.amount}))); }
+    for (const item of this.sale.items2Character){
+      character.inventory.addItem(ItemFactory(this.masterService,
+        fillItemStoreable({type:item.type,amount:item.amount})));
+    }
     character.gold-=this.sale.total;
   }
   private CheckoutSaleUpdateShopInventory() {
@@ -153,10 +157,11 @@ export class Shop
   }
 }
 
-export const ErrorShop = function(){
-  let errorShop:Shop;
-  return function(masterService:MasterService){
-    if(!errorShop)errorShop =new Shop('ERROR',[],()=>"NOT SHOP PROVIDED",masterService)
-    return errorShop
-  }
-}()
+export const ErrorShop = (() => {
+  let errorShop: Shop;
+  return (masterService: MasterService) => {
+    if (!errorShop)
+      errorShop = new Shop('ERROR', [], () => "NOT SHOP PROVIDED", masterService);
+    return errorShop;
+  };
+})()

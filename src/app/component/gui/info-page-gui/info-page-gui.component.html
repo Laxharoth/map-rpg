@@ -1,14 +1,14 @@
 <div class="app-info-page-gui">
   <div class="tab-bar" (click)="setTab($event)">
-    <div class="btn-tab color-5" [ngClass]="{'active': current_tab==='A'}" [attr.for] = "'A'">A</div>
-    <div class="btn-tab color-5" [ngClass]="{'active': current_tab==='G'}" [attr.for] = "'G'">G</div>
-    <div class="btn-tab color-5" [ngClass]="{'active': current_tab==='D'}" [attr.for] = "'D'">D</div>
-    <div class="btn-tab color-5" [ngClass]="{'active': current_tab==='X'}" [attr.for] = "'X'">X</div>
+    <div class="btn-tab color-5" [ngClass]="{'active': currentTab==='A'}" [attr.for] = "'A'">A</div>
+    <div class="btn-tab color-5" [ngClass]="{'active': currentTab==='G'}" [attr.for] = "'G'">G</div>
+    <div class="btn-tab color-5" [ngClass]="{'active': currentTab==='D'}" [attr.for] = "'D'">D</div>
+    <div class="btn-tab color-5" [ngClass]="{'active': currentTab==='X'}" [attr.for] = "'X'">X</div>
   </div>
   <div class="tab-content">
-    <div class="tab" *ngIf="current_tab==='A'"></div>
-    <div class="tab" *ngIf="current_tab==='G'">GGGGGGGGGGGGGG</div>
-    <div class="tab" *ngIf="current_tab==='D'">DDDDDDDDDDDDDD</div>
-    <div class="tab" *ngIf="current_tab==='X'">XXXXXXXXXXXXXX</div>
+    <div class="tab" *ngIf="currentTab==='A'"></div>
+    <div class="tab" *ngIf="currentTab==='G'">GGGGGGGGGGGGGG</div>
+    <div class="tab" *ngIf="currentTab==='D'">DDDDDDDDDDDDDD</div>
+    <div class="tab" *ngIf="currentTab==='X'">XXXXXXXXXXXXXX</div>
   </div>
 </div>

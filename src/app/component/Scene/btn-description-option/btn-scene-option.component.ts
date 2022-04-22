@@ -1,4 +1,4 @@
-import { descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
+import { Descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 import { Component, OnInit, Input } from '@angular/core';
 import { runWrappedAction, DescriptableSceneOptions, SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 
@@ -9,9 +9,9 @@ import { runWrappedAction, DescriptableSceneOptions, SceneOptions } from 'src/ga
 })
 export class BtnSceneOptionComponent implements OnInit {
   @Input()option!:SceneOptions|null;
-  constructor() { }
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
 
   get isDescriptable(): boolean {
     return Boolean(this.option)&&(this.option as DescriptableSceneOptions).descriptable !== undefined;
@@ -22,7 +22,7 @@ export class BtnSceneOptionComponent implements OnInit {
     }
     return false;
   }
-  get descriptable():descriptable{
+  get descriptable():Descriptable{
     if(this.isDescriptable){ return (this.option as DescriptableSceneOptions).descriptable; }
     console.warn(`not found description in ${JSON.stringify(this.option)}`)
     return { get description(){ return [] } }

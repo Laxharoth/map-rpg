@@ -2,14 +2,15 @@ import { MasterService } from "src/app/service/master.service";
 import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
+import { GameElementDescriptionSection
+       } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:registerFunction = ({status,specialAttack,perk},{status:{Status,StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
-  class StatusFright extends StatusBattle implements StatusPreventAttack
-  {
+const register:registerFunction = ({status,specialAttack,perk},
+    {status:{Status,StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
+  class StatusFright extends StatusBattle implements StatusPreventAttack{
     type:"Fright"="Fright";
     get name(): string { return 'Fright'; }
     protected DURATION: number = 3;
@@ -30,7 +31,9 @@ const register:registerFunction = ({status,specialAttack,perk},{status:{Status,S
     const description:ActionOutput = [[],[`${this.frighted.name} is intimidated by ${this.frighter.name}`]]
     return Factory.pushBattleActionOutput(super.onStatusGainded(target),description)
     }
-    protected effect(target: Character): ActionOutput { return [[],[`${this.frighted.name} fears ${this.frighter.name}`]]}
+    protected effect(target: Character): ActionOutput {
+      return [[],[`${this.frighted.name} fears ${this.frighter.name}`]]
+    }
     canAttack(target: Character): boolean {if(this.frighter === target) return Factory.randomCheck(30); return true;}
     preventAttackDescription(target: Character): ActionOutput {
     return [[],[`${this.frighted.name} fears ${this.frighter.name} and can't act.`]];
@@ -38,10 +41,11 @@ const register:registerFunction = ({status,specialAttack,perk},{status:{Status,S
     get tags(): tag[] { return super.tags.concat(['fright'])}
     fromJson(options: StatusStoreable): void {
       super.fromJson(options)
-      this.frighter=options["source"]
-      this.frighted=options["target"]
+      this.frighter=options.source
+      this.frighted=options.target
     }
   }
+  // tslint:disable: max-classes-per-file
   class SpecialFright extends SpecialAttack{
     protected COOLDOWN: number = 4;
     type:"Fright"="Fright";
@@ -63,11 +67,12 @@ const register:registerFunction = ({status,specialAttack,perk},{status:{Status,S
 
     get specials(){return [this.specialFright]}
   }
+  // tslint:disable: no-string-literal
   status["Fright"]=StatusFright
   specialAttack["Fright"]=SpecialFright
   // @ts-ignore
   perk["Frighter"]=PerkFright
 }
-const module_name="Fright"
-const module_dependency:string[] = []
-export { register, module_name, module_dependency}
+const moduleName="Fright"
+const moduleDependency:string[] = []
+export { register, moduleName, moduleDependency}

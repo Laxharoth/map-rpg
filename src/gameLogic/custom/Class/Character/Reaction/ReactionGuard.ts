@@ -8,7 +8,7 @@ export class ReactionGuard extends BeforeActionReaction{
   type: string = "ReactionGuard";
   protected name: string = "ReactionGuard";
   protected whatTriggers: tag[][]=[[]];
-  //@ts-ignore
+  // @ts-ignore
   protected preventReaction: tag[][] = [['paralized'],['benefic']]
   protected action(reactCharacter: Character, {source, target}:BattleCommand): ActionOutput {
     if(reactCharacter.allys.includes(source)){ return [[],[]]; }

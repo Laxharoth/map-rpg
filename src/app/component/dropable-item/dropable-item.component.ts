@@ -12,8 +12,9 @@ export class DropableItemComponent implements OnInit {
   @Input()color:string = "color-6";
   get item():GameItem { return this.dropable[1]}
   get dropped():boolean { return this.dropable[0]}
-  constructor() { }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   toggleDrop(){
     this.dropable[0] = !this.dropable[0]
   }

@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { Upgrade } from "./Upgrade";
-import { UpgradeOptions, upgrade_name } from "./Upgrade.type";
+import { UpgradeOptions, upgradeName } from "./Upgrade.type";
 import { UpgradeCharm } from "./Upgrades/UpgradeCharm";
 import { UpgradeFright } from "./Upgrades/UpgradeFright";
 import { UpgradeGrappler } from "./Upgrades/UpgradeGrappler";
@@ -10,12 +10,12 @@ export const UpgradeFactory = (()=>{
   const upgrades:{[key: string]:Upgrade} = {};
   return (masterService:MasterService,{type}:UpgradeOptions)=>
   {
-    if(!upgrades[type])upgrades[type] = upgrade_switcer[type](masterService);
+    if(!upgrades[type])upgrades[type] = upgradeSwitcer[type](masterService);
     return upgrades[type]
   }
 })()
 
-const upgrade_switcer:{[key in upgrade_name]:(masterService:MasterService)=>Upgrade} = {
+const upgradeSwitcer:{[key in upgradeName]:(masterService:MasterService)=>Upgrade} = {
   'Charm':(masterService:MasterService)=>new UpgradeCharm(masterService),
   'Fright':(masterService:MasterService)=>new UpgradeFright(masterService),
   'Grappler':(masterService:MasterService)=>new UpgradeGrappler(masterService),

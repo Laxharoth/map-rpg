@@ -3,8 +3,7 @@ import { Reaction } from '../Character/Reaction/Reaction';
 import { ReactionGuard } from "../Character/Reaction/ReactionGuard";
 import { StatusBattle } from "./StatusBattle";
 
-export class StatusGuard extends StatusBattle
-{
+export class StatusGuard extends StatusBattle{
   private static REACTION_GUARD:ReactionGuard;
   protected DURATION: number=1;
   constructor(masterService:MasterService){

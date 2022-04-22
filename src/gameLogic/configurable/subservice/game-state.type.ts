@@ -13,7 +13,7 @@ export type game_state = 'map'|
                     'talk'
                     ;
 
-export const game_state_priority: game_state[] = [
+export const gameStatePriority: game_state[] = [
   'prepare',
   'save-page',
   'front-page',

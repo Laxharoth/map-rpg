@@ -2,7 +2,8 @@ import { calculateDamage, DamageSource, DamageTypes } from 'src/gameLogic/custom
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Equipment } from "src/gameLogic/custom/Class/Equipment/Equipment";
-import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
+import { GameElementDescriptionSection
+       } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 import { weaponname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { randomBetween } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
@@ -37,7 +38,7 @@ export abstract class Weapon extends Equipment implements DamageSource{
     if(Math.max(...Object.values(this.damageTypes)))
     for(const [stat,value] of Object.entries(this.damageTypes)){
       if(value===0)continue;
-      //@ts-ignore
+      // @ts-ignore
       damageStatsDescription.section_items.push({name:aliasDamageType[stat],value});
     }
     return  [

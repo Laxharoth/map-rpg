@@ -14,10 +14,16 @@ export class PerkUpItemComponent implements OnInit {
   @Input() optionIndex!:number;
   @Input() upgrade!:Upgrade;
   @Output() selectIndex= new EventEmitter<number>();
-  constructor() { }
   ngOnInit(): void {
+    return undefined;
   }
   emit():void { this.selectIndex.emit(this.optionIndex) }
-  get is_selected():boolean { return compareArray(this.selectedPath.slice(0,this.selectedPath.length-1).concat([this.optionIndex]),this.selectedPath) }
-  get is_fixed():boolean    { return compareArray(this.selectedPath.slice(0,this.selectedPath.length-1).concat([this.optionIndex]),this.fixedPath) }
+  get is_selected():boolean {
+    return compareArray(this.selectedPath.slice(0,this.selectedPath.length-1)
+      .concat([this.optionIndex]),this.selectedPath);
+  }
+  get is_fixed():boolean{
+    return compareArray(this.selectedPath.slice(0,this.selectedPath.length-1)
+      .concat([this.optionIndex]),this.fixedPath);
+  }
 }

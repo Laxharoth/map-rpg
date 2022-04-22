@@ -12,16 +12,23 @@ export interface DamageSource{
   onAttackMissed?:(user:Character,target:Character)=>ActionOutput;
   onAttackLanded?:(user:Character,target:Character)=>ActionOutput;
 }
-export function calculateDamage(damage_source: DamageSource,user:Character,target:Character):number{
+export function calculateDamage(damageSource: DamageSource,user:Character,target:Character):number{
   let finalDamage:number = 0;
-  const damageRelation = damage_source.damagestat(user) / damage_source.defencestat(target);
-  finalDamage += (damageRelation * ( damage_source.damageTypes.slashdamage || 0 ) / ( 100 - target.calculatedResistance.slashresistance ) );
-  finalDamage += (damageRelation * ( damage_source.damageTypes.bluntdamage || 0 ) / ( 100 - target.calculatedResistance.bluntresistance ) );
-  finalDamage += (damageRelation * ( damage_source.damageTypes.piercedamage|| 0 ) / ( 100 - target.calculatedResistance.pierceresistance ) );
-  finalDamage += (damageRelation * ( damage_source.damageTypes.poisondamage|| 0 ) / ( 100 - target.calculatedResistance.poisonresistance ) );
-  finalDamage += (damageRelation * ( damage_source.damageTypes.heatdamage  || 0 ) / ( 100 - target.calculatedResistance.heatresistance ) );
-  finalDamage += (damageRelation * ( damage_source.damageTypes.energydamage|| 0 ) / ( 100 - target.calculatedResistance.energyresistance ) );
-  finalDamage += (damageRelation * ( damage_source.damageTypes.frostdamage || 0 ) / ( 100 - target.calculatedResistance.frostresistance ) );
+  const damageRelation = damageSource.damagestat(user) / damageSource.defencestat(target);
+  finalDamage += (damageRelation * ( damageSource.damageTypes.slashdamage || 0 ) /
+      ( 100 - target.calculatedResistance.slashresistance ) );
+  finalDamage += (damageRelation * ( damageSource.damageTypes.bluntdamage || 0 ) /
+      ( 100 - target.calculatedResistance.bluntresistance ) );
+  finalDamage += (damageRelation * ( damageSource.damageTypes.piercedamage|| 0 ) /
+      ( 100 - target.calculatedResistance.pierceresistance ) );
+  finalDamage += (damageRelation * ( damageSource.damageTypes.poisondamage|| 0 ) /
+      ( 100 - target.calculatedResistance.poisonresistance ) );
+  finalDamage += (damageRelation * ( damageSource.damageTypes.heatdamage  || 0 ) /
+      ( 100 - target.calculatedResistance.heatresistance ) );
+  finalDamage += (damageRelation * ( damageSource.damageTypes.energydamage|| 0 ) /
+      ( 100 - target.calculatedResistance.energyresistance ) );
+  finalDamage += (damageRelation * ( damageSource.damageTypes.frostdamage || 0 ) /
+      ( 100 - target.calculatedResistance.frostresistance ) );
   return Math.round(finalDamage)||0;
 }
 export function attack(damageSource:DamageSource,source:Character,target:Character){

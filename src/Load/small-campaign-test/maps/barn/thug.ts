@@ -7,7 +7,7 @@ import { EnemyFormationFactory } from "src/gameLogic/custom/Factory/EnemyFormati
 export function thugIntroScene(masterService:MasterService, Factory:FactoryForModules):Scene{
   const thug = (Factory as typeof EnemyFormationFactory)(masterService,{ Factory:"EnemyFormation", type:"ThugCrew"});
   const options:SceneOptions[] = [
-    //@ts-ignore
+    // @ts-ignore
     thug.preventBattleByGiveUpEgg(),//Give Egg
     {
       text:"Fight",
@@ -18,7 +18,7 @@ export function thugIntroScene(masterService:MasterService, Factory:FactoryForMo
         type: "Battle",
         enemy: thug,
         postInitializeBattleOptions:(options)=>{
-          //@ts-ignore
+          // @ts-ignore
           options[12] = thug.escapeByGiveUpEgg();
         }
         }).start(); //Fight

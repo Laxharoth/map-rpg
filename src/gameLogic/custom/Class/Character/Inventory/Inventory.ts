@@ -2,13 +2,13 @@ import { AddExceedItem } from 'src/gameLogic/custom/Class/Scene/SceneAddExceedIt
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { GameItem } from 'src/gameLogic/custom/Class/Items/Item';
 import { ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { MasterService } from 'src/app/service/master.service';
 import { removeItem } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { ActionOutput } from '../Character.type';
 import { Character } from '../Character';
 import { itemname } from '../../Items/Item.type';
-export class Inventory implements storeable {
+export class Inventory implements Storeable {
   readonly type:string="Inventory"
   inventorySize = 9;
   items: GameItem[] = [];
@@ -76,7 +76,7 @@ export class Inventory implements storeable {
   }
   fromJson(options: InventoryOptions): void {
     this.inventorySize = options.inventorySize;
-    this.items = options.items.map(options => ItemFactory(this.masterService, options))
+    this.items = options.items.map(option => ItemFactory(this.masterService, option))
   }
 }
 

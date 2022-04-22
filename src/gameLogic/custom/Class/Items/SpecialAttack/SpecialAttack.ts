@@ -1,16 +1,16 @@
 import { MasterService } from 'src/app/service/master.service';
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { attack, DamageSource, DamageTypes } from 'src/gameLogic/custom/Class/Battle/DamageSource';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from 'src/gameLogic/custom/Class/Character/Character.type';
 import { GameElementDescriptionSection } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 import { BattleUseable } from 'src/gameLogic/custom/Class/Items/BattleUseable';
 import { specialsname } from 'src/gameLogic/custom/Class/Items/Item.type';
-import { hashable } from 'src/gameLogic/custom/ClassHelper/ObjectSet';
+import { Hashable } from 'src/gameLogic/custom/ClassHelper/ObjectSet';
 import { tag } from 'src/gameLogic/custom/customTypes/tags';
 import { pushBattleActionOutput, randomCheck } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 
-export abstract class SpecialAttack implements BattleUseable, hashable, storeable{
+export abstract class SpecialAttack implements BattleUseable, Hashable, Storeable{
   abstract type:specialsname;
   abstract readonly name:string;
   protected masterService:MasterService;

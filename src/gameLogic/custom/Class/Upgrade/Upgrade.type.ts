@@ -1,15 +1,15 @@
 import { factoryname } from "src/gameLogic/configurable/Factory/FactoryMap"
 
-enum upgrade_name_enum {
+enum upgradeNameEnum {
   Charm='Charm',
   Fright='Fright',
   Grappler='Grappler',
   "Poison Rush"='Poison Rush',
 }
 
-export type upgrade_name = `${upgrade_name_enum}`
+export type upgradeName = `${upgradeNameEnum}`
 
 export type UpgradeOptions = {
   Factory:factoryname,
-  type:upgrade_name
+  type:upgradeName
 }

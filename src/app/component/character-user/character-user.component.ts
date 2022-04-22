@@ -15,10 +15,14 @@ export class CharacterUserComponent implements OnInit {
 
   constructor(private masterService:MasterService){
     this.character = this.masterService.partyHandler.user;
-    this.characterSubscription = this.masterService.partyHandler.onUpdateUser().subscribe(data=>{ this.character = data; });
+    this.characterSubscription =  this.masterService
+                                    .partyHandler
+                                      .onUpdateUser().subscribe(data=>{ this.character = data; });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
 
   ngOnDestroy(): void { this.characterSubscription.unsubscribe(); }
 

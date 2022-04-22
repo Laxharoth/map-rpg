@@ -1,16 +1,16 @@
 import { MasterService } from "src/app/service/master.service";
 import { FactoryFunction, factoryname } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameItem, ItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
 import { itemname } from 'src/gameLogic/custom/Class/Items/Item.type';
 import { Shop } from "src/gameLogic/custom/Class/Shop/Shop";
 import { ItemFactory } from 'src/gameLogic/custom/Factory/ItemFactory';
 
-export class DynamicShop extends Shop implements storeable{
+export class DynamicShop extends Shop implements Storeable{
   type:"DynamicShop"="DynamicShop";
   private shopPrices:{[key:string]:number};
   constructor(name:string,description:()=>string,masterService: MasterService,shopPrices:{[key:string]:number}={}){
-    //itemas are added from json
+    // itemas are added from json
     super(name,[],description,masterService,{})
     this.shopPrices = shopPrices
   }
@@ -21,7 +21,8 @@ export class DynamicShop extends Shop implements storeable{
   }
   toJson(): ShopStoreable{
     const shopSavedata:ShopStoreable = {Factory:"Shop", type:this.name,Items:[]}
-    const findItem =  (itemname:itemname)=>shopSavedata.Items[shopSavedata.Items.findIndex((item:ItemStoreable)=>item.type === itemname )]
+    const findItem =  (itemName:itemname)=>shopSavedata
+      .Items[shopSavedata.Items.findIndex((item:ItemStoreable)=>item.type === itemName )]
     for(const item of this.shopItems){
       const itemoptions = findItem(item.type)
       if(itemoptions?.amount){ itemoptions.amount += item.amount;continue;}
@@ -39,6 +40,6 @@ export class DynamicShop extends Shop implements storeable{
 }
 export type ShopStoreable = {Factory:factoryname;type:string,Items:ItemStoreable[] }
 export const ShopFactory:FactoryFunction<void,ShopStoreable> = (masterService,options)=>{
-    const Shop = new DynamicShop('',()=>'',masterService,{});
-    Shop.fromJson(options)
+    const dynamicShop = new DynamicShop('',()=>'',masterService,{});
+    dynamicShop.fromJson(options)
   }

@@ -26,73 +26,73 @@ export const room:roomFunction = {
     const user = masterService.partyHandler.user;
     const equipMelee = {
       get text(){return user.characterEquipment.shield instanceof MeleeUnharmed?'Equip Shield':"Unequip"},
-      action:function(){
+      action(){
         if(user.characterEquipment.armor instanceof MeleeUnharmed){
           const armor = user.inventory.items.find(item=>item instanceof MeleeWeapon)
-          armor&&user.useItem(armor,[user]).excecute();
+          if(armor) user.useItem(armor,[user]).excecute();
         }
         else{
           user.unequipShield();
         }
-        console.log(user)
       },
-      get disabled(){return !( user.characterEquipment.armor instanceof MeleeUnharmed || user.inventory.items.some(item=>!(item instanceof MeleeWeapon)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof MeleeUnharmed ||
+        user.inventory.items.some(item=>!(item instanceof MeleeWeapon)))}
     }
     const equipRanged = {
       get text(){return user.characterEquipment.shield instanceof RangedUnharmed?'Equip Shield':"Unequip"},
-      action:function(){
+      action(){
         if(user.characterEquipment.armor instanceof RangedUnharmed){
           const armor = user.inventory.items.find(item=>item instanceof RangedWeapon)
-          armor&&user.useItem(armor,[user]).excecute();
+          if(armor) user.useItem(armor,[user]).excecute();
         }
         else{
           user.unequipShield();
         }
-        console.log(user)
       },
-      get disabled(){return !( user.characterEquipment.armor instanceof RangedUnharmed || user.inventory.items.some(item=>!(item instanceof RangedWeapon)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof RangedUnharmed ||
+        user.inventory.items.some(item=>!(item instanceof RangedWeapon)))}
     }
     const equipShield = {
       get text(){return user.characterEquipment.shield instanceof ShieldNoShield?'Equip Shield':"Unequip"},
-      action:function(){
+      action(){
         if(user.characterEquipment.armor instanceof ShieldNoShield){
           const armor = user.inventory.items.find(item=>item instanceof Shield)
-          armor&&user.useItem(armor,[user]).excecute();
+          if(armor) user.useItem(armor,[user]).excecute();
         }
         else{
           user.unequipShield();
         }
-        console.log(user)
       },
-      get disabled(){return !( user.characterEquipment.armor instanceof ShieldNoShield || user.inventory.items.some(item=>!(item instanceof Shield)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof ShieldNoShield ||
+        user.inventory.items.some(item=>!(item instanceof Shield)))}
     }
     const equipArmor = {
       get text(){return user.characterEquipment.armor instanceof ArmorNoArmor?'Equip Armor':"Unequip"},
-      action:function(){
+      action(){
         if(user.characterEquipment.armor instanceof ArmorNoArmor){
           const armor = user.inventory.items.find(item=>item instanceof Armor)
-          armor&&user.useItem(armor,[user]).excecute();
+          if(armor) user.useItem(armor,[user]).excecute();
         }
         else{
           user.unequipArmor();
         }
-        console.log(user)
       },
-      get disabled(){return !( user.characterEquipment.armor instanceof ArmorNoArmor || user.inventory.items.some(item=>!(item instanceof Armor)))}
+      get disabled(){return !( user.characterEquipment.armor instanceof ArmorNoArmor ||
+        user.inventory.items.some(item=>!(item instanceof Armor)))}
     }
-    const my_nextOption      = nextOption(masterService)
+    const myNextOption = nextOption(masterService)
     const roomOptions:SceneOptions[] =[
       {text:"Shop",action:makeShop,disabled:false},
       {text:"Shop",action:makeDynamicShop,disabled:false},
       {text:"test battle",action:()=>new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" })).start(),disabled:false},
       {text:"Add perk point",action:()=>{
         user.levelStats.perkPoint=4 as Int;
-        user.emit_perk_up();
+        user.emitPerkUp();
       },disabled:false},
       {text:"Add stats point",action:()=>{
         user.levelStats.level=4 as Int;
         user.levelStats.upgradePoint=4 as Int;
-        user.emit_stat_up();
+        user.emitStatUp();
       },disabled:false},
       equipMelee,
       equipRanged,
@@ -100,7 +100,7 @@ export const room:roomFunction = {
       equipArmor,
       {
         text:"Add Test Item",
-        action:function(){
+        action(){
           const item = (Factory as item_factory_function)(masterService,{Factory:"Item",type:"item-test"})
           item.amount = 9;
           user.inventory.addItem(item);
@@ -110,45 +110,46 @@ export const room:roomFunction = {
       ,
       drop_item(masterService,user),{
         text:"level up perk",
-        action:function(){
+        action(){
           const perk = (user.getPerk('PerkUpgradeable'));
           if(!perk) user.addPerk(Factory(masterService,{Factory:"Perk",type:"PerkUpgradeable"}));
           else
-            //@ts-ignore
+            // @ts-ignore
             perk.level++;
         },
         disabled:false
       },
       SceneSelectItemFromMap(masterService),
-      {text:"option3",action:()=>{},disabled:false}
+      {text:"option3",action:()=>null,disabled:false}
     ]
-    const fixed_options:[null, null, null, null, null] = [null, null,null,null,null]
+    const fixedOptions:[null, null, null, null, null] = [null, null,null,null,null]
     const [roomScene, cantGoThere, cantGoThereYet, goBackThere, goBackThere2]:Scene[]=[
-      {sceneData:function(){return `This actually looks the same`},options:roomOptions,fixedOptions: fixed_options},
-      {sceneData:function(){return `I didn't wanted to go there anyway`},options:[my_nextOption],fixedOptions: fixed_options},
-      {sceneData:function(){return `I didn't wanted to go there yet anyway`},options:[my_nextOption],fixedOptions: fixed_options},
-      {sceneData:function(){return `Guess I will go back`},options:[my_nextOption],fixedOptions: fixed_options},
-      {sceneData:function(){return `little choices i have`},options:[my_nextOption],fixedOptions: fixed_options},
+      {sceneData(){return `This actually looks the same`},options:roomOptions,fixedOptions},
+      {sceneData(){return `I didn't wanted to go there anyway`},options:[myNextOption],fixedOptions},
+      {sceneData(){return `I didn't wanted to go there yet anyway`},options:[myNextOption],fixedOptions},
+      {sceneData(){return `Guess I will go back`},options:[myNextOption],fixedOptions},
+      {sceneData(){return `little choices i have`},options:[myNextOption],fixedOptions},
     ]
+    // tslint:disable-next-line: no-shadowed-variable
     const room = {
       onEnter  : () => {
         masterService.sceneHandler.tailScene(roomScene,'map')
         masterService.sceneHandler.nextScene();
       },
-      onExit   : () => {},
-      beforeMoveTo(roomName:string){
-        //if(["room6","room8"].includes(roomName))
-        if(["room6"].includes(roomName)){
+      onExit   : () => null,
+      beforeMoveTo(beforeMoveroomName:string){
+        // if(["room6","room8"].includes(roomName))
+        if(["room6"].includes(beforeMoveroomName)){
           masterService.sceneHandler.headScene(cantGoThere,'map');
           masterService.sceneHandler.setScene();
           return false;
         }
-        if(["room8"].includes(roomName) && $flag("firstreturn2room1")){
+        if(["room8"].includes(beforeMoveroomName) && $flag("firstreturn2room1")){
           masterService.sceneHandler.headScene(cantGoThereYet,'map');
           masterService.sceneHandler.setScene();
           return false;
         }
-        if(roomName === "room1"){
+        if(beforeMoveroomName === "room1"){
           if($flag("firstreturn2room1")){
             masterService.flagsHandler.setFlag("firstreturn2room1",false);
             masterService.sceneHandler.tailScene([goBackThere,goBackThere2],'map');

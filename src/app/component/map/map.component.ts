@@ -30,7 +30,9 @@ export class MapComponent implements OnInit {
     this.setLockedWASD()
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    return undefined;
+  }
 
   ngAfterViewInit(): void {
     this.setMapOverflow();
@@ -77,13 +79,17 @@ export class MapComponent implements OnInit {
     this.lockedMap = this.masterService.lockmap.isMapLocked();
     this.currentMap = this.masterService.mapHandler.currentMap;
     this.timeValues = this.masterService.timeHandler.getTimeValues();
-    this.coordinatesSubscription = this.masterService.mapHandler.onCoordinatesChanged().subscribe(changedCoordinates => {
+    this.coordinatesSubscription =  this.masterService
+                                    .mapHandler.onCoordinatesChanged().subscribe(changedCoordinates => {
       this.currentCoordinates = changedCoordinates;
       this.setLockedWASD();
       this.setMapOverflow();
     });
-    this.mapSubscription = this.masterService.mapHandler.onLoadMap().subscribe(loadedMap => { this.currentMap = loadedMap; });
-    this.lockmapSubscription = this.masterService.lockmap.onMapLockChanged().subscribe(isMapLocked => { this.lockedMap = isMapLocked; });
-    this.timeSubscription = this.masterService.timeHandler.onTimeChanged().subscribe(time => { this.timeValues = time.getTimeValues(); });
+    this.mapSubscription =  this.masterService
+                            .mapHandler.onLoadMap().subscribe(loadedMap => { this.currentMap = loadedMap; });
+    this.lockmapSubscription=this.masterService
+                            .lockmap.onMapLockChanged().subscribe(isMapLocked => { this.lockedMap = isMapLocked; });
+    this.timeSubscription = this.masterService
+                            .timeHandler.onTimeChanged().subscribe(time => { this.timeValues = time.getTimeValues(); });
   }
 }

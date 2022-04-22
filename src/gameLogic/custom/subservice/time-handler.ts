@@ -2,16 +2,16 @@ import { Observable, Subject } from "rxjs";
 import { Time, TimeValues } from "src/gameLogic/custom/ClassHelper/Time";
 
 import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
-import { storeable } from "src/gameLogic/core/Factory/Factory";
+import { Storeable } from "src/gameLogic/core/Factory/Factory";
 import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { MasterService } from "src/app/service/master.service";
-export class TimeHandler implements storeable{
+export class TimeHandler implements Storeable{
   /** The ingame time. */
   type:'TimeHandler'='TimeHandler';
   private time: Time = new Time(0);
   private timeSubject = new Subject<Time>();
-  constructor(game_saver:GameSaver) {
-    game_saver.register("TimeHandler",this);
+  constructor(gameSaver:GameSaver) {
+    gameSaver.register("TimeHandler",this);
   }
   /** Adds time to the current ingame time. */
   addTime(time: number | string) {
@@ -31,7 +31,8 @@ export class TimeHandler implements storeable{
     return this.time.getMinutes();
   }
   fromJson(options: timeHandlerStoreable): void {
-      options && this.time.setTime(options.minutes)
+    if(options)
+      this.time.setTime(options.minutes)
   }
   toJson(): timeHandlerStoreable {
       return{

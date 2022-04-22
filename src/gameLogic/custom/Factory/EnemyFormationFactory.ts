@@ -8,7 +8,5 @@ export const EnemyFormationFactory:FactoryFunction<EnemyFormation,EnemyFormation
   return formation;
 }
 
-interface EnemyFormationConstructor{
-  new(masterService:MasterService):EnemyFormation
-}
+type EnemyFormationConstructor = new(masterService:MasterService) =>EnemyFormation
 export const enemyFormationSwitcher:{ [key: string]:EnemyFormationConstructor }  = {}

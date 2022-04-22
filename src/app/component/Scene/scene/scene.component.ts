@@ -9,39 +9,41 @@ import { MasterService } from 'src/app/service/master.service';
 })
 export class SceneComponent implements OnInit {
   // TODO try to simplify
-  //strings for befor and after Input and select
+  // strings for befor and after Input and select
   /** Text to be displayed before the input element */
   beforeInput!:string;
-  //strings for befor and after Input and select
+  // strings for befor and after Input and select
   /** Text to be displayed after the input element */
   afterInput!:string;
-  //strings for befor and after Input and select
+  // strings for befor and after Input and select
   /** Text to be displayed before the select element */
   beforeSelect!:string;
-  //strings for befor and after Input and select
+  // strings for befor and after Input and select
   /** Text to be displayed after the select element */
   afterSelect!:string;
 
-  //if input goes first and if has input and select
+  // if input goes first and if has input and select
   inputGoesFirst:boolean = false;
   hasInput:boolean = false;
   hasSelect:boolean = false;
 
-  //initial value of input and placeholder
-  input!:inputObject;
-  //select options
+  // initial value of input and placeholder
+  input!:InputObject;
+  // select options
   inputOptions!:string[];
 
   private descriptionSubscription:Subscription;
 
   constructor(private masterService:MasterService){
-    //get original description
+    // get original description
     this.updateDescription(this.masterService.sceneHandler.currentScene?.sceneData());
     this.descriptionSubscription = this.masterService.sceneHandler.onSetTextScene().subscribe((scene)=>{
       this.updateDescription(scene)
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   ngOnDestroy(): void {
     this.descriptionSubscription.unsubscribe()
   }
@@ -52,23 +54,26 @@ export class SceneComponent implements OnInit {
     this.afterSelect  = ''
     if(typeof description !== 'string')
     { this.beforeInput = 'ERROR description is not a string'; return; }
-    //originally assume has not input or select
+    // originally assume has not input or select
     this.hasInput = false;
     this.hasSelect = false;
 
-    let inputIndex:number,endInputIndex:number,
-        selectIndex:number,endselectIndex:number;
+    let inputIndex:number;let endInputIndex:number;
+    let selectIndex:number;let endselectIndex:number;
 
     inputIndex = description.indexOf('\\input');
     endInputIndex = description.indexOf('\\',inputIndex+1)+1;
     selectIndex = description.indexOf('\\select');
 
     this.inputGoesFirst = inputIndex<selectIndex;
-    //if there is no input then inputGoesFirst is true since the inputIndex is negative
-    let beforeInput='',afterInput=description,beforeSelect='',afterSelect='';
+    // if there is no input then inputGoesFirst is true since the inputIndex is negative
+    let beforeInput='';let afterInput=description;
+    const beforeSelect='';const afterSelect='';
 
-    ({ beforeInput, afterInput } = this.InitializeInputStrings(inputIndex, endInputIndex, description, beforeInput, afterInput));
-    ({ afterInput, beforeInput, selectIndex, endselectIndex } = this.InitializeSelectStrings(afterInput, beforeInput, beforeSelect, afterSelect));
+    ({ beforeInput, afterInput } =
+        this.InitializeInputStrings(inputIndex, endInputIndex, description, beforeInput, afterInput));
+    ({ afterInput, beforeInput, selectIndex, endselectIndex } =
+        this.InitializeSelectStrings(afterInput, beforeInput, beforeSelect, afterSelect));
 
     this.beforeInput  = beforeInput;
     this.afterInput   = afterInput;
@@ -94,15 +99,16 @@ export class SceneComponent implements OnInit {
     return { afterInput, beforeInput, selectIndex, endselectIndex };
   }
 
-  private InitializeInputStrings(inputIndex: number, endInputIndex: number, description: string, beforeInput: string, afterInput: string) {
+  private InitializeInputStrings(inputIndex: number, endInputIndex: number,
+      description: string, beforeInput: string, afterInput: string) {
     if (inputIndex >= 0 && inputIndex < endInputIndex) {
       const inputString = description.slice(inputIndex, endInputIndex);
       beforeInput = description.slice(0, inputIndex);
       afterInput = description.slice(endInputIndex);
-      this.input = JSON.parse(inputString.slice(6, -1) || '{}') as inputObject;
+      this.input = JSON.parse(inputString.slice(6, -1) || '{}') as InputObject;
       this.hasInput = true;
     }
     return { beforeInput, afterInput };
   }
 }
-export interface inputObject {default: string , placeholder: string}
+export interface InputObject {default: string , placeholder: string}

@@ -8,7 +8,7 @@ import { Status } from "src/gameLogic/custom/Class/Status/Status";
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusBattle } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { TimedStatus } from "src/gameLogic/custom/Class/Status/TimedStatus";
-import { tag } from "src/gameLogic/custom/customTypes/tags";
+import { tag as tagnames } from "src/gameLogic/custom/customTypes/tags";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { pushBattleActionOutput, removeItem } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { ObjectSet } from "../../ClassHelper/ObjectSet";
@@ -18,13 +18,13 @@ import { BattleClassOptions, CharacterBattleClass } from "../CharacterBattleClas
 import { EnergyStats, ActionOutput, FullCoreStats, LevelStats, FullCalculatedStats, FullResistanceStats } from "./Character.type";
 import { Inventory } from "./Inventory/Inventory";
 import { Reaction } from "./Reaction/Reaction";
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { CharacterBattleClassFactory } from '../../Factory/CharacterBattleClassFactory';
 import { Int, roundToInt } from '../../ClassHelper/Int';
 import { applyModifiers } from './StatsModifier';
 
 /** A model of a character. */
-export abstract class Character implements storeable
+export abstract class Character implements Storeable
 {
   levelStats:LevelStats;
   currentEnergyStats:EnergyStats;
@@ -48,21 +48,26 @@ export abstract class Character implements storeable
   characterEquipment:CharacterEquipment;
   get name(): string{ return this._name};
   protected readonly masterService:MasterService
-  private __bypassScene__ = false;
-  constructor(masterService:MasterService, character_battle_class:string|null=null){
-    this.characterBattleClass=CharacterBattleClassFactory(masterService,{Factory:'CharacterBattleClass',type:character_battle_class||'CharacterBattleClassEmpty'})
+  private _bypassScene = false;
+  constructor(masterService:MasterService, characterBattleClass:string|null=null){
+    this.characterBattleClass=CharacterBattleClassFactory(masterService,{
+      Factory:'CharacterBattleClass',
+      type:characterBattleClass||'CharacterBattleClassEmpty'
+    })
     this.inventory = new Inventory(masterService);
     this.characterEquipment = new CharacterEquipment(masterService);
     this.masterService = masterService;
     this.levelStats = {experience:0 as Int, upgradePoint:0 as Int, perkPoint:0 as Int, level:0 as Int, upgradePath:[]}
     this.coreStats = {...this.characterBattleClass.initialPhysicStats};
     this.originalResistance = {...this.characterBattleClass.initialResistanceStats};
-    //@ts-ignore
+    // @ts-ignore
     this.calculatedStats = {};
-    //@ts-ignore
+    // @ts-ignore
     this.calculatedResistance = {};
     this.calculateStats();
-    this.currentEnergyStats = { hitpoints: this.calculatedStats.hitpoints, energypoints:this.calculatedStats.energypoints};
+    this.currentEnergyStats = {
+      hitpoints: this.calculatedStats.hitpoints,
+      energypoints:this.calculatedStats.energypoints};
     this.applyStatus();
   }
   /** Uses the meleeWeapon to attack the target. */
@@ -86,7 +91,7 @@ export abstract class Character implements storeable
   }
   /** Removes the battle status. */
   onDefeated():ActionOutput{
-    let description:ActionOutput =[[],[]]
+    const description:ActionOutput =[[],[]]
     for(const status of this.battleStatus)
     { pushBattleActionOutput(status.onStatusRemoved(this),description) }
     this.battleStatus.clear()
@@ -109,7 +114,7 @@ export abstract class Character implements storeable
     return specials
   };
   /** Checks if the character has a tag. */
-  hasTag(tag:tag):boolean { return this.tags.includes(tag); }
+  hasTag(tag:tagnames):boolean { return this.tags.includes(tag); }
   /** TODO add description */
   isDefeated():boolean{return this.currentEnergyStats.hitpoints<=0}
   /** Adds status to the character. to the correct Array if able. */
@@ -131,7 +136,7 @@ export abstract class Character implements storeable
   }
   /** Removes all instances of the given statusname or Status. */
   removeStatus(status:Status|statustype):ActionOutput{
-    let removeStatusDescription:ActionOutput = [[],[]];
+    const removeStatusDescription:ActionOutput = [[],[]];
     pushBattleActionOutput(this._removeStatus(status,this.battleStatus),removeStatusDescription);
     pushBattleActionOutput(this._removeStatus(status,this.timedStatus),removeStatusDescription);
     pushBattleActionOutput(this._removeStatus(status,this.status),removeStatusDescription);
@@ -168,7 +173,7 @@ export abstract class Character implements storeable
    * Won't react if character is paralized, zero hitpoints or the battle ended.
    */
   react(action:BattleCommand):ActionOutput{
-    if( this.currentEnergyStats.hitpoints<=0  || this.__bypassScene__ )return [[],[]];
+    if( this.currentEnergyStats.hitpoints<=0  || this._bypassScene )return [[],[]];
     return this.reactions.reduce(
         (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,action),scenes)
         ,[[],[]] as ActionOutput
@@ -176,7 +181,7 @@ export abstract class Character implements storeable
   }
   reactBefore(action:BattleCommand):ActionOutput{
     action.tags.push('before-action');
-    if( this.currentEnergyStats.hitpoints<=0  || this.__bypassScene__ )return [[],[]];
+    if( this.currentEnergyStats.hitpoints<=0  || this._bypassScene )return [[],[]];
     const t = this.reactions.reduce(
         (scenes, reaction)=>pushBattleActionOutput(reaction.reaction(this,action),scenes)
         ,[[],[]] as ActionOutput
@@ -193,7 +198,8 @@ export abstract class Character implements storeable
   /** Heals hitpoints from the character up to original hitpoints. */
   healHitPoints(hitpointsgain:number):number{
     const hitpointsBeforeHeal = this.currentEnergyStats.hitpoints;
-    this.currentEnergyStats.hitpoints=roundToInt(Math.min(this.calculatedStats.hitpoints,this.currentEnergyStats.hitpoints+hitpointsgain));
+    this.currentEnergyStats.hitpoints=roundToInt(
+      Math.min(this.calculatedStats.hitpoints,this.currentEnergyStats.hitpoints+hitpointsgain));
     return this.currentEnergyStats.hitpoints-hitpointsBeforeHeal;
   }
   gainExperience(experience:number):number {
@@ -206,9 +212,9 @@ export abstract class Character implements storeable
   onEndBattle():void{
     const removeStatus = this.battleStatus
     this.battleStatus.clear();
-    this.__bypassScene__ = true;
+    this._bypassScene = true;
     for(const status of removeStatus)status.onStatusRemoved(this);
-    this.__bypassScene__ = false;
+    this._bypassScene = false;
   }
   /** Gets all the reactions from equipment, perks and status. */
   protected get reactions(): Reaction[]{
@@ -219,8 +225,8 @@ export abstract class Character implements storeable
     return reactions;
   };
   /** Gets all the tags from equipment, perks and status. */
-  protected get tags():tag[]{
-    const tags:tag[] = [];
+  protected get tags():tagnames[]{
+    const tags:tagnames[] = [];
     for(const equipment of this.characterEquipment) tags.push(...equipment.tags)
     for(const status of this.iterStatus())tags.push(...status.tags)
     for(const perk of this.perks)tags.push(...perk.tags)
@@ -241,20 +247,20 @@ export abstract class Character implements storeable
   /** Apply status effects. */
   protected applyStatus():void { for(const status of this.iterStatus()){ status.applyEffect(this); } }
   /** TODO */
-  private _removeStatus(status: string | Status, status_array:Status[]): ActionOutput{
+  private _removeStatus(status: string | Status, statusArray:Status[]): ActionOutput{
     if(status instanceof Status){
-      if(removeItem(status_array, status)) return status.onStatusRemoved(this);
+      if(removeItem(statusArray, status)) return status.onStatusRemoved(this);
       return [[],[]]
     }
-    return this.remove_status_from_name(status,status_array);
+    return this.remove_status_from_name(status,statusArray);
   }
-  private remove_status_from_name(status: string,status_array:Status[]) {
+  private remove_status_from_name(status: string,statusArray:Status[]) {
     let removeStatusDescription: ActionOutput = [[], []];
-    let statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
+    let statusIndex = statusArray.findIndex(characterStatus => (status === characterStatus.name));
     while (statusIndex >= 0) {
-      const [statusRemoved] = status_array.splice(statusIndex, 1);
+      const [statusRemoved] = statusArray.splice(statusIndex, 1);
       removeStatusDescription = statusRemoved.onStatusRemoved(this);
-      statusIndex = status_array.findIndex(characterStatus => (status === characterStatus.name));
+      statusIndex = statusArray.findIndex(characterStatus => (status === characterStatus.name));
     }
     return removeStatusDescription;
   }
@@ -265,7 +271,8 @@ export abstract class Character implements storeable
         source:this, target:targets, tags:item.tags,
         excecute:()=>{
           if(item.isSingleTarget)return tryAttack(this,targets[0],(target: Character)=>item.itemEffect(this,target))
-          return targets.reduce( (descriptions:ActionOutput,target)=>pushBattleActionOutput(item.itemEffect(this,target),descriptions),[[],[]] )
+          return targets.reduce( (descriptions:ActionOutput,target)=>pushBattleActionOutput(
+            item.itemEffect(this,target),descriptions),[[],[]] )
         }
       }
     return new EmptyCommand(this,targets);
@@ -278,7 +285,8 @@ export abstract class Character implements storeable
   protected abstract _IA_Action(ally: Character[], enemy: Character[]):BattleCommand;
   toJson(): CharacterStoreable { return { Factory:"Character",type:this.type,battle_class:this.battleClass.toJson()} }
   fromJson(options: CharacterStoreable): void {
-    options.battle_class&&(this.characterBattleClass=CharacterBattleClassFactory(this.masterService,options.battle_class))
+    if(options.battle_class)
+      this.characterBattleClass=CharacterBattleClassFactory(this.masterService,options.battle_class)
   }
   get allys():Character[]{
     if((this.masterService.partyHandler.enemyFormation.enemies as Character[]).some(char=>char===this)){
@@ -293,7 +301,12 @@ export abstract class Character implements storeable
     return this.masterService.partyHandler.enemyParty;
   }
 }
-export type CharacterStoreable = { Factory: "Character"; type: characterType; battle_class?:BattleClassOptions,[key: string]:any; }
+export interface CharacterStoreable{
+  Factory: "Character"; type: characterType;
+  battle_class?:BattleClassOptions,[key: string]:any;
+}
 /** Check if the statusname is the same as the second argument. */
-function compareStatusName(status: string | Status, characterStatus: Status):boolean
-{ return (status instanceof Status && status.constructor === characterStatus.constructor) || characterStatus.type === status; }
+function compareStatusName(status: string | Status, characterStatus: Status):boolean{
+  return (status instanceof Status && status.constructor === characterStatus.constructor) ||
+    characterStatus.type === status;
+}

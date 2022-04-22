@@ -4,7 +4,7 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
 
 
-const register: registerFunction = ({gameItem: game_item}, {gameItem:{GameItem}}, Factory) => {
+const register: registerFunction = ({gameItem}, {gameItem:{GameItem}}, Factory) => {
   const StatusFactory = Factory as StatusFactoryFuctioin;
   class PoisonPill extends GameItem {
     readonly type:"PoisonPill"="PoisonPill"
@@ -14,14 +14,15 @@ const register: registerFunction = ({gameItem: game_item}, {gameItem:{GameItem}}
     protected _itemEffect(user: Character, target: Character): ActionOutput
     {
       const poison = StatusFactory(this.masterService, { Factory:"Status" ,type: "Poison" })
-      //@ts-ignore
+      // @ts-ignore
       poison.DURATION = 1;
       return target.addStatus(poison);
     }
   }
-  game_item['PoisonPill'] = PoisonPill
+  // tslint:disable-next-line: no-string-literal
+  gameItem['PoisonPill'] = PoisonPill
 }
 
-const module_name = 'PoisonPill'
-const module_dependency:string[] = ['Poison']
-export { register, module_name, module_dependency};
+const moduleName = 'PoisonPill'
+const moduleDependency:string[] = ['Poison']
+export { register, moduleName, moduleDependency};

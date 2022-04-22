@@ -13,6 +13,7 @@ export class FrontPageGuiComponent implements OnInit {
   constructor(private masterService:MasterService) { }
 
   ngOnInit(): void {
+    return undefined;
   }
 
   readonly newGame:SceneOptions = {

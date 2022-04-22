@@ -1,6 +1,6 @@
 import { UniqueCharacter } from 'src/gameLogic/custom/Class/Character/UniqueCharacter';
 import { MasterService } from "src/app/service/master.service";
-import { default_flags } from "./configurable/subservice/flag-handler.type";
+import { defaultFlags } from "./configurable/subservice/flag-handler.type";
 import { Factory } from "./core/Factory/Factory";
 import { MainCharacter } from "./custom/Class/Character/MainCharacter/MainCharacter";
 import { GameElementDescriptionSection } from "./custom/Class/GameElementDescription/GameElementDescription";
@@ -51,14 +51,15 @@ export function newGame(masterService:MasterService){
   // const rangedTest1 = ItemFactory(masterService,{ Factory:"Item",type:"RangedTest"})
   // const shieldTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ShieldTest"})
   // const armorTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ArmorTest"})
-  // user.inventory.addItem(meleeTest1); user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
+  // user.inventory.addItem(meleeTest1);
+  // user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
   // masterService.partyHandler.user = user;
   // masterService.partyHandler.setPartyMember(Factory(masterService,{
     //   Factory:"Character",
     //   type:"test character",
     //   name:"ally 1",
     // }),0);
-    //Create Seller
+    // Create Seller
     // masterService.mapHandler.loadRoom(default_flags.currentroom);
     chooseScene(masterService);
 }
@@ -127,21 +128,22 @@ function chooseScene(masterService: MasterService){
       },"talk");
 }
 
-function initializeMainCharacter(masterService: MasterService,charactername:characterOption,options: characterOption[]){
+function initializeMainCharacter(masterService: MasterService,charactername:CharacterOption,options: CharacterOption[]){
   removeItem(options,charactername);
-  masterService.partyHandler.user = CharacterFactory(masterService,{ Factory:"Character",type:charactername.type as characterType, "register-key":"MainCharacter"}) as UniqueCharacter;
+  masterService.partyHandler.user = CharacterFactory(masterService,
+    { Factory:"Character",type:charactername.type as characterType, "register-key":"MainCharacter"}) as UniqueCharacter;
   let index = 0;
   for(const allyOption of options){
     const ally = CharacterFactory(masterService,{ Factory:"Character",type:allyOption.type as characterType, "register-key":"PersistentCharacter"})
     masterService.partyHandler.setPartyMember(ally as UniqueCharacter,(index++) as 0|1);
   }
-  masterService.flagsHandler.setFlags(default_flags)
+  masterService.flagsHandler.setFlags(defaultFlags)
   masterService.sceneHandler.clear();
   masterService.partyHandler.user.levelStats.upgradePoint = 3 as Int;
   masterService.mapHandler.loadRoom("entrance5");
-  masterService.partyHandler.user.emit_stat_up();
+  masterService.partyHandler.user.emitStatUp();
 }
-interface characterOption{
+interface CharacterOption{
   name:string,
   type:string,
   class:string,

@@ -16,12 +16,12 @@ export class MapHandlerService {
   private coordinatesSubject = new Subject<number[]>();
 
   currentMapName:string ="";
-  coordinates:Array<number> = [];
+  coordinates:number[] = [];
 
   private readonly masterService: MasterService;
   private gameStateSubscription: Subscription;
 
-  private currentRoom:Room = fill_room({onEnter:()=>{},onExit:()=>{},icon:''});
+  private currentRoom:Room = fill_room({onEnter:()=>undefined,onExit:()=>undefined,icon:''});
   currentMap:GameMap;
 
   constructor(masterService:MasterService,gameStateHandler:GameStateService, private lockmap:LockMapService){
@@ -61,10 +61,10 @@ export class MapHandlerService {
   }
 
   /** Loads a room by position in the current map matrix. */
-  moveInsideMap(direction:direction):void{
+  moveInsideMap(moveDirection:direction):void{
     if(this.lockmap.isMapLocked())return;
     let [y,x] = this.coordinates;
-    switch (direction){
+    switch (moveDirection){
       case "UP"   :y--;break;
       case "DOWN" :y++;break;
       case "LEFT" :x--;break;
@@ -72,7 +72,7 @@ export class MapHandlerService {
       default:return;
     }
     const room = this.currentMap.findRoomByCoordinates(y,x)
-    if(!room)return;//out of map border
+    if(!room)return;// out of map border
     if(!this.currentRoom.beforeMoveTo?.(room.roomname))return;
     this.loadRoomHelper(room,[y,x]);
   }
@@ -100,11 +100,11 @@ export class MapHandlerService {
 }
 export function enterRoom(sceneHandler:SceneHandlerService,
     sceneData:()=>string,options:SceneOptions[]=[],
-    fixed_options:FixedOptions=[null,null,null,null,null]){
+    fixedOptions:FixedOptions=[null,null,null,null,null]){
   sceneHandler.tailScene({
     sceneData,
     options,
-    fixedOptions: fixed_options
+    fixedOptions
   },"map").nextScene();
 }
 export type direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';

@@ -28,14 +28,16 @@ export class SelectPerkGuiComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    return undefined;
   }
 
   ngOnDestroy(): void {
-    this.getCharacterSubsciption && this.getCharacterSubsciption.unsubscribe();
+    if(this.getCharacterSubsciption)
+      this.getCharacterSubsciption.unsubscribe();
   }
 
   upgradeOptions(path: number[]):tree_node<Upgrade>[]{
-    return this.character.upgrade_options(path);
+    return this.character.upgradeOptions(path);
   }
 
   updateSelectedPath(e:Event){
@@ -50,14 +52,14 @@ export class SelectPerkGuiComponent implements OnInit {
   private _optionSelect!:SceneOptions;
   get optionSelect():SceneOptions{
     const masterService = this.masterService;
-    const selected_path = this.selectedPath;
-    const fixed_path = this.fixedPath;
+    const selectedPath = this.selectedPath;
+    const fixedPath = this.fixedPath;
     const character = this.character;
     if (!this._optionSelect)
       this._optionSelect = {
         text: 'select',
         action(){
-          const newSelected = selected_path.slice(fixed_path.length, -1)
+          const newSelected = selectedPath.slice(fixedPath.length, -1)
           for (const selected of newSelected) {
             character.upgrade(selected)
             if (character.levelStats.perkPoint === 0) break;
@@ -65,7 +67,7 @@ export class SelectPerkGuiComponent implements OnInit {
           masterService.sceneHandler.nextScene(false);
         },
         get disabled() {
-          return !compareArray(fixed_path, selected_path.slice(0, fixed_path.length))
+          return !compareArray(fixedPath, selectedPath.slice(0, fixedPath.length))
         }
       }
     return this._optionSelect;
@@ -91,7 +93,7 @@ export class SelectPerkGuiComponent implements OnInit {
     if(!(character instanceof UniqueCharacter))return;
     if(character.levelStats.perkPoint===0) { this.masterService.sceneHandler.nextScene(false); return; }
     this.character = character;
-    //@ts-ignore
+    // @ts-ignore
     this.selectedPath = [...this.character.levelStats.upgradePath,null]
     const fixedOptions = description.fixedOptions;
     if(fixedOptions){

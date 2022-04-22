@@ -19,8 +19,7 @@ export class StatusParalisis extends StatusBattle {
       case 5: case 6:this.DURATION=2; break;
       case 7: this.DURATION=3; break;
     }
-    if(this.DURATION)
-    {
+    if(this.DURATION){
       return pushBattleActionOutput(super.onStatusGainded(target), [
             [{
               sceneData: () => `${target.name} has been paralized.`,

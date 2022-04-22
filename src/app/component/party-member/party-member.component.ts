@@ -10,10 +10,9 @@ import { Status } from 'src/gameLogic/custom/Class/Status/Status';
 })
 export class PartyMemberComponent implements OnInit {
   @Input() partyMember!:Character;
-  constructor() {}
-
-  ngOnInit(): void { }
-
+  ngOnInit(): void {
+    return undefined;
+  }
   getCharacterStatus():Status[] {
     const status:Status[] = [];
     for(const characterStatus of this.partyMember.iterStatus())status.push(characterStatus)

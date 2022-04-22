@@ -1,13 +1,15 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from "src/gameLogic/core/Factory/Factory";
-import { CalculatedStats, CoreStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, LevelStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { Storeable } from "src/gameLogic/core/Factory/Factory";
+import { CalculatedStats, CoreStats, FullCalculatedStats,
+         FullCoreStats, FullResistanceStats,
+         LevelStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { Int, roundToInt } from "../../ClassHelper/Int";
 import { Upgrade } from "../Upgrade/Upgrade";
 import { UpgradeOptions } from "../Upgrade/Upgrade.type";
 import { UpgradeFactory } from "../Upgrade/UpgradeFactory";
 import { ArrayTree, tree_node } from "./ArrayTree";
 
-export abstract class CharacterBattleClass implements storeable{
+export abstract class CharacterBattleClass implements Storeable{
   abstract readonly type: string;
   abstract name: string;
   protected abstract _initialPhysicStats: CoreStats;
@@ -33,7 +35,6 @@ export abstract class CharacterBattleClass implements storeable{
       strenght: roundToInt(level * 10),
     }
   })
-  constructor() {}
   get initialPhysicStats():FullCoreStats{
     return {
       strenght     : (this._initialPhysicStats.strenght || 0) as Int,
@@ -63,7 +64,9 @@ export abstract class CharacterBattleClass implements storeable{
     return this._upgradeTree;
   }
   totalExperienceToNextLevel(level:number):number { return this.experienceCap[level]||0; }
-  currentLevelExperience(level_stats:LevelStats):number { return level_stats.experience - this.totalExperienceToNextLevel(level_stats.level-1) }
+  currentLevelExperience(levelStats:LevelStats):number {
+    return levelStats.experience - this.totalExperienceToNextLevel(levelStats.level-1)
+  }
   maxCoreAtLevel(level:number):FullCoreStats{return this.maxCoreStats[level]}
   protected _calculateStats({ strenght, stamina, aim, speed, intelligence, }: FullCoreStats): CalculatedStats {
     return {
@@ -78,10 +81,10 @@ export abstract class CharacterBattleClass implements storeable{
       initiative: 0,
     }
   }
-  calculate_stats(core_stats: FullCoreStats): FullCalculatedStats {
+  calculate_stats(coreStats: FullCoreStats): FullCalculatedStats {
     const { hitpoints = null    , energypoints = null     , physicalAttack = null,
             rangedAttack = null, physicalDefence = null , rangedDefence = null,
-            accuracy = null     , evasion = null          , initiative = null     }= this._calculateStats(core_stats);
+            accuracy = null     , evasion = null          , initiative = null     }= this._calculateStats(coreStats);
     return {
       hitpoints: roundToInt(hitpoints||0),
       energypoints: roundToInt(energypoints||0),
@@ -114,8 +117,9 @@ export abstract class CharacterBattleClass implements storeable{
       type:this.name
     }
   }
-  fromJson(options: BattleClassOptions): void {}
+  fromJson(options: BattleClassOptions): void { return undefined; }
 }
+// tslint:disable-next-line: max-classes-per-file
 export class CharacterBattleClassEmpty extends CharacterBattleClass {
   type:"CharacterBattleClassEmpty"="CharacterBattleClassEmpty"
   name: string="CharacterBattleClassEmpty";

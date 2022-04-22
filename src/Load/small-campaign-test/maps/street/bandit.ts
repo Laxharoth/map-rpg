@@ -15,7 +15,8 @@ export function banditsWantRealEgg(masterService:MasterService, Factory:FactoryF
     })]
   }
   function battleBandits(){
-    const bandits = (Factory as typeof EnemyFormationFactory)(masterService,{ Factory:"EnemyFormation", type:"Bandits"});
+    const bandits = (Factory as
+        typeof EnemyFormationFactory)(masterService,{ Factory:"EnemyFormation", type:"Bandits"});
     (Factory as typeof BattleFactory)(masterService,{ Factory:"Battle", type:"",enemy:bandits }).start();
   }
 }

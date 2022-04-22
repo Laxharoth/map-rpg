@@ -1,20 +1,20 @@
 import { MasterService } from "src/app/service/master.service";
 import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { gamesavenames } from "src/gameLogic/configurable/subservice/game-saver.type";
-import { storeable} from "src/gameLogic/core/Factory/Factory";
+import { Storeable} from "src/gameLogic/core/Factory/Factory";
 import { GameSaver } from "src/gameLogic/core/subservice/game-saver";
 import { Quest, QuestOptions } from "../Class/Quest/Quest";
 import { QuestFactory } from "../Factory/QuestFactory";
 import { ObjectSet } from "../ClassHelper/ObjectSet";
 import { questnames } from "../Class/Quest/Quest.type";
 
-export class QuestHolder implements storeable{
+export class QuestHolder implements Storeable{
   type:"QuestHolder"="QuestHolder";
   private activeQuest=new ObjectSet<Quest>();
   private readonly masterService: MasterService;
-  constructor(game_saver:GameSaver,master_service:MasterService){
-    this.masterService = master_service;
-    game_saver.register("QuestHolder",this)
+  constructor(gameSaver:GameSaver,masterService:MasterService){
+    this.masterService = masterService;
+    gameSaver.register("QuestHolder",this)
   }
   add(quest:Quest){this.activeQuest.push(quest)}
   get(type:questnames){return this.activeQuest.find(quest=>quest.type===type);}
@@ -25,7 +25,7 @@ export class QuestHolder implements storeable{
       quests:this.activeQuest.map(quest=>quest.toJson()),
       dependencyGamesaveObjectKey:[]
     }
-    options["dependencyGamesaveObjectKey"] = Array.from(
+    options.dependencyGamesaveObjectKey = Array.from(
       options.quests.reduce((prev, curr)=>{
       if(curr.dependency_gamesave_object_key)
       for(const name of curr.dependency_gamesave_object_key)
@@ -45,6 +45,6 @@ type QuestHolderOptions = {
     dependencyGamesaveObjectKey:gamesavenames[]
 }
 
-export const loadQuest:FactoryFunction<void,QuestHolderOptions> = (master_service, options)=>{
-  master_service.QuestHolder.fromJson(options)
+export const loadQuest:FactoryFunction<void,QuestHolderOptions> = (masterService, options)=>{
+  masterService.QuestHolder.fromJson(options)
 }

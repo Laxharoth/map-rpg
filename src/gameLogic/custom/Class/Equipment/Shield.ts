@@ -28,6 +28,7 @@ export abstract class Shield extends Equipment{
   get tags(): tag[] { return ['shield']}
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class ShieldNoShield extends Shield{
   readonly type:"ShieldNoShield"="ShieldNoShield"
   get name(): string { return 'No shield'; }

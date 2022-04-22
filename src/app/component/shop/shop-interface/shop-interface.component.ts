@@ -25,7 +25,9 @@ export class ShopInterfaceComponent implements OnInit {
     this.shop = this.masterService.sceneHandler.currentScene?.sceneData();
     this.reloadShopArrays();
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   setShopAmount(amount:number){
     this.shopAmount = amount
   }

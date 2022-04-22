@@ -1,9 +1,9 @@
 import { tag } from "../../customTypes/tags";
 import { Character } from "../Character/Character";
 import { ActionOutput } from "../Character/Character.type";
-import { descriptable, GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
+import { Descriptable, GameElementDescriptionSection } from "../GameElementDescription/GameElementDescription";
 
-export interface BattleUseable extends descriptable
+export interface BattleUseable extends Descriptable
 {
   /** The name of the Item. */
   readonly name: string;

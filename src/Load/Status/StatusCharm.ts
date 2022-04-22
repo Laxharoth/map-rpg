@@ -2,14 +2,16 @@ import { MasterService } from "src/app/service/master.service";
 import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
-import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
+import { GameElementDescriptionSection
+       } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
+import { SpecialAttack as SpecialAttackClass } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:registerFunction = ({status,specialAttack: special_attack,perk},{status:{StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
+const register:registerFunction = ({status,specialAttack,perk},
+  {status:{StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
   class StatusCharm extends StatusBattle implements StatusPreventAttack
   {
     discriminator:"StatusPreventAttack"="StatusPreventAttack";
@@ -35,13 +37,14 @@ const register:registerFunction = ({status,specialAttack: special_attack,perk},{
     get tags(): tag[] { return super.tags.concat(['charm'])}
     fromJson(options: StatusStoreable): void {
       super.fromJson(options)
-      this._charmer=options["source"]
-      this._charmed=options["target"]
+      this._charmer=options.source
+      this._charmed=options.target
     }
   }
+  // tslint:disable: no-string-literal
   status["Charm"]=StatusCharm
-  class SpecialCharm extends SpecialAttack
-  {
+  // tslint:disable: max-classes-per-file
+  class SpecialCharm extends SpecialAttack{
     protected COOLDOWN: number=6;
     readonly type:"Charm"="Charm";
     get name(): specialsname { return 'Charm'; }
@@ -59,12 +62,12 @@ const register:registerFunction = ({status,specialAttack: special_attack,perk},{
     readonly type:"PerkCharm"="PerkCharm";
     readonly charmSpecial = new SpecialCharm(this.masterService)
     get name():string { return 'Charmer';}
-    get specials(): SpecialAttack[] {return [this.charmSpecial] }
+    get specials(): SpecialAttackClass[] {return [this.charmSpecial] }
   }
   status["Charm"]=StatusCharm
-  special_attack["Charm"]=SpecialCharm
+  specialAttack["Charm"]=SpecialCharm
   perk["PerkCharm"]=PerkCharm
 }
-const module_name = "Charm";
-const module_dependency:string[] = [];
-export { register, module_name, module_dependency}
+const moduleName = "Charm";
+const moduleDependency:string[] = [];
+export { register, moduleName, moduleDependency}

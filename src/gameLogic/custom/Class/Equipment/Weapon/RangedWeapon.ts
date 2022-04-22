@@ -19,6 +19,7 @@ export abstract class RangedWeapon extends Weapon{
   }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class RangedUnharmed extends RangedWeapon{
   maxStack = 0;
   readonly type:"RangedUnharmed"="RangedUnharmed"

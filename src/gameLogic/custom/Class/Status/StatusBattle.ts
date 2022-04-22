@@ -4,16 +4,14 @@ import { Status } from "src/gameLogic/custom/Class/Status/Status";
 import { BattleCommand } from '../Battle/BattleCommand';
 
 /** Specific Status that occur only in battle. */
-export abstract class StatusBattle extends Status
-{
+export abstract class StatusBattle extends Status{
   /** The number of turns this status last. */
   protected abstract DURATION: number;
   /**
    * Applies the effect to the status, and reduces the duration.
    * If the duration reach zero, removes itself from the character.
    */
-  applyEffect(target: Character):BattleCommand
-  {
+  applyEffect(target: Character):BattleCommand{
     this.DURATION--;
     if(this.DURATION<=0)
       return {
@@ -29,8 +27,7 @@ export abstract class StatusBattle extends Status
 }
 
 /** Status that check if the character affected by the status can attack the target. */
-export interface StatusPreventAttack
-{
+export interface StatusPreventAttack{
   /** A discriminator to check if a class implements the interface. */
   discriminator:'StatusPreventAttack';
   /** Determinate if the character affected by the status can attack the target. */

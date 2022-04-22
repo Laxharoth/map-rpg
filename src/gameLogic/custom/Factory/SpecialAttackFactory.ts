@@ -9,7 +9,7 @@ export const SpecialAttackFactory=(masterService:MasterService,options:SpecialAt
   specialAttack.fromJson(options)
   return specialAttack
 }
-//@ts-ignore
+// @ts-ignore
 export const specialAttackSwitcher:{[key in specialsname]:SpecialAttackConstructor} = {}
 export type SpecialAttackFactoryFunction = FactoryFunction<SpecialAttack>;
-export interface SpecialAttackConstructor {new (MasterService:MasterService):SpecialAttack};
+export type SpecialAttackConstructor = new (MasterService:MasterService) =>SpecialAttack;

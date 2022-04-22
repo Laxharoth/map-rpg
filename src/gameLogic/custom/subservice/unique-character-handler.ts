@@ -10,18 +10,19 @@ export class UniqueCharacterHandler{
   private readonly masterService: MasterService;
   constructor(masterService:MasterService){
     this.masterService = masterService;
-    const {gameSaver:game_saver} = masterService;
-    game_saver.on_change_persistent_instance().subscribe(([instance_name,action,character])=>{
-      const unique_character = character as UniqueCharacter;
-      if(!(instance_name==="MainCharacter" || instance_name==="PersistentCharacter"))return;
-      if(action==="unregister"){delete this._characters[unique_character.type];return;}
-      this._characters[unique_character.type] = unique_character
+    const {gameSaver} = masterService;
+    gameSaver.on_change_persistent_instance().subscribe(([instanceName,action,character])=>{
+      const uniqueCharacter = character as UniqueCharacter;
+      if(!(instanceName==="MainCharacter" || instanceName==="PersistentCharacter"))return;
+      if(action==="unregister"){delete this._characters[uniqueCharacter.type];return;}
+      this._characters[uniqueCharacter.type] = uniqueCharacter
     })
   }
   getCharacter(type: string):UniqueCharacter{
     let character:UniqueCharacter|undefined = this._characters[type];
     if(!character)
-      character = (Factory as typeof CharacterFactory)(this.masterService,{ Factory:"Character",type:type as characterType  }) as UniqueCharacter
+      character = (Factory as typeof
+          CharacterFactory)(this.masterService,{ Factory:"Character",type:type as characterType  }) as UniqueCharacter
     return character;
   }
   get uniqueCharacters():UniqueCharacter[]{ return Object.values(this._characters); }

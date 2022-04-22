@@ -3,10 +3,10 @@ import { FactoryFunction } from "src/gameLogic/configurable/Factory/FactoryMap";
 import { Quest, QuestOptions } from "../Class/Quest/Quest";
 
 /** Creates an Quest with the */
-export const QuestFactory:FactoryFunction<Quest,QuestOptions> = (master_service,options)=>{
-  const quest = new questSwitcher[options.type](master_service);
+export const QuestFactory:FactoryFunction<Quest,QuestOptions> = (masterService,options)=>{
+  const quest = new questSwitcher[options.type](masterService);
   quest.fromJson(options);
   return quest;
 }
-export interface QuestConstructor{ new (master_service:MasterService):Quest }
+export type QuestConstructor = new (masterService:MasterService) =>Quest
 export const questSwitcher:{[key: string]:QuestConstructor} = {}

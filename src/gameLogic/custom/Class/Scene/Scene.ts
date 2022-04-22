@@ -1,6 +1,8 @@
-import { descriptable } from "../GameElementDescription/GameElementDescription";
+import { Descriptable } from "../GameElementDescription/GameElementDescription";
 
-/** A Representation of what the game will displayed (text and options)*/
+/**
+ * A Representation of what the game will displayed (text and options)
+ */
 export interface Scene{
   sceneData:() => any;
   options: SceneOptions[];
@@ -25,11 +27,14 @@ export function wrapAction(option:SceneOptions|null):SceneOptions|null{
   const optionWrapped = option as (SceneOptions & {_action:()=>void;})|null;
   if(!optionWrapped || optionWrapped._action){ return null; }
   optionWrapped._action = optionWrapped.action;
-  optionWrapped.action = function(){ !this.disabled && this._action(); }
+  optionWrapped.action = function(){
+    if(!this.disabled)
+    this._action();
+  }
   return optionWrapped;
 }
 export interface DescriptableSceneOptions extends SceneOptions{
-  descriptable:descriptable;
+  descriptable:Descriptable;
 }
 type fixedOption = SceneOptions|null
 export type FixedOptions = [fixedOption,fixedOption,fixedOption,fixedOption,fixedOption];

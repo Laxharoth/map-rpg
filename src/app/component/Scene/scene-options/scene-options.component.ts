@@ -24,23 +24,26 @@ export class SceneOptionsComponent implements OnInit {
     this.InitializeSubscriptions()
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    return undefined;
+  }
 
   ngOnDestroy(): void {
-    this.getDescriptionOptionsSubscription&&this.getDescriptionOptionsSubscription.unsubscribe();
+    if(this.getDescriptionOptionsSubscription)
+      this.getDescriptionOptionsSubscription.unsubscribe();
   }
 
   @HostListener('body:keydown',["$event"])
-  selectOption(event: any): void{
-    if(event.target.tagName.toLowerCase()==='input')return;
-    const isnumber = (string: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(string)?string:'';
+  selectOption(event: KeyboardEvent): void{
+  if((event.target as unknown as HTMLElement)?.tagName.toLowerCase()==='input')return;
+    const isnumber = (digit: string) => ['1', '2', '3', '4', '5', '6','7', '8', '9', '0'].includes(digit)?digit:'';
     switch(event.key){
       case ' ':case 'Enter':this.currentOptions?.[0]?.action();break;
       default:
         if(!isnumber(event.key))return;
-        let number = event.key==='0'? 10: parseInt(event.key)
-        if(!isNaN(number) && !this.currentOptions?.[number-1]?.disabled){
-          this.currentOptions?.[number-1]?.action();
+        const digit = event.key==='0'? 10: Number.parseInt(event.key)
+        if(!isNaN(digit) && !this.currentOptions?.[digit-1]?.disabled){
+          this.currentOptions?.[digit-1]?.action();
         }
     }
   }
@@ -60,9 +63,9 @@ export class SceneOptionsComponent implements OnInit {
     this.setCurrentOptions();
   }
   private setCurrentOptions(){
-    let aux_currentOptions = this.descriptionOptions.slice(this.offset,this.offset+MAXOPTIONSNUMBERPERPAGE)
-    aux_currentOptions.push(...MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-aux_currentOptions.length,null))
-    this.currentOptions = aux_currentOptions;
+    const auxCurrentOptions = this.descriptionOptions.slice(this.offset,this.offset+MAXOPTIONSNUMBERPERPAGE)
+    auxCurrentOptions.push(...MakeFilledArray(MAXOPTIONSNUMBERPERPAGE-auxCurrentOptions.length,null))
+    this.currentOptions = auxCurrentOptions;
   }
   prevOptions = {
     text: "<<<",

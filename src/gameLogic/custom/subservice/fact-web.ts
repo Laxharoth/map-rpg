@@ -1,16 +1,18 @@
 import { Subscription } from 'rxjs';
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
 import { gamesavenames } from 'src/gameLogic/configurable/subservice/game-saver.type';
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueCharacter";
 import { floorTo, randomCheck, setEquality } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { Time } from './../ClassHelper/Time';
-import { acquaintaceness, CharacterDataWebData, factName, factImportance as factImportance, hashed_acquanitance as hashedAcquanitance } from './fact-web.type';
+import { acquaintaceness, CharacterDataWebData, factName,
+         factImportance as factImportance,
+         hashed_acquanitance as hashedAcquanitance } from './fact-web.type';
 import { TimeHandler } from './time-handler';
 import { UniqueCharacterHandler } from './unique-character-handler';
 
-export class FactWeb implements storeable{
+export class FactWeb implements Storeable{
   type:"FactWeb"="FactWeb";
   static readonly TIME_INTERVAL_2_SPREAD = 1440;
   private static readonly SPREAD_COEFFICIENT = 20;
@@ -26,7 +28,8 @@ export class FactWeb implements storeable{
     gameSaver.register("FactWeb",this);
     this.uniqueCharacterHandler = uniqueCharacterHandler;
     this.createSubscriptions = ()=>{
-      if(!this.spreadSubscriptions)this.spreadSubscriptions = timeHandler.onTimeChanged().subscribe( time => this.spreadFact(time) )
+      if(!this.spreadSubscriptions)this.spreadSubscriptions = timeHandler
+        .onTimeChanged().subscribe( time => this.spreadFact(time) )
     }
   }
   private initializeCharacterMap(){
@@ -39,16 +42,16 @@ export class FactWeb implements storeable{
       acquaintacerMap: new Map(),
     });
   }
-  get_fact(factName:factName){ return this.knownFacts.get(factName); }
-  set_fact(factName:factName,state:any,importance:factImportance=1,who_knows:UniqueCharacter[]){
-    let fact = this.knownFacts.get(factName);
+  getFact(factname:factName){ return this.knownFacts.get(factname); }
+  setFact(factname:factName,state:any,importance:factImportance=1,whoKnows:UniqueCharacter[]){
+    let fact = this.knownFacts.get(factname);
     if(fact)return fact.state = state;
     fact = new Fact(state,importance);
-    this.knownFacts.set(factName,fact);
+    this.knownFacts.set(factname,fact);
     this.createSubscriptions();
-    for(const character of who_knows){
+    for(const character of whoKnows){
       if(!this.characterMap.get(character.type))this.initializeCharacter(character);
-      this.characterMap.get(character.type)?.knownFacts.add(factName);
+      this.characterMap.get(character.type)?.knownFacts.add(factname);
     }
   }
   registerCharacterLink(character1:UniqueCharacter,character2:UniqueCharacter,acquaintace:acquaintaceness){
@@ -71,14 +74,14 @@ export class FactWeb implements storeable{
       const acquaintaceFacts = this.characterMap.get(acquaintace)?.knownFacts;
       if( !acquaintaceFacts ){ continue; }
       surroundingCharactersKnowTheSameThings &&= setEquality(facts,acquaintaceFacts);
-      //no need to spread if both know the same facts
+      // no need to spread if both know the same facts
       if(surroundingCharactersKnowTheSameThings)continue;
-      for(const factName of facts ){
-        const fact = this.knownFacts.get(factName);
-        if(!fact || acquaintaceFacts.has(factName)){continue;}
+      for(const factname of facts ){
+        const fact = this.knownFacts.get(factname);
+        if(!fact || acquaintaceFacts.has(factname)){continue;}
         if(randomCheck(FactWeb.SPREAD_COEFFICIENT*fact.importance*closeness))
-        //only mark for spread, prevent spread the same fact in the same iteration
-        markForSpread.push(()=>{acquaintaceFacts.add(factName)});
+        // only mark for spread, prevent spread the same fact in the same iteration
+        markForSpread.push(()=>{acquaintaceFacts.add(factname)});
       }
     }
     for(const spreadFunction of markForSpread)spreadFunction();
@@ -92,14 +95,14 @@ export class FactWeb implements storeable{
     const knownFacts:[name:factName,fact:FactStoreable][] = []
     const acquaintaceGraph:Set<string> = new Set();
     const knownFactsPerCharacter:[characterId:string,facts:factName[]][]=[];
-    //Store Facts
+    // Store Facts
     for(const [name,fact] of this.knownFacts.entries()) { knownFacts.push([name,fact.toJson()]) }
     for(const [character,{knownFacts:facts,acquaintacerMap:acquaintaces}] of this.characterMap){
-      //Store relationships
+      // Store relationships
       for(const [acquaintace,closeness] of acquaintaces){
         acquaintaceGraph.add(hashAcquanintace(character,acquaintace,closeness));
       }
-      //Store fact known per character
+      // Store fact known per character
       knownFactsPerCharacter.push([character,Array.from(facts)])
     }
     return{
@@ -113,30 +116,31 @@ export class FactWeb implements storeable{
     }
   }
   fromJson(options: DataWebStoreable): void {
-    //clear all
+    // clear all
     this.knownFacts.clear();
     this.characterMap.clear();
     this.initializeCharacterMap();
-    //Load Facts
+    // Load Facts
     for(const [factname,factOptions] of options.knownFacts){
       const fact = new Fact('',0)
       fact.fromJson(factOptions)
       this.knownFacts.set(factname,fact)
     }
-    //Load relationships
+    // Load relationships
     for(const hashedRelationship of options.acquaintaceGraph){
-      const [character1_id,character2_id,closeness] = unhashAcquaintance(hashedRelationship)
+      const [character1Id,character2Id,closeness] = unhashAcquaintance(hashedRelationship)
       this.registerDirectionalCharacterLink(
-        this.uniqueCharacterHandler.getCharacter(character1_id),
-        this.uniqueCharacterHandler.getCharacter(character2_id),
+        this.uniqueCharacterHandler.getCharacter(character1Id),
+        this.uniqueCharacterHandler.getCharacter(character2Id),
         closeness
       )
     }
     this.lastSpreadTime=options.lastSpreadTime;
-    //Load fact known per character
+    // Load fact known per character
     for(const [characterId,facts] of options.knownFactsPerCharacter){
-      // @ts-ignore
-      this.characterMap.get( characterId )&&(this.characterMap.get( characterId ).knownFacts=new Set(facts))
+      const characterDataWebData = this.characterMap.get( characterId );
+      if(characterDataWebData)
+        characterDataWebData.knownFacts=new Set(facts)
     }
   }
 }
@@ -154,13 +158,14 @@ type DataWebStoreable = {
   knownFactsPerCharacter:[character_id:string,facts:factName[]][]
 }
 
-class Fact implements storeable{
+// tslint:disable-next-line: max-classes-per-file
+class Fact implements Storeable{
   type:"Fact"="Fact";
   state:any;
   private _importance:factImportance;
-  constructor(fact_state:any, fact_importance:factImportance){
-    this.state = fact_state;
-    this._importance = fact_importance;
+  constructor(factstate:any, factimportance:factImportance){
+    this.state = factstate;
+    this._importance = factimportance;
   }
   get importance(){return this._importance;}
   toJson(): FactStoreable {
@@ -186,8 +191,8 @@ type FactStoreable = {
 }
 
 const HASH_SEPARATOR = "<!¡>"
-function hashAcquanintace(character1_id:string,character2_id:string,closeness:number):string
-{ return [character1_id,character2_id,closeness].join(HASH_SEPARATOR) }
+function hashAcquanintace(character1Id:string,character2Id:string,closeness:number):string
+{ return [character1Id,character2Id,closeness].join(HASH_SEPARATOR) }
 function unhashAcquaintance(hash: string):hashedAcquanitance{
   const unhash:[string,string,number] = hash.split(HASH_SEPARATOR) as any;
   unhash[2] = Number.parseInt(unhash[2].toString())

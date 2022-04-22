@@ -6,15 +6,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./info-page-gui.component.css']
 })
 export class InfoPageGuiComponent implements OnInit {
-  current_tab = 'A'
-  constructor() { }
-
+  currentTab = 'A'
   ngOnInit(): void {
+    return undefined;
   }
 
   setTab(event:Event){
     if(!event.target){ return; }
     const tabTarget = (event.target as HTMLElement).getAttribute('for') ;
-    if(tabTarget) this.current_tab = tabTarget ;
+    if(tabTarget) this.currentTab = tabTarget ;
   }
 }

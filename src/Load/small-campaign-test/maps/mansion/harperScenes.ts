@@ -34,8 +34,10 @@ export function talkHarper(masterService:MasterService,Factory:FactoryForModules
 export function harperFinishQuest(masterService:MasterService,Factory:FactoryForModules):Scene{
   return {
     sceneData(){
-      const quest = masterService.QuestHolder.get("FoolDragonSeller") as unknown as Quest & { outcome:FoolDragonSellerOutcome };
+      const quest = masterService
+        .QuestHolder.get("FoolDragonSeller") as unknown as Quest & { outcome:FoolDragonSellerOutcome };
       quest.complete();
+      // tslint:disable-next-line: no-console
       console.log(quest);
       if(quest.outcome.deliveredEgg && quest.outcome.plantedTrack){
         return "Hey! you did it";

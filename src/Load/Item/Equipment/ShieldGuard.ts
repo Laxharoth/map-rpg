@@ -6,18 +6,20 @@ import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.typ
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:registerFunction = ({reaction,gameItem: game_item,status}, {status:{StatusBattle},gameItem:{Shield},reaction:{BeforeActionReaction}}, Factory)=>{
+// tslint:disable: max-classes-per-file
+const register:registerFunction = ({reaction,gameItem: gameItem,status},
+  {status:{StatusBattle},gameItem:{Shield},reaction:{BeforeActionReaction}}, Factory)=>{
   class ReactionGuard extends BeforeActionReaction
   {
     readonly type:"ReactionGuard"="ReactionGuard"
     protected name: string = "ReactionGuard";
     protected whatTriggers: tag[][]=[[]];
     protected preventReaction: tag[][] = [['paralized']]
-    protected action(react_character: Character, {source,target}:BattleCommand): ActionOutput {
+    protected action(reactCharacter: Character, {source,target}:BattleCommand): ActionOutput {
       if(this.masterService.partyHandler.isPartyMember(source))return [[],[]]
       for(let i = 0; i < target.length; i++) {
         if(this.masterService.partyHandler.isPartyMember(target[i])) {
-          target[i] = react_character
+          target[i] = reactCharacter
         }
       }
       return [[],[]]
@@ -56,10 +58,11 @@ const register:registerFunction = ({reaction,gameItem: game_item,status}, {statu
         return [StatusGuard.REACTION_GUARD]
     }
   }
+  // tslint:disable: no-string-literal
   reaction["ReactionGuard"]=ReactionGuard
-  game_item["ShieldGuard"]=ShieldGuard
+  gameItem["ShieldGuard"]=ShieldGuard
   status["StatusGuard"]=StatusGuard
 }
-const module_name="StatusGuard";
-const module_dependency:string[] = [];
-export { register, module_name, module_dependency}
+const moduleName="StatusGuard";
+const moduleDependency:string[] = [];
+export { register, moduleName, moduleDependency}

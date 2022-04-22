@@ -35,27 +35,27 @@ export class Time{
   getTimeValues():TimeValues{
     let backupMinutes = this.minutes;
     const values= {Years:0,Months:0,Days:0,Hours:0,Minutes:0};
-    //year
+    // year
     values.Years = Math.floor(backupMinutes/Time.timeconvertion.year)
     backupMinutes-= values.Years*Time.timeconvertion.year;
-    //month
+    // month
     values.Months = Math.floor(backupMinutes/Time.timeconvertion.month)
     backupMinutes-= values.Months*Time.timeconvertion.month
-    //days
+    // days
     values.Days = Math.floor(backupMinutes/Time.timeconvertion.days)
     backupMinutes-= values.Days*Time.timeconvertion.days
-    //hours
+    // hours
     values.Hours = Math.floor(backupMinutes/Time.timeconvertion.hours)
     backupMinutes-= values.Hours*Time.timeconvertion.hours
-    //minutes
+    // minutes
     values.Minutes = backupMinutes;
     return values;
   }
   /** Converts a string into it's representation in minutes. */
   private convert2Time(value: number|string):number{
     if(typeof value === 'number') return value;
-    let unitIndex  = 0;
-    let unitOffset = 0;
+    const unitIndex  = 0;
+    const unitOffset = 0;
     const pendingConvertions = separateTime(unitOffset, value, unitIndex);
     const minutes = pendingConvertions.reduce((accumulator,[quantity,unit]) =>{
       // @ts-ignore
@@ -67,36 +67,35 @@ export class Time{
       return Time.timeconvertion?.[unit]*Number.parseInt(quantity) + accumulator
     } ,0)
     return minutes;
-    function separateTime(unitOffset: number, value: string, unitIndex: number) {
-      const pendingConvertions = []
-      while (unitOffset < value.length) {
-        let quantity:string;
-        ({ quantity, unitIndex } = getNextQuantity(unitIndex, unitOffset, value));
-        let unit:string;
-        ({ unit, unitOffset } = getNextTimeUnit(unitOffset, unitIndex, value));
-        pendingConvertions.push([quantity, unit]);
-      }
-      return pendingConvertions;
-    }
-    function getNextTimeUnit(unitOffset: number, unitIndex: number, value: string) {
-      unitOffset = unitIndex;
-      while ((isPartOfTimeUnit(value,unitOffset)) && unitOffset < value.length) { unitOffset++; }
-      const unit = value.substring(unitIndex, unitOffset);
-      return { unit, unitOffset };
-    }
-    function isPartOfTimeUnit(value:string,unitOffset:number):boolean {
-      return isNaN(Number.parseInt(value[unitOffset])) && !['+', '-'].includes(value[unitOffset]);
-    }
-
-    function getNextQuantity(unitIndex: number, unitOffset: number, value: string) {
-      unitIndex = unitOffset;
-      while ((isPartOfNumber(value,unitIndex)) && unitIndex < value.length) { unitIndex++; }
-      const quantity = value.substring(unitOffset, unitIndex);
-      return { quantity, unitIndex };
-    }
-    function isPartOfNumber(value:string, unitIndex:number):boolean {
-      return !isNaN(Number.parseInt(value[unitIndex])) || ['+', '-'].includes(value[unitIndex]);
-    }
   }
+}
+function separateTime(unitOffset: number, value: string, unitIndex: number) {
+  const pendingConvertions = []
+  while (unitOffset < value.length) {
+    let quantity:string;
+    ({ quantity, unitIndex } = getNextQuantity(unitIndex, unitOffset, value));
+    let unit:string;
+    ({ unit, unitOffset } = getNextTimeUnit(unitOffset, unitIndex, value));
+    pendingConvertions.push([quantity, unit]);
+  }
+  return pendingConvertions;
+}
+function getNextTimeUnit(unitOffset: number, unitIndex: number, value: string) {
+  unitOffset = unitIndex;
+  while ((isPartOfTimeUnit(value,unitOffset)) && unitOffset < value.length) { unitOffset++; }
+  const unit = value.substring(unitIndex, unitOffset);
+  return { unit, unitOffset };
+}
+function isPartOfTimeUnit(value:string,unitOffset:number):boolean {
+  return isNaN(Number.parseInt(value[unitOffset])) && !['+', '-'].includes(value[unitOffset]);
+}
+function getNextQuantity(unitIndex: number, unitOffset: number, value: string) {
+  unitIndex = unitOffset;
+  while ((isPartOfNumber(value,unitIndex)) && unitIndex < value.length) { unitIndex++; }
+  const quantity = value.substring(unitOffset, unitIndex);
+  return { quantity, unitIndex };
+}
+function isPartOfNumber(value:string, unitIndex:number):boolean {
+  return !isNaN(Number.parseInt(value[unitIndex])) || ['+', '-'].includes(value[unitIndex]);
 }
 export type TimeValues = {Years:number;Months:number;Days:number;Hours:number;Minutes:number};

@@ -8,4 +8,4 @@ export function ReactionFactory(masterService:MasterService,options:ReactionOpti
   return reaction;
 }
 export const reactionSwitcher:{[key:string]:ReactionConstructor} = {}
-export interface ReactionConstructor{ new (masterService:MasterService):Reaction; }
+export type ReactionConstructor = new (masterService:MasterService) =>Reaction;

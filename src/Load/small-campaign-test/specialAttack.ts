@@ -3,12 +3,13 @@ import { DamageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
+import { SpecialAttack as SpecialAttackClass } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 import { StatusFactoryFuctioin } from "src/gameLogic/custom/Factory/StatusFactory";
 
-const register:registerFunction = ({specialAttack,perk}, {specialAttack:{SpecialAttack,DamageSpecialAttack},perk:{Perk}}, Factory)=>{
+const register:registerFunction = ({specialAttack,perk},
+    {specialAttack:{SpecialAttack,DamageSpecialAttack},perk:{Perk}}, Factory)=>{
   const statusFactory = Factory as StatusFactoryFuctioin;
 
   class SneakAttack extends SpecialAttack{
@@ -23,11 +24,12 @@ const register:registerFunction = ({specialAttack,perk}, {specialAttack:{Special
       return targets.addStatus(statusFactory(this.masterService,{ Factory:"Status",type:"Hide" }))
     }
   }
+  // tslint:disable: max-classes-per-file
   class SneakAttackPerk extends Perk{
     type: perkname = "SneakAttack";
     readonly sneakAttack  = new SneakAttack(this.masterService)
     get name(): string { return "Sneak Attack"; }
-    get specials(): SpecialAttack[] { return [this.sneakAttack]; }
+    get specials(): SpecialAttackClass[] { return [this.sneakAttack]; }
   }
   class MultiAttack extends SpecialAttack {
     type: specialsname = "MultiAttack";
@@ -53,7 +55,7 @@ const register:registerFunction = ({specialAttack,perk}, {specialAttack:{Special
     readonly multyAttack = new MultiAttack(this.masterService);
     get name(): string { return "Multi-Attack"; }
     type: perkname = "MultiAttack";
-    get specials(): SpecialAttack[] {
+    get specials(): SpecialAttackClass[] {
       return [this.multyAttack];
     }
   }
@@ -122,6 +124,7 @@ const register:registerFunction = ({specialAttack,perk}, {specialAttack:{Special
     readonly mending = new Mending(this.masterService);
     get specials(){ return [this.mending]}
   }
+  // tslint:disable: no-string-literal
   specialAttack["SneakAttack"]=SneakAttack;
   perk["SneakAttack"]=SneakAttackPerk;
   specialAttack["MultiAttack"]=MultiAttack;
@@ -133,6 +136,6 @@ const register:registerFunction = ({specialAttack,perk}, {specialAttack:{Special
   specialAttack["Guidance"]=Guidance;
   perk["Guidance"]=GuidancePerk;
 }
-const module_name = "small-campaign-special-attack";
-const module_dependency:string[] = ["small-campaign-status"];
-export { register, module_name, module_dependency };
+const moduleName = "small-campaign-special-attack";
+const moduleDependency:string[] = ["small-campaign-status"];
+export { register, moduleName, moduleDependency };

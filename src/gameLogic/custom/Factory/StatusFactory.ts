@@ -9,9 +9,9 @@ export const StatusFactory:FactoryFunction<Status,StatusStoreable> = (masterServ
   status.fromJson(options);
   return status;
 }
-//@ts-ignore
+// @ts-ignore
 export const statusSwitcher:{[key in statusEnum | statusTimeEnum | statusBattlesEnum]:StatusConstructor}={
   'TimedStatusTest'   :TimedStatusTest,
 }
-export interface StatusConstructor { new(MasterService: MasterService): Status; }
+export type StatusConstructor = new(MasterService: MasterService) => Status;
 export type StatusFactoryFuctioin = typeof StatusFactory;

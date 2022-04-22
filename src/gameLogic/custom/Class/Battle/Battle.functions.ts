@@ -45,9 +45,11 @@ export function DefendCommand(source: Character, targets: Character[]):BattleCom
     };
 }
 /** Attacks with a damage source. */
-function attackWithDamageSource(source: Character, targets: Character[], damageSource: DamageSource, attackDescription: ActionOutput) {
+function attackWithDamageSource(source: Character,
+  targets: Character[], damageSource: DamageSource, attackDescription: ActionOutput) {
   for (const target of targets){
-    pushBattleActionOutput(tryAttack(source, target, (target: Character) => attack(damageSource,source, target)), attackDescription);
+    pushBattleActionOutput(tryAttack(source, target,
+      (attackTarget: Character) => attack(damageSource,source, attackTarget)), attackDescription);
   }
 }
 export function escapeBattle(masterService: MasterService){
@@ -62,7 +64,8 @@ export function escapeBattle(masterService: MasterService){
   }
 }
 /** Check if the attack action can be performed on the target character. */
-export function tryAttack(source: Character, target: Character, action: (target: Character) => ActionOutput): ActionOutput{
+export function tryAttack(source: Character,
+    target: Character, action: (target: Character) => ActionOutput): ActionOutput{
   if (source.hasTag('paralized')) return [ [], [`${source.name} is paralized and can't move`] ];
   for (const status of source.iterStatus()) {
     const preventAttackStatus = status as unknown as StatusPreventAttack;

@@ -1,6 +1,6 @@
 import { pushBattleActionOutput } from 'src/gameLogic/custom/functions/htmlHelper.functions';
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from "src/gameLogic/core/Factory/Factory";
+import { Storeable } from "src/gameLogic/core/Factory/Factory";
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { ActionOutput } from "src/gameLogic/custom/Class/Character/Character.type";
 import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
@@ -9,7 +9,7 @@ import { BattleUseable } from './BattleUseable';
 import { GameElementDescriptionSection } from '../GameElementDescription/GameElementDescription';
 
 /** Model of game items. */
-export abstract class GameItem implements BattleUseable, storeable{
+export abstract class GameItem implements BattleUseable, Storeable{
   /** The max number of items than can be held in a single stack. */
   readonly maxStack: number = 9;
   /** The number of items in the stack. */

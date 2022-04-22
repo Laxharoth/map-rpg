@@ -22,6 +22,7 @@ export class ExcessItemGuiComponent implements OnInit {
       [this.characterInventory,this.excessItemList] = masterService.sceneHandler.currentScene?.sceneData();
   }
   ngOnInit(): void {
+    return undefined;
   }
   ngOnDestroy(): void {
     if(this.excessItemListUpdateSubscription)this.excessItemListUpdateSubscription.unsubscribe();

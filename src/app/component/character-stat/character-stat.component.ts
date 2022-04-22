@@ -14,7 +14,9 @@ export class CharacterStatComponent implements OnInit {
 
   constructor(){}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   ngOnChanges(changes: SimpleChanges): void {}
 
 }

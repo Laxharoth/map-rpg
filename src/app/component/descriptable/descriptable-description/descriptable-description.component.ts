@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
+import { Descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/GameElementDescription';
 
 @Component({
   selector: 'app-descriptable-description',
@@ -7,9 +7,10 @@ import { descriptable } from 'src/gameLogic/custom/Class/GameElementDescription/
   styleUrls: ['./descriptable-description.component.css']
 })
 export class DescriptableDescriptionComponent implements OnInit {
-  @Input() descriptable!:descriptable;
+  @Input() descriptable!:Descriptable;
   @Input() small:boolean=true;
-  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
 }

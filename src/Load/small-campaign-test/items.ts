@@ -25,6 +25,7 @@ const register:registerFunction = ({gameItem}, {gameItem:{GameItem}}, Factory)=>
     }
     get tags():tag[]{return ["fake egg","Blind","status gained"];}
   }
+  // tslint:disable: max-classes-per-file
   class Net extends GameItem{
     type: itemname="Net";
     get isBattleUsable(): boolean { return true; }
@@ -42,8 +43,9 @@ const register:registerFunction = ({gameItem}, {gameItem:{GameItem}}, Factory)=>
     }
     get tags():tag[]{return ["net","Restrained","status gained"];}
   }
+  // tslint:disable-next-line: no-string-literal
   gameItem["FakeDragonEgg"] = FakeDragonEgg;
 }
-const module_name = "small-campaign-items";
-const module_dependency:string[] = ["small-campaign-status"];
-export { register, module_name, module_dependency };
+const moduleName = "small-campaign-items";
+const moduleDependency:string[] = ["small-campaign-status"];
+export { register, moduleName, moduleDependency };

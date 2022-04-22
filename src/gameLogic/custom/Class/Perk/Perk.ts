@@ -1,16 +1,16 @@
 import { MasterService } from "src/app/service/master.service";
-import { storeable } from "src/gameLogic/core/Factory/Factory";
+import { Storeable } from "src/gameLogic/core/Factory/Factory";
 import { Reaction } from "src/gameLogic/custom/Class/Character/Reaction/Reaction";
 import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
-import { hashable } from "../../ClassHelper/ObjectSet";
+import { Hashable } from "../../ClassHelper/ObjectSet";
 
 /**
  * A object that represents a perk.
  * Something like a status but without effect.
  */
-export abstract class Perk implements storeable, hashable
+export abstract class Perk implements Storeable, Hashable
 {
   abstract get name():string;
   abstract type:perkname;

@@ -5,7 +5,8 @@ import { nextOption } from "./CommonOptions";
 import { Scene, SceneOptions } from "./Scene";
 
 /** Returns options to select target. */
- export function selectTarget(masterService:MasterService,targets:Character[],playerAction:(target:Character[])=>void):Scene{
+ export function selectTarget(masterService:MasterService,
+    targets:Character[],playerAction:(target:Character[])=>void):Scene{
    const targetsOptions:(SceneOptions|null)[] = [];
    const returnOption = nextOption(masterService,'return');
    for(const target of targets){

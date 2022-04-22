@@ -14,7 +14,9 @@ export class ShopItemComponent implements OnInit {
   @Output() ShopItemEvent = new EventEmitter<GameItem|null>();
   constructor(private shopService: ShopCurrentItemService){}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   ngOnDestroy(): void { this.unsetItem() }
   Emit(){
     this.ShopItemEvent.emit(this.item);

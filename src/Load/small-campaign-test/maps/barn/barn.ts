@@ -44,7 +44,7 @@ export function barn(roomname:string,Factory:FactoryForModules):roomFunction{
           }
           masterService.sceneHandler.setScene();
         },
-        onExit(){},
+        onExit(){return null;},
       }
     },
     roomname,
@@ -53,7 +53,7 @@ export function barn(roomname:string,Factory:FactoryForModules):roomFunction{
 export const stairs:roomFunction={
   create:(masterService:MasterService)=>{
     return {
-      onEnter(){},onExit(){},
+      onEnter(){return null;},onExit(){return null;},
     }
   },
   roomname:"stairs",
@@ -62,7 +62,7 @@ export const stairs:roomFunction={
 export const loft:roomFunction={
   create:(masterService:MasterService)=>{
     return {
-      onEnter(){},onExit(){},
+      onEnter(){return null;},onExit(){return null;},
     }
   },
   roomname:"loft",
@@ -71,7 +71,7 @@ export const loft:roomFunction={
 export const secretExit:roomFunction={
   create:(masterService:MasterService)=>{
     return {
-      onEnter(){},onExit(){},
+      onEnter(){return null;},onExit(){return null;},
     }
   },
   roomname:"secret_exit",

@@ -10,7 +10,6 @@ export class ShopCurrentItemService {
   private _currentItemSubject = new Subject<GameItem | null>();
   get currentItem():GameItem | null{return this._currentItem}
   set currentItem(item:GameItem | null){this._currentItem = item;this._currentItemSubject.next(this._currentItem)}
-  constructor() {}
   onCurrentItemChanged():Observable<GameItem | null>{
     return this._currentItemSubject.asObservable();
   }

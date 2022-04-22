@@ -6,8 +6,9 @@ import { primitive } from '../types';
 export function Factory(masterService:MasterService,options:StoreableType)
 { return factoryMap[options.Factory](masterService,options) }
 
-export type StoreableType = {Factory:factoryname,type: string,dependency_gamesave_object_key?:gamesavenames[],[key: string]:any};
-export interface storeable {
+export type StoreableType = {Factory:factoryname,
+  type: string,dependencyGamesaveObjectKey?:gamesavenames[],[key: string]:any};
+export interface Storeable {
   type:primitive,
   toJson():StoreableType;
   fromJson(options:StoreableType):void;

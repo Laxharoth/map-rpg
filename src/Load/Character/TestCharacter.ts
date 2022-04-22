@@ -10,7 +10,10 @@ import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { UniqueCharacterStoreable } from 'src/gameLogic/custom/Class/Character/UniqueCharacter';
 
-const register:registerFunction = ({character,enemyFormation}, {character:{Character,PersistentCharacter,UniqueCharacter}, enemyFormation:{EnemyFormation} },Factory)=>{
+const register:registerFunction = ({character,enemyFormation},
+    // tslint:disable-next-line: no-shadowed-variable
+    {character:{Character,PersistentCharacter,UniqueCharacter},
+    enemyFormation:{EnemyFormation} },Factory)=>{
   const GameItemFactory = Factory as typeof ItemFactory;
 
   const EmptyCommand:(that:Character,enemy:Character[])=>BattleCommand = (that,enemy)=>{ return {
@@ -19,19 +22,17 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
     tags:[],
     excecute:() => [[],[]],
   }}
-  class charTest extends PersistentCharacter
-  {
+  class CharTest extends PersistentCharacter{
     protected _name!: string;
     type:characterType = "test character";
-    constructor(masterService:MasterService ,name:string='')
-    {
+    constructor(masterService:MasterService ,name:string=''){
       super(masterService);
-      //@ts-ignore
+      // @ts-ignore
       this.masterService.gameSaver.unregister("PersistentCharacter",this)
       this._name = name
-      //@ts-ignore
+      // @ts-ignore
       this.type = this._name;
-      //@ts-ignore
+      // @ts-ignore
       this.masterService.gameSaver.register("PersistentCharacter",this)
     }
 
@@ -41,11 +42,11 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
         const target = Factory.randomBetween(0,enemy.length-1);
         switch (Factory.randomBetween(0,2))
         {
-            //ATTACK
+            // ATTACK
             case 0: return this.Attack([enemy[target]]);
-            //RANGE
+            // RANGE
             case 1: return this.Shoot(enemy);
-            //DEFEND
+            // DEFEND
             case 2: return this.Defend([this]);
             default: return EmptyCommand(this,enemy);
         }
@@ -53,16 +54,16 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
     fromJson(options:UniqueCharacterStoreable)
     {
       super.fromJson(options);
-      //@ts-ignore
+      // @ts-ignore
       this.type = this._name;
-      //@ts-ignore
+      // @ts-ignore
       this.masterService.gameSaver.unregister("PersistentCharacter",this)
-      //@ts-ignore
+      // @ts-ignore
       this.masterService.gameSaver.register("PersistentCharacter",this)
     }
   }
-  class enemyTest extends Character implements Enemy
-  {
+  // tslint:disable-next-line: max-classes-per-file
+  class EnemyTest extends Character implements Enemy{
     _name="enemyTest";
     enemyType: string = "enemyTest";
     type:characterType = 'test enemy';
@@ -71,15 +72,15 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
     get name(): string {
         return 'test enemy';
     }
-    _IA_Action(ally: Character[], enemy: Character[]): BattleCommand {
+    _IA_Action(_ally: Character[], enemy: Character[]): BattleCommand {
         const target = Factory.randomBetween(0,enemy.length-1);
         switch (Factory.randomBetween(0,2))
         {
-            //ATTACK
+            // ATTACK
             case 0: return this.Attack([enemy[target]]);
-            //RANGE
+            // RANGE
             case 1: return this.Shoot([enemy[target]]);
-            //DEFEND
+            // DEFEND
             case 2: return this.Defend([this]);
             default: return EmptyCommand(this,[]);
         }
@@ -101,11 +102,11 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
       return 'item-test'
     }
   }
-  class JohnSmith extends UniqueCharacter
-  {
+  // tslint:disable-next-line: max-classes-per-file
+  class JohnSmith extends UniqueCharacter{
     protected _name: string = "John Smith";
     type: characterType= 'john';
-      //@ts-ignore
+      // @ts-ignore
     type=this.type;
     constructor(masterService:MasterService){
       super(masterService);
@@ -115,14 +116,14 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
       throw new Error("Method not implemented.");
     }
   }
-  class testformation extends EnemyFormation
-  {
+  // tslint:disable-next-line: max-classes-per-file
+  class Testformation extends EnemyFormation{
     type:string = "testformation";
     constructor(masterService:MasterService){
         super(masterService)
-        //this._enemies = Array.from(Array(randomBetween(1,3))).map(_=>new enemyTest(this.masterService))
-        this._enemies = [new enemyTest(this.masterService)]
-        this._enemies = [new enemyTest(this.masterService),new enemyTest(this.masterService)]
+        // this._enemies = Array.from(Array(randomBetween(1,3))).map(_=>new enemyTest(this.masterService))
+        this._enemies = [new EnemyTest(this.masterService)]
+        this._enemies = [new EnemyTest(this.masterService),new EnemyTest(this.masterService)]
     }
     protected escapeSuccess():string{
       return `${this.masterService.partyHandler.user.name} escapes`;
@@ -163,13 +164,13 @@ const register:registerFunction = ({character,enemyFormation}, {character:{Chara
         return {sceneData:()=>`Party won`, options,fixedOptions:[null,null,null,null,null]}
     }
   }
-  character["test character"] = charTest;
-  character["enemyTest"] = enemyTest;
-  character["john"] = JohnSmith;
-  enemyFormation["testformation"] = testformation;
+  character["test character"] = CharTest;
+  character.enemyTest = EnemyTest;
+  character.john = JohnSmith;
+  enemyFormation.testformation = Testformation;
 }
 
-const module_name="TestCharacters";
-const module_dependency:string[]=["EquipmentTest"]
+const moduleName="TestCharacters";
+const moduleDependency:string[]=["EquipmentTest"]
 
-export {register, module_name, module_dependency}
+export {register, moduleName, moduleDependency}

@@ -23,8 +23,9 @@ const register:registerFunction = ({status},{status:{StatusBattle}},Factory)=>{
       };
     }
 }
+// tslint:disable-next-line: no-string-literal
 status["Prone"]=StatusProne
 }
-const module_name = "Prone"
-const module_dependency:string[] = []
-export { register, module_name, module_dependency}
+const moduleName = "Prone"
+const moduleDependency:string[] = []
+export { register, moduleName, moduleDependency}

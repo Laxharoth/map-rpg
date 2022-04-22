@@ -18,7 +18,7 @@ export enum FlagNames {
 
 export type flagname = `${FlagNames}`
 
-export const default_flags:{[key in FlagNames]:any} = {
+export const defaultFlags:{[key in FlagNames]:any} = {
   currentmap : 'map1',
   currentroom: 'room1',
   map1room1firstenter : true,

@@ -28,7 +28,9 @@ export class GuiComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    return undefined;
+  }
 
   ngOnDestroy(): void {
     this.gameStateSubscription.unsubscribe();

@@ -21,7 +21,8 @@ export function street(roomname: string,Factory:FactoryForModules):roomFunction{
       const options:SceneOptions[] = [];
       switch(roomname){
         case "street9": options.push(Factory.options.enterRoomOption(masterService,"secret_exit","You hear wind but see no door",true)) ;break;
-        case "street2": options.push(Factory.options.enterRoomOption(masterService,"entrance1","Enter the Mansion")) ;break;
+        case "street2": options.push(Factory
+            .options.enterRoomOption(masterService,"entrance1","Enter the Mansion")) ;break;
         case "street7": options.push(Factory.options.enterRoomOption(masterService,"barn8","Enter the Barn")) ;break;
       }
       return {
@@ -34,7 +35,7 @@ export function street(roomname: string,Factory:FactoryForModules):roomFunction{
             masterService.sceneHandler.headScene(banditsWantRealEgg(masterService,Factory),"talk").setScene(false);
           }
         },
-        onExit(){},
+        onExit(){return null;},
       };
     },
     roomname

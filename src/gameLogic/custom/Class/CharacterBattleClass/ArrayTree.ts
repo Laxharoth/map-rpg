@@ -2,19 +2,19 @@ export class ArrayTree<T> {
   root: tree_node<T>;
   constructor(root: tree_node<T>) { this.root = root; }
 
-  get_node(path: number[]): tree_node<T> | null {
-    let travel_node = this.root;
-    if (!travel_node)
+  getNode(path: number[]): tree_node<T> | null {
+    let travelNode = this.root;
+    if (!travelNode)
       return null;
-    for (const path_index of path) {
-      travel_node = travel_node.children[path_index];
-      if (!travel_node)
+    for (const pathIndex of path) {
+      travelNode = travelNode.children[pathIndex];
+      if (!travelNode)
         return null;
     }
-    return travel_node;
+    return travelNode;
   }
   get_children(path: number[]): tree_node<T>[] {
-    const node = this.get_node(path);
+    const node = this.getNode(path);
     if (!node || !node.children)
     return [];
     return node.children;

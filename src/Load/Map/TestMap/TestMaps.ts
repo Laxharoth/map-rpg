@@ -60,6 +60,6 @@ const register: registerFunction = ({rooms,maps}, {}, _ ) => {
   rooms["room47"]={map:"map2",room:room25('room47')}
   rooms["room48"]={map:"map2",room:room25('room48')}
 }
-const module_name = "TestMap";
-const module_dependency:string[] = [];
-export { register, module_name, module_dependency};
+const moduleName = "TestMap";
+const moduleDependency:string[] = [];
+export { register, moduleName, moduleDependency};

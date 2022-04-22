@@ -14,7 +14,8 @@ export interface SingleTargetCommand extends BattleCommand{
 }
 export type SelectTargetStrategy = (user:Character,ally: Character[], enemy: Character[]) => Character[];
 export type SelectSingleTargetStrategy = (user:Character,ally: Character[], enemy: Character[]) => [Character];
-export type SelectCommandTargetStrategy = (user:Character,ally: Character[], enemy: Character[],targetStrategy:SelectTargetStrategy) => BattleCommand;
+export type SelectCommandTargetStrategy = (user:Character,
+    ally: Character[], enemy: Character[],targetStrategy:SelectTargetStrategy) => BattleCommand;
 export class EmptyCommand implements BattleCommand{
   source:Character;
   target:Character[];
@@ -26,6 +27,7 @@ export class EmptyCommand implements BattleCommand{
     this.excecute = ()=>[[],[]];
   }
 }
+// tslint:disable-next-line: max-classes-per-file
 export class DefeatedCommand implements BattleCommand{
   source:Character;
   target:Character[];

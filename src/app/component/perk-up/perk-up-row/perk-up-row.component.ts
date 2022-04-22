@@ -12,9 +12,9 @@ export class PerkUpRowComponent implements OnInit {
   @Input() fixedPath:number[]=[];
   @Input() row:number=0;
   @Input() upgrades:tree_node<Upgrade>[]=[];
-  constructor() { }
   @Output() selectedPositionAndValue= new EventEmitter<PathPositionAndValue>();
   ngOnInit(): void {
+    return undefined;
   }
   emit(optionIndex:Event):void { this.selectedPositionAndValue.emit([this.row,optionIndex as unknown as number]) }
 }

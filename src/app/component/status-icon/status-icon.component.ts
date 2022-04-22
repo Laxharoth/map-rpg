@@ -19,6 +19,4 @@ export class StatusIconComponent implements OnInit {
     const parentX = parentNode.offsetLeft;
     this.xOffset = parentX -x
   }
-  ngAfterViewInit(): void {
-  }
 }

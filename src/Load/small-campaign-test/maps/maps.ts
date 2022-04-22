@@ -19,7 +19,8 @@ const register:registerFunction = ({maps,rooms}, {}, Factory)=>{
     },
     null,null,null,null
   ]
-  barn:{
+  {
+    // tslint:disable: no-string-literal
     maps["barn"] = barn as string[][];
     rooms["loft"]        = {room:loft,map:"barn"}
     rooms["stairs"]      = {room:stairs,map:"barn"}
@@ -29,7 +30,7 @@ const register:registerFunction = ({maps,rooms}, {}, Factory)=>{
       rooms[roomname]= {room:fnBarn(roomname,Factory),map:"barn"}
     }
   }
-  mansion:{
+  {
     maps["mansion"] = mansion as string[][];
     rooms["upper"]    = {room:upper(Factory),map:"mansion"}
     rooms["mstairs"]  = {room:mstairs(Factory),map:"mansion"}
@@ -38,7 +39,7 @@ const register:registerFunction = ({maps,rooms}, {}, Factory)=>{
       rooms[roomname]= {room:fnentrance(roomname,Factory),map:"mansion"}
     }
   }
-  street:{
+  {
     maps["street"] = street as string[][];
     for(let i=0;i<9;i++){
       const roomname = `street${i+1}`;
@@ -46,8 +47,8 @@ const register:registerFunction = ({maps,rooms}, {}, Factory)=>{
     }
   }
 }
-const module_name = "small-campaign-maps";
-const module_dependency:string[] = [
+const moduleName = "small-campaign-maps";
+const moduleDependency:string[] = [
   "small-campaign-battle-class",
   "small-campaign-items",
   "small-campaign-quest",
@@ -55,4 +56,4 @@ const module_dependency:string[] = [
   "small-campaign-special-attack",
   "small-campaign-status",
 ];
-export { register, module_name, module_dependency };
+export { register, moduleName, moduleDependency };

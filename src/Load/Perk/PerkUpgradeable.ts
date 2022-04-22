@@ -6,8 +6,7 @@ import { perkname } from "src/gameLogic/custom/Class/Perk/Perk.type";
 const register: registerFunction = ({perk}, {perk:{Perk}}, Factory) => {
   class PerkUpgradeable extends Perk {
     level:number;
-    constructor(masterService:MasterService)
-    {
+    constructor(masterService:MasterService){
       super(masterService);
       this.level=0;
     }
@@ -22,11 +21,13 @@ const register: registerFunction = ({perk}, {perk:{Perk}}, Factory) => {
     }
     fromJson(json:PerkStoreable){
       super.fromJson(json);
-      json.level&&(this.level=json.level);
+      if(json.level)
+        this.level=json.level;
     }
   }
+  // tslint:disable-next-line: no-string-literal
   perk["PerkUpgradeable"]=PerkUpgradeable
 }
-const module_name = "PerkUpgradeable"
-const module_dependency:string[] = []
-export { register, module_name, module_dependency}
+const moduleName = "PerkUpgradeable"
+const moduleDependency:string[] = []
+export { register, moduleName, moduleDependency}

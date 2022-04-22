@@ -9,69 +9,77 @@ import { DescriptableSceneOptions, Scene, SceneOptions } from './Scene';
 
 export function selectItem(
   masterService:MasterService,
-  action_source:Character,
+  actionSource:Character,
   targets:Character[],
   items:BattleUseable[],
-  game_state:game_state,
+  gameState:game_state,
   action:(item:BattleUseable,target:Character[])=>void,
-  is_valid_target:valid_target_function,
-  is_item_disabled:is_item_disabled_function
+  isValidTarget:valid_target_function,
+  isItemDisabled:is_item_disabled_function
   ):Scene{
   const options:(SceneOptions|DescriptableSceneOptions)[]=[]
   const returnOption = nextOption(masterService,'return')
   for(const item of items)
   {
-    const option_targets = discriminate_targets(item,targets,is_valid_target)
-    const option_action = (target: Character[])=>{ action(item,target); }
+    const optionTargets = discriminateTargets(item,targets,isValidTarget)
+    const optionAction = (target: Character[])=>{ action(item,target); }
     options.push({
       text:item.name,
       action:()=>{
-        if(item.isSingleTarget && option_targets.length>1){
+        if(item.isSingleTarget && optionTargets.length>1){
           masterService.sceneHandler
-            .headScene(selectTarget(masterService,option_targets,option_action),game_state)
+            .headScene(selectTarget(masterService,optionTargets,optionAction),gameState)
             .setScene(false)
           return;
         }
-        option_action(option_targets);
+        optionAction(optionTargets);
       },
-      get disabled(){return is_item_disabled(action_source,item)},
+      get disabled(){return isItemDisabled(actionSource,item)},
       descriptable: item
     })
   }
-  const use_item_scene:Scene = {
+  const useItemScene:Scene = {
     sceneData:()=>`${ items.map(item=>item.name).join('\n') }`,
       options,fixedOptions:[null,null,null,null,null]
   };
-  use_item_scene.fixedOptions&&(use_item_scene.fixedOptions[4] = returnOption);
-  return use_item_scene
+  if(useItemScene.fixedOptions)
+    useItemScene.fixedOptions[4] = returnOption;
+  return useItemScene
 }
 export function selectItemOverworld(masterService:MasterService):Scene{
   const user = masterService.partyHandler.user;
   const party = masterService.partyHandler.party;
   const targets = [user].concat(party);
-  const use_item_on_party = (item:GameItem,target:Character[])=>{
+  const useItemOnParty = (item:GameItem,target:Character[])=>{
     const [scenes] = user.useItem(item,target).excecute();
     masterService.sceneHandler
       .tailScene(scenes,'item')
       .flush(scenes.length-1)
       .setScene(false);
   }
-  const is_valid_target:valid_target_function=(item,target)=>{
-    return (target===user && item.isSelfUsable)||(masterService.partyHandler.party.some((character:Character)=>character===target) && item.isPartyUsable)
+  const isValidTarget:valid_target_function=(item,target)=>{
+    return  (target===user && item.isSelfUsable)||
+            (masterService.partyHandler.party.some((character:Character)=>character===target) && item.isPartyUsable)
   }
-  const is_item_disabled:is_item_disabled_function = (action_source,item)=>!item.isMapUsable || item.disabled(action_source);
-  // @ts-ignore
-  const select_item_scene = selectItem(masterService,user,targets,user.inventory.items,'item',use_item_on_party,is_valid_target,is_item_disabled);
-  select_item_scene.fixedOptions&&(select_item_scene.fixedOptions[3]=drop_item(masterService,user));
-  return select_item_scene;
+  const isItemDisabled:is_item_disabled_function = (actionSource,item)=>{
+    return!item.isMapUsable || item.disabled(actionSource)
+  };
+  const selectItemScene = selectItem(masterService,
+    user,targets,
+    user.inventory.items,'item',
+    // @ts-ignore
+    useItemOnParty,isValidTarget,isItemDisabled);
+  if(selectItemScene.fixedOptions)
+    selectItemScene.fixedOptions[3]=drop_item(masterService,user);
+  return selectItemScene;
 }
 
-function discriminate_targets(item:BattleUseable,targets:Character[],is_valid_target:valid_target_function):Character[]{
-  const valid_targets:Character[] = []
+function discriminateTargets(item:BattleUseable,targets:Character[],isValidTarget:valid_target_function):Character[]{
+  const validTargets:Character[] = []
   for(const target of targets){
-    if(is_valid_target(item,target))valid_targets.push(target)
+    if(isValidTarget(item,target))validTargets.push(target)
   }
-  return valid_targets;
+  return validTargets;
 }
 export type valid_target_function = (item:BattleUseable,target:Character)=>boolean
 export type is_item_disabled_function = (character:Character,item:BattleUseable)=>boolean

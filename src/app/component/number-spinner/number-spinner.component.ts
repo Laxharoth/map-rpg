@@ -17,20 +17,18 @@ export class NumberSpinnerComponent implements OnInit {
   @Input() disableDown:boolean = false;
   @Output() SpinnerChangedEvent = new EventEmitter<number>();
 
-  constructor() { }
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   changeInput(change:number){
-    const new_value = Math.max(
+    const newValue = Math.max(
       this.min,
       Math.min(this.max,this.value+change)
     );
-    if(this.value===new_value ||
-      (this.disableUp && this.value < new_value)||
-      (this.disableDown && this.value > new_value))return;
-    this.value = new_value;
+    if(this.value===newValue ||
+      (this.disableUp && this.value < newValue)||
+      (this.disableDown && this.value > newValue))return;
+    this.value = newValue;
     this.emmitChange()
   }
   emmitChange(){

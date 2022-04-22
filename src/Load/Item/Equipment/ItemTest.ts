@@ -1,7 +1,7 @@
 import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { DamageTypes } from "src/gameLogic/custom/Class/Battle/DamageSource";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
-import { ActionOutput, CalculatedStats, CoreStats, EnergyStats, FullCalculatedStats, FullCoreStats, FullResistanceStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
+import { ActionOutput, CalculatedStats, CoreStats, FullCoreStats, ResistanceStats } from "src/gameLogic/custom/Class/Character/Character.type";
 import { ArrayTree, tree_node } from "src/gameLogic/custom/Class/CharacterBattleClass/ArrayTree";
 import { experience_cap } from "src/gameLogic/custom/Class/CharacterBattleClass/CharacterBattleClass";
 import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
@@ -9,17 +9,17 @@ import { itemname } from "src/gameLogic/custom/Class/Items/Item.type";
 import { Upgrade } from "src/gameLogic/custom/Class/Upgrade/Upgrade";
 import { UpgradeOptions } from "src/gameLogic/custom/Class/Upgrade/Upgrade.type";
 
-const register:registerFunction = ({gameItem: game_item,characterBattleClass: character_battle_class}, {gameItem:{MeleeWeapon,RangedWeapon,Shield,Armor,GameItem},characterBattleClass:{CharacterBattleClass} },Factory)=>{
-  class ArmorTest extends Armor
-  {
+// tslint:disable: max-classes-per-file
+const register:registerFunction = ({gameItem,characterBattleClass},
+    {gameItem:{MeleeWeapon,RangedWeapon,Shield,Armor,GameItem},characterBattleClass:{CharacterBattleClass} },Factory)=>{
+  class ArmorTest extends Armor{
     protected _statsModifier:CalculatedStats = {physicalDefence:20,initiative:-5};
-    protected _resistance_stats:ResistanceStats = {pierceresistance:10}
+    protected _resistanceStats:ResistanceStats = {pierceresistance:10}
     readonly type:"ArmorTest"="ArmorTest"
     get name(): string { return "Armor Test"; }
     canEquip(): boolean { return true; }
   }
-  class ItemTest extends GameItem
-  {
+  class ItemTest extends GameItem{
     readonly type:"item-test"="item-test";
     get name(): itemname { return 'item-test'; }
     get isBattleUsable(): boolean { return false; }
@@ -27,17 +27,15 @@ const register:registerFunction = ({gameItem: game_item,characterBattleClass: ch
     get isEnemyUsable(): boolean { return false; }
     get isSelfUsable(): boolean { return true; }
     get isSingleTarget(): boolean { return false; }
-    protected _itemEffect(user:Character,target: Character): ActionOutput
-    {
+    protected _itemEffect(user:Character,target: Character): ActionOutput{
     const healHitPoints = target.healHitPoints(10);
     return [[this.itemEffectScene(target, healHitPoints)],[]];
     }
 
-    //Scene
-    private itemEffectScene(target:Character, healHitPoints:number):Scene
-    {
+    // Scene
+    private itemEffectScene(target:Character, healHitPoints:number):Scene{
       return {
-        sceneData: function () {
+        sceneData() {
           return `Heal ${target.name} ${healHitPoints}`
         },
         options: [Factory.options.nextOption(this.masterService)],
@@ -63,7 +61,7 @@ const register:registerFunction = ({gameItem: game_item,characterBattleClass: ch
   class ShieldTest extends Shield
   {
     protected _statsModifier:CalculatedStats = {physicalDefence:20};
-    protected _resistance_stats:ResistanceStats = {bluntresistance:10,pierceresistance:5}
+    protected _resistanceStats:ResistanceStats = {bluntresistance:10,pierceresistance:5}
     readonly type:"ShieldTest"="ShieldTest"
     get name(): string { return 'Shield test'; }
     canEquip(character: Character): boolean { return true; }
@@ -187,15 +185,16 @@ const register:registerFunction = ({gameItem: game_item,characterBattleClass: ch
       ]},
     ]
   }
-  game_item["ShieldTest"]=ShieldTest
-  game_item["RangedTest"]=RangedTest
-  game_item["MeleeTest"]=MeleeTest
-  game_item["item-test"]=ItemTest
-  game_item["ArmorTest"] = ArmorTest
-  character_battle_class["TestCharacterBattleClass"]=TestCharacterBattleClass
-  character_battle_class["TestMainCharacterBattleClass"]=TestMainCharacterBattleClass
+  // tslint:disable: no-string-literal
+  gameItem["ShieldTest"]=ShieldTest
+  gameItem["RangedTest"]=RangedTest
+  gameItem["MeleeTest"]=MeleeTest
+  gameItem["item-test"]=ItemTest
+  gameItem["ArmorTest"] = ArmorTest
+  characterBattleClass["TestCharacterBattleClass"]=TestCharacterBattleClass
+  characterBattleClass["TestMainCharacterBattleClass"]=TestMainCharacterBattleClass
 }
-const module_name="EquipmentTest";
-const module_dependency:string[]=[]
+const moduleName="EquipmentTest";
+const moduleDependency:string[]=[]
 
-export {register, module_name, module_dependency}
+export {register, moduleName, moduleDependency}

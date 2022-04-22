@@ -19,10 +19,13 @@ export class ShopDataComponentComponent implements OnInit {
   constructor(private masterService:MasterService, private shopCurrentItemService:ShopCurrentItemService){
     this.shop = this.masterService.sceneHandler.currentScene?.sceneData();
     if(!(this.shop instanceof Shop))this.shop = ErrorShop(this.masterService);
-    this.currentItemSubscription= this.shopCurrentItemService.onCurrentItemChanged().subscribe(item => this.currentItem = item);
+    this.currentItemSubscription=this.shopCurrentItemService
+      .onCurrentItemChanged().subscribe(item => this.currentItem = item);
     this.currentItem = this.shopCurrentItemService.currentItem;
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    return undefined;
+  }
   ngOnDestroy(): void {
     if(this.currentItemSubscription)this.currentItemSubscription.unsubscribe();
   }

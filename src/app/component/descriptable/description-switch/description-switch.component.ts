@@ -8,7 +8,7 @@ import { GameElementDescriptionSection, section_names } from 'src/gameLogic/cust
 })
 export class DescriptionSwitchComponent implements OnInit {
   @Input() section!:GameElementDescriptionSection;
-  constructor() { }
-
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    return undefined;
+  }
 }

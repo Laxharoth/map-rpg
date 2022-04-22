@@ -39,12 +39,12 @@ export function randomCheck(percent:number):boolean{
   return rng.bool({likelihood:percent })
 }
 
-export function MakeFilledArray<T>(array_size: number,default_value: T): T[] {
-  return Array.from(Array(array_size).map(_=>default_value))
+export function MakeFilledArray<T>(arraySize: number,defaultValue: T): T[] {
+  return Array.from(Array(arraySize).map(_=>defaultValue))
 }
 
-export function floorTo(nuber_to_round:number,coefficient:number):number{
-  return Math.floor(nuber_to_round/coefficient)*coefficient;
+export function floorTo(nuberToRound:number,coefficient:number):number{
+  return Math.floor(nuberToRound/coefficient)*coefficient;
 }
 
 export const setTheme = (()=>{
@@ -55,35 +55,35 @@ export const setTheme = (()=>{
   const themes:{[key in themeNamesEnum]:string} = {
     default:"./assets/theme/default.css"
   }
-  return (theme_name:themeName|null=null)=>{
-    if(!theme_name)theme_name=localStorage.getItem('theme') as themeName;
-    if(!theme_name)theme_name='default';
-    //@ts-ignore
-    document.getElementById("theme")?.href=themes[theme_name];
-    localStorage.setItem('theme',theme_name);
+  return (theme:themeName|null=null)=>{
+    if(!theme)theme=localStorage.getItem('theme') as themeName;
+    if(!theme)theme='default';
+    // @ts-ignore
+    document.getElementById("theme")?.href=themes[theme];
+    localStorage.setItem('theme',theme);
   }
 })();
 
 export function compareArray<T>(array1:T[],array2:T[]): boolean{
-  if(array1.length != array2.length)return false;
+  if(array1.length !== array2.length)return false;
   for(let i = 0; i < array1.length; i++)
     if(array1[i] !== array2[i])return false;
   return true;
 }
 export function setUnion<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
-  const union_set = new Set<T>(set);
-  for(const item of iterable)union_set.add(item);
-  return union_set
+  const unionSet = new Set<T>(set);
+  for(const item of iterable)unionSet.add(item);
+  return unionSet
 }
 export function setIntersection<T>(set: Set<T>, iterable: Iterable<T>):Set<T>{
-  const intersection_set = new Set<T>();
-  for(const item of iterable) if(set.has(item))intersection_set.add(item);
-  return intersection_set
+  const intersectionSet = new Set<T>();
+  for(const item of iterable) if(set.has(item))intersectionSet.add(item);
+  return intersectionSet
 }
-export function setComplement<T>(target: Set<T>, all_elements: Iterable<T>){
-  const complement_set = new Set<T>();
-  for(const item of all_elements) if(!target.has(item))complement_set.add(item)
-  return complement_set
+export function setComplement<T>(target: Set<T>, allElements: Iterable<T>){
+  const complementSet = new Set<T>();
+  for(const item of allElements) if(!target.has(item))complementSet.add(item)
+  return complementSet
 }
 export function setEquality<T>(set1: Set<T>, set2: Set<T>):boolean {
   if(set1.size !== set2.size)return false;

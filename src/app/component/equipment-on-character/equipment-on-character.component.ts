@@ -9,9 +9,8 @@ import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 export class EquipmentOnCharacterComponent implements OnInit {
   @Input() character!: Character;
 
-  constructor() { }
-
   ngOnInit(): void {
+    return undefined;
   }
   unequip_meele() { this.character.unequipMelee(); }
   unequip_ranged(){ this.character.unequipRanged();}

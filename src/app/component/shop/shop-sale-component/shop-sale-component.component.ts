@@ -18,5 +18,6 @@ export class ShopSaleComponentComponent implements OnInit {
     if(!(this.shop instanceof Shop))this.shop = ErrorShop(this.masterService);
   }
   ngOnInit(): void {
+    return undefined;
   }
 }

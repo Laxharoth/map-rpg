@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 import { Character } from 'src/gameLogic/custom/Class/Character/Character';
 import { EnemyFormation } from 'src/gameLogic/custom/Class/Character/NPC/EnemyFormations/EnemyFormation';
@@ -9,7 +9,7 @@ import { UniqueCharacter } from "src/gameLogic/custom/Class/Character/UniqueChar
 import { characterType } from "src/gameLogic/custom/Factory/CharacterFactory";
 import { UniqueCharacterHandler } from './unique-character-handler';
 
-export class PartyService implements storeable{
+export class PartyService implements Storeable{
   type:"PartyService"="PartyService"
   private _user: UniqueCharacter;
   private _party: [PersistentCharacter|null,PersistentCharacter|null] = [null, null];
@@ -22,26 +22,26 @@ export class PartyService implements storeable{
   private _enemyFormation:EnemyFormation;
   get enemyFormation():EnemyFormation { return this._enemyFormation}
   set enemyFormation(value:EnemyFormation) { this._enemyFormation = value; }
-  constructor(gameSaver: GameSaver,unique_character_handler:UniqueCharacterHandler) {
+  constructor(gameSaver: GameSaver,uniqueCharacterHandler:UniqueCharacterHandler) {
     // @ts-ignore
     this._user = null;
     // @ts-ignore
     this._enemyFormation = null;
-    this.uniqueCharacterHandler = unique_character_handler;
+    this.uniqueCharacterHandler = uniqueCharacterHandler;
     gameSaver.register("Party",this)
   }
   get user():UniqueCharacter {
     return this._user as UniqueCharacter;
   }
-  get party(): UniqueCharacter[] {
-    return this._party.filter(character => character !== null) as UniqueCharacter[];
-  }
-  getPersistent(characterType: characterType) {
-    return this.persistents[characterType];
-  }
   set user(user: UniqueCharacter) {
     this._user = user;
     this.updateUser()
+  }
+  get party(): UniqueCharacter[] {
+    return this._party.filter(character => character !== null) as UniqueCharacter[];
+  }
+  getPersistent(characterTypeName: characterType) {
+    return this.persistents[characterTypeName];
   }
   isPartyMember(character: Character): boolean {
     return character===this._user || (this._party as Character[]).includes(character);

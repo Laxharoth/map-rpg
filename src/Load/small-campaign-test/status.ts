@@ -24,6 +24,7 @@ const register:registerFunction = ({status}, {status:{StatusBattle}}, Factory)=>
     };
     get tags(): tag[]{return ["Blind"]}
   }
+  // tslint:disable: max-classes-per-file
   class Advantage extends StatusBattle{
     protected DURATION: number = 1;
     type: statustype = "Advantage";
@@ -79,16 +80,20 @@ const register:registerFunction = ({status}, {status:{StatusBattle}}, Factory)=>
     get tags(): tag[]{return ["Restrained"]}
   }
   class Guidance extends StatusBattle{
-    static readonly emptyStat  :FullCoreStats = { aim:0 as Int,intelligence:0 as Int,speed:0 as Int,strenght:0 as Int,stamina:0 as Int }
-    static readonly aimOnlyStat:FullCoreStats = { aim:1000 as Int,intelligence:0 as Int,speed:0 as Int,strenght:0 as Int,stamina:0 as Int }
+    static readonly emptyStat  :FullCoreStats = {
+      aim:0 as Int,intelligence:0 as Int,speed:0 as Int,strenght:0 as Int,stamina:0 as Int }
+    static readonly aimOnlyStat:FullCoreStats = {
+      aim:1000 as Int,intelligence:0 as Int,speed:0 as Int,strenght:0 as Int,stamina:0 as Int }
     protected DURATION: number = 2;
     type: statustype = "Guidance";
     get name(): string { return "Guidance"; }
     get description(): string { return "Increase the aim of the character"; }
 
     onStatusGainded(target: Character): ActionOutput {
-      const emptyCalculatedStats = target.battleClass.calculate_stats(Guidance.emptyStat) as unknown as unknown as { [key:string]: Int};
-      const aimCalculatedStats = target.battleClass.calculate_stats(Guidance.aimOnlyStat) as unknown as unknown as { [key:string]: Int};
+      const emptyCalculatedStats = target.battleClass
+        .calculate_stats(Guidance.emptyStat) as unknown as unknown as { [key:string]: Int};
+      const aimCalculatedStats = target.battleClass
+        .calculate_stats(Guidance.aimOnlyStat) as unknown as unknown as { [key:string]: Int};
       const modifiers = this.statsModifier as unknown as unknown as { [key:string]: Int};
       for( const statname of Object.keys(emptyCalculatedStats)){
         if(aimCalculatedStats[statname] - emptyCalculatedStats[statname] > 0){
@@ -98,12 +103,13 @@ const register:registerFunction = ({status}, {status:{StatusBattle}}, Factory)=>
       return super.onStatusGainded(target);
     }
   }
+  // tslint:disable: no-string-literal
   status["Blind"] = Blind;
   status["Advantage"] = Advantage;
   status["Hide"] = Hide;
   status["Restrained"] = Restrained;
   status["Guidance"] = Guidance;
 }
-const module_name = "small-campaign-status";
-const module_dependency:string[] = [];
-export { register, module_name, module_dependency };
+const moduleName = "small-campaign-status";
+const moduleDependency:string[] = [];
+export { register, moduleName, moduleDependency };

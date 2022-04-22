@@ -2,15 +2,17 @@ import { MasterService } from "src/app/service/master.service";
 import { registerFunction } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
 import { Character } from "src/gameLogic/custom/Class/Character/Character";
 import { ActionOutput, CalculatedStats } from "src/gameLogic/custom/Class/Character/Character.type";
-import { GameElementDescriptionSection } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
+import { GameElementDescriptionSection
+       } from "src/gameLogic/custom/Class/GameElementDescription/GameElementDescription";
 import { specialsname } from "src/gameLogic/custom/Class/Items/Item.type";
-import { SpecialAttack } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
+import { SpecialAttack as SpecialAttackClass } from "src/gameLogic/custom/Class/Items/SpecialAttack/SpecialAttack";
 import { StatusStoreable } from "src/gameLogic/custom/Class/Status/Status";
 import { statustype } from "src/gameLogic/custom/Class/Status/Status.type";
 import { StatusPreventAttack } from "src/gameLogic/custom/Class/Status/StatusBattle";
 import { tag } from "src/gameLogic/custom/customTypes/tags";
 
-const register:registerFunction = ({status,specialAttack,perk},{status:{Status,StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
+const register:registerFunction = ({status,specialAttack,perk},
+    {status:{Status,StatusBattle},specialAttack:{SpecialAttack},perk:{Perk}},Factory)=>{
 class StatusGrappled extends StatusBattle  implements StatusPreventAttack{
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
   readonly type:"Grappled"="Grappled";
@@ -43,15 +45,19 @@ class StatusGrappled extends StatusBattle  implements StatusPreventAttack{
   }
   get source(): Character {return this._source;}
   onStatusRemoved(target: Character): ActionOutput
-  { return Factory.pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger being grappled`]])}
+  {
+    return Factory
+      .pushBattleActionOutput(super.onStatusRemoved(target),[[],[`${target.name} is no loger being grappled`]])
+  }
 
   get tags(): tag[] { return super.tags.concat(['grappled'])}
   fromJson(options: StatusStoreable): void {
     super.fromJson(options)
-    this._source=options["source"]
-    this._target=options["target"]
+    this._source=options.source
+    this._target=options.target
   }
 }
+// tslint:disable: max-classes-per-file
 class StatusGrappling extends StatusBattle implements StatusPreventAttack{
   discriminator: "StatusPreventAttack"="StatusPreventAttack";
   readonly type: "Grappling"="Grappling";
@@ -86,8 +92,8 @@ class StatusGrappling extends StatusBattle implements StatusPreventAttack{
   get tags(): tag[] { return super.tags.concat(['grappling']);}
   fromJson(options: StatusStoreable): void {
     super.fromJson(options)
-    this._source=options["source"]
-    this._target=options["target"]
+    this._source=options.source
+    this._target=options.target
   }
 }
 class SpecialGrab extends SpecialAttack{
@@ -112,14 +118,15 @@ class PerkGrappler extends Perk {
   readonly specialGrab = new SpecialGrab(this.masterService)
   readonly type: "Grappler"="Grappler";
   get name():string { return 'Grappler'; }
-  get specials() :SpecialAttack[]{return [this.specialGrab]}
+  get specials() :SpecialAttackClass[]{return [this.specialGrab]}
 }
+// tslint:disable: no-string-literal
 status["Grappling"]=StatusGrappling;
 status["Grappled"]=StatusGrappled;
 specialAttack["Grab"]=SpecialGrab;
 perk["Grappler"]=PerkGrappler;
 }
 
-const module_name = "Grab"
-const module_dependency:string[] = []
-export { register, module_name, module_dependency }
+const moduleName = "Grab"
+const moduleDependency:string[] = []
+export { register, moduleName, moduleDependency }

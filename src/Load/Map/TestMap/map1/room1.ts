@@ -16,17 +16,17 @@ export function room(roomName: string): roomFunction {
       return roomName==="room12" ||
              (roomName==="room8" && masterService.flagsHandler.getFlag("firstreturn2room1"));
     },
-    create:function (masterService: MasterService): Room {
+    create(masterService: MasterService): Room {
       const $flag = (name: flagname, value: any = null) => {
         if (value !== null) masterService.flagsHandler.setFlag(name, value);
         return masterService.flagsHandler.getFlag(name)
       };
       const nextoption = nextOption(masterService)
-      const yesOption = (action: ()=>void)=>{return {text:"Yes",action:function(){ action()},disabled: false }}
+      const yesOption = (action: ()=>void)=>{return {text:"Yes",action(){ action()},disabled: false }}
       const noOption = nextOption(masterService,"No")
       const nextOptionInputs = {
         text:"next",
-        action:function () {
+        action() {
           const { input, select } = getInputs();
           $flag('petshout', input);
           if (input === '') { $flag('petshout', null); }
@@ -35,9 +35,9 @@ export function room(roomName: string): roomFunction {
         },
         disabled:false
       };
-      //with input and select
+      // with input and select
       const furtherDescription:Scene = {
-        sceneData: function () {
+        sceneData () {
         return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing` +
           `${($flag('pet'))?`\n\nOMG there is a ${$flag('pet')}`:``}` +
           `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
@@ -45,7 +45,7 @@ export function room(roomName: string): roomFunction {
       const roomOptions:SceneOptions[] = [
         {
           text:'option1',
-          action:function () {
+          action () {
             masterService.sceneHandler.headScene(furtherDescription, 'map');
             masterService.sceneHandler.setScene(false);
           },
@@ -58,7 +58,7 @@ export function room(roomName: string): roomFunction {
         },
         {
           text:'option3',
-          action:()=>{},
+          action:()=>null,
           disabled:true
         },
         {
@@ -75,7 +75,8 @@ export function room(roomName: string): roomFunction {
                 this.text = "lock 3";
                 return;
               }
-              option&&(option.disabled = true);
+              if(option)
+                option.disabled = true;
               // @ts-ignore
               this.text = "unlock 3";
             }
@@ -107,8 +108,10 @@ export function room(roomName: string): roomFunction {
               status:"in progress",
               enemies_defeated: 0
             })
+            // tslint:disable-next-line: no-console
             console.log("before:",masterService.QuestHolder)
             masterService.QuestHolder.add(quest)
+            // tslint:disable-next-line: no-console
             console.log("after:",masterService.QuestHolder)
           },
           disabled:false
@@ -141,28 +144,28 @@ export function room(roomName: string): roomFunction {
       }
       if (roomName === 'room20') {
         const flyDescription1: Scene = {
-          sceneData: function () {
+          sceneData () {
             return `AAAAAAAAh`
           },
           options: [nextoption],
           fixedOptions: [null, null, null, null, null]
         }
         const flyDescription2: Scene = {
-          sceneData: function () {
+          sceneData () {
             return `I can see the place where I started`
           },
           options: [nextoption],
           fixedOptions: [null, null, null, null, null]
         }
         const flyDescription3: Scene = {
-          sceneData: function () {
+          sceneData () {
             return `That was something`
           },
           options: [nextoption],
           fixedOptions: [null, null, null, null, null]
         }
         const cannonDescription:Scene = {
-          sceneData: function () {
+          sceneData () {
           return `Dafuk there is a cannon here.\n enter the cannon?`;
           }, options: [yesOption(() => {
             masterService.sceneHandler.nextScene();
@@ -180,11 +183,11 @@ export function room(roomName: string): roomFunction {
           disabled:false
         })
       }
-      const fistEnter:Scene = {sceneData: function () {
+      const fistEnter:Scene = {sceneData () {
         return `It's the first time`
       }, options:[nextoption],fixedOptions: [null, null, null, null, null]};
       const roomScene:Scene = {
-        sceneData: function () {
+        sceneData () {
         return `I look at the${(roomName!=='room1')?' same':''} room ${$flag("map1room1firstenter")?"FOR THE VERY FIRST TIME":"AGAIN."}${(roomName!=='room1')?`\nbut it's room '${roomName}'`:''}`
       }, options:roomOptions,fixedOptions:[
         SceneSelectItemFromMap(masterService),
@@ -195,14 +198,15 @@ export function room(roomName: string): roomFunction {
         },
         null,null,null
       ]}
-      const firstExit:Scene = {sceneData:function () {
+      const firstExit:Scene = {sceneData () {
         return `It was the first time`
       }, options:[nextoption],fixedOptions:[null,null,null,null,null]};
-      const kickCanDescription:Scene = {sceneData:function () {
+      const kickCanDescription:Scene = {sceneData () {
         return `You kick the can, it's fun.
     The can flew awa}`
       }, options:[nextoption],fixedOptions:[null,null,null,null,null]};
 
+      // tslint:disable-next-line: no-shadowed-variable
       const room = {
         onEnter: () => {
           if ($flag("map1room1firstenter")) {
@@ -213,16 +217,16 @@ export function room(roomName: string): roomFunction {
           if (randomCheck(10)) {
             new Battle(masterService, Factory(masterService,{ Factory:"EnemyFormation",type:"testformation" }),
             // @ts-ignore
-            function(battle_options:battleOptions){
-              const options=[
-                battle_options[0],
-                battle_options[3],
-                battle_options[7],
-                battle_options[13],,
-              ]
-              // @ts-ignore
-              battle_options.splice(0,battle_options.length,...options)
-            }
+            (options: battleOptions) => {
+                const newOptions = [
+                  options[0],
+                  options[3],
+                  options[7],
+                  options[13], ,
+                ];
+                // @ts-ignore
+                options.splice(0, options.length, ...newOptions);
+              }
             ).start()
           }
         },
@@ -233,11 +237,11 @@ export function room(roomName: string): roomFunction {
             masterService.sceneHandler.tailScene(firstExit, 'map');
           }
         },
-        beforeMoveTo(roomName:string) {
+        beforeMoveTo(beforeMoveRoomName:string) {
           return true;
         },
-        afterMoveTo(roomName:string) {
-          if (roomName !== 'room1') {
+        afterMoveTo(afterMoveRoomName:string) {
+          if (afterMoveRoomName !== 'room1') {
             masterService.timeHandler.addTime('5m')
           }
         },

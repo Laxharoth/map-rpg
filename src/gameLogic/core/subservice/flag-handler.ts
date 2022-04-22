@@ -1,16 +1,16 @@
 import { Observable, Subject } from 'rxjs';
 import { FactoryFunction } from 'src/gameLogic/configurable/Factory/FactoryMap';
-import { default_flags, flagname } from 'src/gameLogic/configurable/subservice/flag-handler.type';
-import { storeable } from 'src/gameLogic/core/Factory/Factory';
+import { defaultFlags, flagname } from 'src/gameLogic/configurable/subservice/flag-handler.type';
+import { Storeable } from 'src/gameLogic/core/Factory/Factory';
 import { GameSaver } from 'src/gameLogic/core/subservice/game-saver';
 
 /**
  * Service to modify flags, but also to modifiy ingame time.
  */
-export class FlagHandlerService implements storeable{
+export class FlagHandlerService implements Storeable{
   readonly type:"FlagHandlerService"="FlagHandlerService";
   /** The game flags */
-  private gameFlags = default_flags;
+  private gameFlags = defaultFlags;
   /** Subject to check flags changes. */
   private flagsSubject=new Subject<flagname|"ALL">();
 
@@ -21,7 +21,7 @@ export class FlagHandlerService implements storeable{
     return {Factory:"Flags",type:"Flags",flags:this.gameFlags}
   }
   fromJson(options: FlagsOptions): void {
-    this.setFlags(options.flags as typeof default_flags);
+    this.setFlags(options.flags as typeof defaultFlags);
   }
 
   /** Sets the value of a flag. */
@@ -45,7 +45,7 @@ export class FlagHandlerService implements storeable{
   }
 
   /** Sets all the game flags */
-  setFlags(gameFlags:typeof default_flags){
+  setFlags(gameFlags:typeof defaultFlags){
     this.gameFlags = gameFlags;
     this.flagsSubject.next("ALL");
   }
