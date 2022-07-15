@@ -47,6 +47,15 @@ export function floorTo(nuberToRound:number,coefficient:number):number{
   return Math.floor(nuberToRound/coefficient)*coefficient;
 }
 
+export function createTextBetweenFinder(start:string, end:string):(str:string,position:number)=>[string | null, number]{
+  const expresion = RegExp(`(?<=${start})(.*)(?=${end})`);
+  return (str:string,position:number)=>{
+    str = str.substring(position);
+    const found = str.match(expresion)?.[0] || null;
+    return [found,found?str.indexOf(start):-1]
+  };
+}
+
 export const setTheme = (()=>{
   enum themeNamesEnum {
     default="default"
