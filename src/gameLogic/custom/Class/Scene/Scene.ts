@@ -24,12 +24,12 @@ export function runWrappedAction(sceneOptions:SceneOptions){
   sceneOptions.action();
 }
 export function wrapAction(option:SceneOptions|null):SceneOptions|null{
-  const optionWrapped = option as (SceneOptions & {_action:()=>void;})|null;
+  const optionWrapped = option as (SceneOptions & {_action?:()=>void;})|(SceneOptions & {_action:()=>void;})|null;
   if(!optionWrapped || optionWrapped._action){ return null; }
   optionWrapped._action = optionWrapped.action;
   optionWrapped.action = function(){
     if(!this.disabled)
-    this._action();
+    this._action?.();
   }
   return optionWrapped;
 }
