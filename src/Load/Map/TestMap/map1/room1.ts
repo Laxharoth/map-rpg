@@ -38,7 +38,7 @@ export function room(roomName: string): roomFunction {
       // with input and select
       const furtherDescription:Scene = {
         sceneData () {
-        return `There is \\input{"default":"${$flag('petshout')||''}","placeholder":"nothing"}\\ to do. Except to select \\select["cat","dog"]\\ but does nothing` +
+        return `There is \\input#input[placeholder=nothing]\\ to do. Except to select \\select.pet#select>option{cat}+option{dog}\\ but does nothing` +
           `${($flag('pet'))?`\n\nOMG there is a ${$flag('pet')}`:``}` +
           `${($flag('pet')&&$flag('petshout'))?` 'it's saying ${$flag('petshout')}'`:``}`
       },options: [nextOptionInputs],fixedOptions:[null,null,null,null,null]}
