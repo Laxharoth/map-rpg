@@ -4,12 +4,12 @@ import { SceneSelectItemFromMap, nextOption } from 'src/gameLogic/custom/Class/S
 import { MasterService } from "src/app/service/master.service";
 import { flagname } from "src/gameLogic/configurable/subservice/flag-handler.type";
 import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
-import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { Room, RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { getInputs, randomCheck } from "src/gameLogic/custom/functions/htmlHelper.functions";
 import { QuestFactory } from 'src/gameLogic/custom/Factory/QuestFactory';
 import { Factory } from 'src/gameLogic/core/Factory/Factory';
 
-export function room(roomName: string): roomFunction {
+export function room(roomName: string): RoomFunction {
   return {
     roomname:roomName,
     disabled(masterService:MasterService){

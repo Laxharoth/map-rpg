@@ -1,8 +1,8 @@
 import { MasterService } from "src/app/service/master.service";
 import { Scene } from "src/gameLogic/custom/Class/Scene/Scene";
-import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { Room, RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 
-export function room25(roomname: string): roomFunction{
+export function room25(roomname: string): RoomFunction{
   return {
     roomname,
     create(masterService:MasterService): Room{

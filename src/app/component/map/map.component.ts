@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
-import { roomFunction } from 'src/gameLogic/custom/Class/maps/room';
+import { RoomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { TimeValues } from 'src/gameLogic/custom/ClassHelper/Time';
 
 @Component({
@@ -48,7 +48,7 @@ export class MapComponent implements OnInit {
   move(direction:string){
     this.moveEvent.emit(direction);
   }
-  disabledRoom(room:roomFunction){
+  disabledRoom(room:RoomFunction){
     return room?.disabled?.(this.masterService);
   }
 

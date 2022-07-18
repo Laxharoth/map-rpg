@@ -1,6 +1,6 @@
 import { MasterService } from "src/app/service/master.service";
 import { FactoryForModules } from "src/gameLogic/core/Factory/Register_Module/RegisterModule";
-import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { banditsWantRealEgg } from "./bandit";
 
@@ -15,7 +15,7 @@ const streetStrings = {
   street8:"// TODO add scene string",
   street9:"// TODO add scene string",
 }
-export function street(roomname: string,Factory:FactoryForModules):roomFunction{
+export function street(roomname: string,Factory:FactoryForModules):RoomFunction{
   return {
     create(masterService:MasterService){
       const options:SceneOptions[] = [];

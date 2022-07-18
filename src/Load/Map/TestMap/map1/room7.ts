@@ -6,7 +6,7 @@ import { Scene, SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { SetShopScene } from "src/gameLogic/custom/Class/Scene/ShopScene";
 import { MeleeUnharmed, MeleeWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/MeleeWeapon";
 import { RangedUnharmed, RangedWeapon } from "src/gameLogic/custom/Class/Equipment/Weapon/RangedWeapon";
-import { Room, roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { Room, RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { DynamicShop } from "src/gameLogic/custom/Class/Shop/DynamicShop";
 import { StaticShop } from "src/gameLogic/custom/Class/Shop/StaticShop";
 import { fillItemStoreable } from 'src/gameLogic/custom/Class/Items/Item';
@@ -17,7 +17,7 @@ import { ArmorNoArmor, Armor } from 'src/gameLogic/custom/Class/Equipment/Armor'
 import { item_factory_function } from 'src/gameLogic/custom/Factory/ItemFactory';
 import { Int } from 'src/gameLogic/custom/ClassHelper/Int';
 
-export const room:roomFunction = {
+export const room:RoomFunction = {
   roomname:"room7",
   create(masterService:MasterService):Room{
     const roomName = 'room7'

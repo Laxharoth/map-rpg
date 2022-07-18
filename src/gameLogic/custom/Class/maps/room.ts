@@ -43,7 +43,7 @@ export interface Room{
      updateable_scene?:{[key: string]:Scene};
 }
 
-export interface roomFunction{
+export interface RoomFunction{
   create:(masterService:MasterService) => Room,
   roomname:string
   disabled?:(masterService:MasterService)=>boolean,

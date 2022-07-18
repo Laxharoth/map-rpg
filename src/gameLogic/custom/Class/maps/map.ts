@@ -1,11 +1,11 @@
-import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { mapcollection } from "src/gameLogic/custom/MapCollection/mapcollection";
 import { roomcollection } from "src/gameLogic/custom/MapCollection/roomcollection";
 
 /** A model that represents a map */
 export class GameMap{
   /** The matrix of the map that contains the functions to create the rooms. */
-  rooms:roomFunction[][]=[];
+  rooms:RoomFunction[][]=[];
   /** Loads in the roomNames the matrix of the current map. */
   loadMap(mapname:string):void{
     const roomsNames = mapcollection[mapname];
@@ -20,7 +20,7 @@ export class GameMap{
     }
   }
 
-  findRoomByName(roomName:string):{room:roomFunction,coordinates:[number,number]} | null{
+  findRoomByName(roomName:string):{room:RoomFunction,coordinates:[number,number]} | null{
     for(let i = 0; i < this.rooms.length; i++){
       for(let j = 0; j < this.rooms[i].length;j++){
         if(this.rooms[i][j] && roomName===this.rooms[i][j].roomname){
@@ -33,7 +33,7 @@ export class GameMap{
     }
     return null;
   }
-  findRoomByCoordinates(y:number, x:number):roomFunction{
+  findRoomByCoordinates(y:number, x:number):RoomFunction{
     const room = this.rooms[y]?.[x];
     return room;
   }

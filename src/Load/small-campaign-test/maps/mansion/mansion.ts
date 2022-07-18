@@ -1,6 +1,6 @@
 import { flagname } from 'src/gameLogic/configurable/subservice/flag-handler.type';
 import { MasterService } from "src/app/service/master.service";
-import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { SceneOptions } from "src/gameLogic/custom/Class/Scene/Scene";
 import { harperFinishQuest, harperGivesQuest, talkHarper } from './harperScenes';
 import { FactoryForModules } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
@@ -15,7 +15,7 @@ const entranceString={
   entrance8:" // TODO add scene string",
   entrance9:" // TODO add scene string",
 }
-export function entrace(roomname: string, Factory:FactoryForModules):roomFunction{
+export function entrace(roomname: string, Factory:FactoryForModules):RoomFunction{
   return {
     roomname,
     create(masterService:MasterService){
@@ -41,7 +41,7 @@ export function entrace(roomname: string, Factory:FactoryForModules):roomFunctio
     }
   }
 }
-export function stairs(Factory:FactoryForModules):roomFunction{
+export function stairs(Factory:FactoryForModules):RoomFunction{
   return {
     roomname:"mstairs",
     create(masterService:MasterService){
@@ -57,7 +57,7 @@ export function stairs(Factory:FactoryForModules):roomFunction{
     }
   }
 }
-export function upper(Factory:FactoryForModules):roomFunction{
+export function upper(Factory:FactoryForModules):RoomFunction{
   return {
     roomname:"upper",
     create(masterService:MasterService){

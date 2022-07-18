@@ -45,37 +45,37 @@ export function entryPoint(masterService:MasterService){
 }
 
 export function newGame(masterService:MasterService){
-  // const user = new MainCharacter(masterService, 'player',"TestMainCharacterBattleClass");
-  // masterService.partyHandler.user = user;
-  // const meleeTest1 = ItemFactory(masterService,{ Factory:"Item",type:"MeleeTest"})
-  // const rangedTest1 = ItemFactory(masterService,{ Factory:"Item",type:"RangedTest"})
-  // const shieldTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ShieldTest"})
-  // const armorTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ArmorTest"})
-  // user.inventory.addItem(meleeTest1);
-  // user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
-  // masterService.partyHandler.user = user;
-  // masterService.partyHandler.setPartyMember(Factory(masterService,{
-    //   Factory:"Character",
-    //   type:"test character",
-    //   name:"ally 1",
-    // }),0);
+  const user = new MainCharacter(masterService, 'player',"TestMainCharacterBattleClass");
+  masterService.partyHandler.user = user;
+  const meleeTest1 = ItemFactory(masterService,{ Factory:"Item",type:"MeleeTest"})
+  const rangedTest1 = ItemFactory(masterService,{ Factory:"Item",type:"RangedTest"})
+  const shieldTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ShieldTest"})
+  const armorTest1 = ItemFactory(masterService,{ Factory:"Item",type:"ArmorTest"})
+  user.inventory.addItem(meleeTest1);
+  user.inventory.addItem(rangedTest1); user.inventory.addItem(shieldTest1); user.inventory.addItem(armorTest1);
+  masterService.partyHandler.user = user;
+  masterService.partyHandler.setPartyMember(Factory(masterService,{
+      Factory:"Character",
+      type:"test character",
+      name:"ally 1",
+    }),0);
     // Create Seller
-    // masterService.mapHandler.loadRoom(default_flags.currentroom);
-    chooseScene(masterService);
+    masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
+    // chooseScene(masterService);
 }
 
 export function continueGame(masterService:MasterService){
   // debug to get savedata
-  // masterService.gameSaver.load("save1");
-  // masterService.sceneHandler.clear();
-  // masterService.partyHandler.user = masterService.gameSaver.MainCharacter[0];
-  // masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
-  // masterService.timeHandler.addTime(0);
-  masterService.gameSaver.load("save2");
+  masterService.gameSaver.load("save1");
   masterService.sceneHandler.clear();
   masterService.partyHandler.user = masterService.gameSaver.MainCharacter[0];
   masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
   masterService.timeHandler.addTime(0);
+  // masterService.gameSaver.load("save2");
+  // masterService.sceneHandler.clear();
+  // masterService.partyHandler.user = masterService.gameSaver.MainCharacter[0];
+  // masterService.mapHandler.loadRoom(masterService.flagsHandler.getFlag("currentroom"));
+  // masterService.timeHandler.addTime(0);
 }
 
 function chooseScene(masterService: MasterService){

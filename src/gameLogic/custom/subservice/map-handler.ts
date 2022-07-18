@@ -6,7 +6,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { GameStateService } from '../../core/subservice/game-state';
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
-import { fill_room, Room, roomFunction } from 'src/gameLogic/custom/Class/maps/room';
+import { fill_room, Room, RoomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { LockMapService } from './lock-map';
 import { mapcollection } from '../MapCollection/mapcollection';
 
@@ -85,7 +85,7 @@ export class MapHandlerService {
     return this.coordinatesSubject.asObservable();
   }
   /** Loads a room given a name or coordinates. */
-  private loadRoomHelper(room:roomFunction,coordinates:[number,number]):boolean{
+  private loadRoomHelper(room:RoomFunction,coordinates:[number,number]):boolean{
     if(room.disabled&&room.disabled(this.masterService)){ return false; }
     const foundRoom = fill_room(room?.create(this.masterService));
     this.masterService.flagsHandler.setFlag('currentroom',room.roomname);

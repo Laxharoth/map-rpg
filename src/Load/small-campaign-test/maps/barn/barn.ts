@@ -1,12 +1,12 @@
 import { MasterService } from 'src/app/service/master.service';
 import { flagname } from 'src/gameLogic/configurable/subservice/flag-handler.type';
 import { FactoryForModules } from 'src/gameLogic/core/Factory/Register_Module/RegisterModule';
-import { roomFunction } from "src/gameLogic/custom/Class/maps/room";
+import { RoomFunction } from "src/gameLogic/custom/Class/maps/room";
 import { SceneOptions } from 'src/gameLogic/custom/Class/Scene/Scene';
 import { sellerScene } from './sellerScenes';
 import { thugIntroScene } from './thug';
 
-export function barn(roomname:string,Factory:FactoryForModules):roomFunction{
+export function barn(roomname:string,Factory:FactoryForModules):RoomFunction{
   const sceneStrings = {
     room1:"//TODO add scene",
     room2:"//TODO add scene",
@@ -50,7 +50,7 @@ export function barn(roomname:string,Factory:FactoryForModules):roomFunction{
     roomname,
   }
 }
-export const stairs:roomFunction={
+export const stairs:RoomFunction={
   create:(masterService:MasterService)=>{
     return {
       onEnter(){return null;},onExit(){return null;},
@@ -59,7 +59,7 @@ export const stairs:roomFunction={
   roomname:"stairs",
   disabled:(_)=>true
 }
-export const loft:roomFunction={
+export const loft:RoomFunction={
   create:(masterService:MasterService)=>{
     return {
       onEnter(){return null;},onExit(){return null;},
@@ -68,7 +68,7 @@ export const loft:roomFunction={
   roomname:"loft",
   disabled:(_)=>true
 }
-export const secretExit:roomFunction={
+export const secretExit:RoomFunction={
   create:(masterService:MasterService)=>{
     return {
       onEnter(){return null;},onExit(){return null;},
