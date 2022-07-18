@@ -26,11 +26,9 @@ export interface RoomFunction{
   roomname:string
   disabled?:(masterService:MasterService)=>boolean,
 };
-export function fill_room(room:Room):Room
-{
-  const {beforeMoveTo=null,afterMoveTo=null,icon=null} = room;
-  !beforeMoveTo && (room.beforeMoveTo = (roomName:string)=>true);
-  !afterMoveTo && (room.afterMoveTo = (roomName:string)=>{});
-  !icon && (room.icon = '');
+export function fillRoom(room:Room):Room{
+  if(!room.beforeMoveTo) room.beforeMoveTo = ()=>true;
+  if(!room.afterMoveTo) room.afterMoveTo = ()=>undefined;
+  if(!room.icon) room.icon = '';
   return room;
 }

@@ -6,7 +6,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { MasterService } from "src/app/service/master.service";
 import { GameStateService } from '../../core/subservice/game-state';
 import { GameMap } from 'src/gameLogic/custom/Class/maps/map';
-import { fill_room, Room, RoomFunction } from 'src/gameLogic/custom/Class/maps/room';
+import { fillRoom, Room, RoomFunction } from 'src/gameLogic/custom/Class/maps/room';
 import { LockMapService } from './lock-map';
 import { mapcollection } from '../MapCollection/mapcollection';
 
@@ -21,7 +21,7 @@ export class MapHandlerService {
   private readonly masterService: MasterService;
   private gameStateSubscription: Subscription;
 
-  private currentRoom:Room = fill_room({onEnter:()=>undefined,onExit:()=>undefined,icon:''});
+  private currentRoom:Room = fillRoom({onEnter:()=>undefined,onExit:()=>undefined,icon:''});
   currentMap:GameMap;
 
   constructor(masterService:MasterService,gameStateHandler:GameStateService, private lockmap:LockMapService){
@@ -87,7 +87,7 @@ export class MapHandlerService {
   /** Loads a room given a name or coordinates. */
   private loadRoomHelper(room:RoomFunction,coordinates:[number,number]):boolean{
     if(room.disabled&&room.disabled(this.masterService)){ return false; }
-    const foundRoom = fill_room(room?.create(this.masterService));
+    const foundRoom = fillRoom(room?.create(this.masterService));
     this.masterService.flagsHandler.setFlag('currentroom',room.roomname);
     this.currentRoom.onExit();
     foundRoom.onEnter();
